@@ -9,7 +9,7 @@ using System.Windows;
 
 namespace CompleteBackup.Models.Backup.Storage
 {
-    class FileSystemStorage : IStorageInterface
+    public class FileSystemStorage : IStorageInterface
     {
         //private const int cMaxFilePathLength = Win32LongPathFile.MAX_PATH;
         //private const int cMaxFolderPathLength = Win32LongPathDirectory.MAX_PATH;
