@@ -113,6 +113,17 @@ namespace CompleteBackup.Models.Backup.Storage
             return fileList;
         }
 
+        public DateTime GetLastWriteTime(string path)
+        {
+            if (path.Length < 260)
+            {
+                return File.GetLastWriteTime(path);
+            }
+            else
+            {
+                return Win32LongPathFile.GetLastWriteTime(path);
+            }
+        }
         public bool IsFileSame(string file1, string file2)
         {
             //var sourceFileInfo = new System.IO.FileInfo(file1);

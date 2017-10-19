@@ -12,7 +12,7 @@ namespace CompleteBackup.DataRepository
 {
     class BackupProfileRepository : ObservableObject
     {
-        private const bool bRestRepositoryonStartup = true;
+        private const bool bRestRepositoryonStartup = false;
 
         static public BackupProfileRepository Instance { get; private set; } = new BackupProfileRepository();
         private BackupProfileRepository()

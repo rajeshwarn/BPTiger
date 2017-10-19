@@ -11,7 +11,11 @@ namespace CompleteBackup.Models.Backup.Storage
 {
     class FileSystemStorage : IStorageInterface
     {
-        private const int MAX_PATH = Win32FileSystem.MAX_PATH;
+        //private const int cMaxFilePathLength = Win32LongPathFile.MAX_PATH;
+        //private const int cMaxFolderPathLength = Win32LongPathDirectory.MAX_PATH;
+        private const int MAX_PATH_LENGTH = Win32LongPathFile.MAX_PATH;
+        //private const int cMaxWin32PathLength = Win32LongPathFile.MAX_PATH;
+
         public string Combine(string path1, string path2)
         {
             return Path.Combine(path1, path2);
@@ -24,240 +28,189 @@ namespace CompleteBackup.Models.Backup.Storage
 
         public string GetDirectoryName(string path)
         {
-            if (path.Length < MAX_PATH)
+            if (path.Length < MAX_PATH_LENGTH)
             {
                 return  Path.GetDirectoryName(path);
             }
             else
             {
-                int iIndex = path.LastIndexOf('\\');
-                return path.Substring(0, iIndex);
+                return Win32LongPathPath.GetDirectoryName(path);
             }
         }
 
         public bool FileExists(string path)
         {
-            return Win32LongPathFile.Exists(path);
-
-            //if (path.Length < MAX_PATH)
-            //{
-            //    return File.Exists(path);
-            //}
-            //else
-            //{
-            //    return Win32FileSystem.FileExists(Win32FileSystem.GetWin32LongPath(path));
-            //}
+            if (path.Length < MAX_PATH_LENGTH)
+            {
+                return System.IO.File.Exists(path);
+            }
+            else
+            {
+                return Win32LongPathFile.Exists(path);
+            }
         }
 
         public bool DirectoryExists(string path)
         {
-            return Win32LongPathDirectory.Exists(path);
-
-            //if (path.Length < MAX_PATH)
-            //{
-            //    return Directory.Exists(path);
-            //}
-            //else
-            //{
-            //    var longPath = Win32FileSystem.GetLongPath(path);
-
-            //    return Win32FileSystem.DirectoryExists(longPath);
-            //}
+            if (path.Length < MAX_PATH_LENGTH)
+            {
+                return System.IO.Directory.Exists(path);
+            }
+            else
+            {
+                return Win32LongPathDirectory.Exists(path);
+            }
         }
 
         //used buy delete file/directory to delete read only files
         private void SetFileAttributeRecrusive(string folder, FileAttributes attribute)
         {
-            foreach (string file in Directory.GetFiles(folder))
+            if (folder.Length < MAX_PATH_LENGTH)
             {
-                File.SetAttributes(file, attribute);
-            }
+                foreach (string file in Directory.GetFiles(folder))
+                {
+                    File.SetAttributes(file, attribute);
+                }
 
-            foreach (string subDir in Directory.GetDirectories(folder))
+                foreach (string subDir in Directory.GetDirectories(folder))
+                {
+                    File.SetAttributes(subDir, attribute);
+                    SetFileAttributeRecrusive(subDir, attribute);
+                }
+            }
+            else
             {
-                File.SetAttributes(subDir, attribute);
-                SetFileAttributeRecrusive(subDir, attribute);
+                foreach (string file in Directory.GetFiles(folder))
+                {
+                    Win32LongPathFile.SetAttributes(file, attribute);
+                }
+
+                foreach (string subDir in Directory.GetDirectories(folder))
+                {
+                    Win32LongPathFile.SetAttributes(subDir, attribute);
+                    SetFileAttributeRecrusive(subDir, attribute);
+                }
             }
         }
 
         public bool DeleteDirectory(string path, bool bRecursive = true)
         {
-            Win32LongPathDirectory.Delete(path, bRecursive);
-
-            //            SetFileAttribute(directory, FileAttributes.Normal);
-            //Directory.Delete(path, bRecursive);
+            if (path.Length < MAX_PATH_LENGTH)
+            {
+                //Handle read only
+                //SetFileAttribute(directory, FileAttributes.Normal);
+                Directory.Delete(path, bRecursive);
+            }
+            else
+            {
+                Win32LongPathDirectory.Delete(path, bRecursive);
+            }
 
             return true;
         }
 
         public void DeleteFile(string path)
         {
-            Win32LongPathFile.Delete(path);
-
-            //if (sourcePath.Length < MAX_PATH)
-            //{
-            //    File.Delete(sourcePath);
-            //}
-            //else
-            //{
-            //    Win32FileSystem.DeleteFileW(Win32FileSystem.GetWin32LongPath(sourcePath));
-            //}
+            if (path.Length < MAX_PATH_LENGTH)
+            {
+                File.Delete(path);
+            }
+            else
+            {
+                Win32LongPathFile.Delete(path);
+            }
         }
-
 
         public string[] GetDirectories(string path)
         {
             string[] setEntries = null;
 
-            if (path.Length < Win32LongPathDirectory.MAX_PATH)
+            if (path != null)
             {
-                setEntries = Directory.GetDirectories(path);
+                if (path.Length < Win32LongPathDirectory.MAX_PATH)
+                {
+                    setEntries = Directory.GetDirectories(path);
+                }
+                else
+                {
+                    setEntries = Win32LongPathDirectory.GetDirectories(path);
+                }
             }
-            else
-            {
-                setEntries = Win32LongPathDirectory.GetDirectories(path);
-            }
-
-            //try
-            //{
-            //    setEntries = Directory.GetDirectories(path);
-            //}
-            //catch (IOException ex)
-            //{
-            //}
 
             return setEntries;
         }
 
 
-        //private DateTime GetLastWriteTime(string path)
-        //{
-        //    if (path.Length < MAX_PATH)
-        //    {
-        //        return File.GetLastWriteTime(path);
-        //    }
-        //    else
-        //    {
-        //        return Win32LongPathFile.GetLastWriteTime(path);
-        //    }
-        //}
+        public DateTime GetLastWriteTime(string path)
+        {
+            if (path.Length < MAX_PATH_LENGTH)
+            {
+                return File.GetLastWriteTime(path);
+            }
+            else
+            {
+                return Win32LongPathFile.GetLastWriteTime(path);
+            }
+        }
 
         public bool IsFileSame(string file1, string file2)
         {
 
-            DateTime time1;
-            DateTime time2;
+            DateTime time1 = GetLastWriteTime(file1);
+            DateTime time2 = GetLastWriteTime(file2);
 
             //bool bSame = File.ReadLines(file1).SequenceEqual(File.ReadLines(file2));
-            if (file1.Length < MAX_PATH && file2.Length < MAX_PATH)
-            {
-                time1 = File.GetLastWriteTime(file1);
-                time2 = File.GetLastWriteTime(file2);
-            }
-            else
-            {
-                time1 = Win32LongPathFile.GetLastWriteTime(file1);
-                time2 = Win32LongPathFile.GetLastWriteTime(file2);
-            }
 
             return time1 == time2;
         }
 
-//        public List<string> GetFileList(string directory)
-//        {
-//            var fileList = new List<string>();
-
-//            if (DirectoryExists(directory))
-//            {
-//                try
-//                {
-//                    string[] sourceFileEntries = GetFiles(directory);
-//                    foreach (string path in sourceFileEntries)
-//                    {
-//                        fileList.Add(Path.GetFileName(path));
-//                    }
-//                }
-//                catch (IOException ex)
-//                {
-////                    MessageBox.Show($"{ex.Message}", "Folder Selection", MessageBoxButton.OK, MessageBoxImage.Error);
-//                }
-//            }
-
-//            return fileList;
-//        }
-
 
         public void CreateDirectory(string path, bool bCheckIfExist = false)
         {
+            bool bExists = false;
+
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return;
+            }
+
             if (bCheckIfExist)
             {
-                if (!DirectoryExists(path))
+                bExists = DirectoryExists(path);
+            }
+
+            if (!(bExists & bCheckIfExist))
+            {
+                if (path.Length < MAX_PATH_LENGTH)
+                {
+                    System.IO.Directory.CreateDirectory(path);
+                }
+                else
                 {
                     Win32LongPathDirectory.CreateDirectory(path);
                 }
             }
-            else
-            {
-                Win32LongPathDirectory.CreateDirectory(path);
-            }
-
-            //if (path.Length < MAX_PATH)
-            //{
-            //    if (bCheckIfExist)
-            //    {
-            //        if (!DirectoryExists(path))
-            //        {
-            //            Directory.CreateDirectory(path, null);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        Directory.CreateDirectory(path, null);
-            //    }
-            //}
-            //else
-            //{
-            //    if (bCheckIfExist)
-            //    {
-            //        if (!DirectoryExists(Win32FileSystem.GetLongPath(path)))
-            //        {
-            //            Win32FileSystem.CreateDirectory(Win32FileSystem.GetLongPath(path), null);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        Win32FileSystem.CreateDirectory(Win32FileSystem.GetLongPath(path), null);
-            //    }
-            //}
         }
 
-        public void CopyFile(string sourcePath, string targetPath, bool overwrite = false)
+        public void CopyFile(string sourcePath, string targetPath, bool bOverwrite = false)
         {
-            Win32LongPathFile.Copy(sourcePath, targetPath, overwrite);
-
-            //if (sourcePath.Length < MAX_PATH && targetPath.Length < MAX_PATH)
-            //{
-            //    File.Copy(sourcePath, targetPath, overwrite);
-            //}
-            //else
-            //{
-            //    var sourcePathLong = Win32FileSystem.GetLongPath(sourcePath);
-            //    var targetPathLong = Win32FileSystem.GetLongPath(targetPath);
-
-            //    Win32FileSystem.CopyFile(sourcePathLong, targetPathLong, overwrite);
-            //}
+            if (sourcePath.Length < MAX_PATH_LENGTH && (targetPath.Length < MAX_PATH_LENGTH))
+            {
+                File.Copy(sourcePath, targetPath, bOverwrite);
+            }
+            else
+            {
+                Win32LongPathFile.Copy(sourcePath, targetPath, bOverwrite);
+            }
         }
 
         public void MoveFile(string sourcePath, string targetPath, bool bCreateFolder = false)
         {
-         //   Trace.WriteLine($"Move File: {sourcePath} --> {targetPath}");
-
             if (bCreateFolder)
             {
                 string targetDirectoryName = null;
 
-
-                if (targetPath.Length < MAX_PATH)
+                if (targetPath.Length < MAX_PATH_LENGTH)
                 {
                     targetDirectoryName = Path.GetDirectoryName(targetPath);
                 }
@@ -272,19 +225,16 @@ namespace CompleteBackup.Models.Backup.Storage
                     CreateDirectory(targetDirectoryName);
                 }
             }
-            
-            Win32LongPathFile.Move(sourcePath, targetPath);
 
-            //if (sourcePath.Length < MAX_PATH && targetPath.Length < MAX_PATH)
-            //{
-            //    File.Move(Win32FileSystem.GetLongPath(sourcePath), Win32FileSystem.GetLongPath(targetPath));
-            //}
-            //else
-            //{
-            //    Win32FileSystem.MoveFileW(Win32FileSystem.GetLongPath(sourcePath), Win32FileSystem.GetLongPath(targetPath));
-            //}
+            if (sourcePath.Length < MAX_PATH_LENGTH && (targetPath.Length < MAX_PATH_LENGTH))
+            {
+                File.Move(sourcePath, targetPath);
+            }
+            else
+            {
+                Win32LongPathFile.Move(sourcePath, targetPath);
+            }
         }
-
 
 
         public bool MoveDirectory(string sourcePath, string targetPath, bool bCreateFolder = false)
@@ -308,7 +258,7 @@ namespace CompleteBackup.Models.Backup.Storage
                 try
                 {
                     bRetry = false;
-                    if (sourcePath.Length < MAX_PATH && targetPath.Length < MAX_PATH)
+                    if (sourcePath.Length < MAX_PATH_LENGTH && targetPath.Length < MAX_PATH_LENGTH)
                     {
                         Directory.Move(sourcePath, targetPath);
                     }
@@ -337,11 +287,9 @@ namespace CompleteBackup.Models.Backup.Storage
 
         public string[] GetDirectories(string path, string searchPattern = null, System.IO.SearchOption searchOption = SearchOption.TopDirectoryOnly)
         {
-            if (path.Length < MAX_PATH)
+            if (path.Length < MAX_PATH_LENGTH)
             {
-                string[] fileEntries = Directory.GetFiles(path, searchPattern);
-
-                return fileEntries;
+                return Directory.GetFiles(path, searchPattern);
             }
             else
             {
@@ -353,19 +301,13 @@ namespace CompleteBackup.Models.Backup.Storage
 
         public List<string> GetFiles(string directory, string searchPattern = null, SearchOption searchOption = SearchOption.TopDirectoryOnly)
         {
-            if (directory.Length < MAX_PATH)
+            if (directory.Length < MAX_PATH_LENGTH)
             {
                 return Directory.GetFiles(directory).ToList();
             }
             else
             {
-                var sourceFileEntries = Win32LongPathDirectory.GetFiles(directory, searchPattern, searchOption);
-                //foreach (string path in sourceFileEntries)
-                //{
-                //    fileList.Add(Path.GetFileName(path));
-                //}
-
-                return sourceFileEntries;
+                return Win32LongPathDirectory.GetFiles(directory, searchPattern, searchOption);
             }
         }
 

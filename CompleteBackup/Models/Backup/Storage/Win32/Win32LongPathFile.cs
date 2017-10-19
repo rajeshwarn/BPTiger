@@ -15,16 +15,20 @@ namespace CompleteBackup.Models.Backup.Storage
 
         public static bool Exists(string path)
         {
-            if (path.Length < MAX_PATH)
-            {
-                return System.IO.File.Exists(path);
-            }
-            else
-            {
-                var attr = Win32FileSystem.GetFileAttributesW(GetWin32LongPath(path));
+            var attr = Win32FileSystem.GetFileAttributesW(GetWin32LongPath(path));
 
-                return (attr != Win32FileSystem.INVALID_FILE_ATTRIBUTES && ((attr & Win32FileSystem.FILE_ATTRIBUTE_ARCHIVE) == Win32FileSystem.FILE_ATTRIBUTE_ARCHIVE));
-            }
+            return (attr != Win32FileSystem.INVALID_FILE_ATTRIBUTES && ((attr & Win32FileSystem.FILE_ATTRIBUTE_ARCHIVE) == Win32FileSystem.FILE_ATTRIBUTE_ARCHIVE));
+
+            //if (path.Length < MAX_PATH)
+            //{
+            //    return System.IO.File.Exists(path);
+            //}
+            //else
+            //{
+            //    var attr = Win32FileSystem.GetFileAttributesW(GetWin32LongPath(path));
+
+            //    return (attr != Win32FileSystem.INVALID_FILE_ATTRIBUTES && ((attr & Win32FileSystem.FILE_ATTRIBUTE_ARCHIVE) == Win32FileSystem.FILE_ATTRIBUTE_ARCHIVE));
+            //}
         }
 
         public static void Delete(string path)
@@ -102,27 +106,17 @@ namespace CompleteBackup.Models.Backup.Storage
 
         public static void Copy(string sourceFileName, string destFileName, bool bOverwrite = false)
         {
-            if (sourceFileName.Length < MAX_PATH && (destFileName.Length < MAX_PATH))
+            if (!Win32FileSystem.CopyFileW(GetWin32LongPath(sourceFileName), GetWin32LongPath(destFileName), !bOverwrite))
             {
-                System.IO.File.Copy(sourceFileName, destFileName, bOverwrite);
-            }
-            else
-            {
-                var ok = Win32FileSystem.CopyFileW(GetWin32LongPath(sourceFileName), GetWin32LongPath(destFileName), !bOverwrite);
-                if (!ok) ThrowWin32Exception();
+                    ThrowWin32Exception();
             }
         }
 
         public static void Move(string sourceFileName, string destFileName)
         {
-            if (sourceFileName.Length < MAX_PATH && (destFileName.Length < MAX_PATH))
+            if (!Win32FileSystem.MoveFileW(GetWin32LongPath(sourceFileName), GetWin32LongPath(destFileName)))
             {
-                System.IO.File.Move(sourceFileName, destFileName);
-            }
-            else
-            {
-                var ok = Win32FileSystem.MoveFileW(GetWin32LongPath(sourceFileName), GetWin32LongPath(destFileName));
-                if (!ok) ThrowWin32Exception();
+                    ThrowWin32Exception();
             }
         }
 
@@ -179,15 +173,18 @@ namespace CompleteBackup.Models.Backup.Storage
 
         public static void SetAttributes(string path, System.IO.FileAttributes attributes)
         {
-            if (path.Length < MAX_PATH)
-            {
-                System.IO.File.SetAttributes(path, attributes);
-            }
-            else
-            {
-                var longFilename = GetWin32LongPath(path);
-                Win32FileSystem.SetFileAttributesW(longFilename, (int)attributes);
-            }
+            var longFilename = GetWin32LongPath(path);
+            Win32FileSystem.SetFileAttributesW(longFilename, (int)attributes);
+
+            //if (path.Length < MAX_PATH)
+            //{
+            //    System.IO.File.SetAttributes(path, attributes);
+            //}
+            //else
+            //{
+            //    var longFilename = GetWin32LongPath(path);
+            //    Win32FileSystem.SetFileAttributesW(longFilename, (int)attributes);
+            //}
         }
 
         #region Helper methods

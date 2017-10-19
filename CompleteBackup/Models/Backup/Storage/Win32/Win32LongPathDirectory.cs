@@ -14,54 +14,60 @@ namespace CompleteBackup.Models.Backup.Storage
 
         public static void CreateDirectory(string path)
         {
-            if (string.IsNullOrWhiteSpace(path)) return;
-            if (path.Length < MAX_PATH)
+            var paths = GetAllPathsFromPath(GetWin32LongPath(path));
+            foreach (var item in paths)
             {
-                System.IO.Directory.CreateDirectory(path);
-            }
-            else
-            {
-                var paths = GetAllPathsFromPath(GetWin32LongPath(path));
-                foreach (var item in paths)
+                if (!Exists(item))
                 {
-                    if (!LongExists(item))
+                    var ok = Win32FileSystem.CreateDirectory(item, null);// IntPtr.Zero);
+                    if (!ok)
                     {
-                        var ok = Win32FileSystem.CreateDirectory(item, null);// IntPtr.Zero);
-                        if (!ok)
-                        {
-                            ThrowWin32Exception();
-                        }
+                        ThrowWin32Exception();
                     }
                 }
-            }
+            }            
         }
 
         public static void Delete(string path, bool recursive = false)
         {
-            if (path.Length < MAX_PATH && !recursive)
+            if (!recursive)
             {
-                //Handle read only
-                //            SetFileAttribute(directory, FileAttributes.Normal);
-                System.IO.Directory.Delete(path, recursive);
+                //handle read only
+                //Win32LongPathFile.SetAttributes(path, System.IO.FileAttributes.Normal);
+                if (!Win32FileSystem.RemoveDirectory(GetWin32LongPath(path)))
+                {
+                    ThrowWin32Exception();
+                }
             }
             else
             {
-                if (!recursive)
-                {
-                    //handle read only
-                    //            SetFileAttribute(directory, FileAttributes.Normal);
-                    bool ok = Win32FileSystem.RemoveDirectory(GetWin32LongPath(path));
-                    if (!ok) ThrowWin32Exception();
-                }
-                else
-                {
-                    DeleteDirectories(new string[] { GetWin32LongPath(path) });
-                }
+                DeleteDirectoriesRecrusive(new string[] { GetWin32LongPath(path) });
             }
+
+            //if (path.Length < MAX_PATH && !recursive)
+            //{
+            //    //Handle read only
+            //    //            SetFileAttribute(directory, FileAttributes.Normal);
+            //    System.IO.Directory.Delete(path, recursive);
+            //}
+            //else
+            //{
+            //    if (!recursive)
+            //    {
+            //        //handle read only
+            //        //            SetFileAttribute(directory, FileAttributes.Normal);
+            //        bool ok = Win32FileSystem.RemoveDirectory(GetWin32LongPath(path));
+            //        if (!ok) ThrowWin32Exception();
+            //    }
+            //    else
+            //    {
+            //        DeleteDirectories(new string[] { GetWin32LongPath(path) });
+            //    }
+            //}
         }
 
 
-        private static void DeleteDirectories(string[] directories)
+        private static void DeleteDirectoriesRecrusive(string[] directories)
         {
             foreach (string directory in directories)
             {
@@ -71,25 +77,25 @@ namespace CompleteBackup.Models.Backup.Storage
                     Win32LongPathFile.Delete(file);
                 }
                 directories = Win32LongPathDirectory.GetDirectories(directory, null, System.IO.SearchOption.TopDirectoryOnly);
-                DeleteDirectories(directories);
+                DeleteDirectoriesRecrusive(directories);
                 bool ok = Win32FileSystem.RemoveDirectory(GetWin32LongPath(directory));
                 if (!ok) ThrowWin32Exception();
             }
         }
 
-        public static bool Exists(string path)
-        {
-            if (path.Length < MAX_PATH)
-            {
-                return System.IO.Directory.Exists(path);
-            }
-            else
-            {
-                return LongExists(GetWin32LongPath(path));
-            }
-        }
+        //public static bool Exists(string path)
+        //{
+        //    //if (path.Length < MAX_PATH)
+        //    //{
+        //    //    return System.IO.Directory.Exists(path);
+        //    //}
+        //    //else
+        //    //{
+        //    //    return LongExists(GetWin32LongPath(path));
+        //    //}
+        //}
 
-        private static bool LongExists(string path)
+        public static bool Exists(string path)
         {
             var attr = Win32FileSystem.GetFileAttributesW(path);
 
@@ -188,17 +194,11 @@ namespace CompleteBackup.Models.Backup.Storage
         }
 
 
-
         public static void Move(string sourceDirName, string destDirName)
         {
-            if (sourceDirName.Length < MAX_PATH || destDirName.Length < MAX_PATH)
+            if (!Win32FileSystem.MoveFileW(GetWin32LongPath(sourceDirName), GetWin32LongPath(destDirName)))
             {
-                System.IO.Directory.Move(sourceDirName, destDirName);
-            }
-            else
-            {
-                var ok = Win32FileSystem.MoveFileW(GetWin32LongPath(sourceDirName), GetWin32LongPath(destDirName));
-                if (!ok) ThrowWin32Exception();
+                ThrowWin32Exception();
             }
         }
 
