@@ -53,6 +53,10 @@ namespace CompleteBackup.Models.Backup.Storage
             return setEntries;
         }
 
+        public string[] GetDirectories(string path, string searchPattern = null, System.IO.SearchOption searchOption = SearchOption.TopDirectoryOnly)
+        {
+                return Directory.GetDirectories(path, searchPattern, searchOption);
+        }
         public string Combine(string path1, string path2)
         {
             return Path.Combine(path1, path2);
@@ -172,10 +176,16 @@ namespace CompleteBackup.Models.Backup.Storage
             return true;
         }
 
-
-        public string[] GetDirectories(string path, string searchPattern = "*", System.IO.SearchOption searchOption = SearchOption.TopDirectoryOnly)
+        public FileAttributes GetFileAttributes(string path)
         {
-            return null;
+            if (path.Length < Win32FileSystem.MAX_PATH)
+            {
+                return File.GetAttributes(path);
+            }
+            else
+            {
+                return Win32LongPathFile.GetAttributes(path);
+            }
         }
     }
 }

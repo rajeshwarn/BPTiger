@@ -47,11 +47,13 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
 
                         try
                         {
-                            profileData.TargetBackupFolder = fileDialog.SelectedPath;
-
                             if (!profileData.IsValidSetData)
                             {
                                 MessageBox.Show($"The destination folder you have selected does not contain a valid backup set", "Destination folder", MessageBoxButton.OK, MessageBoxImage.Information);
+                            }
+                            else
+                            {
+                                profileData.TargetBackupFolder = fileDialog.SelectedPath;
                             }
                         }
                         catch (System.IO.PathTooLongException ex)

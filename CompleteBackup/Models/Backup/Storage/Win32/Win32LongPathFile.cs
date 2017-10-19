@@ -31,6 +31,11 @@ namespace CompleteBackup.Models.Backup.Storage
             //}
         }
 
+        public static System.IO.FileAttributes GetAttributes(string path)
+        {
+            return (System.IO.FileAttributes)Win32FileSystem.GetFileAttributesW(GetWin32LongPath(path));
+        }
+
         public static void Delete(string path)
         {
             if (path.Length < MAX_PATH) System.IO.File.Delete(path);

@@ -62,6 +62,19 @@ namespace CompleteBackup.Models.Backup.Storage
             }
         }
 
+
+        public FileAttributes GetFileAttributes(string path)
+        {
+            if (path.Length < Win32FileSystem.MAX_PATH)
+            {
+                return File.GetAttributes(path);
+            }
+            else
+            {
+                return Win32LongPathFile.GetAttributes(path);
+            }
+        }
+
         //used buy delete file/directory to delete read only files
         private void SetFileAttributeRecrusive(string folder, FileAttributes attribute)
         {

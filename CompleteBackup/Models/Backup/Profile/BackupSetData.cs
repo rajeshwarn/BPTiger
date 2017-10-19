@@ -19,38 +19,28 @@ namespace CompleteBackup.Models.Backup.Profile
 
         public ObservableCollection<string> FolderList { get; set; } = new ObservableCollection<string>();
 
-        //        [NonSerialized]
         public bool IsValidSetData
         {
             get
             {
-                bool bValidSet = true;
+                bool bValidSet = false;
                 var subdirectoryList = GetDirectoriesNames(_TargetBackupFolder);
 
                 foreach (string subDirectory in subdirectoryList)
                 {
                     string newPath = m_IStorage.Combine(_TargetBackupFolder, subDirectory);
-                    FileAttributes attr;
-                    if (newPath.Length < Win32FileSystem.MAX_PATH)
-                    {
-                        attr = File.GetAttributes(newPath);
-                    }
-                    else
-                    {
-                        attr = (FileAttributes)Win32FileSystem.GetFileAttributesW(newPath);
-                    }
+                    FileAttributes attr = m_IStorage.GetFileAttributes(newPath);
 
-                    if (((attr & FileAttributes.System) != FileAttributes.System) &&
-                        ((attr & FileAttributes.Hidden) != FileAttributes.Hidden))
+                    if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                     {
-                        bValidSet &= subDirectory.StartsWith(GUID.ToString());
+                        bValidSet |= subDirectory.StartsWith(GUID.ToString());
                     }
                 }
 
                 return bValidSet;
             }
 
-            set { }
+            private set { }
         }
 
         private string _TargetBackupFolder;
