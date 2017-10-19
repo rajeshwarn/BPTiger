@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace CompleteBackup.Models.Backup.Profile
 {
@@ -19,6 +20,7 @@ namespace CompleteBackup.Models.Backup.Profile
 
         public ObservableCollection<string> FolderList { get; set; } = new ObservableCollection<string>();
 
+        [XmlIgnore]
         public bool IsValidSetData
         {
             get

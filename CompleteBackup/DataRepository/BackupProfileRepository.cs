@@ -61,18 +61,15 @@ namespace CompleteBackup.DataRepository
                 {
                     new BackupProfileData()
                     {
-                        Name = "My Sample Profile",
+                        Name = "My first Profile",
                         BackupSetList = new ObservableCollection<BackupSetData>()
                         {
                             new BackupSetData()
                             {
                                 GUID = Guid.NewGuid(),
-                                Name = "My Sample Set",
-                                TargetBackupFolder = null,
+                                Name = "My first backup set",
                                 FolderList = new ObservableCollection<string>()
                                 {
-                                    //"C:\\tmp\\BackupTest\\Source\\Icarus",
-                                    //"C:\\tmp\\BackupTest\\Source\\ICR_Generic\\NT"
                                 }
                             }
                         }
@@ -80,7 +77,7 @@ namespace CompleteBackup.DataRepository
                 };
 
                 Properties.BackupProfileRepository.Default.BackupProfileList = BackupProfileList;
-                SaveProfile();
+                SaveProfile();            
             }
         }
         public void SaveProfile()
