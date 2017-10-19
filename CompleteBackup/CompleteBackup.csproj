@@ -85,7 +85,7 @@
     <Compile Include="ViewModels\FolderSelection\ICommands\SaveFolderSelectionICommand.cs" />
     <Compile Include="ViewModels\MainWindow\MainWindowStatusBarViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\MainWindowViewModel.cs" />
-    <Compile Include="Views\FolderTreeView.xaml.cs">
+    <Compile Include="Views\BackupSetting\FolderTreeView.xaml.cs">
       <DependentUpon>FolderTreeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ICommands\FolderTreeItemClickICommand.cs" />
@@ -108,7 +108,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\FolderTreeView.xaml">
+    <Page Include="Views\BackupSetting\FolderTreeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

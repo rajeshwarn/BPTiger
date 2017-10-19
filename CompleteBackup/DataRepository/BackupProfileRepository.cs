@@ -12,6 +12,8 @@ namespace CompleteBackup.DataRepository
 {
     class BackupProfileRepository : ObservableObject
     {
+        private const bool bRestRepositoryonStartup = true;
+
         static public BackupProfileRepository Instance { get; private set; } = new BackupProfileRepository();
         private BackupProfileRepository()
         {
@@ -53,7 +55,7 @@ namespace CompleteBackup.DataRepository
                // MessageBox.Show($"{ex.Message}", "Backup Profile", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            if (BackupProfileList == null)
+            if ((BackupProfileList == null) || bRestRepositoryonStartup)
             {
                 BackupProfileList = new ObservableCollection<BackupProfileData>()
                 {
@@ -66,7 +68,7 @@ namespace CompleteBackup.DataRepository
                             {
                                 GUID = Guid.NewGuid(),
                                 Name = "My Sample Set",
-                                TargetBackupFolder = "C:\\tmp\\BackupTest\\Target",
+                                TargetBackupFolder = null,
                                 FolderList = new ObservableCollection<string>()
                                 {
                                     //"C:\\tmp\\BackupTest\\Source\\Icarus",

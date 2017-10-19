@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:convertors="clr-namespace:CompleteBackup.Utilities.Convertors"
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
              xmlns:view_models="clr-namespace:CompleteBackup.ViewModels"
              xmlns:folder_view_models="clr-namespace:CompleteBackup.ViewModels"
              xmlns:folder_models="clr-namespace:CompleteBackup.Models.FolderSelection"
@@ -31,12 +32,28 @@
 
         <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Vertical" Margin="0,0,0,8">
             <DockPanel LastChildFill="True">
-                <TextBlock Text="Save backup folder to: "  DockPanel.Dock="Left"/>
+                <TextBlock Text="Save backup folder to: "  DockPanel.Dock="Left">
+                </TextBlock>
                 <Button Content=" ... " DockPanel.Dock="Right"
                 Command="{Binding SelectFolderNameCommand}"
                 CommandParameter="{Binding SetData}">
                 </Button>
-                <TextBox Text="{Binding Path=SetData.TargetBackupFolder, FallbackValue=' -- Please select target folder --'}" Width="Auto"/>
+                <TextBox x:Name="NameTxtBlock" Text="{Binding Path=SetData.TargetBackupFolder, TargetNullValue=' -- Please select target folder --'}" Width="Auto">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox" >
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=NameTxtBlock, Path=Text}" Value="{x:Null}">
+                                    <Setter Property="FontStyle" Value="Italic"/>
+                                    <Setter Property="Text" Value="  XX-- Please select target folder --" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=SetData.TargetBackupFolderEmptyFolderMessage}" Value="{x:Static System:String.Empty}">
+                                    <Setter Property="FontStyle" Value="Italic"/>
+                                    <Setter Property="Text" Value="  XX-- Please select target folder --" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
             </DockPanel>
         </StackPanel>
         <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Vertical" Margin="0,0,0,8">
