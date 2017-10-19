@@ -1,0 +1,117 @@
+﻿<Window x:Class="CompleteBackup.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:main_views="clr-namespace:CompleteBackup.Views"  
+        xmlns:main_window_views="clr-namespace:CompleteBackup.Views.MainWindow"             
+        xmlns:main_viewmodels="clr-namespace:CompleteBackup.ViewModels.MainWindow"  
+        xmlns:local="clr-namespace:CompleteBackup"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="550" Width="825">
+    <Window.Resources>
+        <!--<DataTemplate DataType="{x:Type view_models:MainFrameWindowViewModel}">
+            <views:MainFrameView />
+        </DataTemplate>-->
+    </Window.Resources>
+    <Window.DataContext>
+        <main_viewmodels:MainWindowViewModel/>
+    </Window.DataContext>
+
+    <DockPanel LastChildFill="True">
+        <Ribbon x:Name="RibbonWin" DockPanel.Dock="Top" SelectedIndex="1">
+            <!-- Help Pane, located at the right-hand side -->
+            <Ribbon.HelpPaneContent>
+                <RibbonButton SmallImageSource="/Resources/Icons/Iconsmind-Outline-File.ico" />
+            </Ribbon.HelpPaneContent>
+            <!-- Quick Access Toolbar - located at the upper-left corner -->
+            <Ribbon.QuickAccessToolBar>
+                <RibbonQuickAccessToolBar>
+                    <RibbonButton x:Name ="Save" SmallImageSource="/Resources/Icons/Iconsmind-Outline-File.ico" />
+                    <RibbonSplitButton x:Name ="Undo" SmallImageSource="/Resources/Icons/Iconsmind-Outline-File.ico">
+                        <RibbonSplitMenuItem Header="Undo 1" />
+                        <RibbonSplitMenuItem Header="Undo 2" />
+                        <RibbonSplitMenuItem Header="Undo 3" />
+                    </RibbonSplitButton>
+                    <RibbonSplitButton x:Name="Redo" SmallImageSource="/Resources/Icons/Iconsmind-Outline-File.ico" >
+                        <RibbonSplitMenuItem Header="Redo 1" />
+                        <RibbonSplitMenuItem Header="Redo 2" />
+                    </RibbonSplitButton>
+                </RibbonQuickAccessToolBar>
+            </Ribbon.QuickAccessToolBar>
+            <!-- Application Menu, located at the left-hand side (down arrow) -->
+            <Ribbon.ApplicationMenu>
+                <RibbonApplicationMenu KeyTip="F">
+                    <RibbonApplicationMenuItem Header="Options" ImageSource="/Resources/Icons/Iconsmind-Outline-File.ico" />
+                    <RibbonApplicationMenuItem Header="Exit" ImageSource="/Resources/Icons/Iconsmind-Outline-File.ico" />
+                </RibbonApplicationMenu>
+            </Ribbon.ApplicationMenu>
+
+            <RibbonTab Header="File" KeyTip="F" >
+                <RibbonGroup Header="Profile">
+                    <RibbonButton SmallImageSource="/Resources/Icons/Ribbon/document-import.ico" Label="Import" KeyTip="I" 
+                                                  Command="{Binding ImportSmartGraphCollectionCommand}"/>
+                    <RibbonButton SmallImageSource="/Resources/Icons/Ribbon/document-export.ico" Label="Export" KeyTip="E" 
+                                                  Command="{Binding ExportSmartGraphCollectionCommand}"/>
+                </RibbonGroup>
+            </RibbonTab>
+
+
+            <RibbonTab Header="Backup" KeyTip="B" >
+                <TextBlock Text="{Binding TEXT}"/>
+                <RibbonGroup Header="{Binding Profile.SelectedBackupProfile.Name}" ItemsSource="{Binding Profile.SelectedBackupProfile.BackupSetList}"
+                                     ToolTip="{Binding Profile.SelectedBackupProfile.Description}">
+                    <RibbonGroup.ItemTemplate>
+                        <DataTemplate>
+                            <!--<RibbonCheckBox Label="{Binding Name}" Foreground="{Binding ForgroundColor}" IsChecked="{Binding IsSelected}" ToolTip="{Binding Description}"
+                                            Command="{Binding DataContext.ToggleSmartGraphRuleCommand, RelativeSource={RelativeSource AncestorType=RibbonTab}}"
+                                            CommandParameter="{Binding }"/>-->
+                            <TextBlock Text="{Binding Name}" ToolTip="{Binding Description}"/>
+                        </DataTemplate>
+                    </RibbonGroup.ItemTemplate>
+                </RibbonGroup>
+            </RibbonTab>
+
+
+
+
+            <!-- Ribbon Tab #1: Home -->
+            <RibbonTab Header="Home" KeyTip="H" >
+                <!-- Home  group-->
+                <RibbonGroup x:Name="ClipboardGroup" Header="Home">
+                    <RibbonMenuButton LargeImageSource="/Resources/Icons/Iconsmind-Outline-File.ico" Label="Paste" KeyTip="V">
+                        <RibbonMenuItem ImageSource="/Resources/Icons/Iconsmind-Outline-File.ico" Header="Keep Text Only" KeyTip="T"/>
+                        <RibbonMenuItem ImageSource="/Resources/Icons/Iconsmind-Outline-File.ico" Header="Paste Special..." KeyTip="S"/>
+                    </RibbonMenuButton>
+                    <RibbonButton SmallImageSource="/Resources/Icons/Iconsmind-Outline-File.ico" Label="Cut" KeyTip="X" />
+                    <RibbonButton SmallImageSource="/Resources/Icons/Iconsmind-Outline-File.ico" Label="Copy" KeyTip="C" />
+                    <RibbonButton SmallImageSource="/Resources/Icons/Iconsmind-Outline-File.ico" Label="Format Painter" KeyTip="FP" />
+                </RibbonGroup>
+                <!-- Employee And Payroll group-->
+                <RibbonGroup x:Name="Employee" Header="Employee And Payroll">
+                    <RibbonMenuButton LargeImageSource="/Resources/Icons/Iconsmind-Outline-File.ico" Label="Employee" KeyTip="V">
+                        <RibbonMenuItem ImageSource="/Resources/Icons/Iconsmind-Outline-File.ico" Header="Keep Text Only" KeyTip="T"/>
+                        <RibbonMenuItem ImageSource="/Resources/Icons/Iconsmind-Outline-File.ico" Header="Paste Special..." KeyTip="S"/>
+                    </RibbonMenuButton>
+                    <RibbonButton SmallImageSource="/Resources/Icons/Iconsmind-Outline-File.ico" Label="Save" KeyTip="X" />
+                    <RibbonButton SmallImageSource="/Resources/Icons/Iconsmind-Outline-File.ico" Label="Add" KeyTip="C" />
+                </RibbonGroup>
+            </RibbonTab>
+            <!-- Ribbon Tab #2: -->
+            <RibbonTab Header="Insert" KeyTip="I">
+            </RibbonTab>
+            <!-- Ribbon Tab #3: -->
+            <RibbonTab Header="PageLayout" KeyTip="L">
+            </RibbonTab>
+        </Ribbon>
+
+        <main_window_views:MainWindowStatusBarView DockPanel.Dock="Bottom"/>
+
+        <!--<ContentControl Content="{Binding ViewManager.CurrentPageViewModel}"/>-->
+
+        <main_views:UserControl1 />
+        <!--<ContentControl Content="{Binding ViewManager.CurrentPageViewModel}"/>-->
+
+    </DockPanel>
+
+</Window>

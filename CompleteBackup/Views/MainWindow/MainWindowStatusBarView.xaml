@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="CompleteBackup.Views.MainWindow.MainWindowStatusBarView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:main_window_models="clr-namespace:CompleteBackup.ViewModels.MainWindow"
+             xmlns:local="clr-namespace:CompleteBackup.Views.MainWindow"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.DataContext>
+        <main_window_models:MainWindowStatusBarViewModel/>
+    </UserControl.DataContext>
+    
+    <DockPanel LastChildFill="True">
+        <StatusBar>
+
+            <Separator DockPanel.Dock="Right"/>
+
+            <StatusBarItem Name="sbiProgressBar">
+                <Grid Width="{Binding ActualWidth, ElementName=sbiProgressBar}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="10*" />
+                        <ColumnDefinition Width="4*" />
+                    </Grid.ColumnDefinitions>
+
+
+                    <StatusBarItem Grid.Column="0">
+                        <TextBlock Text="{Binding StatusBarText}"/>
+                    </StatusBarItem>
+
+                    <StatusBarItem Name="progressBarContainer"  Grid.Column="1">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Cancel" Visibility="{Binding IsCancelEnabled}"/>
+                            <TextBlock Text="{Binding ProgressBarText}"/>
+                            <StackPanel Orientation="Vertical">
+                                <ProgressBar x:Name="pbMainWindowStatusBarProgressBar1"
+                                    IsIndeterminate="{Binding IsIndeterminate1}"
+                                    Minimum="0"
+                                    Maximum="{Binding ProgressBar1Maximum}"
+                                    Value="{Binding ProgressBar1Value}"
+                                    Height="{Binding ProgressBarHeight}" 
+                                    Width="{Binding ElementName=progressBarContainer, Path=ActualWidth}"
+                                    Visibility="{Binding ProgressBar1Visibility}" Margin="0,1"/>
+                                <ProgressBar x:Name="pbMainWindowStatusBarProgressBar2"
+                                    IsIndeterminate="{Binding IsIndeterminate1}"
+                                    Minimum="0"
+                                    Maximum="{Binding ProgressBar2Maximum}"
+                                    Value="{Binding ProgressBar2Value}"
+                                    Height="{Binding ProgressBarHeight}" 
+                                    Width="{Binding ElementName=progressBarContainer, Path=ActualWidth}"
+                                    Visibility="{Binding ProgressBar2Visibility}" Margin="0,1"/>
+                                <ProgressBar x:Name="pbMainWindowStatusBarProgressBar3"
+                                    IsIndeterminate="{Binding IsIndeterminate1}"
+                                    Minimum="0"
+                                    Maximum="{Binding ProgressBar3Maximum}"
+                                    Value="{Binding ProgressBar3Value}"
+                                    Height="{Binding ProgressBarHeight}" 
+                                    Width="{Binding ElementName=progressBarContainer, Path=ActualWidth}"
+                                    Visibility="{Binding ProgressBar3Visibility}" Margin="0,1"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StatusBarItem>
+
+                </Grid>
+            </StatusBarItem>
+        </StatusBar>
+    </DockPanel>
+</UserControl>

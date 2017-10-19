@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{587E07C2-8BFF-4318-B67B-5E0B6B531EC9}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>CompleteBackup</RootNamespace>
+    <AssemblyName>CompleteBackup</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Controls.Ribbon" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="DataRepository\BackupProfileRepository.cs" />
+    <Compile Include="Models\Backup\BackupFactory.cs" />
+    <Compile Include="Models\Backup\Profile\BackupSetData.cs" />
+    <Compile Include="Models\Backup\Profile\BackupProfileData.cs" />
+    <Compile Include="Models\Backup\Storage\NullStorage.cs" />
+    <Compile Include="Models\Backup\Storage\FileSystemStorage.cs" />
+    <Compile Include="Models\Backup\Storage\IStorageInterface.cs" />
+    <Compile Include="Models\Backup\IncrementalBackup.cs" />
+    <Compile Include="Models\Backup\OneWaySyncBackup.cs" />
+    <Compile Include="Models\Backup\BackupSet.cs" />
+    <Compile Include="Models\Backup\Storage\Win32\Win32FileSystem.cs" />
+    <Compile Include="Models\Backup\Storage\Win32\Win32LongPathDirectory.cs" />
+    <Compile Include="Models\Backup\Storage\Win32\Win32LongPathFile.cs" />
+    <Compile Include="Models\MainWindowModel.cs" />
+    <Compile Include="Properties\BackupProfileRepository.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>BackupProfileRepository.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Utilities\Convertors\NullVisibilityConverter.cs" />
+    <Compile Include="Utilities\ObservableObject.cs" />
+    <Compile Include="Models\FolderSelection\FolderMenuItem.cs" />
+    <Compile Include="ViewModels\FolderSelection\FolderTreeViewModel.cs" />
+    <Compile Include="ViewModels\FolderSelection\ICommands\ExpandFolderTreeICommand.cs" />
+    <Compile Include="ViewModels\FolderSelection\ICommands\SelectFolderNameICommand.cs" />
+    <Compile Include="ViewModels\FolderSelection\ICommands\SaveFolderSelectionICommand.cs" />
+    <Compile Include="ViewModels\MainWindow\MainWindowStatusBarViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\MainWindowViewModel.cs" />
+    <Compile Include="Views\FolderTreeView.xaml.cs">
+      <DependentUpon>FolderTreeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ICommands\FolderTreeItemClickICommand.cs" />
+    <Compile Include="Views\MainWindow\GenericStatusBarView.cs" />
+    <Compile Include="Views\MainWindow\MainWindowStatusBarView.xaml.cs">
+      <DependentUpon>MainWindowStatusBarView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControl1.xaml.cs">
+      <DependentUpon>UserControl1.xaml</DependentUpon>
+    </Compile>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Views\FolderTreeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow\MainWindowStatusBarView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControl1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\BackupProfileRepository.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>BackupProfileRepository.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Ribbon\DeleteRed.ico" />
+    <Resource Include="Resources\Icons\Ribbon\document-export.ico" />
+    <Resource Include="Resources\Icons\Ribbon\document-import.ico" />
+    <Resource Include="Resources\Icons\Ribbon\options.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Iconsmind-Outline-File.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
