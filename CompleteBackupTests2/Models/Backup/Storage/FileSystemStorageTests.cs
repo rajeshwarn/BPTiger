@@ -145,7 +145,7 @@ namespace CompleteBackup.Models.Backup.Storage.Tests
             }
 
             path = fs.Combine(tempFolder, Guid.NewGuid().ToString());
-            System.IO.Directory.CreateDirectory(path);
+            fs.CreateDirectory(path);
 
             result = fs.DirectoryExists(path);
             if (!result)
@@ -160,19 +160,71 @@ namespace CompleteBackup.Models.Backup.Storage.Tests
         [TestMethod()]
         public void GetFileAttributesTest()
         {
-            Assert.Fail();
+            var tempFolder = GetTempFolder();
+            var fs = new FileSystemStorage();
+
+            var path = fs.Combine(tempFolder, Guid.NewGuid().ToString());
+            System.IO.File.WriteAllText(path, "test");
+
+            var result = fs.GetFileAttributes(path);
+            if (result == 0 || ((int)result == -1))
+            {
+                Trace.WriteLine($"Failed to read file attribute from filr {path}");
+                Assert.Fail();
+            }
+
+            fs.DeleteFile(path);
         }
 
         [TestMethod()]
         public void DeleteDirectoryTest()
         {
-            Assert.Fail();
+            var tempFolder = GetTempFolder();
+            var fs = new FileSystemStorage();
+
+            var path = fs.Combine(tempFolder, Guid.NewGuid().ToString());
+            fs.CreateDirectory(path);
+
+            var result = fs.DirectoryExists(path);
+            if (!result)
+            {
+                Trace.WriteLine($"Failed to create directory: {path}");
+                Assert.Fail();
+            }
+
+            fs.DeleteDirectory(path);
+
+            result = fs.DirectoryExists(path);
+            if (result)
+            {
+                Trace.WriteLine($"Failed to delete directory: {path}");
+                Assert.Fail();
+            }
         }
 
         [TestMethod()]
         public void DeleteFileTest()
         {
-            Assert.Fail();
+            var tempFolder = GetTempFolder();
+            var fs = new FileSystemStorage();
+
+            var path = fs.Combine(tempFolder, Guid.NewGuid().ToString());
+            System.IO.File.WriteAllText(path, "test");
+
+            var result = fs.FileExists(path);
+            if (!result)
+            {
+                Trace.WriteLine($"Failed to create file: {path}");
+                Assert.Fail();
+            }
+
+            fs.DeleteFile(path);
+            result = fs.FileExists(path);
+            if (result)
+            {
+                Trace.WriteLine($"Failed to delete file: {path}");
+                Assert.Fail();
+            }
         }
 
         [TestMethod()]
@@ -190,25 +242,202 @@ namespace CompleteBackup.Models.Backup.Storage.Tests
         [TestMethod()]
         public void IsFileSameTest()
         {
-            Assert.Fail();
+            var tempFolder = GetTempFolder();
+            var fs = new FileSystemStorage();
+
+            var path1 = fs.Combine(tempFolder, Guid.NewGuid().ToString());
+            var path2 = fs.Combine(tempFolder, Guid.NewGuid().ToString());
+
+            System.IO.File.WriteAllText(path1, "test");
+            System.IO.File.WriteAllText(path2, "test");
+
+            var result = fs.IsFileSame(path1, path2);
+            if (result)
+            {
+                Trace.WriteLine($"Date signature: Files are the same: {path1}, {path2}");
+                Assert.Fail();
+            }
+
+            var path3 = fs.Combine(tempFolder, Guid.NewGuid().ToString());
+            fs.CopyFile(path1, path3);
+            result = fs.IsFileSame(path1, path3);
+            if (!result)
+            {
+                Trace.WriteLine($"Date signature: Files are not the same: {path1}, {path3}");
+                Assert.Fail();
+            }
+
+            fs.DeleteFile(path1);
+            fs.DeleteFile(path2);
+            fs.DeleteFile(path3);
         }
 
         [TestMethod()]
         public void CreateDirectoryTest()
         {
-            Assert.Fail();
+            var tempFolder = GetTempFolder();
+            var fs = new FileSystemStorage();
+
+            var path = fs.Combine(tempFolder, Guid.NewGuid().ToString());
+            fs.CreateDirectory(path);
+
+            var result = fs.DirectoryExists(path);
+            if (!result)
+            {
+                Trace.WriteLine($"Failed to create directory: {path}");
+                Assert.Fail();
+            }
+
+            fs.DeleteDirectory(path);
+
+            result = fs.DirectoryExists(path);
+            if (result)
+            {
+                Trace.WriteLine($"Failed to delete directory: {path}");
+                Assert.Fail();
+            }
         }
 
         [TestMethod()]
         public void CopyFileTest()
         {
-            Assert.Fail();
+            var tempFolder = GetTempFolder();
+            var fs = new FileSystemStorage();
+
+            var testData = new List<Tuple<string, string>>
+            {
+                new Tuple<string, string>(@"file1.txt", @"folder2\file2.txt"),
+            };
+
+            foreach (var data in testData)
+            {
+                var path1 = fs.Combine(tempFolder, data.Item1);
+                var path2 = fs.Combine(tempFolder, data.Item2);
+
+                //Delete leftovers
+                try { fs.DeleteFile(path1); } catch { }
+                try { fs.DeleteFile(path2); } catch { }
+
+                System.IO.File.WriteAllText(path1, "test file");
+                try
+                {
+                    fs.CopyFile(path1, path2);
+                    Trace.WriteLine($"Copy to {path2} shuold fail to copy file - path error");
+                    Assert.Fail();
+                }
+                catch { }
+
+                try { fs.CreateDirectory(fs.GetDirectoryName(path2)); } catch { }
+
+                fs.CopyFile(path1, path2, true);
+                if (!fs.FileExists(path2))
+                {
+                    Trace.WriteLine($"failed to copy file {path2}");
+                    Assert.Fail();
+                }
+
+                try
+                {
+                    fs.CopyFile(path1, path2);
+                    Trace.WriteLine($"Copy to {path2} shuold fail to copy file - file exist");
+                    Assert.Fail();
+                }
+                catch { }
+
+                fs.CopyFile(path1, path2, true);
+
+                if (!fs.FileExists(path1))
+                {
+                    Trace.WriteLine($"File was deleted{path1}");
+                    Assert.Fail();
+                }
+
+                if (!fs.FileExists(path2))
+                {
+                    Trace.WriteLine($"File not copied - override {path2}");
+                    Assert.Fail();
+                }
+
+                fs.DeleteFile(path1);
+                fs.DeleteFile(path2);
+
+                var targetFileName = fs.GetFileName(path2);
+                var targetDirectoryName = path2.Substring(0, path2.Length - targetFileName.Length);
+                fs.DeleteDirectory(targetDirectoryName);
+            }
         }
 
         [TestMethod()]
         public void MoveFileTest()
         {
-            Assert.Fail();
+            var tempFolder = GetTempFolder();
+            var fs = new FileSystemStorage();
+
+            var testData = new List<Tuple<string, string>>
+            {
+                new Tuple<string, string>(@"file1.txt", @"folder2\file2.txt"),
+            };
+
+            foreach (var data in testData)
+            {
+                var path1 = fs.Combine(tempFolder, data.Item1);
+                var path2 = fs.Combine(tempFolder, data.Item2);
+
+                //Delete leftovers
+                try { fs.DeleteFile(path1); } catch { }
+                try { fs.DeleteFile(path2); } catch { }
+                try { fs.DeleteDirectory(fs.GetDirectoryName(path2)); } catch { }                
+
+                System.IO.File.WriteAllText(path1, "test file");
+
+                //simple move target folder no exists
+                try
+                {
+                    fs.MoveFile(path1, path2);
+                    Trace.WriteLine($"move to {path2} shuold fail to move file - path error");
+                    Assert.Fail();
+                }
+                catch { }
+
+                try { fs.CreateDirectory(fs.GetDirectoryName(path2)); } catch { }
+
+                //simple move
+                fs.MoveFile(path1, path2);
+                if (!fs.FileExists(path2))
+                {
+                    Trace.WriteLine($"failed to move file {path2}");
+                    Assert.Fail();
+                }
+
+                //file already exist
+                fs.CopyFile(path2, path1);
+                try
+                {
+                    fs.MoveFile(path1, path2);
+                    Trace.WriteLine($"Moveto {path2} shuold fail- file exist");
+                    Assert.Fail();
+                }
+                catch { }
+
+                if (!fs.FileExists(path2))
+                {
+                    Trace.WriteLine($"File was deleted{path1}");
+                    Assert.Fail();
+                }
+
+                if (!fs.FileExists(path2))
+                {
+                    Trace.WriteLine($"File not copied - override {path2}");
+                    Assert.Fail();
+                }
+
+                fs.DeleteFile(path1);
+                fs.DeleteFile(path2);
+
+                var targetFileName = fs.GetFileName(path2);
+                var targetDirectoryName = path2.Substring(0, path2.Length - targetFileName.Length);
+                fs.DeleteDirectory(targetDirectoryName);
+            }
         }
 
         [TestMethod()]
