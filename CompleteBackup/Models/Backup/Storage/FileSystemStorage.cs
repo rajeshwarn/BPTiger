@@ -13,9 +13,29 @@ namespace CompleteBackup.Models.Backup.Storage
     {
         //private const int cMaxFilePathLength = Win32LongPathFile.MAX_PATH;
         //private const int cMaxFolderPathLength = Win32LongPathDirectory.MAX_PATH;
-        private const int MAX_PATH_LENGTH = Win32LongPathFile.MAX_PATH;
+        private int MAX_PATH_LENGTH = Win32LongPathFile.MAX_PATH;
         //private const int cMaxWin32PathLength = Win32LongPathFile.MAX_PATH;
 
+        public bool IsFileSameByLastChangeOnle { get; set; };
+
+        public bool IsLongPathSupported
+        {
+            get
+            {
+                return MAX_PATH_LENGTH == Win32LongPathFile.MAX_PATH;
+            }
+            set
+            {
+                if (value == true)
+                {
+                    MAX_PATH_LENGTH = Win32LongPathFile.MAX_PATH;
+                }
+                else
+                {
+                    MAX_PATH_LENGTH = int.MaxValue;
+                }
+            }
+        }
         public string Combine(string path1, string path2)
         {
             return Path.Combine(path1, path2);
@@ -168,13 +188,16 @@ namespace CompleteBackup.Models.Backup.Storage
 
         public bool IsFileSame(string file1, string file2)
         {
-
-            DateTime time1 = GetLastWriteTime(file1);
-            DateTime time2 = GetLastWriteTime(file2);
-
-            //bool bSame = File.ReadLines(file1).SequenceEqual(File.ReadLines(file2));
-
-            return time1 == time2;
+            if (IsFileSameByLastChangeOnle)
+            {
+                DateTime time1 = GetLastWriteTime(file1);
+                DateTime time2 = GetLastWriteTime(file2);
+                return time1 == time2;
+            }
+            else
+            {
+                return File.ReadLines(file1).SequenceEqual(File.ReadLines(file2));
+            }
         }
 
 
