@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompleteBackup", "CompleteBackup\CompleteBackup.csproj", "{587E07C2-8BFF-4318-B67B-5E0B6B531EC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompleteBackupTests2", "CompleteBackupTests2\CompleteBackupTests2.csproj", "{7C365B83-8CA3-470D-BACE-606B2D03463E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompleteBackupTests", "CompleteBackupTests2\CompleteBackupTests.csproj", "{7C365B83-8CA3-470D-BACE-606B2D03463E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

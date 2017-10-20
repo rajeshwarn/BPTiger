@@ -7,8 +7,8 @@
     <ProjectGuid>{7C365B83-8CA3-470D-BACE-606B2D03463E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CompleteBackupTests2</RootNamespace>
-    <AssemblyName>CompleteBackupTests2</AssemblyName>
+    <RootNamespace>CompleteBackupTests</RootNamespace>
+    <AssemblyName>CompleteBackupTests</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

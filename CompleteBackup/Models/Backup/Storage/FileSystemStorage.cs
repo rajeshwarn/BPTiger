@@ -16,7 +16,7 @@ namespace CompleteBackup.Models.Backup.Storage
         private int MAX_PATH_LENGTH = Win32LongPathFile.MAX_PATH;
         //private const int cMaxWin32PathLength = Win32LongPathFile.MAX_PATH;
 
-        public bool IsFileSameByLastChangeOnle { get; set; };
+        public bool IsFileSameByLastChangeOnle { get; set; }
 
         public bool IsLongPathSupported
         {
