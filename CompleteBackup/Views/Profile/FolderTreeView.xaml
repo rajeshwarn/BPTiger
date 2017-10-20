@@ -65,12 +65,12 @@
                 </Button>
 
                 <TextBox x:Name="txTaggetFolder" IsReadOnly="false" IsReadOnlyCaretVisible="True"                         
-                         Validation.ErrorTemplate="{StaticResource validationTargetFolderErrorTemplate}" TextChanged="txTaggetFolder_TextChanged">
+                         Validation.ErrorTemplate="{StaticResource validationTargetFolderErrorTemplate}">
                     <TextBox.Text>
                         <Binding Path="ProfileData.TargetBackupFolder"
                                  Mode="TwoWay"
                                  TargetNullValue=''
-                                 UpdateSourceTrigger="PropertyChanged">
+                                 UpdateSourceTrigger="Default">
                             <Binding.ValidationRules>
                                 <validators:BackupTargetLocationValidator/>
                             </Binding.ValidationRules>

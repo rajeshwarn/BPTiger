@@ -12,16 +12,26 @@ namespace CompleteBackup.Models.Backup.Profile
 {
     public class BackupProfileData : ObservableObject
     {
-        [Flags]
         public enum ProfileTargetFolderStatusEnum
         {
             AssosiatedWithThisProfile, //no error looks good
             AssosiatedWithADifferentProfile,
-            EmptyFolderNoProfile,
-            NonEmptyFolderNoProfile,
             CoccuptedOrNotRecognizedProfile,
-            InvalidTargetPath
+            EmptyFolderNoProfile,
+            InvalidTargetPath,
+            NonEmptyFolderNoProfile,
         }
+
+        public static Dictionary<ProfileTargetFolderStatusEnum, string> ProfileTargetFolderStatusDictionary { get; } = new Dictionary<ProfileTargetFolderStatusEnum, string>()
+        {
+            { ProfileTargetFolderStatusEnum.AssosiatedWithADifferentProfile, "The folder is associated with a different backup profile" },
+            { ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile, "" },
+            { ProfileTargetFolderStatusEnum.CoccuptedOrNotRecognizedProfile, "The backup profile in this folder is not recognized or corrupted" },
+            { ProfileTargetFolderStatusEnum.EmptyFolderNoProfile, "" },
+            { ProfileTargetFolderStatusEnum.InvalidTargetPath, "The folder does not exist or invalid" },
+            { ProfileTargetFolderStatusEnum.NonEmptyFolderNoProfile, "The folder does not contain a backup profile" },
+        };
+
 
         public Guid GUID { get; set; } = Guid.NewGuid();
         public string Name { get; set; } = "My Backup Profile";

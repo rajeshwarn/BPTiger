@@ -33,6 +33,9 @@ namespace CompleteBackup.Views
             {
                 trvFolderTreeView.Items.Add(item);
             }
+
+            BindingExpression binding = txTaggetFolder.GetBindingExpression(TextBox.TextProperty);
+            binding.UpdateSource();
         }
 
         private void TreeViewItem_Expanded(object sender, RoutedEventArgs e)
@@ -60,15 +63,6 @@ namespace CompleteBackup.Views
 
             var viewModel = DataContext as FolderTreeViewModel;
             viewModel.FolderTreeClick(dc, (bool)checkbox.IsChecked);
-        }
-
-        private void txTaggetFolder_TextChanged(object sender, TextChangedEventArgs e)
-        {
-       //     var vm = this.DataContext as FolderTreeViewModel;
-       //     vm.ProfileData.UpdateProfileTargetFolderStatus();
-
-            BindingExpression binding = txTaggetFolder.GetBindingExpression(TextBox.TextProperty);
-            binding.UpdateSource();
         }
     }
 }

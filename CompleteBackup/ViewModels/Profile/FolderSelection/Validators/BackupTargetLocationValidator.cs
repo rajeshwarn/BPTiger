@@ -1,5 +1,6 @@
 ﻿using CompleteBackup.DataRepository;
 using CompleteBackup.Models.backup;
+using CompleteBackup.Models.Backup.Profile;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +15,9 @@ namespace CompleteBackup.ViewModels.FolderSelection.Validators
         public override ValidationResult Validate (object value, System.Globalization.CultureInfo cultureInfo)
         {
             var name = value as String;
-            var backupProfile = BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile;
+            var profile = BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile;
 
-            if (backupProfile == null)
+            if (profile == null)
             {
                 return new ValidationResult(false, "Please create or select a Backup Profile");
             }
@@ -27,14 +28,16 @@ namespace CompleteBackup.ViewModels.FolderSelection.Validators
             }
             else
             {
-                var folderStatus = backupProfile.GetProfileTargetFolderStatus(name);
+                var folderStatus = profile.GetProfileTargetFolderStatus(name);
                 if (folderStatus == Models.Backup.Profile.BackupProfileData.ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile)
                 {
                     return ValidationResult.ValidResult;
                 }
                 else
                 {
-                    return new ValidationResult(false, folderStatus.ToString());
+                    var num = (int)folderStatus;
+                    var res = BackupProfileData.ProfileTargetFolderStatusDictionary[folderStatus];
+                    return new ValidationResult(false, BackupProfileData.ProfileTargetFolderStatusDictionary[folderStatus]);
                 }
             }
         }
