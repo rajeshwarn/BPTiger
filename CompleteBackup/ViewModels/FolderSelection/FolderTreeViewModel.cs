@@ -1,5 +1,5 @@
 ﻿using CompleteBackup.DataRepository;
-using CompleteBackup.Models.Backup.Profile;
+using CompleteBackup.Models.Backup.Project;
 using CompleteBackup.Models.Backup.Storage;
 using CompleteBackup.Models.FolderSelection;
 using CompleteBackup.ViewModels.FolderSelection.ICommands;
@@ -34,7 +34,7 @@ namespace CompleteBackup.ViewModels
 
         public FolderTreeViewModel()
         {
-            SetData = BackupProfileRepository.Instance.SelectedBackupSet;
+            SetData = BackupProjectRepository.Instance.SelectedBackupSet;
 
             //string[] drives = System.IO.Directory.GetLogicalDrives();
 
@@ -168,7 +168,7 @@ namespace CompleteBackup.ViewModels
                         var newItem = new FolderMenuItem() { IsFolder = true, Attributes = attr, Path = newPath, Name = subdirectory, ParentItem = item, Selected = false};
                         item.Items.Add(newItem);
 
-                        //var match = ProfileData.FolderList.Where(f => String.Compare(f, newPath, true) == 0);
+                        //var match = ProjectData.FolderList.Where(f => String.Compare(f, newPath, true) == 0);
 
                         //var iCount = match.Count();
                         //if (iCount > 0)

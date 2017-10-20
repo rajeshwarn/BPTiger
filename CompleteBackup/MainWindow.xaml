@@ -48,7 +48,7 @@
             </Ribbon.ApplicationMenu>
 
             <RibbonTab Header="File" KeyTip="F" >
-                <RibbonGroup Header="Profile">
+                <RibbonGroup Header="Project">
                     <RibbonButton SmallImageSource="/Resources/Icons/Ribbon/document-import.ico" Label="Import" KeyTip="I" 
                                                   Command="{Binding ImportSmartGraphCollectionCommand}"/>
                     <RibbonButton SmallImageSource="/Resources/Icons/Ribbon/document-export.ico" Label="Export" KeyTip="E" 
@@ -59,8 +59,8 @@
 
             <RibbonTab Header="Backup" KeyTip="B" >
                 <TextBlock Text="{Binding TEXT}"/>
-                <RibbonGroup Header="{Binding Profile.SelectedBackupProfile.Name}" ItemsSource="{Binding Profile.SelectedBackupProfile.BackupSetList}"
-                                     ToolTip="{Binding Profile.SelectedBackupProfile.Description}">
+                <RibbonGroup Header="{Binding Project.SelectedBackupProject.Name}" ItemsSource="{Binding Project.SelectedBackupProject.BackupSetList}"
+                                     ToolTip="{Binding Project.SelectedBackupProject.Description}">
                     <RibbonGroup.ItemTemplate>
                         <DataTemplate>
                             <!--<RibbonCheckBox Label="{Binding Name}" Foreground="{Binding ForgroundColor}" IsChecked="{Binding IsSelected}" ToolTip="{Binding Description}"

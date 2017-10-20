@@ -18,7 +18,7 @@ namespace CompleteBackup.Models.backup
             m_IStorage = new FileSystemStorage();
             m_BackupName = backupName;
         }
-        public override string BackUpSetSignature { get { return $"{BackupProfileRepository.Instance.SelectedBackupSet.GUID.ToString()}-CBKP-SNAP"; } }
+        public override string BackUpSetSignature { get { return $"{BackupProjectRepository.Instance.SelectedBackupSet.GUID.ToString()}-CBKP-SNAP"; } }
         string m_BackupName;
 
         public override void ProcessBackup()

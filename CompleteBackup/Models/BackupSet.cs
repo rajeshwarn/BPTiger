@@ -90,8 +90,8 @@ namespace CompleteBackup.Models.backup
             m_NoChangeItemsNode.Attributes.Append(attribute);
 
 
-//            var tmpPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-//            var name = System.Reflection.Assembly.GetExecutingAssembly().GetName();
+            //            var tmpPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProject);
+            //            var name = System.Reflection.Assembly.GetExecutingAssembly().GetName();
             var file = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $"{signature}_ChangeLog.xml");
 
             string targetFile = m_IStorage.Combine(path, $"{signature}_ChangeLog.xml");

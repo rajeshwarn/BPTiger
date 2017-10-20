@@ -57,25 +57,25 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="DataRepository\BackupProfileRepository.cs" />
+    <Compile Include="DataRepository\BackupProjectRepository.cs" />
     <Compile Include="Models\Backup\BackupFactory.cs" />
-    <Compile Include="Models\Backup\Profile\BackupSetData.cs" />
-    <Compile Include="Models\Backup\Profile\BackupProfileData.cs" />
+    <Compile Include="Models\Project\BackupProjectData.cs" />
+    <Compile Include="Models\Profile\BackupSetData.cs" />
     <Compile Include="Models\Backup\Storage\NullStorage.cs" />
     <Compile Include="Models\Backup\Storage\FileSystemStorage.cs" />
     <Compile Include="Models\Backup\Storage\IStorageInterface.cs" />
     <Compile Include="Models\Backup\IncrementalBackup.cs" />
     <Compile Include="Models\Backup\OneWaySyncBackup.cs" />
-    <Compile Include="Models\Backup\BackupSet.cs" />
+    <Compile Include="Models\BackupSet.cs" />
     <Compile Include="Models\Backup\Storage\Win32\Win32FileSystem.cs" />
     <Compile Include="Models\Backup\Storage\Win32\Win32LongPathDirectory.cs" />
     <Compile Include="Models\Backup\Storage\Win32\Win32LongPathPath.cs" />
     <Compile Include="Models\Backup\Storage\Win32\Win32LongPathFile.cs" />
     <Compile Include="Models\MainWindowModel.cs" />
-    <Compile Include="Properties\BackupProfileRepository.Designer.cs">
+    <Compile Include="Properties\BackupProjectRepositorySettings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>BackupProfileRepository.settings</DependentUpon>
+      <DependentUpon>BackupProjectRepositorySettings.settings</DependentUpon>
     </Compile>
     <Compile Include="Utilities\Convertors\NullVisibilityConverter.cs" />
     <Compile Include="Utilities\ObservableObject.cs" />
@@ -141,9 +141,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Properties\BackupProfileRepository.settings">
+    <None Include="Properties\BackupProjectRepositorySettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>BackupProfileRepository.Designer.cs</LastGenOutput>
+      <LastGenOutput>BackupProjectRepositorySettings.Designer.cs</LastGenOutput>
     </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

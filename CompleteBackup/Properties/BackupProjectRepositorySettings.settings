@@ -1,0 +1,9 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CompleteBackup.Properties" GeneratedClassName="BackupProjectRepositorySettings">
+  <Profiles />
+  <Settings>
+    <Setting Name="BackupProjectList" Type="System.Collections.ObjectModel.ObservableCollection&lt;CompleteBackup.Models.Backup.Project.BackupProjectData&gt;" Scope="User">
+      <Value Project="(Default)" />
+    </Setting>
+  </Settings>
+</SettingsFile>

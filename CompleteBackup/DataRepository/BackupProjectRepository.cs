@@ -1,4 +1,4 @@
-﻿using CompleteBackup.Models.Backup.Profile;
+﻿using CompleteBackup.Models.Backup.Project;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,19 +10,19 @@ using System.Windows;
 
 namespace CompleteBackup.DataRepository
 {
-    class BackupProfileRepository : ObservableObject
+    class BackupProjectRepository : ObservableObject
     {
         private const bool bRestRepositoryonStartup = false;
 
-        static public BackupProfileRepository Instance { get; private set; } = new BackupProfileRepository();
-        private BackupProfileRepository()
+        static public BackupProjectRepository Instance { get; private set; } = new BackupProjectRepository();
+        private BackupProjectRepository()
         {
-            LoadProfile();
+            LoadProjects();
         }
 
 
-        private ObservableCollection<BackupProfileData> BackupProfileList { get; set; }
-        public BackupProfileData SelectedBackupProfile { get { return BackupProfileList?[0]; } private set { } }
+        private ObservableCollection<BackupProjectData> BackupProjectList { get; set; }
+        public BackupProjectData SelectedBackupProject { get { return BackupProjectList?[0]; } private set { } }
 
         private BackupSetData _SelectedBackupSet;
         public BackupSetData SelectedBackupSet
@@ -31,7 +31,7 @@ namespace CompleteBackup.DataRepository
             {
                 if (_SelectedBackupSet == null)
                 {
-                    _SelectedBackupSet = BackupProfileList?[0].BackupSetList?[0];
+                    _SelectedBackupSet = BackupProjectList?[0].BackupSetList?[0];
                 }
 
                 return _SelectedBackupSet;
@@ -43,25 +43,25 @@ namespace CompleteBackup.DataRepository
             }
         }
 
-        public void LoadProfile()
+        public void LoadProjects()
         {
             try
             {
-                BackupProfileList = Properties.BackupProfileRepository.Default.BackupProfileList;
+                BackupProjectList = Properties.BackupProjectRepositorySettings.Default.BackupProjectList;
             }
             catch (Exception ex)
             {
-                Trace.WriteLine($"Error while reading backup profile\n\n {ex.Message}");
-               // MessageBox.Show($"{ex.Message}", "Backup Profile", MessageBoxButton.OK, MessageBoxImage.Error);
+                Trace.WriteLine($"Error while reading backup Project\n\n {ex.Message}");
+               // MessageBox.Show($"{ex.Message}", "Backup Project", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            if ((BackupProfileList == null) || bRestRepositoryonStartup)
+            if ((BackupProjectList == null) || bRestRepositoryonStartup)
             {
-                BackupProfileList = new ObservableCollection<BackupProfileData>()
+                BackupProjectList = new ObservableCollection<BackupProjectData>()
                 {
-                    new BackupProfileData()
+                    new BackupProjectData()
                     {
-                        Name = "My first Profile",
+                        Name = "My first Project",
                         BackupSetList = new ObservableCollection<BackupSetData>()
                         {
                             new BackupSetData()
@@ -76,15 +76,16 @@ namespace CompleteBackup.DataRepository
                     }
                 };
 
-                Properties.BackupProfileRepository.Default.BackupProfileList = BackupProfileList;
-                SaveProfile();            
+                Properties.BackupProjectRepositorySettings.Default.Reset();
+                Properties.BackupProjectRepositorySettings.Default.BackupProjectList = BackupProjectList;
+                SaveProject();            
             }
         }
-        public void SaveProfile()
+        public void SaveProject()
         {
-            if (BackupProfileList != null)
+            if (BackupProjectList != null)
             {                
-                Properties.BackupProfileRepository.Default.Save();
+                Properties.BackupProjectRepositorySettings.Default.Save();
             }
         }
     }

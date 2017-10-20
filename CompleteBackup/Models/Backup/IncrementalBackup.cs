@@ -18,7 +18,7 @@ namespace CompleteBackup.Models.backup
         public IncrementalBackup(List<string> sourcePath, string currSetPath, IStorageInterface storageInterface, GenericStatusBarView progressBar = null) : base(sourcePath, currSetPath, storageInterface, progressBar)
         {
         }
-        public override string BackUpSetSignature { get { return $"{BackupProfileRepository.Instance.SelectedBackupSet.GUID.ToString()}-CBKP-INC"; } }
+        public override string BackUpSetSignature { get { return $"{BackupProjectRepository.Instance.SelectedBackupSet.GUID.ToString()}-CBKP-INC"; } }
 
         public override void ProcessBackup()
         {

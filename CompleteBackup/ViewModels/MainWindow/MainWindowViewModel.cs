@@ -13,7 +13,7 @@ namespace CompleteBackup.ViewModels.MainWindow
         {
 
         }
-        public BackupProfileRepository Profile { get; set; } = BackupProfileRepository.Instance;
+        public BackupProjectRepository Project { get; set; } = BackupProjectRepository.Instance;
         public string TEXT { get; set; } = "guy test";
     }
 }

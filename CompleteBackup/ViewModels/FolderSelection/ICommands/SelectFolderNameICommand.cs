@@ -1,4 +1,4 @@
-﻿using CompleteBackup.Models.Backup.Profile;
+﻿using CompleteBackup.Models.Backup.Project;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,8 +32,8 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
 
         public void Execute(object parameter)
         {
-            var profileData = parameter as BackupSetData;
-            if (profileData != null)
+            var projectData = parameter as BackupSetData;
+            if (projectData != null)
             {
                 //var mongoDBSettings = parameters[0] as Properties.MongoDBSettings;
                 //var jagSettins = parameters[0] as Properties.JagSettings;
@@ -47,13 +47,13 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
 
                         try
                         {
-                            if (!profileData.IsValidSetData)
+                            if (!projectData.IsValidSetData)
                             {
                                 MessageBox.Show($"The destination folder you have selected does not contain a valid backup set", "Destination folder", MessageBoxButton.OK, MessageBoxImage.Information);
                             }
                             else
                             {
-                                profileData.TargetBackupFolder = fileDialog.SelectedPath;
+                                projectData.TargetBackupFolder = fileDialog.SelectedPath;
                             }
                         }
                         catch (System.IO.PathTooLongException ex)
