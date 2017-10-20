@@ -11,14 +11,14 @@ using System.Windows;
 
 namespace CompleteBackup.Models.backup
 {
-    public class OneWaySyncBackup : BackupSet
+    public class OneWaySyncBackup : BackupManager
     {
         public OneWaySyncBackup(string backupName, List<string> sourcePath, string currSetPath, IStorageInterface storageInterface, GenericStatusBarView progressBar = null) : base(sourcePath, currSetPath, storageInterface, progressBar)
         {
             m_IStorage = new FileSystemStorage();
             m_BackupName = backupName;
         }
-        public override string BackUpSetSignature { get { return $"{BackupProjectRepository.Instance.SelectedBackupSet.GUID.ToString()}-CBKP-SNAP"; } }
+        public override string BackUpProfileSignature { get { return $"{BackupProjectRepository.Instance.SelectedBackupProfile.GUID.ToString()}-CBKP-SNAP"; } }
         string m_BackupName;
 
         public override void ProcessBackup()
@@ -27,7 +27,7 @@ namespace CompleteBackup.Models.backup
             {
                 DateTime d = DateTime.Now;
                 string dateSignature = $"{d.Year:0000}-{d.Month:00}-{d.Day:00}_{d.Hour:00}{d.Minute:00}{d.Hour:00}{d.Second:00}{d.Millisecond:000}";
-                m_BackupName = $"{BackUpSetSignature}_{dateSignature}";
+                m_BackupName = $"{BackUpProfileSignature}_{dateSignature}";
             }
 
             var newTargetPath = m_IStorage.Combine(TargetPath, m_BackupName);

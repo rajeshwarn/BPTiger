@@ -8,12 +8,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace CompleteBackup.Models.Backup.Project
+namespace CompleteBackup.Models.Backup.Profile
 {
-    public class BackupSetData : ObservableObject
+    public class BackupProfileData : ObservableObject
     {
         public Guid GUID { get; set; } = Guid.Empty;
-        public string Name { get; set; } = "My Set";
+        public string Name { get; set; } = "My Backup Profile";
         public string Description { get { return Name; } set { } }
 
         IStorageInterface m_IStorage = new FileSystemStorage();

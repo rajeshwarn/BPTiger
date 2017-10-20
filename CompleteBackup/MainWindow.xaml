@@ -59,7 +59,7 @@
 
             <RibbonTab Header="Backup" KeyTip="B" >
                 <TextBlock Text="{Binding TEXT}"/>
-                <RibbonGroup Header="{Binding Project.SelectedBackupProject.Name}" ItemsSource="{Binding Project.SelectedBackupProject.BackupSetList}"
+                <RibbonGroup Header="{Binding Project.SelectedBackupProject.Name}" ItemsSource="{Binding Project.SelectedBackupProject.BackupProfileList}"
                                      ToolTip="{Binding Project.SelectedBackupProject.Description}">
                     <RibbonGroup.ItemTemplate>
                         <DataTemplate>

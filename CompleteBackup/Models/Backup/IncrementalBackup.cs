@@ -11,28 +11,28 @@ using System.Windows;
 
 namespace CompleteBackup.Models.backup
 {
-    public class IncrementalBackup : BackupSet
+    public class IncrementalBackup : BackupManager
     {
         public string LastSetPath;
 
         public IncrementalBackup(List<string> sourcePath, string currSetPath, IStorageInterface storageInterface, GenericStatusBarView progressBar = null) : base(sourcePath, currSetPath, storageInterface, progressBar)
         {
         }
-        public override string BackUpSetSignature { get { return $"{BackupProjectRepository.Instance.SelectedBackupSet.GUID.ToString()}-CBKP-INC"; } }
+        public override string BackUpProfileSignature { get { return $"{BackupProjectRepository.Instance.SelectedBackupProfile.GUID.ToString()}-CBKP-INC"; } }
 
         public override void ProcessBackup()
         {
-            var backUpSetList = new List<string>();
+            var backupProfileList = new List<string>();
             string[] setEntries = m_IStorage.GetDirectories(TargetPath);
-            foreach (var entry in setEntries.Where(s => m_IStorage.GetFileName(s).StartsWith(BackUpSetSignature)))
+            foreach (var entry in setEntries.Where(s => m_IStorage.GetFileName(s).StartsWith(BackUpProfileSignature)))
             {
-                backUpSetList.Add(m_IStorage.GetFileName(entry));
+                backupProfileList.Add(m_IStorage.GetFileName(entry));
             }
 
-            var lastSet = backUpSetList.OrderBy(set => set).LastOrDefault();
+            var lastSet = backupProfileList.OrderBy(set => set).LastOrDefault();
 
             DateTime d = DateTime.Now;
-            var targetSet = $"{BackUpSetSignature}_{d.Year:0000}-{d.Month:00}-{d.Day:00}_{d.Hour:00}{d.Minute:00}{d.Hour:00}{d.Second:00}{d.Millisecond:000}";
+            var targetSet = $"{BackUpProfileSignature}_{d.Year:0000}-{d.Month:00}-{d.Day:00}_{d.Hour:00}{d.Minute:00}{d.Hour:00}{d.Second:00}{d.Millisecond:000}";
 
             if (lastSet == null)
             {

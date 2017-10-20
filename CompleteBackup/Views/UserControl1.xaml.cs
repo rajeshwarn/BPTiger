@@ -52,12 +52,6 @@ namespace CompleteBackup.Views
         {
             var folderSelection = folderTree.DataContext as FolderTreeViewModel;
 
-            //            BackupSet backup = new FullBackup(SourcePath, TargetPath);
-            //            BackupSet backup = new IncrementalBackup(SourcePath, TargetPath);
-
-            //            backup.ProcessBackup();
-
-
             var progressBar = GenericStatusBarView.NewInstance;
             progressBar.UpdateProgressBar("Backup starting...", 0);
 

@@ -1,4 +1,5 @@
-﻿using CompleteBackup.Models.Backup.Project;
+﻿using CompleteBackup.Models.Backup.Profile;
+using CompleteBackup.Models.Backup.Project;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
 
         public void Execute(object parameter)
         {
-            var projectData = parameter as BackupSetData;
+            var projectData = parameter as BackupProfileData;
             if (projectData != null)
             {
                 //var mongoDBSettings = parameters[0] as Properties.MongoDBSettings;

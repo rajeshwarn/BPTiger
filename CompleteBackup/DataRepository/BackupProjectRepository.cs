@@ -1,4 +1,5 @@
-﻿using CompleteBackup.Models.Backup.Project;
+﻿using CompleteBackup.Models.Backup.Profile;
+using CompleteBackup.Models.Backup.Project;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,21 +25,21 @@ namespace CompleteBackup.DataRepository
         private ObservableCollection<BackupProjectData> BackupProjectList { get; set; }
         public BackupProjectData SelectedBackupProject { get { return BackupProjectList?[0]; } private set { } }
 
-        private BackupSetData _SelectedBackupSet;
-        public BackupSetData SelectedBackupSet
+        private BackupProfileData _SelectedBackupProfile;
+        public BackupProfileData SelectedBackupProfile
         {
             get
             {
-                if (_SelectedBackupSet == null)
+                if (_SelectedBackupProfile == null)
                 {
-                    _SelectedBackupSet = BackupProjectList?[0].BackupSetList?[0];
+                    _SelectedBackupProfile = BackupProjectList?[0].BackupProfileList?[0];
                 }
 
-                return _SelectedBackupSet;
+                return _SelectedBackupProfile;
             }
             set
             {
-                _SelectedBackupSet = value;
+                _SelectedBackupProfile = value;
                 OnPropertyChanged();
             }
         }
@@ -55,16 +56,16 @@ namespace CompleteBackup.DataRepository
                // MessageBox.Show($"{ex.Message}", "Backup Project", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            if ((BackupProjectList == null) || bRestRepositoryonStartup)
+            if ((BackupProjectList == null) || (BackupProjectList?.Count() == 0) || bRestRepositoryonStartup)
             {
                 BackupProjectList = new ObservableCollection<BackupProjectData>()
                 {
                     new BackupProjectData()
                     {
                         Name = "My first Project",
-                        BackupSetList = new ObservableCollection<BackupSetData>()
+                        BackupProfileList = new ObservableCollection<BackupProfileData>()
                         {
-                            new BackupSetData()
+                            new BackupProfileData()
                             {
                                 GUID = Guid.NewGuid(),
                                 Name = "My first backup set",

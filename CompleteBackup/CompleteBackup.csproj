@@ -66,7 +66,7 @@
     <Compile Include="Models\Backup\Storage\IStorageInterface.cs" />
     <Compile Include="Models\Backup\IncrementalBackup.cs" />
     <Compile Include="Models\Backup\OneWaySyncBackup.cs" />
-    <Compile Include="Models\BackupSet.cs" />
+    <Compile Include="Models\Backup\BackupManager.cs" />
     <Compile Include="Models\Backup\Storage\Win32\Win32FileSystem.cs" />
     <Compile Include="Models\Backup\Storage\Win32\Win32LongPathDirectory.cs" />
     <Compile Include="Models\Backup\Storage\Win32\Win32LongPathPath.cs" />

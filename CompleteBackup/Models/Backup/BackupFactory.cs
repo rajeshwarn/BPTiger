@@ -24,10 +24,10 @@ namespace CompleteBackup.Models.backup
                 try
                 {
 
-//                    BackupSet backup = new IncrementalBackup(sourcePath, currSetPath, new NullStorage(), progressBar);
-                    BackupSet backup = new IncrementalBackup(sourcePath, currSetPath, new FileSystemStorage(), progressBar);
-                    //                    BackupSet backup = new IncrementalBackup(sourcePath, currSetPath, new FileSystemStorage(), progressBar);
-                    //                    BackupSet backup = new OneWaySyncBackup("CBKP-Snap_2017-10-13_12501247655", sourcePath, currSetPath, new FileSystemStorage(), progressBar);
+                    //                    BackupManager backup = new IncrementalBackup(sourcePath, currSetPath, new NullStorage(), progressBar);
+                    BackupManager backup = new IncrementalBackup(sourcePath, currSetPath, new FileSystemStorage(), progressBar);
+                    //                    BackupManager backup = new IncrementalBackup(sourcePath, currSetPath, new FileSystemStorage(), progressBar);
+                    //                    BackupManager backup = new OneWaySyncBackup("CBKP-Snap_2017-10-13_12501247655", sourcePath, currSetPath, new FileSystemStorage(), progressBar);
 
                     backup.Init();
                     backup.ProcessBackup();

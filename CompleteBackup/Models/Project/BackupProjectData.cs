@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CompleteBackup.Models.Backup.Profile;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -11,6 +12,6 @@ namespace CompleteBackup.Models.Backup.Project
     {
         public string Name { get; set; } = "My Project";
         public string Description { get { return Name; } set { } }
-        public ObservableCollection<BackupSetData> BackupSetList { get; set; } = new ObservableCollection<BackupSetData>();
+        public ObservableCollection<BackupProfileData> BackupProfileList { get; set; } = new ObservableCollection<BackupProfileData>();
     }
 }

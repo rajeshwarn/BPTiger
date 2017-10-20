@@ -1,4 +1,5 @@
 ﻿using CompleteBackup.DataRepository;
+using CompleteBackup.Models.Backup.Profile;
 using CompleteBackup.Models.Backup.Project;
 using CompleteBackup.Models.Backup.Storage;
 using CompleteBackup.Models.FolderSelection;
@@ -29,12 +30,12 @@ namespace CompleteBackup.ViewModels
         public List<FolderMenuItem> RootFolderItemList { get; set; } = new List<FolderMenuItem>();
 
 
-        public BackupSetData SetData { get; set; }
+        public BackupProfileData SetData { get; set; }
 
 
         public FolderTreeViewModel()
         {
-            SetData = BackupProjectRepository.Instance.SelectedBackupSet;
+            SetData = BackupProjectRepository.Instance.SelectedBackupProfile;
 
             //string[] drives = System.IO.Directory.GetLogicalDrives();
 

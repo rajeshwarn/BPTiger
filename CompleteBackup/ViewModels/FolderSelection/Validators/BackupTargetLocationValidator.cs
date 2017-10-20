@@ -14,7 +14,7 @@ namespace CompleteBackup.ViewModels.FolderSelection.Validators
         public override ValidationResult Validate (object value, System.Globalization.CultureInfo cultureInfo)
         {
             var name = value as String;
-            var backupSet = BackupProjectRepository.Instance.SelectedBackupSet;
+            var backupProfile = BackupProjectRepository.Instance.SelectedBackupProfile;
 
 
             if ((name == null) || (name == String.Empty))
@@ -23,7 +23,7 @@ namespace CompleteBackup.ViewModels.FolderSelection.Validators
             }
             else
             {
-                if (backupSet.IsValidSetData)
+                if (backupProfile.IsValidSetData)
                 {
                     return ValidationResult.ValidResult;
                 }
