@@ -52,11 +52,11 @@
 
                 <Button Content="Select Backup Folder" DockPanel.Dock="Right"                
                         Command="{Binding SelectFolderNameCommand}"
-                        CommandParameter="{Binding SetData}" Margin="4,0,0,0">
+                        CommandParameter="{Binding ProfileData}" Margin="4,0,0,0">
                     <!--<Button.Style>
                         <Style TargetType="Button" >
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=SetData.IsValidSetData}" Value="True">
+                                <DataTrigger Binding="{Binding Path=ProfileData.IsValidProfileFolder}" Value="True">
                                     <Setter Property="Visibility" Value="Visible"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -64,12 +64,12 @@
                     </Button.Style>-->
                 </Button>
 
-                <TextBox x:Name="NameTxtBlock" IsReadOnly="false" IsReadOnlyCaretVisible="True"                         
-                         Validation.ErrorTemplate="{StaticResource validationTargetFolderErrorTemplate}">
+                <TextBox x:Name="txTaggetFolder" IsReadOnly="false" IsReadOnlyCaretVisible="True"                         
+                         Validation.ErrorTemplate="{StaticResource validationTargetFolderErrorTemplate}" TextChanged="txTaggetFolder_TextChanged">
                     <TextBox.Text>
-                        <Binding Path="SetData.TargetBackupFolder"
+                        <Binding Path="ProfileData.TargetBackupFolder"
                                  Mode="TwoWay"
-                                 TargetNullValue=' -- Please select target folder --'
+                                 TargetNullValue=''
                                  UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>
                                 <validators:BackupTargetLocationValidator/>
@@ -79,11 +79,11 @@
                     <TextBox.Style>
                         <Style TargetType="TextBox" >
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ElementName=NameTxtBlock, Path=Text}" Value="{x:Null}">
+                                <DataTrigger Binding="{Binding ElementName=txTaggetFolder, Path=Text}" Value="{x:Null}">
                                     <Setter Property="FontStyle" Value="Italic"/>
                                     <Setter Property="Text" Value="  XX-- Please select target folder --" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding Path=SetData.TargetBackupFolderEmptyFolderMessage}" Value="{x:Static System:String.Empty}">
+                                <DataTrigger Binding="{Binding Path=ProfileData.TargetBackupFolderEmptyFolderMessage}" Value="{x:Static System:String.Empty}">
                                     <Setter Property="FontStyle" Value="Italic"/>
                                     <Setter Property="Text" Value="  XX-- Please select target folder --" />
                                 </DataTrigger>
@@ -141,7 +141,7 @@
             <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
                 <TextBlock Text="Selected Folders:"/>
             </StackPanel>
-            <ListBox ItemsSource="{Binding SetData.FolderList}">
+            <ListBox ItemsSource="{Binding ProfileData.FolderList}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -157,7 +157,7 @@
                 <Button Content="Save" Width="80" DockPanel.Dock="Right"
                     Command="{Binding SaveFolderSelectionCommand}">
                 </Button>
-                <!--<TextBox Text="{Binding Path=SetData.TargetBackupFolder}" Width="Auto"/>-->
+                <!--<TextBox Text="{Binding Path=ProfileData.TargetBackupFolder}" Width="Auto"/>-->
             </DockPanel>
         </StackPanel>        
     </Grid>

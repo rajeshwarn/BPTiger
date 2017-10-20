@@ -72,7 +72,11 @@ namespace CompleteBackup.Models.Backup.Storage
 
         public bool DirectoryExists(string path)
         {
-            if (path.Length < MAX_PATH_LENGTH)
+            if (path == null)
+            {
+                return false;
+            }
+            else if (path.Length < MAX_PATH_LENGTH)
             {
                 return System.IO.Directory.Exists(path);
             }

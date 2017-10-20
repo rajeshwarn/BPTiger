@@ -55,7 +55,7 @@ namespace CompleteBackup.Views
             var progressBar = GenericStatusBarView.NewInstance;
             progressBar.UpdateProgressBar("Backup starting...", 0);
 
-            var backup = BackupFactory.CreateFullBackupTask(folderSelection.SetData.FolderList.ToList<string>(), folderSelection.SetData.TargetBackupFolder, progressBar);
+            var backup = BackupFactory.CreateFullBackupTask(folderSelection.ProfileData.FolderList.ToList<string>(), folderSelection.ProfileData.TargetBackupFolder, progressBar);
             backup.RunWorkerAsync();
         }
 

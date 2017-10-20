@@ -14,22 +14,27 @@ namespace CompleteBackup.ViewModels.FolderSelection.Validators
         public override ValidationResult Validate (object value, System.Globalization.CultureInfo cultureInfo)
         {
             var name = value as String;
-            var backupProfile = BackupProjectRepository.Instance.SelectedBackupProfile;
+            var backupProfile = BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile;
 
-
+            if (backupProfile == null)
+            {
+                return new ValidationResult(false, "Please create or select a Backup Profile");
+            }
+            else
             if ((name == null) || (name == String.Empty))
             {
                 return new ValidationResult(false, "Please Enter or select a destenition backup folder");
             }
             else
             {
-                if (backupProfile.IsValidSetData)
+                var folderStatus = backupProfile.GetProfileTargetFolderStatus(name);
+                if (folderStatus == Models.Backup.Profile.BackupProfileData.ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile)
                 {
                     return ValidationResult.ValidResult;
                 }
                 else
                 {
-                    return new ValidationResult (false, "The path does not point to a valid folder");
+                    return new ValidationResult(false, folderStatus.ToString());
                 }
             }
         }

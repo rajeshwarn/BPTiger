@@ -60,7 +60,7 @@
     <Compile Include="DataRepository\BackupProjectRepository.cs" />
     <Compile Include="Models\Backup\BackupFactory.cs" />
     <Compile Include="Models\Project\BackupProjectData.cs" />
-    <Compile Include="Models\Profile\BackupSetData.cs" />
+    <Compile Include="Models\Profile\BackupProfileData.cs" />
     <Compile Include="Models\Backup\Storage\NullStorage.cs" />
     <Compile Include="Models\Backup\Storage\FileSystemStorage.cs" />
     <Compile Include="Models\Backup\Storage\IStorageInterface.cs" />

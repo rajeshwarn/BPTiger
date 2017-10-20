@@ -12,6 +12,12 @@ namespace CompleteBackup.Models.Backup.Project
     {
         public string Name { get; set; } = "My Project";
         public string Description { get { return Name; } set { } }
+
+        private Guid CurrentProfileGuid { get; set; } = Guid.Empty;
+
+        public BackupProfileData CurrentBackupProfile { get { return BackupProfileList.FirstOrDefault(p => p.GUID == CurrentProfileGuid); }
+                                                        set { CurrentProfileGuid = value.GUID; OnPropertyChanged(); } }
+
         public ObservableCollection<BackupProfileData> BackupProfileList { get; set; } = new ObservableCollection<BackupProfileData>();
     }
 }

@@ -21,28 +21,11 @@ namespace CompleteBackup.DataRepository
             LoadProjects();
         }
 
+        private ObservableCollection<BackupProjectData> BackupProjectList { get; set; } = new ObservableCollection<BackupProjectData>();
 
-        private ObservableCollection<BackupProjectData> BackupProjectList { get; set; }
-        public BackupProjectData SelectedBackupProject { get { return BackupProjectList?[0]; } private set { } }
+        private BackupProjectData _SelectedBackupProject;
+        public BackupProjectData SelectedBackupProject { get { return _SelectedBackupProject; } set { _SelectedBackupProject = value; OnPropertyChanged(); } }
 
-        private BackupProfileData _SelectedBackupProfile;
-        public BackupProfileData SelectedBackupProfile
-        {
-            get
-            {
-                if (_SelectedBackupProfile == null)
-                {
-                    _SelectedBackupProfile = BackupProjectList?[0].BackupProfileList?[0];
-                }
-
-                return _SelectedBackupProfile;
-            }
-            set
-            {
-                _SelectedBackupProfile = value;
-                OnPropertyChanged();
-            }
-        }
 
         public void LoadProjects()
         {
@@ -62,25 +45,39 @@ namespace CompleteBackup.DataRepository
                 {
                     new BackupProjectData()
                     {
-                        Name = "My first Project",
+                        Name = "Backup Profiles",
                         BackupProfileList = new ObservableCollection<BackupProfileData>()
                         {
                             new BackupProfileData()
                             {
-                                GUID = Guid.NewGuid(),
-                                Name = "My first backup set",
+                                Name = "My first profile",
+                                Description = "home backup",
                                 FolderList = new ObservableCollection<string>()
                                 {
+                                    //empty folder list
+                                }
+                            },
+                            new BackupProfileData()
+                            {
+                                Name = "My first profile2",
+                                Description = "home backup",
+                                FolderList = new ObservableCollection<string>()
+                                {
+                                    //empty folder list
                                 }
                             }
                         }
                     }
                 };
 
+                BackupProjectList[0].CurrentBackupProfile = BackupProjectList[0].BackupProfileList[0];
+
                 Properties.BackupProjectRepositorySettings.Default.Reset();
                 Properties.BackupProjectRepositorySettings.Default.BackupProjectList = BackupProjectList;
                 SaveProject();            
             }
+
+            SelectedBackupProject = BackupProjectList[0];
         }
         public void SaveProject()
         {

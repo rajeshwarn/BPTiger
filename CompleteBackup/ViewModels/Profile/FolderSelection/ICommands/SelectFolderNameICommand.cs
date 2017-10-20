@@ -33,41 +33,58 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
 
         public void Execute(object parameter)
         {
-            var projectData = parameter as BackupProfileData;
-            if (projectData != null)
+            var profile = parameter as BackupProfileData;
+            if (profile != null)
             {
-                //var mongoDBSettings = parameters[0] as Properties.MongoDBSettings;
-                //var jagSettins = parameters[0] as Properties.JagSettings;
-                //var propName = parameters[1] as string;
-
-                var fileDialog = new System.Windows.Forms.FolderBrowserDialog();
-
-                switch (fileDialog.ShowDialog())
+                using (var fileDialog = new System.Windows.Forms.FolderBrowserDialog() { ShowNewFolderButton = true })
                 {
-                    case System.Windows.Forms.DialogResult.OK:
-
-                        try
+                    bool bRetry = true;
+                    while (bRetry)
+                    {
+                        switch (fileDialog.ShowDialog())
                         {
-                            if (!projectData.IsValidSetData)
-                            {
-                                MessageBox.Show($"The destination folder you have selected does not contain a valid backup set", "Destination folder", MessageBoxButton.OK, MessageBoxImage.Information);
-                            }
-                            else
-                            {
-                                projectData.TargetBackupFolder = fileDialog.SelectedPath;
-                            }
-                        }
-                        catch (System.IO.PathTooLongException ex)
-                        {
-                            MessageBox.Show($"The destination path you have selected is too long, please select a shorter", "Destination folder", MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
+                            case System.Windows.Forms.DialogResult.OK:
 
-                        break;
+                                try
+                                {
+                                    var path = fileDialog.SelectedPath;
 
-                    case System.Windows.Forms.DialogResult.Cancel:
-                    //Do nothiong
-                    default:
-                        break;
+                                    if ((path == null) || (path == String.Empty))
+                                    {
+                                        MessageBox.Show($"The destination folder you have selected does not contain a valid backup set", "Destination folder", MessageBoxButton.OK, MessageBoxImage.Error);
+                                    }
+                                    else
+                                    {
+                                        var folderStatus = profile.GetProfileTargetFolderStatus(path);
+                                        if (folderStatus == Models.Backup.Profile.BackupProfileData.ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile)
+                                        {
+                                            profile.TargetBackupFolder = fileDialog.SelectedPath;
+
+                                            bRetry = false;
+                                        }
+                                        else
+                                        {
+                                            MessageBox.Show($"folder error {folderStatus.ToString()}", "Destination folder", MessageBoxButton.OK, MessageBoxImage.Error);
+                                        }
+                                    }
+                                }
+                                catch (System.IO.PathTooLongException ex)
+                                {
+                                    MessageBox.Show($"The destination path you have selected is too long, please select a shorter", "Destination folder", MessageBoxButton.OK, MessageBoxImage.Error);
+                                }
+
+                                break;
+
+                            case System.Windows.Forms.DialogResult.Cancel:
+                                bRetry = false;
+
+                                break;
+
+                            default:
+
+                                break;
+                        }                        
+                    }
                 }
             }
         }

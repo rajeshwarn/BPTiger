@@ -8,6 +8,7 @@ using CompleteBackup.Views.ICommands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -30,15 +31,19 @@ namespace CompleteBackup.ViewModels
         public List<FolderMenuItem> RootFolderItemList { get; set; } = new List<FolderMenuItem>();
 
 
-        public BackupProfileData SetData { get; set; }
+        public BackupProfileData ProfileData { get; set; }
 
 
         public FolderTreeViewModel()
         {
-            SetData = BackupProjectRepository.Instance.SelectedBackupProfile;
+            ProfileData = BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile;
+            if (ProfileData == null)
+            {
+                Trace.WriteLine("FolderTreeViewModel::CurrentBackupProfile is null");
 
-            //string[] drives = System.IO.Directory.GetLogicalDrives();
-
+                return;
+            }
+            
             DriveInfo[] drives = DriveInfo.GetDrives();
 
             foreach (var drive in drives)
@@ -67,7 +72,7 @@ namespace CompleteBackup.ViewModels
 
             var itemList = new List<FolderMenuItem>();
 
-            foreach (var folder in SetData.FolderList)
+            foreach (var folder in ProfileData.FolderList)
             {
                 string pr = Directory.GetDirectoryRoot(folder);
                 var match = RootFolderItemList.Where(f => String.Compare(f.Path, pr, true) == 0);
@@ -229,7 +234,7 @@ namespace CompleteBackup.ViewModels
 
         void UpdateSelectedFolderList()
         {
-            SetData.FolderList.Clear();
+            ProfileData.FolderList.Clear();
             UpdateSelectedFolderListStep(RootFolderItemList);
         }
         void UpdateSelectedFolderListStep(List<FolderMenuItem> folderList)
@@ -238,7 +243,7 @@ namespace CompleteBackup.ViewModels
             {
                 if (folder.Selected == true)
                 {
-                    SetData.FolderList.Add(folder.Path);
+                    ProfileData.FolderList.Add(folder.Path);
                 }
                 else if (folder.Selected == null)
                 {
