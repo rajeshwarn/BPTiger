@@ -8,7 +8,7 @@
         xmlns:main_viewmodels="clr-namespace:CompleteBackup.ViewModels.MainWindow"  
         xmlns:local="clr-namespace:CompleteBackup"
         mc:Ignorable="d"
-        Title="MainWindow" Height="550" Width="825">
+        Title="MainWindow" Height="750" Width="825">
     <Window.Resources>
         <!--<DataTemplate DataType="{x:Type view_models:MainFrameWindowViewModel}">
             <views:MainFrameView />

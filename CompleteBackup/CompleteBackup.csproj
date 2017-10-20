@@ -80,20 +80,24 @@
     <Compile Include="Utilities\Convertors\NullVisibilityConverter.cs" />
     <Compile Include="Utilities\ObservableObject.cs" />
     <Compile Include="Models\FolderSelection\FolderMenuItem.cs" />
-    <Compile Include="ViewModels\FolderSelection\FolderTreeViewModel.cs" />
-    <Compile Include="ViewModels\FolderSelection\ICommands\ExpandFolderTreeICommand.cs" />
-    <Compile Include="ViewModels\FolderSelection\ICommands\SelectFolderNameICommand.cs" />
-    <Compile Include="ViewModels\FolderSelection\ICommands\SaveFolderSelectionICommand.cs" />
+    <Compile Include="ViewModels\Profile\FolderSelection\FolderTreeViewModel.cs" />
+    <Compile Include="ViewModels\Profile\FolderSelection\ICommands\ExpandFolderTreeICommand.cs" />
+    <Compile Include="ViewModels\Profile\FolderSelection\ICommands\SelectFolderNameICommand.cs" />
+    <Compile Include="ViewModels\Profile\FolderSelection\ICommands\SaveFolderSelectionICommand.cs" />
     <Compile Include="ViewModels\MainWindow\MainWindowStatusBarViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\MainWindowViewModel.cs" />
-    <Compile Include="ViewModels\FolderSelection\Validators\BackupTargetLocationValidator.cs" />
-    <Compile Include="Views\BackupSetting\FolderTreeView.xaml.cs">
+    <Compile Include="ViewModels\Profile\FolderSelection\Validators\BackupTargetLocationValidator.cs" />
+    <Compile Include="ViewModels\Profile\ProfileList\ProfileListViewModel.cs" />
+    <Compile Include="Views\Profile\FolderTreeView.xaml.cs">
       <DependentUpon>FolderTreeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ICommands\FolderTreeItemClickICommand.cs" />
     <Compile Include="Views\MainWindow\GenericStatusBarView.cs" />
     <Compile Include="Views\MainWindow\MainWindowStatusBarView.xaml.cs">
       <DependentUpon>MainWindowStatusBarView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Profile\ProfileListView.xaml.cs">
+      <DependentUpon>ProfileListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControl1.xaml.cs">
       <DependentUpon>UserControl1.xaml</DependentUpon>
@@ -110,11 +114,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\BackupSetting\FolderTreeView.xaml">
+    <Page Include="Views\Profile\FolderTreeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow\MainWindowStatusBarView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Profile\ProfileListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
