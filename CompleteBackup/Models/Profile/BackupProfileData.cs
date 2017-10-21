@@ -83,8 +83,11 @@ namespace CompleteBackup.Models.Backup.Profile
                             {
                                 try
                                 {
-                                    Guid newGuid = Guid.Parse(subDirectory.Substring(0, 32 + 4));
-                                    iOtherMatchCount++;
+                                    if (subDirectory.Length > 36)
+                                    {
+                                        Guid newGuid = Guid.Parse(subDirectory.Substring(0, 32 + 4));
+                                        iOtherMatchCount++;
+                                    }
                                 }
                                 catch (ArgumentNullException)
                                 {

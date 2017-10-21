@@ -168,7 +168,7 @@ namespace CompleteBackup.Models.backup
         public abstract void ProcessBackup();
         //public abstract void ProcessBackupStep(string sourcePath, string currSetPath, string lastSetPath = null);
 
-        BackgroundWorker m_Worker = null;
+        //BackgroundWorker m_Worker = null;
 
         //public void StartNewWorker(string sourcePath, string currSetPath, string lastSetPath = null)
         //{

@@ -12,6 +12,7 @@
     </UserControl.DataContext>
     
     <Grid>
+        <TextBlock Text="TEST LIST"/>
         <ListBox Width="120" BorderThickness="0"
                  ItemsSource="{Binding Repository.SelectedBackupProject.BackupProfileList, Mode=OneWay}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">

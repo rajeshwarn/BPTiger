@@ -5,18 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:main_views="clr-namespace:CompleteBackup.Views"  
         xmlns:main_window_views="clr-namespace:CompleteBackup.Views.MainWindow"             
+        xmlns:profile_view="clr-namespace:CompleteBackup.Views.Profile"             
+        xmlns:profile_viewmodel="clr-namespace:CompleteBackup.ViewModels.Profile"             
         xmlns:main_viewmodels="clr-namespace:CompleteBackup.ViewModels.MainWindow"  
         xmlns:local="clr-namespace:CompleteBackup"
         mc:Ignorable="d"
         Title="MainWindow" Height="750" Width="825">
-    <Window.Resources>
-        <!--<DataTemplate DataType="{x:Type view_models:MainFrameWindowViewModel}">
-            <views:MainFrameView />
-        </DataTemplate>-->
-    </Window.Resources>
     <Window.DataContext>
         <main_viewmodels:MainWindowViewModel/>
     </Window.DataContext>
+    <Window.Resources>
+        <DataTemplate
+            DataType="{x:Type profile_viewmodel:ProfileListViewModel}">
+            <profile_view:ProfileListView/>
+        </DataTemplate>
+    </Window.Resources>
 
     <DockPanel LastChildFill="True">
         <Ribbon x:Name="RibbonWin" DockPanel.Dock="Top" SelectedIndex="1">
@@ -97,7 +100,8 @@
                 </RibbonGroup>
             </RibbonTab>
 
-
+            <RibbonTab Header="Restore" KeyTip="R" >
+            </RibbonTab>
 
 
             <!-- Ribbon Tab #1: Home -->
@@ -133,9 +137,9 @@
         <main_window_views:MainWindowStatusBarView DockPanel.Dock="Bottom"/>
 
         <!--<ContentControl Content="{Binding ViewManager.CurrentPageViewModel}"/>-->
+        <ContentControl DockPanel.Dock="Right" Content="{Binding CurrentPageViewModel}"/>
 
-        <main_views:UserControl1 />
-        <!--<ContentControl Content="{Binding ViewManager.CurrentPageViewModel}"/>-->
+        <main_views:MainBackupView />
 
     </DockPanel>
 
