@@ -32,6 +32,7 @@
                 <TextBlock Text="File Count:"/>
                 <TextBox Width="200" Text="{Binding FileCount}"></TextBox>
             </StackPanel>-->
+            <profile_views:ProfileDetailsPageView x:Name="profileDetailsPageView" Margin="0,20,0,0"/>
         </StackPanel>
 
         <main_views:FolderTreeView x:Name="folderTree" Margin="0,20,0,0"/>

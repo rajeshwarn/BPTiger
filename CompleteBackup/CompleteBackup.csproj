@@ -87,6 +87,7 @@
     <Compile Include="ViewModels\MainWindow\MainWindowStatusBarViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\Profile\FolderSelection\Validators\BackupTargetLocationValidator.cs" />
+    <Compile Include="ViewModels\Profile\ProfileDetailsPageViewModel.cs" />
     <Compile Include="ViewModels\Profile\ProfileList\ProfileListViewModel.cs" />
     <Compile Include="Views\Profile\FolderTreeView.xaml.cs">
       <DependentUpon>FolderTreeView.xaml</DependentUpon>
@@ -95,6 +96,9 @@
     <Compile Include="Views\MainWindow\GenericStatusBarView.cs" />
     <Compile Include="Views\MainWindow\MainWindowStatusBarView.xaml.cs">
       <DependentUpon>MainWindowStatusBarView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Profile\ProfileDetailsPageView.xaml.cs">
+      <DependentUpon>ProfileDetailsPageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Profile\ProfileListView.xaml.cs">
       <DependentUpon>ProfileListView.xaml</DependentUpon>
@@ -119,6 +123,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow\MainWindowStatusBarView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Profile\ProfileDetailsPageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

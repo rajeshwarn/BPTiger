@@ -193,5 +193,43 @@ namespace CompleteBackup.Models.Backup.Profile
         }
 
 
+        public long BackupTargetSize
+        {
+            get
+            {
+                return new DirectoryInfo(_TargetBackupFolder).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length) / 1000000;
+
+            }
+            set { }
+        }
+        public long BackupTargetFreeSpace
+        {
+            get
+            {
+                string drive1 = Path.GetPathRoot(_TargetBackupFolder);
+
+                foreach (DriveInfo drive in DriveInfo.GetDrives().Where(d => d.ToString().Contains(drive1)))
+                {
+                    if (drive.IsReady)
+                    {
+                        return drive.TotalFreeSpace / 1000000;
+                    }
+                }
+
+                return 0;
+//                return new DirectoryInfo(_TargetBackupFolder).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length) / 1000000;
+
+            }
+            set { }
+        }
+        public string TargetDriveFreeSpace
+        {
+            get
+            {
+                return new DirectoryInfo(_TargetBackupFolder).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length).ToString();
+
+            }
+            set { }
+        }
     }
 }
