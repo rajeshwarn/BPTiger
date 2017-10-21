@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:main_views="clr-namespace:CompleteBackup.Views"  
+        xmlns:view="clr-namespace:CompleteBackup.Views"  
+        xmlns:view_model="clr-namespace:CompleteBackup.ViewModels"  
         xmlns:main_window_views="clr-namespace:CompleteBackup.Views.MainWindow"             
         xmlns:profile_view="clr-namespace:CompleteBackup.Views.Profile"             
         xmlns:profile_viewmodel="clr-namespace:CompleteBackup.ViewModels.Profile"             
@@ -18,6 +19,10 @@
         <DataTemplate
             DataType="{x:Type profile_viewmodel:ProfileListViewModel}">
             <profile_view:ProfileListView/>
+        </DataTemplate>
+        <DataTemplate
+            DataType="{x:Type view_model:MainBackupViewModel}">
+            <view:MainBackupView/>
         </DataTemplate>
     </Window.Resources>
 
@@ -137,9 +142,10 @@
         <main_window_views:MainWindowStatusBarView DockPanel.Dock="Bottom"/>
 
         <!--<ContentControl Content="{Binding ViewManager.CurrentPageViewModel}"/>-->
-        <ContentControl DockPanel.Dock="Right" Content="{Binding CurrentPageViewModel}"/>
+        <!--<ContentControl DockPanel.Dock="Right" Content="{Binding CurrentPageViewModel}"/>-->
 
-        <main_views:MainBackupView />
+        <ContentControl DockPanel.Dock="Right" Content="{Binding CurrentPageViewModel}"/>
+        <!--<main_views:MainBackupView />-->
 
     </DockPanel>
 

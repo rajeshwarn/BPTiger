@@ -71,7 +71,6 @@
     <Compile Include="Models\Backup\Storage\Win32\Win32LongPathDirectory.cs" />
     <Compile Include="Models\Backup\Storage\Win32\Win32LongPathPath.cs" />
     <Compile Include="Models\Backup\Storage\Win32\Win32LongPathFile.cs" />
-    <Compile Include="Models\MainWindowModel.cs" />
     <Compile Include="Properties\BackupProjectRepositorySettings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
