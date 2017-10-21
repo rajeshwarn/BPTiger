@@ -67,6 +67,7 @@ namespace CompleteBackup.Models.Backup.Profile
                 else
                 {
                     int iMatchCount = 0;
+                    int iOtherMatchCount = 0;
                     foreach (string subDirectory in subdirectoryList)
                     {
                         string newPath = m_IStorage.Combine(path, subDirectory);
@@ -74,9 +75,25 @@ namespace CompleteBackup.Models.Backup.Profile
 
                         if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                         {
-                            if (subDirectory.StartsWith(GUID.ToString()))
+                            if (subDirectory.StartsWith(GUID.ToString("D")))
                             {
                                 iMatchCount++;
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    Guid newGuid = Guid.Parse(subDirectory.Substring(0, 32 + 4));
+                                    iOtherMatchCount++;
+                                }
+                                catch (ArgumentNullException)
+                                {
+                                    Console.WriteLine("The string to be parsed is null.");
+                                }
+                                catch (FormatException)
+                                {
+//                                    Console.WriteLine("Bad format: {0}", subDirectory);
+                                }
                             }
                         }
                     }
@@ -85,32 +102,72 @@ namespace CompleteBackup.Models.Backup.Profile
                     {
                         profileStatus = ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile;
                     }
-                    else if (iMatchCount == 0)
+                    else if (iMatchCount == 0 && iOtherMatchCount == 0)
                     {
                         profileStatus = ProfileTargetFolderStatusEnum.NonEmptyFolderNoProfile;
                     }
-                    else 
+                    else if (iOtherMatchCount > 0)
+                    {
+                        profileStatus = ProfileTargetFolderStatusEnum.AssosiatedWithADifferentProfile;
+                    }
+                    else
                     {
                         profileStatus = ProfileTargetFolderStatusEnum.CoccuptedOrNotRecognizedProfile;
                     }
                 }
             }
 
-            //if (m_ProfileTargetFolderStatus != profileStatus)
-            //{
-            //    m_ProfileTargetFolderStatus = profileStatus;
-
-            //    OnPropertyChanged("ProfileTargetFolderStatus");
-            //    OnPropertyChanged("IsValidProfileFolder");
-
-            //    return true;
-            //}
-            //else
-            //{
-            //    return false;
-            //}
             return profileStatus;
         }
+
+        public int ConverBackupProfileFolderToNewPath(string path)
+        {
+            int iCount = -1;
+
+            var subdirectoryList = GetDirectoriesNames(path);
+            if (subdirectoryList == null || subdirectoryList.Count() == 0)
+            {
+                return 0;
+            }
+            else
+            {
+                iCount = 0;
+                foreach (string subDirectory in subdirectoryList)
+                {
+                    string sourcePath = m_IStorage.Combine(path, subDirectory);
+                    FileAttributes attr = m_IStorage.GetFileAttributes(sourcePath);
+
+                    if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                    {
+                        try
+                        {
+                            Guid newGuid = Guid.Parse(subDirectory.Substring(0, 36));
+
+                            var sub1 = subDirectory.Substring(36, subDirectory.Length - 36);
+                            var sub2 = subDirectory.Remove(36);
+
+                            var destDirectory = GUID.ToString("D") + subDirectory.Substring(36, subDirectory.Length - 36);
+                            string targetPath = m_IStorage.Combine(path, destDirectory);
+                            if (m_IStorage.MoveDirectory(sourcePath, targetPath))
+                            {
+                                iCount++;
+                            }
+                        }
+                        catch (ArgumentNullException)
+                        {
+                            Console.WriteLine("The string to be parsed is null.");
+                        }
+                        catch (FormatException)
+                        {
+                            //                                    Console.WriteLine("Bad format: {0}", subDirectory);
+                        }
+                    }
+                }
+            }
+
+            return iCount;
+        }
+
 
         private string _TargetBackupFolder;
         public string TargetBackupFolder { get { return _TargetBackupFolder; } set  { _TargetBackupFolder = value; OnPropertyChanged(); } }

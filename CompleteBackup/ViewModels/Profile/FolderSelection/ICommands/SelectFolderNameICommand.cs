@@ -56,15 +56,45 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
                                     else
                                     {
                                         var folderStatus = profile.GetProfileTargetFolderStatus(path);
-                                        if (folderStatus == Models.Backup.Profile.BackupProfileData.ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile)
+                                        switch (folderStatus)
                                         {
-                                            profile.TargetBackupFolder = fileDialog.SelectedPath;
+                                            case BackupProfileData.ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile:
 
-                                            bRetry = false;
-                                        }
-                                        else
-                                        {
-                                            MessageBox.Show($"folder error {folderStatus.ToString()}", "Destination folder", MessageBoxButton.OK, MessageBoxImage.Error);
+                                                profile.TargetBackupFolder = fileDialog.SelectedPath;
+                                                bRetry = false;
+
+                                                break;
+
+                                            case BackupProfileData.ProfileTargetFolderStatusEnum.AssosiatedWithADifferentProfile:
+                                            case BackupProfileData.ProfileTargetFolderStatusEnum.CoccuptedOrNotRecognizedProfile:
+
+                                                MessageBoxResult result = MessageBox.Show($"The backup folder is assosiated with a different Backup Profile or corrupted\n\nWould you like to try to convert and associate this target folder to this Backup Profile?\nPress Yes to try to convert or No if you are not sure", "Backup folder", MessageBoxButton.YesNoCancel, MessageBoxImage.Error);
+
+                                                if (result == MessageBoxResult.Yes)
+                                                {
+                                                    if (profile.ConverBackupProfileFolderToNewPath(path) > 0)
+                                                    {
+                                                        MessageBox.Show($"Backup profile Succesfully converted!", "Destination folder", MessageBoxButton.OK, MessageBoxImage.Information);
+                                                        profile.TargetBackupFolder = fileDialog.SelectedPath;
+
+                                                        bRetry = false;
+                                                    }
+                                                    else
+                                                    {
+                                                        MessageBox.Show($"Failed to convert Backup Folder", "Destination folder", MessageBoxButton.OK, MessageBoxImage.Error);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    bRetry = false;
+                                                }
+
+                                                break;
+                                            default:
+                                                {
+                                                    MessageBox.Show($"folder error {folderStatus.ToString()}", "Destination folder", MessageBoxButton.OK, MessageBoxImage.Error);
+                                                }
+                                                break;
                                         }
                                     }
                                 }

@@ -16,7 +16,7 @@ namespace CompleteBackup.Models.Backup.Storage
         private int MAX_PATH_LENGTH = Win32LongPathFile.MAX_PATH;
         //private const int cMaxWin32PathLength = Win32LongPathFile.MAX_PATH;
 
-        public bool IsFileSameByLastChangeOnle { get; set; }
+        public bool IsFileSameByLastChangeOnly { get; set; } = true;
 
         public bool IsLongPathSupported
         {
@@ -192,11 +192,22 @@ namespace CompleteBackup.Models.Backup.Storage
 
         public bool IsFileSame(string file1, string file2)
         {
-            if (IsFileSameByLastChangeOnle)
+            if (IsFileSameByLastChangeOnly)
             {
-                DateTime time1 = GetLastWriteTime(file1);
-                DateTime time2 = GetLastWriteTime(file2);
-                return time1 == time2;
+                if (file1.Length < MAX_PATH_LENGTH && file2.Length < MAX_PATH_LENGTH)
+                {
+                    DateTime time1 = File.GetLastWriteTime(file1);
+                    DateTime time2 = File.GetLastWriteTime(file2);
+
+                    return time1 == time2;
+                }
+                else
+                {
+                    DateTime time1 = Win32LongPathFile.GetLastWriteTime(file1);
+                    DateTime time2 = Win32LongPathFile.GetLastWriteTime(file2);
+
+                    return time1 == time2;
+                }
             }
             else
             {
