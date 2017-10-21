@@ -10,5 +10,6 @@ namespace CompleteBackup.ViewModels.Profile
     class ProfileDetailsPageViewModel
     {
         public BackupProjectRepository Repository { get; } = BackupProjectRepository.Instance;
+
     }
 }

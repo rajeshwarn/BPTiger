@@ -12,6 +12,6 @@
     </UserControl.DataContext>
     
     <Grid>
-            
+        <TextBlock Text="RESTORE"/>
     </Grid>
 </UserControl>

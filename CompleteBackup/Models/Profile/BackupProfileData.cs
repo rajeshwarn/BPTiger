@@ -201,7 +201,6 @@ namespace CompleteBackup.Models.Backup.Profile
             get
             {
                 return new DirectoryInfo(_TargetBackupFolder).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length) / 1000000;
-
             }
             set { }
         }

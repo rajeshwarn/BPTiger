@@ -24,10 +24,14 @@
             DataType="{x:Type view_model:MainBackupViewModel}">
             <view:MainBackupView/>
         </DataTemplate>
+        <DataTemplate
+            DataType="{x:Type view_model:MainRestoreViewModel}">
+            <view:MainRestoreView/>
+        </DataTemplate>
     </Window.Resources>
 
     <DockPanel LastChildFill="True">
-        <Ribbon x:Name="RibbonWin" DockPanel.Dock="Top" SelectedIndex="1">
+        <Ribbon x:Name="RibbonWin" DockPanel.Dock="Top" SelectedIndex="{Binding SelectedRibbonIndex}">
             <!-- Help Pane, located at the right-hand side -->
             <Ribbon.HelpPaneContent>
                 <RibbonButton SmallImageSource="/Resources/Icons/Iconsmind-Outline-File.ico" />
