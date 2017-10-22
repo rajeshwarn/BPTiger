@@ -59,6 +59,9 @@
     </ApplicationDefinition>
     <Compile Include="DataRepository\BackupProjectRepository.cs" />
     <Compile Include="Models\Backup\BackupFactory.cs" />
+    <Compile Include="Models\Profile\StorageDataUpdaterTask.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Models\Project\BackupProjectData.cs" />
     <Compile Include="Models\Profile\BackupProfileData.cs" />
     <Compile Include="Models\Backup\Storage\NullStorage.cs" />

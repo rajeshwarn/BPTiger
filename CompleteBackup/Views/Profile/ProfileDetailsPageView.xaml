@@ -14,15 +14,12 @@
     <Grid>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Target Backup consumed size: "></TextBlock>
-                <TextBlock Text="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.BackupTargetSize, StringFormat='{}{0:###,##0}' }" ></TextBlock>
-                <TextBlock Text=" KBytes"></TextBlock>
+                <TextBlock Text="Target Backup used size: "></TextBlock>
+                <TextBlock Text="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.BackupTargetUsedSize}" ></TextBlock>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Target free space: "></TextBlock>
-                <TextBlock Text="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.BackupTargetFreeSpace, StringFormat='{}{0:###,##0}' }" ></TextBlock>
-                
-                <TextBlock Text=" KBytes"></TextBlock>
+                <TextBlock Text="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.BackupTargetFreeSize}" ></TextBlock>
             </StackPanel>
         </StackPanel>
     </Grid>

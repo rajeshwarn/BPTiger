@@ -2,10 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Xml.Serialization;
 
 namespace CompleteBackup.Models.Backup.Profile
@@ -32,6 +35,11 @@ namespace CompleteBackup.Models.Backup.Profile
             { ProfileTargetFolderStatusEnum.NonEmptyFolderNoProfile, "The folder does not contain a backup profile" },
         };
 
+
+        public BackupProfileData()
+        {
+            InitStorageDataUpdaterTask();
+        }
 
         public Guid GUID { get; set; } = Guid.NewGuid();
         public string Name { get; set; } = "My Backup Profile";
@@ -196,42 +204,77 @@ namespace CompleteBackup.Models.Backup.Profile
         }
 
 
-        public long BackupTargetSize
-        {
-            get
-            {
-                return new DirectoryInfo(_TargetBackupFolder).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length) / 1000000;
-            }
-            set { }
-        }
-        public long BackupTargetFreeSpace
-        {
-            get
-            {
-                string drive1 = Path.GetPathRoot(_TargetBackupFolder);
+        //==================================
 
-                foreach (DriveInfo drive in DriveInfo.GetDrives().Where(d => d.ToString().Contains(drive1)))
+        BackgroundWorker m_StorageDataUpdaterTask = new BackgroundWorker() { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
+
+        void InitStorageDataUpdaterTask()
+        {
+            m_StorageDataUpdaterTask.DoWork += (sender, e) =>
+            {
+                //var collection = e.Argument as EventCollectionDataBase;
+                try
                 {
-                    if (drive.IsReady)
+
+                    Application.Current.Dispatcher.Invoke(new Action(() =>
                     {
-                        return drive.TotalFreeSpace / 1000000;
+                        BackupTargetUsedSize = "Calculating...";
+                        BackupTargetFreeSize = "Calculating...";
+                    }));
+
+                    
+                    //Target Total Space
+                    m_BackupTargetFreeSizeNumber = new DirectoryInfo(_TargetBackupFolder).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
+                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    {
+                        BackupTargetUsedSize = (m_BackupTargetFreeSizeNumber / 1000000).ToString("###,##0") + " KBytes";
+                    }));
+
+
+                    //Target free space
+                    m_BackupTargetFreeSizeNumber = 0;
+                    string drive1 = Path.GetPathRoot(_TargetBackupFolder);
+                    foreach (DriveInfo drive in DriveInfo.GetDrives().Where(d => d.ToString().Contains(drive1)))
+                    {
+                        if (drive.IsReady)
+                        {
+                            m_BackupTargetFreeSizeNumber = drive.TotalFreeSpace;
+                            Application.Current.Dispatcher.Invoke(new Action(() =>
+                            {
+                                BackupTargetFreeSize = (m_BackupTargetFreeSizeNumber / 1000000).ToString("###,##0") + " KBytes";
+                            }));
+
+                            break;
+                        }
                     }
+
                 }
-
-                return 0;
-//                return new DirectoryInfo(_TargetBackupFolder).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length) / 1000000;
-
-            }
-            set { }
+                catch (TaskCanceledException ex)
+                {
+                    Trace.WriteLine($"StorageDataUpdaterTask exception: {ex.Message}");
+                    e.Result = $"StorageDataUpdaterTaskexception: {ex.Message}";
+                    throw (ex);
+                }
+            };
         }
-        public string TargetDriveFreeSpace
+
+
+        public void UpdateProfileProperties()
         {
-            get
+            if (!m_StorageDataUpdaterTask.IsBusy)
             {
-                return new DirectoryInfo(_TargetBackupFolder).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length).ToString();
-
-            }
-            set { }
+                m_StorageDataUpdaterTask.RunWorkerAsync();
+            }                
         }
+
+
+        private long m_BackupTargetUsedSizeNumber = 0;
+        private string m_BackupTargetUsedSize = "Data Not available";
+        public string BackupTargetUsedSize { get { return m_BackupTargetUsedSize; } set { m_BackupTargetUsedSize = value; OnPropertyChanged(); } }
+
+
+        private long m_BackupTargetFreeSizeNumber = 0;
+        private string m_BackupTargetFreeSize = "Data Not available";
+        public string BackupTargetFreeSize { get { return m_BackupTargetFreeSize; } set { m_BackupTargetFreeSize = value; OnPropertyChanged(); } }
     }
 }
