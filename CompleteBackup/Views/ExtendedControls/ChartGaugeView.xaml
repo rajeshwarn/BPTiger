@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="CompleteBackup.Views.ExtendedControls.ChartGaugeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CompleteBackup.Views.ExtendedControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid x:Name="cvChartGaugeGrid">
+        <StackPanel Orientation="Vertical">
+            <TextBlock Text="{Binding PumpNumber}" HorizontalAlignment="Center"/>
+            <Grid>
+                <Canvas x:Name="cvChartGaugeCanvas" Width="{Binding RadiusX2}"/>
+                <!--fill-->
+                <Ellipse Width="{Binding RadiusX4}" Height="{Binding RadiusX4}" Canvas.Left="0" Canvas.Top="0" Stretch="Fill" Stroke="{Binding FillBrush}" Fill="{Binding FillBrush}">
+                    <Ellipse.Clip>
+                        <PathGeometry >
+                            <PathFigure StartPoint="0, 0" IsClosed="True" IsFilled="True">
+                                <PolyLineSegment IsStroked="False" Points="{Binding GaugeValueSegment}"></PolyLineSegment>
+                            </PathFigure>
+                        </PathGeometry>
+                    </Ellipse.Clip>
+                </Ellipse>
+                <!--Half-->
+                <Ellipse Width="{Binding RadiusX4}" Height="{Binding RadiusX4}" Canvas.Left="0" Canvas.Top="0" Stroke="{Binding BorderBrush}">
+                    <Ellipse.Clip>
+                        <RectangleGeometry Rect="{Binding ClipRect}"/>
+                    </Ellipse.Clip>
+                </Ellipse>
+                <!--half dot-->
+                <Ellipse Width="{Binding DotSizeX2}" Height="{Binding DotSizeX2}" Canvas.Left="0" Canvas.Top="0" Stretch="Fill" Fill="{Binding DotBrush}">
+                    <Ellipse.Clip>
+                        <RectangleGeometry Rect="{Binding DotClipRect}"/>
+                    </Ellipse.Clip>
+                </Ellipse>
+                <Line X1="0" X2="{Binding RadiusX4}" Y1="{Binding RadiusX2}" Y2="{Binding RadiusX2}" Stroke="{Binding BorderBrush}"/>
+
+                <Line X1="{Binding GaugeX1L}" X2="{Binding GaugeX2}" Y1="{Binding GaugeY1}" Y2="{Binding GaugeY2}" Stroke="{Binding MeterBrush}" StrokeThickness="1"/>
+                <Line X1="{Binding GaugeX1}" X2="{Binding GaugeX2}" Y1="{Binding GaugeY1}" Y2="{Binding GaugeY2}" Stroke="{Binding MeterBrush}" StrokeThickness="1"/>
+                <Line X1="{Binding GaugeX1R}" X2="{Binding GaugeX2}" Y1="{Binding GaugeY1}" Y2="{Binding GaugeY2}" Stroke="{Binding MeterBrush}" StrokeThickness="1"/>
+
+                <TextBlock Text="{Binding Utilization}" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+            </Grid>
+        </StackPanel>
+        <TextBox Text="{Binding GaugeValue}" Visibility="Collapsed" TextChanged="GaugeValueValue_TextChanged"/>
+    </Grid>
+</UserControl>

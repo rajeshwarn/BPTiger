@@ -12,19 +12,21 @@
     </UserControl.DataContext>
 
     <Grid>
-        <StackPanel Orientation="Vertical">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Source foldes size: "></TextBlock>
-                <TextBlock Text="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.BackupSourceFoldersSize}" ></TextBlock>
+        <Border BorderThickness="2" CornerRadius="8" BorderBrush="DarkGray" Margin="0,0,0,0" Padding="4">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Source foldes size: "></TextBlock>
+                    <TextBlock Text="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.BackupSourceFoldersSize}" ></TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Target Backup used size: "></TextBlock>
+                    <TextBlock Text="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.BackupTargetUsedSize}" ></TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Target free space: "></TextBlock>
+                    <TextBlock Text="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.BackupTargetFreeSize}" ></TextBlock>
+                </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Target Backup used size: "></TextBlock>
-                <TextBlock Text="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.BackupTargetUsedSize}" ></TextBlock>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Target free space: "></TextBlock>
-                <TextBlock Text="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.BackupTargetFreeSize}" ></TextBlock>
-            </StackPanel>
-        </StackPanel>
+        </Border>
     </Grid>
 </UserControl>

@@ -218,37 +218,41 @@ namespace CompleteBackup.Models.Backup.Profile
 
                     Application.Current.Dispatcher.Invoke(new Action(() =>
                     {
-                        BackupTargetUsedSize = "Calculating...";
-                        BackupTargetFreeSize = "Calculating...";
-                        BackupSourceFoldersSize = "Calculating...";
+                        BackupTargetUsedSize = "n/a";
+                        BackupTargetFreeSize = "n/a";
+                        BackupSourceFoldersSize = "n/a";
                     }));
 
-                    
+                    m_BackupTargetFreeSizeNumber = 0;
                     //Target Total Space
-                    m_BackupTargetFreeSizeNumber = new DirectoryInfo(_TargetBackupFolder).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
-                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    if (_TargetBackupFolder != null)
                     {
-                        BackupTargetUsedSize = (m_BackupTargetFreeSizeNumber / 1000000).ToString("###,##0") + " KBytes";
-                    }));
-
+                        m_BackupTargetFreeSizeNumber = new DirectoryInfo(_TargetBackupFolder).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
+                        Application.Current.Dispatcher.Invoke(new Action(() =>
+                        {
+                            BackupTargetUsedSize = (m_BackupTargetFreeSizeNumber / 1000000).ToString("###,##0") + " KBytes";
+                        }));
+                    }
 
                     //Target free space
                     m_BackupTargetFreeSizeNumber = 0;
-                    string drive1 = Path.GetPathRoot(_TargetBackupFolder);
-                    foreach (DriveInfo drive in DriveInfo.GetDrives().Where(d => d.ToString().Contains(drive1)))
+                    if (_TargetBackupFolder != null)
                     {
-                        if (drive.IsReady)
+                        string drive1 = Path.GetPathRoot(_TargetBackupFolder);
+                        foreach (DriveInfo drive in DriveInfo.GetDrives().Where(d => d.ToString().Contains(drive1)))
                         {
-                            m_BackupTargetFreeSizeNumber = drive.TotalFreeSpace;
-                            Application.Current.Dispatcher.Invoke(new Action(() =>
+                            if (drive.IsReady)
                             {
-                                BackupTargetFreeSize = (m_BackupTargetFreeSizeNumber / 1000000).ToString("###,##0") + " KBytes";
-                            }));
+                                m_BackupTargetFreeSizeNumber = drive.TotalFreeSpace;
+                                Application.Current.Dispatcher.Invoke(new Action(() =>
+                                {
+                                    BackupTargetFreeSize = (m_BackupTargetFreeSizeNumber / 1000000).ToString("###,##0") + " KBytes";
+                                }));
 
-                            break;
+                                break;
+                            }
                         }
                     }
-
 
                     //Source Foldes Size
                     foreach(var folder in FolderList)
