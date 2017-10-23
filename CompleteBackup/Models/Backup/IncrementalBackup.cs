@@ -69,7 +69,7 @@ namespace CompleteBackup.Models.backup
                 m_IStorage.CreateDirectory(lastTargetPath_);
 
                 var fileEntries = m_IStorage.GetFiles(newTargetPath);
-                foreach (string fileName in fileEntries.Where(f => f.EndsWith(".xml", true, null)))
+                foreach (string fileName in fileEntries.Where(f => BackupSessionHistory.IsHistoryFile(f)))
                 {
                     m_IStorage.MoveFile(m_IStorage.Combine(newTargetPath, m_IStorage.GetFileName(fileName)),
                                         m_IStorage.Combine(lastTargetPath_, m_IStorage.GetFileName(fileName)));

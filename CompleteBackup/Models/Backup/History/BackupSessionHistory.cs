@@ -53,6 +53,11 @@ namespace CompleteBackup.Models.Backup.History
         }
 
 
+        public static bool IsHistoryFile(string path)
+        {
+            return path.EndsWith(".json", true, null);
+        }
+
         public static void SaveHistory(string path, string signature, BackupSessionHistory history)
         {
             var m_IStorage = new FileSystemStorage();
