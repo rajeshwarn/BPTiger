@@ -1,4 +1,5 @@
 ﻿using CompleteBackup.DataRepository;
+using CompleteBackup.Models.Backup.History;
 using CompleteBackup.Models.Backup.Storage;
 using CompleteBackup.Views.MainWindow;
 using System;
@@ -34,13 +35,13 @@ namespace CompleteBackup.Models.backup
             DateTime d = DateTime.Now;
             var targetSet = $"{BackUpProfileSignature}_{d.Year:0000}-{d.Month:00}-{d.Day:00}_{d.Hour:00}{d.Minute:00}{d.Hour:00}{d.Second:00}{d.Millisecond:000}";
 
+            m_BackupSessionHistory.Clear();
+
             if (lastSet == null)
             {
                 var newTargetPath = m_IStorage.Combine(TargetPath, targetSet);
 
                 m_IStorage.CreateDirectory(newTargetPath);
-
-                CreateChangeLogFile();
 
                 foreach (var path in SourcePath)
                 {
@@ -50,7 +51,7 @@ namespace CompleteBackup.Models.backup
                     ProcessNewBackupStep(path, targetPath);
                 }
 
-                SaveChangeLogFile(newTargetPath, targetSet);
+                BackupSessionHistory.SaveHistory(newTargetPath, targetSet, m_BackupSessionHistory);
             }
             else
             {
@@ -73,10 +74,7 @@ namespace CompleteBackup.Models.backup
                     m_IStorage.MoveFile(m_IStorage.Combine(newTargetPath, m_IStorage.GetFileName(fileName)),
                                         m_IStorage.Combine(lastTargetPath_, m_IStorage.GetFileName(fileName)));
                 }
-
-
-                CreateChangeLogFile();
-
+               
                 //check if set was changed and need to be deleted
                 var prevSetList = m_IStorage.GetDirectories(newTargetPath);
                 foreach (var path in prevSetList)
@@ -91,7 +89,7 @@ namespace CompleteBackup.Models.backup
                         var lastTargetPath = m_IStorage.Combine(lastTargetPath_, setName);
                         m_IStorage.MoveDirectory(targetPath, lastTargetPath);
 
-                        AddDeletedFolder(sourcePath);
+                        m_BackupSessionHistory.AddDeletedFolder(sourcePath);
                     }
                 }
 
@@ -105,7 +103,7 @@ namespace CompleteBackup.Models.backup
                     ProcessIncrementalStep(path, targetPath, lastTargetPath);
                 }
 
-                SaveChangeLogFile(newTargetPath, targetSet);
+                BackupSessionHistory.SaveHistory(newTargetPath, targetSet, m_BackupSessionHistory);
             }
         }
 
@@ -127,7 +125,7 @@ namespace CompleteBackup.Models.backup
 
                 m_IStorage.CopyFile(sourceFilePath, targetFilePath);
 
-                AddNewFile(targetFilePath);
+                m_BackupSessionHistory.AddNewFile(targetFilePath);
             }
 
             //Process directories

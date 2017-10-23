@@ -1,4 +1,5 @@
 ﻿using CompleteBackup.DataRepository;
+using CompleteBackup.Models.Backup.History;
 using CompleteBackup.Models.Backup.Storage;
 using CompleteBackup.Views.MainWindow;
 using System;
@@ -34,7 +35,7 @@ namespace CompleteBackup.Models.backup
     
             m_IStorage.CreateDirectory(newTargetPath);
 
-            CreateChangeLogFile();
+            m_BackupSessionHistory.Clear();
 
             foreach (var path in SourcePath)
             {
@@ -44,7 +45,7 @@ namespace CompleteBackup.Models.backup
                 ProcessSnapBackupStep(path, targetPath);
             }
 
-            SaveChangeLogFile(newTargetPath, m_BackupName);
+            BackupSessionHistory.SaveHistory(newTargetPath, m_BackupName, m_BackupSessionHistory);
         }
 
 

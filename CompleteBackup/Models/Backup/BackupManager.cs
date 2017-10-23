@@ -1,4 +1,5 @@
-﻿using CompleteBackup.Models.Backup.Storage;
+﻿using CompleteBackup.Models.Backup.History;
+using CompleteBackup.Models.Backup.Storage;
 using CompleteBackup.Views.MainWindow;
 using System;
 using System.Collections.Generic;
@@ -25,10 +26,7 @@ namespace CompleteBackup.Models.backup
             TargetPath = currSetPath;
 
             m_IStorage = storageInterface;
-
             m_ProgressBar = progressBar;
-
- //           InitStorageDataUpdaterTask();
         }
 
         public abstract string BackUpProfileSignature { get; }
@@ -56,226 +54,15 @@ namespace CompleteBackup.Models.backup
             }
         }
 
-
-
-
-
-
-        //BackgroundWorker m_StorageDataUpdaterTask = new BackgroundWorker() { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
-
-        //void InitStorageDataUpdaterTask()
-        //{
-        //    m_StorageDataUpdaterTask.DoWork += (sender, e) =>
-        //    {
-        //        //var collection = e.Argument as EventCollectionDataBase;
-        //        try
-        //        {
-        //            long files = 0;
-        //            long directories = 0;
-
-        //            Application.Current.Dispatcher.Invoke(new Action(() =>
-        //            {
-        //                NumberOfFiles = -1;
-        //                ProgressBar?.SetPauseState(true);
-
-        //            }));
-
-        //            foreach (var path in SourcePath)
-        //            {
-        //                long files_ = 0;
-        //                long directories_ = 0;
-        //                m_IStorage.GetNumberOfFiles(path, ref files_, ref directories_);
-
-        //                directories += directories_;
-        //                files += files_;
-        //            }
-
-        //            Application.Current.Dispatcher.Invoke(new Action(() =>
-        //            {
-        //                NumberOfFiles = files;
-
-        //                ProgressBar?.SetPauseState(false);
-        //                ProgressBar?.SetRange(NumberOfFiles);
-        //                ProgressBar?.UpdateProgressBar("Runnin...", 0);
-        //                ProgressBar?.ShowTimeEllapsed(true);
-        //            }));
-        //        }
-        //        catch (TaskCanceledException ex)
-        //        {
-        //            Trace.WriteLine($"StorageDataUpdaterTask exception: {ex.Message}");
-        //            e.Result = $"StorageDataUpdaterTaskexception: {ex.Message}";
-        //            throw (ex);
-        //        }
-        //    };
-        //}
-
-
-
-
-
-
-
-
-
-
-
-
-        XmlDocument m_xmlDoc;
-        XmlNode m_NewItemsNode;
-        XmlNode m_UpdatedItemsNode;
-        XmlNode m_DeletedItemsNode;
-        XmlNode m_NoChangeItemsNode;
-
-        long m_iNewFiles = 0;
-        long m_iUpdatedFiles = 0;
-        long m_iDeletedFiles = 0;
-        long m_iDeletedFolders = 0;
-        long m_iNoChangeFiles = 0;
-
-        public void CreateChangeLogFile()
-        {
-            m_xmlDoc = new XmlDocument();
-            XmlNode rootNode = m_xmlDoc.CreateElement("ChangeLog");
-            m_xmlDoc.AppendChild(rootNode);
-
-            m_NewItemsNode = m_xmlDoc.CreateElement("New");
-            m_UpdatedItemsNode = m_xmlDoc.CreateElement("Updated");
-            m_DeletedItemsNode = m_xmlDoc.CreateElement("Deleted");
-            m_NoChangeItemsNode = m_xmlDoc.CreateElement("NoChange");
-
-            rootNode.AppendChild(m_NewItemsNode);
-            rootNode.AppendChild(m_UpdatedItemsNode);
-            rootNode.AppendChild(m_DeletedItemsNode);
-            rootNode.AppendChild(m_NoChangeItemsNode);
-        }
-
-        public void SaveChangeLogFile(string path, string signature)
-        {
-            XmlAttribute attribute = m_xmlDoc.CreateAttribute("count");
-            attribute.Value = m_iNoChangeFiles.ToString();
-            m_NoChangeItemsNode.Attributes.Append(attribute);
-
-
-            //            var tmpPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProject);
-            //            var name = System.Reflection.Assembly.GetExecutingAssembly().GetName();
-            var file = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $"{signature}_ChangeLog.xml");
-
-            string targetFile = m_IStorage.Combine(path, $"{signature}_ChangeLog.xml");
-
-
-            m_xmlDoc.Save(file);
-            var storage = new FileSystemStorage();
-            storage.MoveFile(file, targetFile);
-
-
-        }
-
-        public void AddNewFile(string item)
-        {
-            m_iNewFiles++;
-
-            XmlNode userNode = m_xmlDoc.CreateElement("file");
-            XmlAttribute attribute = m_xmlDoc.CreateAttribute("count");
-            attribute.Value = m_iNewFiles.ToString();
-            userNode.Attributes.Append(attribute);
-            userNode.InnerText = item;
-            m_NewItemsNode.AppendChild(userNode);
-        }
-        public void AddUpdatedFile(string item)
-        {
-            m_iUpdatedFiles++;
-
-            XmlNode userNode = m_xmlDoc.CreateElement("file");
-            XmlAttribute attribute = m_xmlDoc.CreateAttribute("count");
-            attribute.Value = m_iUpdatedFiles.ToString();
-            userNode.Attributes.Append(attribute);
-            userNode.InnerText = item;
-            m_UpdatedItemsNode.AppendChild(userNode);
-        }
-        public void AddDeletedFile(string item)
-        {
-            m_iDeletedFiles++;
-
-            XmlNode userNode = m_xmlDoc.CreateElement("file");
-            XmlAttribute attribute = m_xmlDoc.CreateAttribute("count");
-            attribute.Value = m_iDeletedFiles.ToString();
-            userNode.Attributes.Append(attribute);
-            userNode.InnerText = item;
-            m_DeletedItemsNode.AppendChild(userNode);
-        }
-
-        public void AddDeletedFolder(string item)
-        {
-            m_iDeletedFolders++;
-
-            XmlNode userNode = m_xmlDoc.CreateElement("folder");
-            XmlAttribute attribute = m_xmlDoc.CreateAttribute("count");
-            attribute.Value = m_iDeletedFolders.ToString();
-            userNode.Attributes.Append(attribute);
-            userNode.InnerText = item;
-            m_DeletedItemsNode.AppendChild(userNode);
-        }
-
-        public void AddNoChangeFile(string item)
-        {
-            m_iNoChangeFiles++;
-
-            //XmlNode userNode = m_xmlDoc.CreateElement("file");
-            //XmlAttribute attribute = m_xmlDoc.CreateAttribute("count");
-            //attribute.Value = m_iNoChangeFiles.ToString();
-            //userNode.Attributes.Append(attribute);
-            //userNode.InnerText = item;
-            //m_NoChangeItemsNode.AppendChild(userNode);
-        }
-
-
+        protected BackupSessionHistory m_BackupSessionHistory = new BackupSessionHistory();
 
 
         public abstract void ProcessBackup();
-        //public abstract void ProcessBackupStep(string sourcePath, string currSetPath, string lastSetPath = null);
-
-        //BackgroundWorker m_Worker = null;
-
-        //public void StartNewWorker(string sourcePath, string currSetPath, string lastSetPath = null)
-        //{
-        //    ProcessBackupStep(sourcePath, currSetPath, lastSetPath);
-
-        //    return;
-
-        //    if (m_Worker != null && m_Worker.IsBusy)
-        //    {
-        //        ProcessBackupStep(sourcePath, currSetPath, lastSetPath);
-        //    }
-        //    else
-        //    {
-        //        m_Worker = new BackgroundWorker() { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
-
-        //        m_Worker.DoWork += (sender, e) =>
-        //        {
-        //            try
-        //            {
-        //                ProcessBackupStep(sourcePath, currSetPath, lastSetPath);
-        //            }
-        //            catch (TaskCanceledException ex)
-        //            {
-        //                Trace.WriteLine($"Backup Worker exception: {ex.Message}");
-        //                e.Result = $"Backup Worker exception: {ex.Message}";
-        //                throw (ex);
-        //            }
-        //        };
-
-        //        m_Worker.RunWorkerAsync();
-        //    }
-        //}
 
 
 
         public void Init()
         {
-            //            if (!m_StorageDataUpdaterTask.IsBusy)
-            //            {
-            //                m_StorageDataUpdaterTask.RunWorkerAsync();
-            //       
             long files = 0;
             long directories = 0;
 
@@ -318,7 +105,9 @@ namespace CompleteBackup.Models.backup
                 if (m_IStorage.IsFileSame(sourceFilePath, currSetFilePath))
                 {
                     //File is the same, do nothing
-                    AddNoChangeFile(currSetFilePath);
+                    m_BackupSessionHistory.AddNoChangeFile(currSetFilePath);
+
+                    m_BackupSessionHistory.AddNoChangeFile(sourcePath);
                 }
                 else
                 {
@@ -338,7 +127,7 @@ namespace CompleteBackup.Models.backup
                     }
                     m_IStorage.CopyFile(sourceFilePath, currSetFilePath);
 
-                    AddUpdatedFile(currSetFilePath);
+                    m_BackupSessionHistory.AddUpdatedFile(currSetFilePath);
                 }
             }
             else
@@ -350,7 +139,7 @@ namespace CompleteBackup.Models.backup
                 }
                 m_IStorage.CopyFile(sourceFilePath, currSetFilePath);
 
-                AddNewFile(currSetFilePath);
+                m_BackupSessionHistory.AddNewFile(currSetFilePath);
             }
         }
 
@@ -364,14 +153,14 @@ namespace CompleteBackup.Models.backup
                 if (m_IStorage.IsFileSame(sourceFilePath, currSetFilePath))
                 {
                     //Do nothing
-                    AddNoChangeFile(currSetFilePath);
+                    m_BackupSessionHistory.AddNoChangeFile(currSetFilePath);
                 }
                 else
                 {
                     //update/overwrite file
                     m_IStorage.CopyFile(sourceFilePath, currSetFilePath, true);
 
-                    AddUpdatedFile(currSetFilePath);
+                    m_BackupSessionHistory.AddUpdatedFile(currSetFilePath);
                 }
             }
             else
@@ -382,7 +171,7 @@ namespace CompleteBackup.Models.backup
                 }
                 m_IStorage.CopyFile(sourceFilePath, currSetFilePath);
 
-                AddNewFile(currSetFilePath);
+                m_BackupSessionHistory.AddNewFile(currSetFilePath);
             }
         }
 
@@ -401,7 +190,7 @@ namespace CompleteBackup.Models.backup
                     //Move file to last set
                     m_IStorage.MoveFile(filePath, prevSetfilePath, true);
 
-                    AddDeletedFile(filePath);
+                    m_BackupSessionHistory.AddDeletedFile(filePath);
                 }
             }
         }
@@ -419,7 +208,7 @@ namespace CompleteBackup.Models.backup
                     //if not exists in source, delete the file
                     File.Delete(filePath);
 
-                    AddDeletedFile(filePath);
+                    m_BackupSessionHistory.AddDeletedFile(filePath);
                 }
             }
         }
@@ -448,7 +237,7 @@ namespace CompleteBackup.Models.backup
                 {
                     m_IStorage.MoveDirectory(entry, m_IStorage.Combine(lastSetPath, m_IStorage.GetFileName(entry)), true);
 
-                    AddDeletedFolder(entry);
+                    m_BackupSessionHistory.AddDeletedFolder(entry);
                 }
             }
         }
@@ -473,7 +262,7 @@ namespace CompleteBackup.Models.backup
                 {
                     m_IStorage.DeleteDirectory(entry);
 
-                    AddDeletedFolder(entry);
+                    m_BackupSessionHistory.AddDeletedFolder(entry);
                 }
             }
         }
