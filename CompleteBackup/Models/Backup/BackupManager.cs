@@ -27,11 +27,13 @@ namespace CompleteBackup.Models.backup
             m_IStorage = storageInterface;
 
             m_ProgressBar = progressBar;
+
+ //           InitStorageDataUpdaterTask();
         }
 
         public abstract string BackUpProfileSignature { get; }
 
-        public long NumberOfFiles { get; set; }
+        public long NumberOfFiles { get; set; } = 0;
         public long ProcessFileCount { get; set; }
 
         public List<string> SourcePath;
@@ -53,6 +55,70 @@ namespace CompleteBackup.Models.backup
                 }
             }
         }
+
+
+
+
+
+
+        //BackgroundWorker m_StorageDataUpdaterTask = new BackgroundWorker() { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
+
+        //void InitStorageDataUpdaterTask()
+        //{
+        //    m_StorageDataUpdaterTask.DoWork += (sender, e) =>
+        //    {
+        //        //var collection = e.Argument as EventCollectionDataBase;
+        //        try
+        //        {
+        //            long files = 0;
+        //            long directories = 0;
+
+        //            Application.Current.Dispatcher.Invoke(new Action(() =>
+        //            {
+        //                NumberOfFiles = -1;
+        //                ProgressBar?.SetPauseState(true);
+
+        //            }));
+
+        //            foreach (var path in SourcePath)
+        //            {
+        //                long files_ = 0;
+        //                long directories_ = 0;
+        //                m_IStorage.GetNumberOfFiles(path, ref files_, ref directories_);
+
+        //                directories += directories_;
+        //                files += files_;
+        //            }
+
+        //            Application.Current.Dispatcher.Invoke(new Action(() =>
+        //            {
+        //                NumberOfFiles = files;
+
+        //                ProgressBar?.SetPauseState(false);
+        //                ProgressBar?.SetRange(NumberOfFiles);
+        //                ProgressBar?.UpdateProgressBar("Runnin...", 0);
+        //                ProgressBar?.ShowTimeEllapsed(true);
+        //            }));
+        //        }
+        //        catch (TaskCanceledException ex)
+        //        {
+        //            Trace.WriteLine($"StorageDataUpdaterTask exception: {ex.Message}");
+        //            e.Result = $"StorageDataUpdaterTaskexception: {ex.Message}";
+        //            throw (ex);
+        //        }
+        //    };
+        //}
+
+
+
+
+
+
+
+
+
+
+
 
         XmlDocument m_xmlDoc;
         XmlNode m_NewItemsNode;
@@ -206,6 +272,10 @@ namespace CompleteBackup.Models.backup
 
         public void Init()
         {
+            //            if (!m_StorageDataUpdaterTask.IsBusy)
+            //            {
+            //                m_StorageDataUpdaterTask.RunWorkerAsync();
+            //       
             long files = 0;
             long directories = 0;
 
@@ -225,6 +295,7 @@ namespace CompleteBackup.Models.backup
             ProgressBar?.UpdateProgressBar("Runnin...", 0);
             ProgressBar?.ShowTimeEllapsed(true);
         }
+        
 
         public void Done()
         {

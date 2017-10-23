@@ -220,6 +220,7 @@ namespace CompleteBackup.Models.Backup.Profile
                     {
                         BackupTargetUsedSize = "Calculating...";
                         BackupTargetFreeSize = "Calculating...";
+                        BackupSourceFoldersSize = "Calculating...";
                     }));
 
                     
@@ -247,6 +248,18 @@ namespace CompleteBackup.Models.Backup.Profile
                             break;
                         }
                     }
+
+
+                    //Source Foldes Size
+                    foreach(var folder in FolderList)
+                    {
+                        m_BackupSourceFoldersSizeNumber += new DirectoryInfo(folder).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
+                        Application.Current.Dispatcher.Invoke(new Action(() =>
+                        {
+                            BackupSourceFoldersSize = (m_BackupSourceFoldersSizeNumber / 1000000).ToString("###,##0") + " KBytes";
+                        }));
+                    }
+
 
                 }
                 catch (TaskCanceledException ex)
@@ -276,5 +289,9 @@ namespace CompleteBackup.Models.Backup.Profile
         private long m_BackupTargetFreeSizeNumber = 0;
         private string m_BackupTargetFreeSize = "Data Not available";
         public string BackupTargetFreeSize { get { return m_BackupTargetFreeSize; } set { m_BackupTargetFreeSize = value; OnPropertyChanged(); } }
+
+        private long m_BackupSourceFoldersSizeNumber = 0;
+        private string m_BackupSourceFoldersSize = "Data Not available";
+        public string BackupSourceFoldersSize { get { return m_BackupSourceFoldersSize; } set { m_BackupSourceFoldersSize = value; OnPropertyChanged(); } }
     }
 }

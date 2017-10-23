@@ -14,6 +14,10 @@
     <Grid>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Source foldes size: "></TextBlock>
+                <TextBlock Text="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.BackupSourceFoldersSize}" ></TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Target Backup used size: "></TextBlock>
                 <TextBlock Text="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.BackupTargetUsedSize}" ></TextBlock>
             </StackPanel>
