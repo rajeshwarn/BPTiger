@@ -64,7 +64,6 @@ namespace CompleteBackup.Models.Backup.History
             string historyFile = m_IStorage.Combine(path, $"{signature}_history.json");
 
             var historyData = new object[1];
-            string name = "Session history";
             historyData[0] = history;
             string json = json = JsonConvert.SerializeObject(historyData, Formatting.Indented);
 

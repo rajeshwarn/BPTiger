@@ -31,8 +31,11 @@ namespace CompleteBackup.ViewModels
         public List<FolderMenuItem> RootFolderItemList { get; set; } = new List<FolderMenuItem>();
 
 
+        public BackupProjectData ProjectData { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject;
         public BackupProfileData ProfileData { get; set; }
 
+
+        private void ProfileDataUpdate(BackupProfileData profile) { }
 
         public FolderTreeViewModel()
         {
@@ -43,7 +46,10 @@ namespace CompleteBackup.ViewModels
 
                 return;
             }
-            
+
+            //Register to get update event when backup profile changed
+            BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile.RegisterEvent(ProfileDataUpdate);
+
             DriveInfo[] drives = DriveInfo.GetDrives();
 
             foreach (var drive in drives)

@@ -67,7 +67,7 @@
                 <TextBox x:Name="txTaggetFolder" IsReadOnly="false" IsReadOnlyCaretVisible="True"                         
                          Validation.ErrorTemplate="{StaticResource validationTargetFolderErrorTemplate}">
                     <TextBox.Text>
-                        <Binding Path="ProfileData.TargetBackupFolder"
+                        <Binding Path="ProjectData.CurrentBackupProfile.TargetBackupFolder"
                                  Mode="TwoWay"
                                  TargetNullValue=''
                                  UpdateSourceTrigger="Default">
