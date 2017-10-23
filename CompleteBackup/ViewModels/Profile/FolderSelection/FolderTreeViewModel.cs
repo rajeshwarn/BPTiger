@@ -28,7 +28,7 @@ namespace CompleteBackup.ViewModels
         public ICommand SelectFolderNameCommand { get; private set; } = new SelectFolderNameICommand<object>();
         public ICommand SaveFolderSelectionCommand { get; private set; } = new SaveFolderSelectionICommand<object>();
         
-        public List<FolderMenuItem> RootFolderItemList { get; set; } = new List<FolderMenuItem>();
+        public ObservableCollection<FolderMenuItem> RootFolderItemList { get; set; } = new ObservableCollection<FolderMenuItem>();
 
 
         public BackupProjectData ProjectData { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject;
@@ -36,8 +36,12 @@ namespace CompleteBackup.ViewModels
 
 
         private void ProfileDataUpdate(BackupProfileData profile) { }
-
         public FolderTreeViewModel()
+        {
+            
+        }
+
+        public void Init()
         {
             ProfileData = BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile;
             if (ProfileData == null)
@@ -46,6 +50,8 @@ namespace CompleteBackup.ViewModels
 
                 return;
             }
+
+            RootFolderItemList.Clear();
 
             //Register to get update event when backup profile changed
             BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile.RegisterEvent(ProfileDataUpdate);
@@ -243,7 +249,7 @@ namespace CompleteBackup.ViewModels
             ProfileData.FolderList.Clear();
             UpdateSelectedFolderListStep(RootFolderItemList);
         }
-        void UpdateSelectedFolderListStep(List<FolderMenuItem> folderList)
+        void UpdateSelectedFolderListStep(ObservableCollection<FolderMenuItem> folderList)
         {
             foreach (var folder in folderList.Where(i => (i.IsFolder)))
             {

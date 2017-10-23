@@ -18,7 +18,7 @@ namespace CompleteBackup.Models.FolderSelection
     {
         public FolderMenuItem()
         {
-            this.Items = new List<FolderMenuItem>();
+            this.Items = new ObservableCollection<FolderMenuItem>();
         }
 
         public string Name { get; set; }
@@ -100,7 +100,7 @@ namespace CompleteBackup.Models.FolderSelection
         public bool? Selected { get { return _Selected; } set { _Selected = value; OnPropertyChanged(); } }
 
         public FolderMenuItem ParentItem { get; set; }
-        public List<FolderMenuItem> Items { get; set; }
+        public ObservableCollection<FolderMenuItem> Items { get; set; }
     }
 
 }

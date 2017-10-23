@@ -1,4 +1,5 @@
-﻿using CompleteBackup.Models.Backup.Storage;
+﻿using CompleteBackup.DataRepository;
+using CompleteBackup.Models.Backup.Storage;
 using CompleteBackup.Models.FolderSelection;
 using CompleteBackup.ViewModels;
 using System;
@@ -63,6 +64,14 @@ namespace CompleteBackup.Views
 
             var viewModel = DataContext as FolderTreeViewModel;
             viewModel.FolderTreeClick(dc, (bool)checkbox.IsChecked);
+        }
+
+        private void hiddenNameTextBlock_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var profile = BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile;
+
+            var vm = this.DataContext as FolderTreeViewModel;
+            vm.Init();
         }
     }
 }

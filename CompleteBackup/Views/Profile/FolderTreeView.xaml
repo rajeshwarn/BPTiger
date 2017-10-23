@@ -52,7 +52,7 @@
 
                 <Button Content="Select Backup Folder" DockPanel.Dock="Right"                
                         Command="{Binding SelectFolderNameCommand}"
-                        CommandParameter="{Binding ProfileData}" Margin="4,0,0,0">
+                        CommandParameter="{Binding ProjectData.CurrentBackupProfile}" Margin="4,0,0,0">
                     <!--<Button.Style>
                         <Style TargetType="Button" >
                             <Style.Triggers>
@@ -96,6 +96,7 @@
         <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Vertical" Margin="0,0,0,8">
             <TextBlock Text="Folders to backup:"/>
         </StackPanel>
+        <TextBox x:Name="hiddenNameTextBlock" Text="{Binding ProjectData.CurrentBackupProfile.Name}" Visibility="Collapsed" TextChanged="hiddenNameTextBlock_TextChanged" />
         <ScrollViewer Grid.Column="0" Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <TreeView Name="trvFolderTreeView" TreeViewItem.Expanded="TreeViewItem_Expanded">
                 <!--<TreeView.Resources>
@@ -141,7 +142,7 @@
             <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
                 <TextBlock Text="Selected Folders:"/>
             </StackPanel>
-            <ListBox ItemsSource="{Binding ProfileData.FolderList}">
+            <ListBox ItemsSource="{Binding ProjectData.CurrentBackupProfile.FolderList}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
