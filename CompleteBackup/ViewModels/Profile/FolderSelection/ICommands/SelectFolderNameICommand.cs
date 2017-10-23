@@ -93,6 +93,8 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
                                             default:
                                                 {
                                                     MessageBox.Show($"folder error {folderStatus.ToString()}", "Destination folder", MessageBoxButton.OK, MessageBoxImage.Error);
+                                                    profile.TargetBackupFolder = fileDialog.SelectedPath;
+                                                    bRetry = false;
                                                 }
                                                 break;
                                         }

@@ -26,9 +26,13 @@
                     <TextBlock Text="Target free space: "></TextBlock>
                     <TextBlock Text="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.BackupTargetFreeSize}" ></TextBlock>
                 </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Target drive size: "></TextBlock>
+                    <TextBlock Text="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.BackupTargetDiskSize}" ></TextBlock>
+                </StackPanel>
 
 
-                <!--<Expander Grid.Row="0" Header="Utilization"  IsExpanded="True">-->
+                <Expander Grid.Row="0" Header="Utilization"  IsExpanded="False">
                     <ListBox ToolTip="Utilization" ItemsSource="{Binding ProfileGaugeList}"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                      ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -40,7 +44,7 @@
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
                     </ListBox>
-
+                </Expander>
             </StackPanel>
         </Border>
     </Grid>
