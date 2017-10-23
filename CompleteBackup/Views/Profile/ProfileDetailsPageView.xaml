@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.DataContext>
-        <view_model:ProfileListViewModel/>
+        <view_model:ProfileDetailsPageViewModel/>
     </UserControl.DataContext>
 
     <Grid>
@@ -26,6 +26,21 @@
                     <TextBlock Text="Target free space: "></TextBlock>
                     <TextBlock Text="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.BackupTargetFreeSize}" ></TextBlock>
                 </StackPanel>
+
+
+                <!--<Expander Grid.Row="0" Header="Utilization"  IsExpanded="True">-->
+                    <ListBox ToolTip="Utilization" ItemsSource="{Binding ProfileGaugeList}"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                     IsSynchronizedWithCurrentItem="True"
+                     BorderThickness="0" Background="Transparent">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel IsItemsHost="True" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                    </ListBox>
+
             </StackPanel>
         </Border>
     </Grid>
