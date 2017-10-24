@@ -47,8 +47,8 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
                 viewModel.DirtyFlag = false;
             }
 
-            BackupProjectRepository.Instance.SaveProject();
             viewModel.UpdateSelectedFolderList();
+            BackupProjectRepository.Instance.SaveProject();
         }
     }
 }
