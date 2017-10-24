@@ -29,14 +29,14 @@ namespace CompleteBackup.Views
         {
             InitializeComponent();
 
-            var viewModel = DataContext as SourceBackupItemsTreeViewModel;
-            foreach (var item in viewModel.RootFolderItemList)
-            {
-                trvFolderTreeView.Items.Add(item);
-            }
+            //var viewModel = DataContext as SourceBackupItemsTreeViewModel;
+            //foreach (var item in viewModel.RootFolderItemList)
+            //{
+            //    trvFolderTreeView.Items.Add(item);
+            //}
 
-            BindingExpression binding = txTaggetFolder.GetBindingExpression(TextBox.TextProperty);
-            binding.UpdateSource();
+            //BindingExpression binding = txTaggetFolder.GetBindingExpression(TextBox.TextProperty);
+            //binding.UpdateSource();
         }
 
         private void TreeViewItem_Expanded(object sender, RoutedEventArgs e)

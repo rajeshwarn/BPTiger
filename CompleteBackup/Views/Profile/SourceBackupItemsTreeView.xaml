@@ -98,14 +98,15 @@
         </StackPanel>
         <TextBox x:Name="hiddenNameTextBlock" Text="{Binding ProjectData.CurrentBackupProfile.Name}" Visibility="Collapsed" TextChanged="hiddenNameTextBlock_TextChanged" />
         <ScrollViewer Grid.Column="0" Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <TreeView Name="trvFolderTreeView" TreeViewItem.Expanded="TreeViewItem_Expanded">
+            <TreeView ItemsSource="{Binding RootFolderItemList}"
+                      TreeViewItem.Expanded="TreeViewItem_Expanded">
                 <!--<TreeView.Resources>
                 <Style TargetType="TreeViewItem">
                     <Setter Property="bindTreeViewExpand:Behaviours.ExpandingBehaviour" Value="{Binding ExpandingCommand}"/>
                 </Style>
             </TreeView.Resources>-->
                 <TreeView.ItemTemplate>
-                    <HierarchicalDataTemplate DataType="{x:Type folder_models:FolderMenuItem}" ItemsSource="{Binding Items}">
+                    <HierarchicalDataTemplate DataType="{x:Type folder_models:FolderMenuItem}" ItemsSource="{Binding SourceBackupItems}">
                         <StackPanel Orientation="Horizontal">
                             <!--<Image Width="12" Source="/Resources/Icons/Iconsmind-Outline-File.ico">
                                 <Image.Style>

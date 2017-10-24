@@ -119,7 +119,7 @@ namespace CompleteBackup.ViewModels
             {
                 var folderItem = item as FolderMenuItem;
 
-                if (folderItem.Items.Count() == 0)
+                if (folderItem.SourceBackupItems.Count() == 0)
                 {
                     AddFoldersToTree(folderItem);
                 }
@@ -138,12 +138,12 @@ namespace CompleteBackup.ViewModels
                 string name = parentPath.FullName;
                 var parent = AddFolderName(item, name);
 
-                var found = parent.Items.Where(i => String.Compare(i.Path, path, true) == 0);
+                var found = parent.SourceBackupItems.Where(i => String.Compare(i.Path, path, true) == 0);
                 if (found.Count() == 0)
                 {
                     FileAttributes attr = File.GetAttributes(path);
                     var newItem = new FolderMenuItem() { IsFolder = true, Attributes = attr, Path = path, Name = path, ParentItem = parent, Selected = false };
-                    parent.Items.Add(newItem);
+                    parent.SourceBackupItems.Add(newItem);
                     return newItem;
                 }
                 else
@@ -184,7 +184,7 @@ namespace CompleteBackup.ViewModels
                         ((attr & FileAttributes.Hidden) != FileAttributes.Hidden))
                     {
                         var newItem = new FolderMenuItem() { IsFolder = true, Attributes = attr, Path = newPath, Name = subdirectory, ParentItem = item, Selected = false};
-                        item.Items.Add(newItem);
+                        item.SourceBackupItems.Add(newItem);
 
                         //var match = ProjectData.FolderList.Where(f => String.Compare(f, newPath, true) == 0);
 
@@ -220,7 +220,7 @@ namespace CompleteBackup.ViewModels
                     var filePath = m_IStorage.Combine(item.Path, file);
                     FileAttributes attr = File.GetAttributes(filePath);
 
-                    item.Items.Add(new FolderMenuItem() { IsFolder = false, Attributes = attr, Name = file, Path = filePath, Image = null });
+                    item.SourceBackupItems.Add(new FolderMenuItem() { IsFolder = false, Attributes = attr, Name = file, Path = filePath, Image = null });
                 }
             }
         }
@@ -259,7 +259,7 @@ namespace CompleteBackup.ViewModels
                 }
                 else if (folder.Selected == null)
                 {
-                    UpdateSelectedFolderListStep(folder.Items);
+                    UpdateSelectedFolderListStep(folder.SourceBackupItems);
                 }
             }
         }
@@ -276,7 +276,7 @@ namespace CompleteBackup.ViewModels
         {
             if (item != null)
             {
-                foreach (var subItem in item.Items)
+                foreach (var subItem in item.SourceBackupItems)
                 {
                     subItem.Selected = item.Selected;
 
@@ -304,7 +304,7 @@ namespace CompleteBackup.ViewModels
                     //}
 
                     bool? bValue = false;
-                    foreach (var folder in parent.Items.Where(i => (i.IsFolder)))
+                    foreach (var folder in parent.SourceBackupItems.Where(i => (i.IsFolder)))
                     {
                         if (folder.Selected != false)
                         {

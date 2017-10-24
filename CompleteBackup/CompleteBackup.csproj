@@ -96,7 +96,7 @@
     <Compile Include="ViewModels\MainWindow\MainWindowStatusBarViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\Profile\SourceItemsSelection\Validators\BackupTargetLocationValidator.cs" />
-    <Compile Include="ViewModels\Profile\ProfileDetailsPageViewModel.cs" />
+    <Compile Include="ViewModels\Profile\ProfileDetails\ProfileDetailsPageViewModel.cs" />
     <Compile Include="ViewModels\Profile\ProfileList\ProfileListViewModel.cs" />
     <Compile Include="Views\ExtendedControls\ChartGaugeView.xaml.cs">
       <DependentUpon>ChartGaugeView.xaml</DependentUpon>
