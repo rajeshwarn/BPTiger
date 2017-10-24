@@ -67,7 +67,6 @@ namespace CompleteBackup.ViewModels
                     }
                 }
 
-
                 //Add selected folders to tree list
                 var itemList = new List<FolderMenuItem>();
                 foreach (var folder in ProfileData.FolderList)
@@ -229,7 +228,7 @@ namespace CompleteBackup.ViewModels
 
                 if (folderItem.SourceBackupItems.Count() == 0)
                 {
-         //           AddFoldersToTree(folderItem);
+                    AddFoldersToTree(folderItem);
                 }
             }
         }
@@ -240,7 +239,7 @@ namespace CompleteBackup.ViewModels
             SelectItemDown(item);
             SelectItemUp(item);
 
-            UpdateSelectedFolderList(profile);
+//            UpdateSelectedFolderList(profile);
         }
 
 
@@ -292,11 +291,13 @@ namespace CompleteBackup.ViewModels
         }
 
 
-
-
-
-        void UpdateSelectedFolderList(BackupProfileData profile)
+        public void UpdateSelectedFolderList(BackupProfileData profile = null)
         {
+            if (profile == null)
+            {
+                profile = ProjectData.CurrentBackupProfile;
+            }
+
             profile.FolderList.Clear();
             UpdateSelectedFolderListStep(profile, profile.RootFolderItemList);
         }

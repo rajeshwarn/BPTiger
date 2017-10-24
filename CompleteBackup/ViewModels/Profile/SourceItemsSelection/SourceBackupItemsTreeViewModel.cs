@@ -27,8 +27,6 @@ namespace CompleteBackup.ViewModels
         public ICommand OpenChangeBackupItemsWindowCommand { get; private set; } = new OpenChangeBackupItemsWindowICommand<object>();
         public ICommand SelectFolderNameCommand { get; private set; } = new SelectFolderNameICommand<object>();
 
-        //        public ObservableCollection<FolderMenuItem> RootFolderItemList { get; set; } = new ObservableCollection<FolderMenuItem>();
-
 
         public BackupProjectData ProjectData { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject;
 
