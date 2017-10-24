@@ -10,7 +10,9 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -28,47 +30,59 @@ namespace CompleteBackup.ViewModels
 
         public ChangeBackupItemsWindowModel()
         {
-            foreach (var ProfileData in BackupProjectRepository.Instance.SelectedBackupProject.BackupProfileList)
+            new Thread(new System.Threading.ThreadStart(() =>
             {
+                RefreshRootFolders();
+            }))
+            {
+                IsBackground = true,
+                Name = "Source folder reader"
+            }.Start();
+        }
 
-                if (ProfileData == null)
-                {
-                   // Trace.WriteLine("SourceBackupItemsTreeViewModel::CurrentBackupProfile is null");
 
-                    return;
-                }
+        private void RefreshRootFolders()
+        {
+            var ProfileData = ProjectData.CurrentBackupProfile;
 
+            Application.Current.Dispatcher.Invoke(new Action(() =>
+            {
                 ProfileData.RootFolderItemList.Clear();
+            }));
 
+            DriveInfo[] drives = DriveInfo.GetDrives();
 
-                DriveInfo[] drives = DriveInfo.GetDrives();
-
-                //Add all available drives to list
-                foreach (var drive in drives)
+            //Add all available drives to list
+            foreach (var drive in drives)
+            {
+                DirectoryInfo dInfo = drive.RootDirectory;
+                try
                 {
-                    DirectoryInfo dInfo = drive.RootDirectory;
-                    try
+                    FileAttributes attr = File.GetAttributes(drive.Name);
+                    var rootItem = new FolderMenuItem()
                     {
-                        FileAttributes attr = File.GetAttributes(drive.Name);
-                        var rootItem = new FolderMenuItem()
-                        {
-                            IsFolder = true,
-                            Attributes = attr,
-                            Path = drive.Name,
-                            Name = $"{drive.VolumeLabel} ({drive.DriveType}) ({drive.Name})"
-                        };
+                        IsFolder = true,
+                        Attributes = attr,
+                        Path = drive.Name,
+                        Name = $"{drive.VolumeLabel} ({drive.DriveType}) ({drive.Name})"
+                    };
 
-                        AddFoldersToTree(rootItem);
+                    AddFoldersToTree(rootItem);
 
+                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    {
                         ProfileData.RootFolderItemList.Add(rootItem);
-                    }
-                    catch
-                    {
-                    }
+                    }));
                 }
+                catch
+                {
+                }
+            }
 
-                //Add selected folders to tree list
-                var itemList = new List<FolderMenuItem>();
+            //Add selected folders to tree list
+            var itemList = new List<FolderMenuItem>();
+            Application.Current.Dispatcher.Invoke(new Action(() =>
+            {
                 foreach (var folder in ProfileData.FolderList)
                 {
                     string pr = Directory.GetDirectoryRoot(folder);
@@ -80,15 +94,20 @@ namespace CompleteBackup.ViewModels
                         itemList.Add(item);
                     }
                 }
+            }));
 
-                //After we added the folders, we need update selected folders root items to mark the correct selection
-                foreach (var item in itemList)
+            //After we added the folders, we need update selected folders root items to mark the correct selection
+            foreach (var item in itemList)
+            {
+                item.Selected = true;
+                Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
-                    item.Selected = true;
                     UpdateSelectedFolders(ProfileData, item);
-                }
+                }));
             }
         }
+    
+
 
         IStorageInterface m_IStorage = new FileSystemStorage();
 
@@ -220,11 +239,17 @@ namespace CompleteBackup.ViewModels
             }
         }
 
+        bool m_bRefreshOnExpand = true;
         public void ExpandFolder(ItemCollection itemList)
         {
             foreach (var item in itemList)
             {
                 var folderItem = item as FolderMenuItem;
+
+                if (m_bRefreshOnExpand)
+                {
+                    folderItem.SourceBackupItems.Clear();
+                }
 
                 if (folderItem.SourceBackupItems.Count() == 0)
                 {
