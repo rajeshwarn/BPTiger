@@ -1,4 +1,5 @@
 ﻿using CompleteBackup.Models.Backup.Storage;
+using CompleteBackup.Models.FolderSelection;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -49,6 +50,8 @@ namespace CompleteBackup.Models.Backup.Profile
 
         public ObservableCollection<string> FolderList { get; set; } = new ObservableCollection<string>();
 
+        [XmlIgnore]
+        public ObservableCollection<FolderMenuItem> RootFolderItemList { get; set; } = new ObservableCollection<FolderMenuItem>();
 
 
         public delegate void ProfileDataUpdateEvent(BackupProfileData tranData);

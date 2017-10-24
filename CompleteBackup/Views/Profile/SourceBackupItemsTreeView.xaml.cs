@@ -42,8 +42,6 @@ namespace CompleteBackup.Views
             vm.ExpandFolder(itemList);
         }
 
-
-
         private void FolderCheckBox_Click(object sender, RoutedEventArgs e)
         {
             var checkBox = e.OriginalSource as CheckBox;
@@ -57,5 +55,14 @@ namespace CompleteBackup.Views
             var viewModel = DataContext as SourceBackupItemsTreeViewModel;
             viewModel.FolderTreeClick(dc, (bool)checkBox.IsChecked);
         }
+
+   //     private void hiddenNameTextBlock_TextChanged(object sender, TextChangedEventArgs e)
+   //     {
+   //         var profile = BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile;
+
+   //         var vm = this.DataContext as SourceBackupItemsTreeViewModel;
+   ////         vm.Init();
+   //     }
+
     }
 }

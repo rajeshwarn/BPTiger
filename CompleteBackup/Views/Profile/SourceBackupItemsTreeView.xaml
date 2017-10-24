@@ -45,6 +45,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+        <!--<TextBox x:Name="hiddenNameTextBlock" Text="{Binding ProjectData.CurrentBackupProfile.Name}" Visibility="Collapsed" TextChanged="hiddenNameTextBlock_TextChanged" />-->
         <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Vertical" Margin="0,0,0,8">
             <DockPanel LastChildFill="True">
                 <TextBlock Text="Save backup files to: "  DockPanel.Dock="Left">
@@ -97,7 +98,7 @@
             <TextBlock Text="Folders to backup:"/>
         </StackPanel>
         <ScrollViewer Grid.Column="0" Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <TreeView ItemsSource="{Binding RootFolderItemList}"
+            <TreeView ItemsSource="{Binding ProjectData.CurrentBackupProfile.RootFolderItemList}"
                       TreeViewItem.Expanded="TreeViewItem_Expanded">
                 <!--<TreeView.Resources>
                 <Style TargetType="TreeViewItem">
