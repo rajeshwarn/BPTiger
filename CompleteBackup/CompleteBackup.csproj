@@ -89,13 +89,13 @@
     <Compile Include="ViewModels\ExtendedControls\ChartGaugeViewModel.cs" />
     <Compile Include="ViewModels\MainBackupViewModel.cs" />
     <Compile Include="ViewModels\MainRestoreViewModel.cs" />
-    <Compile Include="ViewModels\Profile\FolderSelection\FolderTreeViewModel.cs" />
-    <Compile Include="ViewModels\Profile\FolderSelection\ICommands\ExpandFolderTreeICommand.cs" />
-    <Compile Include="ViewModels\Profile\FolderSelection\ICommands\SelectFolderNameICommand.cs" />
-    <Compile Include="ViewModels\Profile\FolderSelection\ICommands\SaveFolderSelectionICommand.cs" />
+    <Compile Include="ViewModels\Profile\SourceItemsSelection\SourceBackupItemsTreeViewModel.cs" />
+    <Compile Include="ViewModels\Profile\SourceItemsSelection\ICommands\ExpandFolderTreeICommand.cs" />
+    <Compile Include="ViewModels\Profile\SourceItemsSelection\ICommands\SelectFolderNameICommand.cs" />
+    <Compile Include="ViewModels\Profile\SourceItemsSelection\ICommands\SaveFolderSelectionICommand.cs" />
     <Compile Include="ViewModels\MainWindow\MainWindowStatusBarViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\MainWindowViewModel.cs" />
-    <Compile Include="ViewModels\Profile\FolderSelection\Validators\BackupTargetLocationValidator.cs" />
+    <Compile Include="ViewModels\Profile\SourceItemsSelection\Validators\BackupTargetLocationValidator.cs" />
     <Compile Include="ViewModels\Profile\ProfileDetailsPageViewModel.cs" />
     <Compile Include="ViewModels\Profile\ProfileList\ProfileListViewModel.cs" />
     <Compile Include="Views\ExtendedControls\ChartGaugeView.xaml.cs">
@@ -107,8 +107,8 @@
     <Compile Include="Views\MainTab\MainRestoreView.xaml.cs">
       <DependentUpon>MainRestoreView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Profile\FolderTreeView.xaml.cs">
-      <DependentUpon>FolderTreeView.xaml</DependentUpon>
+    <Compile Include="Views\Profile\SourceBackupItemsTreeView.xaml.cs">
+      <DependentUpon>SourceBackupItemsTreeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ICommands\FolderTreeItemClickICommand.cs" />
     <Compile Include="Views\MainWindow\GenericStatusBarView.cs" />
@@ -145,7 +145,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Profile\FolderTreeView.xaml">
+    <Page Include="Views\Profile\SourceBackupItemsTreeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

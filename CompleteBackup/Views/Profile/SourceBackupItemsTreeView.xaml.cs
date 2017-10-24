@@ -21,15 +21,15 @@ using System.Windows.Shapes;
 namespace CompleteBackup.Views
 {
     /// <summary>
-    /// Interaction logic for FolderTreeView.xaml
+    /// Interaction logic for SourceBackupItemsTreeView.xaml
     /// </summary>
-    public partial class FolderTreeView : UserControl
+    public partial class SourceBackupItemsTreeView : UserControl
     {
-        public FolderTreeView()
+        public SourceBackupItemsTreeView()
         {
             InitializeComponent();
 
-            var viewModel = DataContext as FolderTreeViewModel;
+            var viewModel = DataContext as SourceBackupItemsTreeViewModel;
             foreach (var item in viewModel.RootFolderItemList)
             {
                 trvFolderTreeView.Items.Add(item);
@@ -45,7 +45,7 @@ namespace CompleteBackup.Views
             TreeViewItem tvi = e.OriginalSource as TreeViewItem;
             var itemList = tvi.Items;
 
-            var vm = DataContext as FolderTreeViewModel;
+            var vm = DataContext as SourceBackupItemsTreeViewModel;
             vm.ExpandFolder(itemList);
         }
 
@@ -62,7 +62,7 @@ namespace CompleteBackup.Views
                 checkbox.IsChecked = false;
             }
 
-            var viewModel = DataContext as FolderTreeViewModel;
+            var viewModel = DataContext as SourceBackupItemsTreeViewModel;
             viewModel.FolderTreeClick(dc, (bool)checkbox.IsChecked);
         }
 
@@ -70,7 +70,7 @@ namespace CompleteBackup.Views
         {
             var profile = BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile;
 
-            var vm = this.DataContext as FolderTreeViewModel;
+            var vm = this.DataContext as SourceBackupItemsTreeViewModel;
             vm.Init();
         }
     }

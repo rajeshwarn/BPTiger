@@ -31,7 +31,7 @@ namespace CompleteBackup.Views
 
         private void StartBackupButton_Click(object sender, RoutedEventArgs e)
         {
-            var folderSelection = folderTree.DataContext as FolderTreeViewModel;
+            var folderSelection = folderTree.DataContext as SourceBackupItemsTreeViewModel;
 
             var progressBar = GenericStatusBarView.NewInstance;
             progressBar.UpdateProgressBar("Backup starting...", 0);

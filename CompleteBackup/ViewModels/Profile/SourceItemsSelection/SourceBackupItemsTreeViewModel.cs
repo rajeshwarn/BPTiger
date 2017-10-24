@@ -22,7 +22,7 @@ using System.Windows.Media.Imaging;
 
 namespace CompleteBackup.ViewModels
 {
-    public class FolderTreeViewModel : ObservableObject
+    public class SourceBackupItemsTreeViewModel : ObservableObject
     {
         //        public ICommand ExpandFolderTreeCommand { get; private set; } = new ExpandFolderTreeICommand<object>();
         public ICommand SelectFolderNameCommand { get; private set; } = new SelectFolderNameICommand<object>();
@@ -36,7 +36,7 @@ namespace CompleteBackup.ViewModels
 
 
         private void ProfileDataUpdate(BackupProfileData profile) { }
-        public FolderTreeViewModel()
+        public SourceBackupItemsTreeViewModel()
         {
             
         }
@@ -46,7 +46,7 @@ namespace CompleteBackup.ViewModels
             ProfileData = BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile;
             if (ProfileData == null)
             {
-                Trace.WriteLine("FolderTreeViewModel::CurrentBackupProfile is null");
+                Trace.WriteLine("SourceBackupItemsTreeViewModel::CurrentBackupProfile is null");
 
                 return;
             }
