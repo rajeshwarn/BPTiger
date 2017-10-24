@@ -1,5 +1,4 @@
-﻿using CompleteBackup.DataRepository;
-using CompleteBackup.Models.Backup.Project;
+﻿using CompleteBackup.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +8,11 @@ using System.Windows.Input;
 
 namespace CompleteBackup.ViewModels.FolderSelection.ICommands
 {
-    internal class SaveFolderSelectionICommand<T> : ICommand
+    internal class OpenChangeBackupItemsWindowICommand<T> : ICommand
     {
-        public SaveFolderSelectionICommand() { }
-
+        public OpenChangeBackupItemsWindowICommand()
+        {
+        }
         public event EventHandler CanExecuteChanged
         {
             add
@@ -27,27 +27,13 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
 
         public bool CanExecute(object parameter)
         {
-            bool bExecute = false;
-            var viewModel = parameter as ChangeBackupItemsWindowModel;
-        
-            if (viewModel?.DirtyFlag == true)
-            {
-                bExecute = true;
-            }
-
+            bool bExecute = true;
             return bExecute;
         }
 
         public void Execute(object parameter)
         {
-            var viewModel = parameter as ChangeBackupItemsWindowModel;
-
-            if (viewModel != null)
-            {
-                viewModel.DirtyFlag = false;
-            }
-
-            BackupProjectRepository.Instance.SaveProject();
+            new ChangeBackupItemsWindow().ShowDialog();
         }
     }
 }

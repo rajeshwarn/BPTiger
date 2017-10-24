@@ -86,9 +86,12 @@
     <Compile Include="Utilities\Convertors\NullVisibilityConverter.cs" />
     <Compile Include="Utilities\ObservableObject.cs" />
     <Compile Include="Models\FolderSelection\FolderMenuItem.cs" />
+    <Compile Include="ViewModels\Profile\SourceItemsSelection\ChangeBackupItemsWindowModel.cs" />
     <Compile Include="ViewModels\ExtendedControls\ChartGaugeViewModel.cs" />
     <Compile Include="ViewModels\MainBackupViewModel.cs" />
     <Compile Include="ViewModels\MainRestoreViewModel.cs" />
+    <Compile Include="ViewModels\Profile\SourceItemsSelection\ICommands\CloseChangeBackupItemsWindowICommand.cs" />
+    <Compile Include="ViewModels\Profile\SourceItemsSelection\ICommands\OpenChangeBackupItemsWindowICommand.cs" />
     <Compile Include="ViewModels\Profile\SourceItemsSelection\SourceBackupItemsTreeViewModel.cs" />
     <Compile Include="ViewModels\Profile\SourceItemsSelection\ICommands\ExpandFolderTreeICommand.cs" />
     <Compile Include="ViewModels\Profile\SourceItemsSelection\ICommands\SelectFolderNameICommand.cs" />
@@ -98,6 +101,9 @@
     <Compile Include="ViewModels\Profile\SourceItemsSelection\Validators\BackupTargetLocationValidator.cs" />
     <Compile Include="ViewModels\Profile\ProfileDetails\ProfileDetailsPageViewModel.cs" />
     <Compile Include="ViewModels\Profile\ProfileList\ProfileListViewModel.cs" />
+    <Compile Include="Views\Profile\ChangeBackupItemsWindow.xaml.cs">
+      <DependentUpon>ChangeBackupItemsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ExtendedControls\ChartGaugeView.xaml.cs">
       <DependentUpon>ChartGaugeView.xaml</DependentUpon>
     </Compile>
@@ -133,6 +139,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\Profile\ChangeBackupItemsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ExtendedControls\ChartGaugeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

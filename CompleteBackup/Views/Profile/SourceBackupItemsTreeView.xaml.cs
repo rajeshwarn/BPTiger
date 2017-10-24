@@ -33,28 +33,6 @@ namespace CompleteBackup.Views
             //binding.UpdateSource();
         }
 
-        private void TreeViewItem_Expanded(object sender, RoutedEventArgs e)
-        {
-            TreeViewItem tvi = e.OriginalSource as TreeViewItem;
-            var itemList = tvi.Items;
-
-            var vm = DataContext as SourceBackupItemsTreeViewModel;
-            vm.ExpandFolder(itemList);
-        }
-
-        private void FolderCheckBox_Click(object sender, RoutedEventArgs e)
-        {
-            var checkBox = e.OriginalSource as CheckBox;
-
-            if (checkBox.IsChecked == null)
-            {
-                checkBox.IsChecked = false;
-            }
-
-            var dc = checkBox.DataContext as FolderMenuItem;
-            var viewModel = DataContext as SourceBackupItemsTreeViewModel;
-            viewModel.FolderTreeClick(dc, (bool)checkBox.IsChecked);
-        }
 
    //     private void hiddenNameTextBlock_TextChanged(object sender, TextChangedEventArgs e)
    //     {

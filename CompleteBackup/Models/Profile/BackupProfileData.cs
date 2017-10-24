@@ -68,7 +68,6 @@ namespace CompleteBackup.Models.Backup.Profile
         }
 
 
-
         [XmlIgnore]
         public bool IsValidProfileFolder { get { return GetProfileTargetFolderStatus(_TargetBackupFolder) != ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile; } }
 
