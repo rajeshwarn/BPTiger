@@ -167,20 +167,23 @@ namespace CompleteBackup.Models.Backup.Profile
                     string sourcePath = m_IStorage.Combine(path, subDirectory);
                     FileAttributes attr = m_IStorage.GetFileAttributes(sourcePath);
 
-                    if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                    if (((attr & FileAttributes.Directory) == FileAttributes.Directory) &&
+                        (subDirectory.Length >= 36))
                     {
                         try
                         {
                             Guid newGuid = Guid.Parse(subDirectory.Substring(0, 36));
-
-                            var sub1 = subDirectory.Substring(36, subDirectory.Length - 36);
-                            var sub2 = subDirectory.Remove(36);
-
-                            var destDirectory = GUID.ToString("D") + subDirectory.Substring(36, subDirectory.Length - 36);
-                            string targetPath = m_IStorage.Combine(path, destDirectory);
-                            if (m_IStorage.MoveDirectory(sourcePath, targetPath))
+                            if (GUID != newGuid)
                             {
-                                iCount++;
+                                var sub1 = subDirectory.Substring(36, subDirectory.Length - 36);
+                                var sub2 = subDirectory.Remove(36);
+
+                                var destDirectory = GUID.ToString("D") + subDirectory.Substring(36, subDirectory.Length - 36);
+                                string targetPath = m_IStorage.Combine(path, destDirectory);
+                                if (m_IStorage.MoveDirectory(sourcePath, targetPath))
+                                {
+                                    iCount++;
+                                }
                             }
                         }
                         catch (ArgumentNullException)

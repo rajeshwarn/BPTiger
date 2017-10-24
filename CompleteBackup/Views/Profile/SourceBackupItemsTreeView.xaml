@@ -40,7 +40,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -54,15 +54,6 @@
                 <Button Content="Select Backup Folder" DockPanel.Dock="Right"                
                         Command="{Binding SelectFolderNameCommand}"
                         CommandParameter="{Binding ProjectData.CurrentBackupProfile}" Margin="4,0,0,0">
-                    <!--<Button.Style>
-                        <Style TargetType="Button" >
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=ProfileData.IsValidProfileFolder}" Value="True">
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>-->
                 </Button>
 
                 <TextBox x:Name="txTaggetFolder" IsReadOnly="false" IsReadOnlyCaretVisible="True"                         
@@ -97,50 +88,7 @@
         <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Vertical" Margin="0,0,0,8">
             <TextBlock Text="Folders to backup:"/>
         </StackPanel>
-        <!--<Expander Grid.Column="0" Grid.Row="2" Header="Change backup items" IsExpanded="False">
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                <TreeView ItemsSource="{Binding ProjectData.CurrentBackupProfile.RootFolderItemList}"
-                      TreeViewItem.Expanded="TreeViewItem_Expanded">
-                    --><!--<TreeView.Resources>
-                <Style TargetType="TreeViewItem">
-                    <Setter Property="bindTreeViewExpand:Behaviours.ExpandingBehaviour" Value="{Binding ExpandingCommand}"/>
-                </Style>
-            </TreeView.Resources>--><!--
-                    <TreeView.ItemTemplate>
-                        <HierarchicalDataTemplate DataType="{x:Type folder_models:FolderMenuItem}" ItemsSource="{Binding SourceBackupItems}">
-                            <StackPanel Orientation="Horizontal">
-                                --><!--<Image Width="12" Source="/Resources/Icons/Iconsmind-Outline-File.ico">
-                                <Image.Style>
-                                    <Style TargetType="Image">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsFolder}" Value="False">
-                                                <Setter Property="Visibility" Value="Visible"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Image.Style>
-                            </Image>--><!--
-                                <Image Width="16" Source="{Binding Image}"/>
-                                <CheckBox IsThreeState="True" IsChecked="{Binding Selected}" Click="FolderCheckBox_Click">
-                                    <CheckBox.Style>
-                                        <Style TargetType="CheckBox">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsFolder}" Value="True">
-                                                    <Setter Property="Visibility" Value="Visible"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </CheckBox.Style>
-                                </CheckBox>
-                                <TextBlock Text="{Binding Name}" />
-                            </StackPanel>
-                        </HierarchicalDataTemplate>
-                    </TreeView.ItemTemplate>
-                </TreeView>
-            </ScrollViewer>
-        </Expander>-->
+
         <DockPanel Grid.Column="0" Grid.Row="3" LastChildFill="True" Margin="0,8,0,0" Visibility="Visible">
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                 <TextBlock Text="Selected Folders:"/>
@@ -159,14 +107,5 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </DockPanel>
-        <StackPanel Grid.Column="0" Grid.Row="4" Orientation="Vertical" Margin="0,0,0,8">
-            <DockPanel LastChildFill="True">
-                <!--<TextBlock Text="Save backup folder to: "  DockPanel.Dock="Left"/>-->
-                <Button Content="Save" Width="80" DockPanel.Dock="Right"
-                    Command="{Binding SaveFolderSelectionCommand}">
-                </Button>
-                <!--<TextBox Text="{Binding Path=ProfileData.TargetBackupFolder}" Width="Auto"/>-->
-            </DockPanel>
-        </StackPanel>        
     </Grid>
 </UserControl>
