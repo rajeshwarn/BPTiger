@@ -96,7 +96,6 @@
         <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Vertical" Margin="0,0,0,8">
             <TextBlock Text="Folders to backup:"/>
         </StackPanel>
-        <TextBox x:Name="hiddenNameTextBlock" Text="{Binding ProjectData.CurrentBackupProfile.Name}" Visibility="Collapsed" TextChanged="hiddenNameTextBlock_TextChanged" />
         <ScrollViewer Grid.Column="0" Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <TreeView ItemsSource="{Binding RootFolderItemList}"
                       TreeViewItem.Expanded="TreeViewItem_Expanded">

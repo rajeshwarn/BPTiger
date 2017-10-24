@@ -29,19 +29,12 @@ namespace CompleteBackup.Views
         {
             InitializeComponent();
 
-            //var viewModel = DataContext as SourceBackupItemsTreeViewModel;
-            //foreach (var item in viewModel.RootFolderItemList)
-            //{
-            //    trvFolderTreeView.Items.Add(item);
-            //}
-
             //BindingExpression binding = txTaggetFolder.GetBindingExpression(TextBox.TextProperty);
             //binding.UpdateSource();
         }
 
         private void TreeViewItem_Expanded(object sender, RoutedEventArgs e)
         {
-            var itemSource = e.OriginalSource;
             TreeViewItem tvi = e.OriginalSource as TreeViewItem;
             var itemList = tvi.Items;
 
@@ -53,25 +46,16 @@ namespace CompleteBackup.Views
 
         private void FolderCheckBox_Click(object sender, RoutedEventArgs e)
         {
+            var checkBox = e.OriginalSource as CheckBox;
 
-            var checkbox = e.OriginalSource as CheckBox;
-            var dc = checkbox.DataContext as FolderMenuItem;
-
-            if (checkbox.IsChecked == null)
+            if (checkBox.IsChecked == null)
             {
-                checkbox.IsChecked = false;
+                checkBox.IsChecked = false;
             }
 
+            var dc = checkBox.DataContext as FolderMenuItem;
             var viewModel = DataContext as SourceBackupItemsTreeViewModel;
-            viewModel.FolderTreeClick(dc, (bool)checkbox.IsChecked);
-        }
-
-        private void hiddenNameTextBlock_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            var profile = BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile;
-
-            var vm = this.DataContext as SourceBackupItemsTreeViewModel;
-            vm.Init();
+            viewModel.FolderTreeClick(dc, (bool)checkBox.IsChecked);
         }
     }
 }
