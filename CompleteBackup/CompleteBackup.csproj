@@ -96,7 +96,7 @@
     <Compile Include="ViewModels\MainRestoreViewModel.cs" />
     <Compile Include="ViewModels\Profile\SourceItemsSelection\ICommands\CloseChangeBackupItemsWindowICommand.cs" />
     <Compile Include="ViewModels\Profile\SourceItemsSelection\ICommands\OpenChangeBackupItemsWindowICommand.cs" />
-    <Compile Include="ViewModels\Profile\SourceItemsSelection\SourceBackupItemsTreeViewModel.cs" />
+    <Compile Include="ViewModels\Profile\SourceItemsSelection\SourceDestinationItemsViewModel.cs" />
     <Compile Include="ViewModels\Profile\SourceItemsSelection\ICommands\ExpandFolderTreeICommand.cs" />
     <Compile Include="ViewModels\Profile\SourceItemsSelection\ICommands\SelectFolderNameICommand.cs" />
     <Compile Include="ViewModels\Profile\SourceItemsSelection\ICommands\SaveFolderSelectionICommand.cs" />
@@ -120,8 +120,8 @@
     <Compile Include="Views\MainTab\MainRestoreView.xaml.cs">
       <DependentUpon>MainRestoreView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Profile\SourceBackupItemsTreeView.xaml.cs">
-      <DependentUpon>SourceBackupItemsTreeView.xaml</DependentUpon>
+    <Compile Include="Views\Profile\SourceDestinationItemsView.xaml.cs">
+      <DependentUpon>SourceDestinationItemsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\GenericStatusBarView.cs" />
     <Compile Include="Views\MainWindow\MainWindowStatusBarView.xaml.cs">
@@ -165,7 +165,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Profile\SourceBackupItemsTreeView.xaml">
+    <Page Include="Views\Profile\SourceDestinationItemsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

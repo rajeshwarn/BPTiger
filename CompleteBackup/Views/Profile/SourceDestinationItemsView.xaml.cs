@@ -21,11 +21,11 @@ using System.Windows.Shapes;
 namespace CompleteBackup.Views
 {
     /// <summary>
-    /// Interaction logic for SourceBackupItemsTreeView.xaml
+    /// Interaction logic for SourceDestinationItemsView.xaml
     /// </summary>
-    public partial class SourceBackupItemsTreeView : UserControl
+    public partial class SourceDestinationItemsView : UserControl
     {
-        public SourceBackupItemsTreeView()
+        public SourceDestinationItemsView()
         {
             InitializeComponent();
 
@@ -34,13 +34,13 @@ namespace CompleteBackup.Views
         }
 
 
-   //     private void hiddenNameTextBlock_TextChanged(object sender, TextChangedEventArgs e)
-   //     {
-   //         var profile = BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile;
+        //     private void hiddenNameTextBlock_TextChanged(object sender, TextChangedEventArgs e)
+        //     {
+        //         var profile = BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile;
 
-   //         var vm = this.DataContext as SourceBackupItemsTreeViewModel;
-   ////         vm.Init();
-   //     }
+        //         var vm = this.DataContext as SourceDestinationItemsViewModel;
+        ////         vm.Init();
+        //     }
 
     }
 }

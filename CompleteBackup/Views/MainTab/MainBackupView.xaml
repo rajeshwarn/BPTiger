@@ -24,7 +24,7 @@
     </UserControl.Resources>
     <DockPanel LastChildFill="True">
         <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
-            <local:SourceBackupItemsTreeView x:Name="folderTree"/>
+            <local:SourceDestinationItemsView x:Name="folderTree"/>
             <!--<DockPanel>
                 <extended_view:ProcessingSpinnerView HorizontalAlignment="Right"/>
             </DockPanel>-->

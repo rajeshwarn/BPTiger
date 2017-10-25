@@ -21,7 +21,7 @@ using System.Windows.Media.Imaging;
 
 namespace CompleteBackup.ViewModels
 {
-    public class SourceBackupItemsTreeViewModel : ObservableObject
+    public class SourceDestinationItemsViewModel : ObservableObject
     {
         public ICommand OpenChangeBackupItemsWindowCommand { get; private set; } = new OpenChangeBackupItemsWindowICommand<object>();
         public ICommand SelectFolderNameCommand { get; private set; } = new SelectFolderNameICommand<object>();
@@ -33,7 +33,7 @@ namespace CompleteBackup.ViewModels
         private void ProfileDataUpdate(BackupProfileData profile)
         {
         }
-        public SourceBackupItemsTreeViewModel()
+        public SourceDestinationItemsViewModel()
         {
             //Register to get update event when backup profile changed
             BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile.RegisterEvent(ProfileDataUpdate);
