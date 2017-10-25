@@ -32,7 +32,7 @@ namespace CompleteBackup.ViewModels.ICommands
         {
             var profile = parameter as BackupProfileData;
 
-            bool bExecute = (profile != null) && (profile.IsBackupRunning);
+            bool bExecute = (profile != null) && (profile.IsBackupWorkerBusy);
 
             return bExecute;
         }

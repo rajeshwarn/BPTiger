@@ -115,13 +115,50 @@
                     <RibbonButton SmallImageSource="/Resources/Icons/Menu/blue-document-export.ico" Label="Export" KeyTip="E" 
                                                   Command="{Binding ExportSmartGraphCollectionCommand}"/>-->
                 </RibbonGroup>
-                <RibbonGroup Header="Run now" ToolTip="Click start to manuaaly run a backup now for this profile">
-                    <RibbonButton LargeImageSource="/Resources/Icons/Ribbon/Start.ico" Label="Start" KeyTip="S"
+                <RibbonGroup Header="Run backup now" ToolTip="Click start to manuaaly run a backup now for this profile">
+                    <!--Start-->
+                    <RibbonButton LargeImageSource="/Resources/Icons/Ribbon/Start.ico"  KeyTip="S"
                                   Command="{Binding StartBackupCommand}"
-                                  CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>
+                                  CommandParameter="{Binding ProjectData.CurrentBackupProfile}">
+                        <RibbonButton.Style>
+                            <Style TargetType="RibbonButton">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ProjectData.CurrentBackupProfile.IsBackupWorkerPaused}" Value="False">
+                                        <Setter Property="Label" Value="Start"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ProjectData.CurrentBackupProfile.IsBackupWorkerPaused}" Value="True">
+                                        <Setter Property="Label" Value="Resume"/>
+                                        <DataTrigger.EnterActions>
+                                            <BeginStoryboard x:Name="blinking">
+                                                <Storyboard RepeatBehavior="Forever">
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" AutoReverse="True" To="0.0" Duration="0:0:0.6">
+                                                    </DoubleAnimation>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.EnterActions>
+                                        <DataTrigger.ExitActions>
+                                            <StopStoryboard BeginStoryboardName="blinking"/>
+                                        </DataTrigger.ExitActions>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </RibbonButton.Style>
+                    </RibbonButton>
+                    <!--Pause-->
                     <RibbonButton LargeImageSource="/Resources/Icons/Ribbon/Pause.ico" Label="Pause" KeyTip="P"
                                   Command="{Binding PauseBackupCommand}"
-                                  CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>
+                                  CommandParameter="{Binding ProjectData.CurrentBackupProfile}">
+                        <RibbonButton.Style>
+                            <Style TargetType="RibbonButton">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ProjectData.CurrentBackupProfile.IsBackupWorkerBusy}" Value="False">
+                                        <!--<Setter Property="Visibility" Value="Collapsed"/>-->
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </RibbonButton.Style>
+                    </RibbonButton>
+                    <!--Stop-->
                     <RibbonButton LargeImageSource="/Resources/Icons/Ribbon/Stop.ico" Label="Stop" KeyTip="T"
                                   Command="{Binding StopBackupCommand}"
                                   CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>
@@ -131,7 +168,7 @@
                         <Style TargetType="RibbonGroup">
                             <Setter Property="Visibility" Value="Collapsed"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ProjectData.CurrentBackupProfile.IsBackupRunning}" Value="True">
+                                <DataTrigger Binding="{Binding ProjectData.CurrentBackupProfile.IsBackupWorkerBusy}" Value="True">
                                     <Setter Property="Visibility" Value="Visible"/>
                                 </DataTrigger>
                             </Style.Triggers>

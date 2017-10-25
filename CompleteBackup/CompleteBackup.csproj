@@ -63,7 +63,7 @@
     <Compile Include="DataRepository\BackupProjectRepository.cs" />
     <Compile Include="Models\Backup\BackupFactory.cs" />
     <Compile Include="Models\Backup\History\BackupSessionHistory.cs" />
-    <Compile Include="Models\Profile\StorageDataUpdaterTask.cs">
+    <Compile Include="Models\Profile\BackupTask.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Models\Project\BackupProjectData.cs" />
@@ -229,6 +229,8 @@
     <Resource Include="Resources\Icons\Ribbon\Start.ico" />
     <Resource Include="Resources\Icons\Ribbon\Stop.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Ribbon\ResumeStart.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

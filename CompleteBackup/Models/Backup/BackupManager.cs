@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
@@ -29,6 +30,9 @@ namespace CompleteBackup.Models.backup
             m_ProgressBar = progressBar;
         }
 
+
+        public ManualResetEvent PauseWaitHandle { get; set; } = new ManualResetEvent(true);
+
         public abstract string BackUpProfileSignature { get; }
 
         public long NumberOfFiles { get; set; } = 0;
@@ -42,6 +46,12 @@ namespace CompleteBackup.Models.backup
         DateTime m_LastProgressUpdate = DateTime.Now;
         public void UpdateProgress(string text, long progress)
         {
+            if (!PauseWaitHandle.WaitOne(0))
+            {
+                DateTime dateTime = DateTime.Now;
+                PauseWaitHandle.WaitOne();
+            }
+
             if (ProgressBar != null)
             {
                 DateTime dateTime = DateTime.Now;

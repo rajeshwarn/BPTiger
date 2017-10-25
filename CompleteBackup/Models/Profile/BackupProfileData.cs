@@ -1,6 +1,7 @@
 ﻿using CompleteBackup.Models.backup;
 using CompleteBackup.Models.Backup.Storage;
 using CompleteBackup.Models.FolderSelection;
+using CompleteBackup.Models.Profile;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,6 +10,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Serialization;
@@ -76,29 +78,43 @@ namespace CompleteBackup.Models.Backup.Profile
         public ProfileTargetFolderStatusEnum ProfileTargetFolderStatus { get { return GetProfileTargetFolderStatus(_TargetBackupFolder); } }
 
 
-
-        private bool m_IsBackupRunning = false;
         [XmlIgnore]
-        public bool IsBackupRunning { get { return m_BackupBackgroundWorker != null && m_BackupBackgroundWorker.IsBusy; } set { OnPropertyChanged(); } }
+        public BackupWorker BackupWorkerTask { get; set; }
 
-        private BackgroundWorker m_BackupBackgroundWorker;
+        [XmlIgnore]
+        public bool IsBackupWorkerBusy { get { return BackupWorkerTask != null && BackupWorkerTask.IsBusy; } set { OnPropertyChanged(); } }
+
+        [XmlIgnore]
+        public bool IsBackupWorkerPaused { get { return BackupWorkerTask != null && BackupWorkerTask.IsPaused == true; } set { BackupWorkerTask.IsPaused = value; OnPropertyChanged(); } }
+
 
         public void StartBackup()
         {
-            if (m_BackupBackgroundWorker != null && m_BackupBackgroundWorker.IsBusy)
+            if (BackupWorkerTask != null && BackupWorkerTask.IsBusy)
             {
                 //busy
             }
             else
             {
-                m_BackupBackgroundWorker = BackupFactory.CreateFullBackupTaskWithProgressBar(this);// FolderList.ToList<string>(), TargetBackupFolder);
-                m_BackupBackgroundWorker.RunWorkerAsync();
+                BackupWorkerTask = new BackupWorker(this);
+                BackupWorkerTask.RunWorkerAsync();
             }
         }
 
-
-
-
+        public void PauseBackup()
+        {
+            if (BackupWorkerTask != null && BackupWorkerTask.IsBusy)
+            {
+                IsBackupWorkerPaused = true;
+            }
+        }
+        public void ResumeBackup()
+        {
+            if (BackupWorkerTask != null && BackupWorkerTask.IsBusy)
+            {
+                IsBackupWorkerPaused = false;
+            }
+        }
 
         //private ProfileTargetFolderStatusEnum m_ProfileTargetFolderStatus = ProfileTargetFolderStatusEnum.InvalidTargetPath;
         public ProfileTargetFolderStatusEnum GetProfileTargetFolderStatus(string path)
