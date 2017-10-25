@@ -87,6 +87,8 @@
     <Compile Include="Utilities\ObservableObject.cs" />
     <Compile Include="Models\FolderSelection\FolderMenuItem.cs" />
     <Compile Include="ViewModels\ExtendedControls\ProcessingSpinnerViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ICommands\StopBackupICommand.cs" />
+    <Compile Include="ViewModels\MainWindow\ICommands\PauseBackupICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\StartBackupICommand.cs" />
     <Compile Include="ViewModels\Profile\SourceItemsSelection\ChangeBackupItemsWindowModel.cs" />
     <Compile Include="ViewModels\ExtendedControls\ChartGaugeViewModel.cs" />

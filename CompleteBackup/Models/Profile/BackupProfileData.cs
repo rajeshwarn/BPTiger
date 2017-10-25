@@ -76,6 +76,11 @@ namespace CompleteBackup.Models.Backup.Profile
         public ProfileTargetFolderStatusEnum ProfileTargetFolderStatus { get { return GetProfileTargetFolderStatus(_TargetBackupFolder); } }
 
 
+
+        private bool m_IsBackupRunning = false;
+        [XmlIgnore]
+        public bool IsBackupRunning { get { return m_BackupBackgroundWorker != null && m_BackupBackgroundWorker.IsBusy; } set { OnPropertyChanged(); } }
+
         private BackgroundWorker m_BackupBackgroundWorker;
 
         public void StartBackup()
@@ -86,7 +91,7 @@ namespace CompleteBackup.Models.Backup.Profile
             }
             else
             {
-                m_BackupBackgroundWorker = BackupFactory.CreateFullBackupTaskWithProgressBar(FolderList.ToList<string>(), TargetBackupFolder);
+                m_BackupBackgroundWorker = BackupFactory.CreateFullBackupTaskWithProgressBar(this);// FolderList.ToList<string>(), TargetBackupFolder);
                 m_BackupBackgroundWorker.RunWorkerAsync();
             }
         }

@@ -11,9 +11,9 @@ using System.Windows.Input;
 
 namespace CompleteBackup.ViewModels.ICommands
 {
-    internal class StartBackupICommand<T> : ICommand
+    internal class PauseBackupICommand<T> : ICommand
     {
-        public StartBackupICommand()
+        public PauseBackupICommand()
         {
         }
         public event EventHandler CanExecuteChanged
@@ -32,7 +32,7 @@ namespace CompleteBackup.ViewModels.ICommands
         {
             var profile = parameter as BackupProfileData;
 
-            bool bExecute = (profile != null) && (!profile.IsBackupRunning);
+            bool bExecute = (profile != null) && (profile.IsBackupRunning);
 
             return bExecute;
         }
@@ -41,7 +41,7 @@ namespace CompleteBackup.ViewModels.ICommands
         {
             var profile = parameter as BackupProfileData;
 
-            profile.StartBackup();
+//            profile.StartBackup();
         }
     }
 }

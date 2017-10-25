@@ -24,16 +24,10 @@
     </UserControl.Resources>
     <DockPanel LastChildFill="True">
         <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
-            <extended_view:ProcessingSpinnerView/>
-
             <local:SourceBackupItemsTreeView x:Name="folderTree"/>
-
-
-            <!--<StackPanel Orientation="Horizontal">
-                <Button x:Name="StartBackupButton" Content="Start" Click="StartBackupButton_Click"></Button>
-            </StackPanel>-->
-
-            <!--<profile_views:ProfileListView/>-->
+            <!--<DockPanel>
+                <extended_view:ProcessingSpinnerView HorizontalAlignment="Right"/>
+            </DockPanel>-->
         </StackPanel>
 
         <profile_views:ProfileDetailsPageView x:Name="profileDetailsPageView" Margin="0,20,0,0"/>

@@ -1,18 +1,21 @@
 ﻿using CompleteBackup.DataRepository;
 using CompleteBackup.Models.Backup.Project;
-using CompleteBackup.ViewModels.MainWindow.ICommands;
+using CompleteBackup.ViewModels.ICommands;
 using CompleteBackup.ViewModels.Profile;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace CompleteBackup.ViewModels.MainWindow
 {
     class MainWindowViewModel : ObservableObject
     {
-        public System.Windows.Input.ICommand StartBackupCommand { get; private set; } = new StartBackupICommand<object>();
+        public ICommand StartBackupCommand { get; private set; } = new StartBackupICommand<object>();
+        public ICommand PauseBackupCommand { get; private set; } = new PauseBackupICommand<object>();
+        public ICommand StopBackupCommand { get; private set; } = new StopBackupICommand<object>();
 
         public MainWindowViewModel()
         {

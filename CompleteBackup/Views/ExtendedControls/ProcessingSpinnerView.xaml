@@ -6,7 +6,7 @@
              xmlns:view_model="clr-namespace:CompleteBackup.ViewModels.ExtendedControls"
              xmlns:local="clr-namespace:CompleteBackup.Views.ExtendedControls"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="100" d:DesignWidth="100">
     <UserControl.DataContext>
         <view_model:ProcessingSpinnerViewModel/>
     </UserControl.DataContext>
@@ -15,7 +15,7 @@
         <Color x:Key="UnfilledColor" A="0" B="155" R="155" G="155"/>
 
         <Style x:Key="BusyAnimationStyle" TargetType="Control">
-            <Setter Property="Background" Value="#7F000000"/>
+            <!--<Setter Property="Background" Value="#7F000000"/>-->
 
             <Setter Property="Template">
                 <Setter.Value>
@@ -123,9 +123,9 @@
                                     <Ellipse x:Name="ellipse5" Canvas.Left="34.75" Canvas.Top="34.5"/>
                                     <Ellipse x:Name="ellipse6" Canvas.Left="20.75" Canvas.Top="39.75"/>
                                     <Ellipse x:Name="ellipse7" Canvas.Top="34.25" Canvas.Left="7" />
-                                    <Ellipse Width="39.5" Height="39.5" Canvas.Left="8.75" Canvas.Top="8" Visibility="Hidden"/>
+                                    <!--<Ellipse Width="39.5" Height="39.5" Canvas.Left="8.75" Canvas.Top="8" Visibility="Hidden"/>-->
                                 </Canvas>
-                                <Label Content="{Binding Path=Text}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Label Content="{Binding Path=Text}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
                             </Grid>
                         </Border>
                     </ControlTemplate>

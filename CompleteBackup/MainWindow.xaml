@@ -115,12 +115,29 @@
                     <RibbonButton SmallImageSource="/Resources/Icons/Menu/blue-document-export.ico" Label="Export" KeyTip="E" 
                                                   Command="{Binding ExportSmartGraphCollectionCommand}"/>-->
                 </RibbonGroup>
-                <RibbonGroup>
+                <RibbonGroup Header="Run now" ToolTip="Click start to manuaaly run a backup now for this profile">
                     <RibbonButton LargeImageSource="/Resources/Icons/Ribbon/Start.ico" Label="Start" KeyTip="S"
                                   Command="{Binding StartBackupCommand}"
-                                  CommandParameter="{Binding ProjectData.CurrentBackupProfile}" Margin="0,0"/>
-                    <RibbonButton LargeImageSource="/Resources/Icons/Ribbon/Pause.ico" Label="Pause" KeyTip="S" Command="{Binding PauseBackupCommand}"/>
-                    <RibbonButton LargeImageSource="/Resources/Icons/Ribbon/Stop.ico" Label="Stop" KeyTip="S" Command="{Binding StopBackupCommand}"/>
+                                  CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>
+                    <RibbonButton LargeImageSource="/Resources/Icons/Ribbon/Pause.ico" Label="Pause" KeyTip="P"
+                                  Command="{Binding PauseBackupCommand}"
+                                  CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>
+                    <RibbonButton LargeImageSource="/Resources/Icons/Ribbon/Stop.ico" Label="Stop" KeyTip="T"
+                                  Command="{Binding StopBackupCommand}"
+                                  CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>
+                </RibbonGroup>
+                <RibbonGroup>
+                    <RibbonGroup.Style>
+                        <Style TargetType="RibbonGroup">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ProjectData.CurrentBackupProfile.IsBackupRunning}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </RibbonGroup.Style>
+                    <extended_view:ProcessingSpinnerView/>
                 </RibbonGroup>
             </RibbonTab>
 
