@@ -40,7 +40,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="0" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -49,10 +49,13 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <GroupBox Grid.Column="0" Grid.Row="0" Header="Items to backup" >
+        <GroupBox Grid.Column="0" Grid.Row="0">
+            <GroupBox.Header>
+                <Label FontWeight="Bold">Source Items</Label>
+            </GroupBox.Header>
             <DockPanel LastChildFill="True">
                 <StackPanel DockPanel.Dock="Right" Orientation="Vertical" HorizontalAlignment="Right">
-                    <Button Content="Change" Width="80"
+                    <Button Content="Change"
                         Command="{Binding OpenChangeBackupItemsWindowCommand}">
                     </Button>
                 </StackPanel>
@@ -61,7 +64,7 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding }" VerticalAlignment="Center" Padding="5,0" />
+                                <TextBlock Text="{Binding }" VerticalAlignment="Center" Padding="4,0" />
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -69,20 +72,20 @@
             </DockPanel>
         </GroupBox>
 
-        <GroupBox Grid.Column="0" Grid.Row="1" Header="Save backup to">
-            <StackPanel Orientation="Vertical" Margin="0,0,0,8">
+        <GroupBox Grid.Column="0" Grid.Row="1">
+            <GroupBox.Header>
+                <Label FontWeight="Bold">Destination</Label>
+            </GroupBox.Header>
+            <StackPanel Orientation="Vertical">
                 <DockPanel LastChildFill="True">
-                    <TextBlock Text="Destination: "  DockPanel.Dock="Left">
-                    </TextBlock>
-
                     <Button Content="Change" DockPanel.Dock="Right"                
                         Command="{Binding SelectFolderNameCommand}"
-                        CommandParameter="{Binding ProjectData.CurrentBackupProfile}" Margin="4,0,0,0">
+                        CommandParameter="{Binding ProjectData.CurrentBackupProfile}" Margin="0,0">
                     </Button>
 
-                    <TextBox x:Name="txTaggetFolder" IsReadOnly="false" IsReadOnlyCaretVisible="True"                         
-                         Validation.ErrorTemplate="{StaticResource validationTargetFolderErrorTemplate}">
-                        <TextBox.Text>
+                    <TextBlock x:Name="txTaggetFolder"                        
+                         Validation.ErrorTemplate="{StaticResource validationTargetFolderErrorTemplate}" Margin="8,0,0,0">
+                        <TextBlock.Text>
                             <Binding Path="ProjectData.CurrentBackupProfile.TargetBackupFolder"
                                  Mode="TwoWay"
                                  TargetNullValue=''
@@ -91,9 +94,9 @@
                                     <validators:BackupTargetLocationValidator/>
                                 </Binding.ValidationRules>
                             </Binding>
-                        </TextBox.Text>
-                        <TextBox.Style>
-                            <Style TargetType="TextBox" >
+                        </TextBlock.Text>
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock" >
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding ElementName=txTaggetFolder, Path=Text}" Value="{x:Null}">
                                         <Setter Property="FontStyle" Value="Italic"/>
@@ -105,8 +108,8 @@
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
-                        </TextBox.Style>
-                    </TextBox>
+                        </TextBlock.Style>
+                    </TextBlock>
                 </DockPanel>
             </StackPanel>
         </GroupBox>
