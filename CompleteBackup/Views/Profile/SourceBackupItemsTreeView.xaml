@@ -31,6 +31,11 @@
                 <AdornedElementPlaceholder x:Name="ErrorAdorner"/>
             </DockPanel>
         </ControlTemplate>
+
+        <Style TargetType="GroupBox">
+            <Setter Property="Margin" Value="4,4,4,4" />
+            <!--<Setter Property="FontWeight" Value="Bold" />-->
+        </Style>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -42,70 +47,69 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!--<TextBox x:Name="hiddenNameTextBlock" Text="{Binding ProjectData.CurrentBackupProfile.Name}" Visibility="Collapsed" TextChanged="hiddenNameTextBlock_TextChanged" />-->
-        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Vertical" Margin="0,0,0,8">
+        <GroupBox Grid.Column="0" Grid.Row="0" Header="Items to backup" >
             <DockPanel LastChildFill="True">
-                <TextBlock Text="Save backup files to: "  DockPanel.Dock="Left">
-                </TextBlock>
+                <StackPanel DockPanel.Dock="Right" Orientation="Vertical" HorizontalAlignment="Right">
+                    <Button Content="Change" Width="80"
+                        Command="{Binding OpenChangeBackupItemsWindowCommand}">
+                    </Button>
+                </StackPanel>
+                <ListBox ItemsSource="{Binding ProjectData.CurrentBackupProfile.FolderList}"
+                         BorderThickness="0">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding }" VerticalAlignment="Center" Padding="5,0" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+        </GroupBox>
 
-                <Button Content="Select Backup Folder" DockPanel.Dock="Right"                
+        <GroupBox Grid.Column="0" Grid.Row="1" Header="Save backup to">
+            <StackPanel Orientation="Vertical" Margin="0,0,0,8">
+                <DockPanel LastChildFill="True">
+                    <TextBlock Text="Destination: "  DockPanel.Dock="Left">
+                    </TextBlock>
+
+                    <Button Content="Change" DockPanel.Dock="Right"                
                         Command="{Binding SelectFolderNameCommand}"
                         CommandParameter="{Binding ProjectData.CurrentBackupProfile}" Margin="4,0,0,0">
-                </Button>
+                    </Button>
 
-                <TextBox x:Name="txTaggetFolder" IsReadOnly="false" IsReadOnlyCaretVisible="True"                         
+                    <TextBox x:Name="txTaggetFolder" IsReadOnly="false" IsReadOnlyCaretVisible="True"                         
                          Validation.ErrorTemplate="{StaticResource validationTargetFolderErrorTemplate}">
-                    <TextBox.Text>
-                        <Binding Path="ProjectData.CurrentBackupProfile.TargetBackupFolder"
+                        <TextBox.Text>
+                            <Binding Path="ProjectData.CurrentBackupProfile.TargetBackupFolder"
                                  Mode="TwoWay"
                                  TargetNullValue=''
                                  UpdateSourceTrigger="Default">
-                            <Binding.ValidationRules>
-                                <validators:BackupTargetLocationValidator/>
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </TextBox.Text>
-                    <TextBox.Style>
-                        <Style TargetType="TextBox" >
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding ElementName=txTaggetFolder, Path=Text}" Value="{x:Null}">
-                                    <Setter Property="FontStyle" Value="Italic"/>
-                                    <Setter Property="Text" Value="  XX-- Please select target folder --" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding Path=ProfileData.TargetBackupFolderEmptyFolderMessage}" Value="{x:Static System:String.Empty}">
-                                    <Setter Property="FontStyle" Value="Italic"/>
-                                    <Setter Property="Text" Value="  XX-- Please select target folder --" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBox.Style>
-                </TextBox>
-            </DockPanel>
-        </StackPanel>
-        <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Vertical" Margin="0,0,0,8">
-            <TextBlock Text="Folders to backup:"/>
-        </StackPanel>
-
-        <DockPanel Grid.Column="0" Grid.Row="3" LastChildFill="True" Margin="0,8,0,0" Visibility="Visible">
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                <TextBlock Text="Selected Folders:"/>
-                <Button Content="Change" Width="80"
-                    Command="{Binding OpenChangeBackupItemsWindowCommand}">
-                </Button>
-
+                                <Binding.ValidationRules>
+                                    <validators:BackupTargetLocationValidator/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                        <TextBox.Style>
+                            <Style TargetType="TextBox" >
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=txTaggetFolder, Path=Text}" Value="{x:Null}">
+                                        <Setter Property="FontStyle" Value="Italic"/>
+                                        <Setter Property="Text" Value="  XX-- Please select target folder --" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Path=ProfileData.TargetBackupFolderEmptyFolderMessage}" Value="{x:Static System:String.Empty}">
+                                        <Setter Property="FontStyle" Value="Italic"/>
+                                        <Setter Property="Text" Value="  XX-- Please select target folder --" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+                </DockPanel>
             </StackPanel>
-            <ListBox ItemsSource="{Binding ProjectData.CurrentBackupProfile.FolderList}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding }" VerticalAlignment="Center" Padding="5,0" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </DockPanel>
+        </GroupBox>
+
     </Grid>
 </UserControl>

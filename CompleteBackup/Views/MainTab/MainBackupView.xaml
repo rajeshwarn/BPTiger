@@ -11,34 +11,23 @@
     <UserControl.DataContext>
         <view_model:MainBackupViewModel/>
     </UserControl.DataContext>
-
+    <UserControl.Resources>
+        <Style TargetType="GroupBox">
+            <Setter Property="Margin" Value="11,11,11,11" />
+        </Style>
+    </UserControl.Resources>
     <DockPanel LastChildFill="True">
         <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
-
-            <profile_views:ProfileListView/>
+            <local:SourceBackupItemsTreeView x:Name="folderTree"/>
 
 
             <!--<StackPanel Orientation="Horizontal">
-                <TextBlock Text="Source:"/>
-                <TextBox Width="200" Text="{Binding SourcePath}"></TextBox>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Target:"/>
-                <TextBox Width="200" Text="{Binding TargetPath}"></TextBox>
-            </StackPanel>-->
-
-            <StackPanel Orientation="Horizontal">
                 <Button x:Name="StartBackupButton" Content="Start" Click="StartBackupButton_Click"></Button>
-            </StackPanel>
-
-
-            <!--<StackPanel Orientation="Horizontal">
-                <TextBlock Text="File Count:"/>
-                <TextBox Width="200" Text="{Binding FileCount}"></TextBox>
             </StackPanel>-->
-            <profile_views:ProfileDetailsPageView x:Name="profileDetailsPageView" Margin="0,20,0,0"/>
+
+            <!--<profile_views:ProfileListView/>-->
         </StackPanel>
 
-        <local:SourceBackupItemsTreeView x:Name="folderTree" Margin="0,20,0,0"/>
+        <profile_views:ProfileDetailsPageView x:Name="profileDetailsPageView" Margin="0,20,0,0"/>
     </DockPanel>
 </UserControl>

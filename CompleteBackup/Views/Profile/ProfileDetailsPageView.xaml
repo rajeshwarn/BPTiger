@@ -12,41 +12,40 @@
     </UserControl.DataContext>
 
     <Grid>
-        <Border BorderThickness="2" CornerRadius="8" BorderBrush="DarkGray" Margin="0,0,0,0" Padding="4">
-            <StackPanel Orientation="Vertical">
-                <Button Content="Refresh" Click="Button_Click"/>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Source foldes size: "></TextBlock>
-                    <TextBlock Text="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.BackupSourceFoldersSize}" ></TextBlock>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Target Backup used size: "></TextBlock>
-                    <TextBlock Text="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.BackupTargetUsedSize}" ></TextBlock>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Target free space: "></TextBlock>
-                    <TextBlock Text="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.BackupTargetFreeSize}" ></TextBlock>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Target drive size: "></TextBlock>
-                    <TextBlock Text="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.BackupTargetDiskSize}" ></TextBlock>
-                </StackPanel>
+        <!--<Border BorderThickness="1" CornerRadius="4" BorderBrush="DarkGray" Margin="0,0,0,0" Padding="4">-->
+        <StackPanel Orientation="Vertical">
+            <Button Width="50" Content="Refresh" Click="Button_Click" HorizontalAlignment="Right"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Source foldes size: "></TextBlock>
+                <TextBlock Text="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.BackupSourceFoldersSize}" ></TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Target Backup used size: "></TextBlock>
+                <TextBlock Text="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.BackupTargetUsedSize}" ></TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Target free space: "></TextBlock>
+                <TextBlock Text="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.BackupTargetFreeSize}" ></TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Target drive size: "></TextBlock>
+                <TextBlock Text="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.BackupTargetDiskSize}" ></TextBlock>
+            </StackPanel>
 
 
-                <Expander Grid.Row="0" Header="Utilization"  IsExpanded="False">
-                    <ListBox ToolTip="Utilization" ItemsSource="{Binding ProfileGaugeList}"
+            <Expander Grid.Row="0" Header="Utilization"  IsExpanded="False">
+                <ListBox ToolTip="Utilization" ItemsSource="{Binding ProfileGaugeList}"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                      ScrollViewer.VerticalScrollBarVisibility="Auto"
                      IsSynchronizedWithCurrentItem="True"
                      BorderThickness="0" Background="Transparent">
-                        <ListBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel IsItemsHost="True" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                            </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>
-                    </ListBox>
-                </Expander>
-            </StackPanel>
-        </Border>
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel IsItemsHost="True" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                </ListBox>
+            </Expander>
+        </StackPanel>
     </Grid>
 </UserControl>
