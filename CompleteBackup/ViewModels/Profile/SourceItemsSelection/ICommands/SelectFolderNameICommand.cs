@@ -1,4 +1,5 @@
-﻿using CompleteBackup.Models.Backup.Profile;
+﻿using CompleteBackup.DataRepository;
+using CompleteBackup.Models.Backup.Profile;
 using CompleteBackup.Models.Backup.Project;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,13 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
             return true;
         }
 
+        void SaveTargetFolder(BackupProfileData profile, string path)
+        {
+            profile.TargetBackupFolder = path;
+
+            BackupProjectRepository.Instance.SaveProject();
+        }
+
         public void Execute(object parameter)
         {
             var profile = parameter as BackupProfileData;
@@ -60,7 +68,7 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
                                         {
                                             case BackupProfileData.ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile:
 
-                                                profile.TargetBackupFolder = fileDialog.SelectedPath;
+                                                SaveTargetFolder(profile, fileDialog.SelectedPath);
                                                 bRetry = false;
 
                                                 break;
@@ -75,13 +83,18 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
                                                     if (profile.ConverBackupProfileFolderToNewPath(path) > 0)
                                                     {
                                                         MessageBox.Show($"Backup profile Succesfully converted!", "Destination folder", MessageBoxButton.OK, MessageBoxImage.Information);
-                                                        profile.TargetBackupFolder = fileDialog.SelectedPath;
+                                                        SaveTargetFolder(profile, fileDialog.SelectedPath);
 
                                                         bRetry = false;
                                                     }
                                                     else
                                                     {
-                                                        MessageBox.Show($"Failed to convert Backup Folder", "Destination folder", MessageBoxButton.OK, MessageBoxImage.Error);
+                                                        MessageBoxResult resultFail = MessageBox.Show($"Failed to convert Backup Folder\nDo you want to keep using the selected folder?", "Destination folder", MessageBoxButton.YesNoCancel, MessageBoxImage.Error);
+                                                        if (resultFail == MessageBoxResult.Yes)
+                                                        {
+                                                            SaveTargetFolder(profile, fileDialog.SelectedPath);
+                                                            bRetry = false;
+                                                        }
                                                     }
                                                 }
                                                 else
@@ -93,7 +106,7 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
                                             default:
                                                 {
                                                     MessageBox.Show($"folder error {folderStatus.ToString()}", "Destination folder", MessageBoxButton.OK, MessageBoxImage.Error);
-                                                    profile.TargetBackupFolder = fileDialog.SelectedPath;
+                                                    SaveTargetFolder(profile, fileDialog.SelectedPath);
                                                     bRetry = false;
                                                 }
                                                 break;

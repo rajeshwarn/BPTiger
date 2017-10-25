@@ -39,6 +39,6 @@
             <profile_views:ProfileDetailsPageView x:Name="profileDetailsPageView" Margin="0,20,0,0"/>
         </StackPanel>
 
-        <local:FolderTreeView x:Name="folderTree" Margin="0,20,0,0"/>
+        <local:SourceBackupItemsTreeView x:Name="folderTree" Margin="0,20,0,0"/>
     </DockPanel>
 </UserControl>

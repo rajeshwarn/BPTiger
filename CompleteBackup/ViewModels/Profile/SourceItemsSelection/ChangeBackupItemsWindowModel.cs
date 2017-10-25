@@ -4,66 +4,61 @@ using CompleteBackup.Models.Backup.Project;
 using CompleteBackup.Models.Backup.Storage;
 using CompleteBackup.Models.FolderSelection;
 using CompleteBackup.ViewModels.FolderSelection.ICommands;
-using CompleteBackup.Views.ICommands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Interop;
-using System.Windows.Media.Imaging;
 
 namespace CompleteBackup.ViewModels
 {
-    public class FolderTreeViewModel : ObservableObject
+    class ChangeBackupItemsWindowModel : ObservableObject
     {
-        //        public ICommand ExpandFolderTreeCommand { get; private set; } = new ExpandFolderTreeICommand<object>();
-        public ICommand SelectFolderNameCommand { get; private set; } = new SelectFolderNameICommand<object>();
         public ICommand SaveFolderSelectionCommand { get; private set; } = new SaveFolderSelectionICommand<object>();
-        
-        public ObservableCollection<FolderMenuItem> RootFolderItemList { get; set; } = new ObservableCollection<FolderMenuItem>();
-
+        public ICommand CloseChangeBackupItemsWindowCommand { get; private set; } = new CloseChangeBackupItemsWindowICommand<object>();
 
         public BackupProjectData ProjectData { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject;
-        public BackupProfileData ProfileData { get; set; }
 
+        private bool m_DirtyFlag = false;
+        public bool DirtyFlag { get { return m_DirtyFlag; } set { m_DirtyFlag = value; OnPropertyChanged(); } }
 
-        private void ProfileDataUpdate(BackupProfileData profile) { }
-        public FolderTreeViewModel()
+        public ChangeBackupItemsWindowModel()
         {
-            
+            new Thread(new System.Threading.ThreadStart(() =>
+            {
+                RefreshRootFolders();
+            }))
+            {
+                IsBackground = true,
+                Name = "Source folder reader"
+            }.Start();
         }
 
-        public void Init()
+
+        private void RefreshRootFolders()
         {
-            ProfileData = BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile;
-            if (ProfileData == null)
+            var ProfileData = ProjectData.CurrentBackupProfile;
+
+            Application.Current.Dispatcher.Invoke(new Action(() =>
             {
-                Trace.WriteLine("FolderTreeViewModel::CurrentBackupProfile is null");
-
-                return;
-            }
-
-            RootFolderItemList.Clear();
-
-            //Register to get update event when backup profile changed
-            BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile.RegisterEvent(ProfileDataUpdate);
+                ProfileData.RootFolderItemList.Clear();
+            }));
 
             DriveInfo[] drives = DriveInfo.GetDrives();
 
+            //Add all available drives to list
             foreach (var drive in drives)
             {
                 DirectoryInfo dInfo = drive.RootDirectory;
                 try
                 {
-                    FileAttributes attr= File.GetAttributes(drive.Name);
+                    FileAttributes attr = File.GetAttributes(drive.Name);
                     var rootItem = new FolderMenuItem()
                     {
                         IsFolder = true,
@@ -74,57 +69,45 @@ namespace CompleteBackup.ViewModels
 
                     AddFoldersToTree(rootItem);
 
-                    RootFolderItemList.Add(rootItem);
+                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    {
+                        ProfileData.RootFolderItemList.Add(rootItem);
+                    }));
                 }
                 catch
                 {
                 }
             }
 
-
+            //Add selected folders to tree list
             var itemList = new List<FolderMenuItem>();
-
-            foreach (var folder in ProfileData.FolderList)
+            Application.Current.Dispatcher.Invoke(new Action(() =>
             {
-                string pr = Directory.GetDirectoryRoot(folder);
-                var match = RootFolderItemList.Where(f => String.Compare(f.Path, pr, true) == 0);
-
-                if (match.Count() > 0)
+                foreach (var folder in ProfileData.FolderList)
                 {
-                    var item = AddFolderName(match.ElementAt(0), folder);
-                    itemList.Add(item);
-                }
-            }
+                    string pr = Directory.GetDirectoryRoot(folder);
+                    var match = ProfileData.RootFolderItemList.Where(f => String.Compare(f.Path, pr, true) == 0);
 
+                    if (match.Count() > 0)
+                    {
+                        var item = AddFolderName(match.ElementAt(0), folder);
+                        itemList.Add(item);
+                    }
+                }
+            }));
+
+            //After we added the folders, we need update selected folders root items to mark the correct selection
             foreach (var item in itemList)
             {
                 item.Selected = true;
-                UpdateSelectedFolders(item);
-            }
-        }
-
-        public void FolderTreeClick(FolderMenuItem item, bool bSelected)
-        {
-            if (item != null)
-            {
-                item.Selected = bSelected;
-
-                UpdateSelectedFolders(item);
-            }
-        }
-
-        public void ExpandFolder(ItemCollection itemList)
-        {
-            foreach (var item in itemList)
-            {
-                var folderItem = item as FolderMenuItem;
-
-                if (folderItem.Items.Count() == 0)
+                Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
-                    AddFoldersToTree(folderItem);
-                }
+                    UpdateSelectedFolders(ProfileData, item);
+                }));
             }
         }
+    
+
 
         IStorageInterface m_IStorage = new FileSystemStorage();
 
@@ -138,12 +121,12 @@ namespace CompleteBackup.ViewModels
                 string name = parentPath.FullName;
                 var parent = AddFolderName(item, name);
 
-                var found = parent.Items.Where(i => String.Compare(i.Path, path, true) == 0);
+                var found = parent.SourceBackupItems.Where(i => String.Compare(i.Path, path, true) == 0);
                 if (found.Count() == 0)
                 {
                     FileAttributes attr = File.GetAttributes(path);
                     var newItem = new FolderMenuItem() { IsFolder = true, Attributes = attr, Path = path, Name = path, ParentItem = parent, Selected = false };
-                    parent.Items.Add(newItem);
+                    parent.SourceBackupItems.Add(newItem);
                     return newItem;
                 }
                 else
@@ -151,7 +134,7 @@ namespace CompleteBackup.ViewModels
                     AddFoldersToTree(found.ElementAt(0));
                     return found.ElementAt(0);
                 }
-            
+
             }
             else
             {
@@ -183,8 +166,8 @@ namespace CompleteBackup.ViewModels
                     if (((attr & FileAttributes.System) != FileAttributes.System) &&
                         ((attr & FileAttributes.Hidden) != FileAttributes.Hidden))
                     {
-                        var newItem = new FolderMenuItem() { IsFolder = true, Attributes = attr, Path = newPath, Name = subdirectory, ParentItem = item, Selected = false};
-                        item.Items.Add(newItem);
+                        var newItem = new FolderMenuItem() { IsFolder = true, Attributes = attr, Path = newPath, Name = subdirectory, ParentItem = item, Selected = false };
+                        item.SourceBackupItems.Add(newItem);
 
                         //var match = ProjectData.FolderList.Where(f => String.Compare(f, newPath, true) == 0);
 
@@ -195,15 +178,15 @@ namespace CompleteBackup.ViewModels
                         //}
                         //else
                         //{
-                            if (item.Selected == true)
-                            {
-                                newItem.Selected = true;
-                            }
-                            else
-                            {
-                                newItem.Selected = false;
-                            }                           
-                   //     }
+                        if (item.Selected == true)
+                        {
+                            newItem.Selected = true;
+                        }
+                        else
+                        {
+                            newItem.Selected = false;
+                        }
+                        //     }
 
                         //SelectItemUp(newItem);
 
@@ -220,7 +203,7 @@ namespace CompleteBackup.ViewModels
                     var filePath = m_IStorage.Combine(item.Path, file);
                     FileAttributes attr = File.GetAttributes(filePath);
 
-                    item.Items.Add(new FolderMenuItem() { IsFolder = false, Attributes = attr, Name = file, Path = filePath, Image = null });
+                    item.SourceBackupItems.Add(new FolderMenuItem() { IsFolder = false, Attributes = attr, Name = file, Path = filePath, Image = null });
                 }
             }
         }
@@ -244,39 +227,52 @@ namespace CompleteBackup.ViewModels
             return sourceSubdirectoryEntriesList;
         }
 
-        void UpdateSelectedFolderList()
+
+        public void FolderTreeClick(FolderMenuItem item, bool bSelected)
         {
-            ProfileData.FolderList.Clear();
-            UpdateSelectedFolderListStep(RootFolderItemList);
-        }
-        void UpdateSelectedFolderListStep(ObservableCollection<FolderMenuItem> folderList)
-        {
-            foreach (var folder in folderList.Where(i => (i.IsFolder)))
+            if (item != null)
             {
-                if (folder.Selected == true)
+                DirtyFlag = true;
+                item.Selected = bSelected;
+
+                UpdateSelectedFolders(ProjectData.CurrentBackupProfile, item);
+            }
+        }
+
+        bool m_bRefreshOnExpand = true;
+        public void ExpandFolder(ItemCollection itemList)
+        {
+            foreach (var item in itemList)
+            {
+                var folderItem = item as FolderMenuItem;
+
+                if (m_bRefreshOnExpand)
                 {
-                    ProfileData.FolderList.Add(folder.Path);
+                    folderItem.SourceBackupItems.Clear();
                 }
-                else if (folder.Selected == null)
+
+                if (folderItem.SourceBackupItems.Count() == 0)
                 {
-                    UpdateSelectedFolderListStep(folder.Items);
+                    AddFoldersToTree(folderItem);
                 }
             }
         }
 
-        void UpdateSelectedFolders(FolderMenuItem item)
+
+        void UpdateSelectedFolders(BackupProfileData profile, FolderMenuItem item)
         {
             SelectItemDown(item);
             SelectItemUp(item);
 
-            UpdateSelectedFolderList();
+//            UpdateSelectedFolderList(profile);
         }
+
 
         void SelectItemDown(FolderMenuItem item)
         {
             if (item != null)
             {
-                foreach (var subItem in item.Items)
+                foreach (var subItem in item.SourceBackupItems)
                 {
                     subItem.Selected = item.Selected;
 
@@ -304,7 +300,7 @@ namespace CompleteBackup.ViewModels
                     //}
 
                     bool? bValue = false;
-                    foreach (var folder in parent.Items.Where(i => (i.IsFolder)))
+                    foreach (var folder in parent.SourceBackupItems.Where(i => (i.IsFolder)))
                     {
                         if (folder.Selected != false)
                         {
@@ -318,7 +314,32 @@ namespace CompleteBackup.ViewModels
                 }
             }
         }
+
+
+        public void UpdateSelectedFolderList(BackupProfileData profile = null)
+        {
+            if (profile == null)
+            {
+                profile = ProjectData.CurrentBackupProfile;
+            }
+
+            profile.FolderList.Clear();
+            UpdateSelectedFolderListStep(profile, profile.RootFolderItemList);
+        }
+        void UpdateSelectedFolderListStep(BackupProfileData profile, ObservableCollection<FolderMenuItem> folderList)
+        {
+            foreach (var folder in folderList.Where(i => (i.IsFolder)))
+            {
+                if (folder.Selected == true)
+                {
+                    profile.FolderList.Add(folder.Path);
+                }
+                else if (folder.Selected == null)
+                {
+                    UpdateSelectedFolderListStep(profile, folder.SourceBackupItems);
+                }
+            }
+        }
+
     }
-
-
 }
