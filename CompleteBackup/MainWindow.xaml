@@ -4,10 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:view="clr-namespace:CompleteBackup.Views"  
+        xmlns:extended_view="clr-namespace:CompleteBackup.Views.ExtendedControls"  
         xmlns:view_model="clr-namespace:CompleteBackup.ViewModels"  
         xmlns:main_window_views="clr-namespace:CompleteBackup.Views.MainWindow"             
         xmlns:profile_view="clr-namespace:CompleteBackup.Views.Profile"             
         xmlns:profile_viewmodel="clr-namespace:CompleteBackup.ViewModels.Profile"             
+        xmlns:extended_view_model="clr-namespace:CompleteBackup.ViewModels.ExtendedControls"             
         xmlns:main_viewmodels="clr-namespace:CompleteBackup.ViewModels.MainWindow"  
         xmlns:local="clr-namespace:CompleteBackup"
         mc:Ignorable="d"
@@ -28,13 +30,20 @@
             DataType="{x:Type view_model:MainRestoreViewModel}">
             <view:MainRestoreView/>
         </DataTemplate>
+        <DataTemplate
+            DataType="{x:Type extended_view_model:ProcessingSpinnerViewModel}">
+            <view:MainRestoreView/>
+        </DataTemplate>
     </Window.Resources>
 
     <DockPanel LastChildFill="True">
         <Ribbon x:Name="RibbonWin" DockPanel.Dock="Top" SelectedIndex="{Binding SelectedRibbonIndex}">
             <!-- Help Pane, located at the right-hand side -->
             <Ribbon.HelpPaneContent>
-                <RibbonButton SmallImageSource="/Resources/Icons/Iconsmind-Outline-File.ico" />
+                <StackPanel Orientation="Horizontal">
+                    <extended_view:ProcessingSpinnerView/>
+                    <RibbonButton SmallImageSource="/Resources/Icons/Iconsmind-Outline-File.ico" />
+                </StackPanel>
             </Ribbon.HelpPaneContent>
             <!-- Quick Access Toolbar - located at the upper-left corner -->
             <Ribbon.QuickAccessToolBar>

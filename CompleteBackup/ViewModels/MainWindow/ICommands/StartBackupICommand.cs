@@ -30,20 +30,18 @@ namespace CompleteBackup.ViewModels.MainWindow.ICommands
 
         public bool CanExecute(object parameter)
         {
-            bool bExecute = true;
+            var profile = parameter as BackupProfileData;
+
+            bool bExecute = profile != null;
+
             return bExecute;
         }
 
         public void Execute(object parameter)
         {
             var profile = parameter as BackupProfileData;
-//            var folderSelection = folderTree.DataContext as SourceBackupItemsTreeViewModel;
 
-            var progressBar = GenericStatusBarView.NewInstance;
-            progressBar.UpdateProgressBar("Backup starting...", 0);
-
-            var backup = BackupFactory.CreateFullBackupTask(profile.FolderList.ToList<string>(), profile.TargetBackupFolder, progressBar);
-            backup.RunWorkerAsync();
+            profile.StartBackup();
         }
     }
 }

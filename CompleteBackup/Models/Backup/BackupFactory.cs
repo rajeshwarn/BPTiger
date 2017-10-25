@@ -12,6 +12,13 @@ namespace CompleteBackup.Models.backup
 {
     class BackupFactory
     {
+        public static BackgroundWorker CreateFullBackupTaskWithProgressBar(List<string> sourcePath, string currSetPath)
+        {
+            var progressBar = GenericStatusBarView.NewInstance;
+            progressBar.UpdateProgressBar("Backup starting...", 0);
+
+            return CreateFullBackupTask(sourcePath, currSetPath, progressBar);
+        }
         public static BackgroundWorker CreateFullBackupTask(List<string> sourcePath, string currSetPath, GenericStatusBarView progressBar = null)
         {
             var task = new BackgroundWorker();

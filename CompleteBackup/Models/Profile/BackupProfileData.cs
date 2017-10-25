@@ -1,4 +1,5 @@
-﻿using CompleteBackup.Models.Backup.Storage;
+﻿using CompleteBackup.Models.backup;
+using CompleteBackup.Models.Backup.Storage;
 using CompleteBackup.Models.FolderSelection;
 using System;
 using System.Collections.Generic;
@@ -73,6 +74,26 @@ namespace CompleteBackup.Models.Backup.Profile
 
         [XmlIgnore]
         public ProfileTargetFolderStatusEnum ProfileTargetFolderStatus { get { return GetProfileTargetFolderStatus(_TargetBackupFolder); } }
+
+
+        private BackgroundWorker m_BackupBackgroundWorker;
+
+        public void StartBackup()
+        {
+            if (m_BackupBackgroundWorker != null && m_BackupBackgroundWorker.IsBusy)
+            {
+                //busy
+            }
+            else
+            {
+                m_BackupBackgroundWorker = BackupFactory.CreateFullBackupTaskWithProgressBar(FolderList.ToList<string>(), TargetBackupFolder);
+                m_BackupBackgroundWorker.RunWorkerAsync();
+            }
+        }
+
+
+
+
 
         //private ProfileTargetFolderStatusEnum m_ProfileTargetFolderStatus = ProfileTargetFolderStatusEnum.InvalidTargetPath;
         public ProfileTargetFolderStatusEnum GetProfileTargetFolderStatus(string path)
