@@ -27,17 +27,5 @@ namespace CompleteBackup.Views
         {
             InitializeComponent();
         }
-
-
-        private void StartBackupButton_Click(object sender, RoutedEventArgs e)
-        {
-            var folderSelection = folderTree.DataContext as SourceBackupItemsTreeViewModel;
-
-            var progressBar = GenericStatusBarView.NewInstance;
-            progressBar.UpdateProgressBar("Backup starting...", 0);
-
-            var backup = BackupFactory.CreateFullBackupTask(folderSelection.ProjectData.CurrentBackupProfile.FolderList.ToList<string>(), folderSelection.ProjectData.CurrentBackupProfile.TargetBackupFolder, progressBar);
-            backup.RunWorkerAsync();
-        }
     }
 }

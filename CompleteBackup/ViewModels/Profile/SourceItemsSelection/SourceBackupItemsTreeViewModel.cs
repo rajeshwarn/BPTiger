@@ -4,7 +4,6 @@ using CompleteBackup.Models.Backup.Project;
 using CompleteBackup.Models.Backup.Storage;
 using CompleteBackup.Models.FolderSelection;
 using CompleteBackup.ViewModels.FolderSelection.ICommands;
-using CompleteBackup.Views.ICommands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

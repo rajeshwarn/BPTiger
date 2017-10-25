@@ -70,8 +70,7 @@
 
 
             <RibbonTab Header="Backup" KeyTip="B" >
-                <!--<TextBlock Text="{Binding TEXT}"/>
-                <RibbonGroup Header="{Binding Project.SelectedBackupProject.Name}" ItemsSource="{Binding Project.SelectedBackupProject.BackupProfileList}"
+                <!--<RibbonGroup Header="{Binding Project.SelectedBackupProject.Name}" ItemsSource="{Binding Project.SelectedBackupProject.BackupProfileList}"
                                      ToolTip="{Binding Project.SelectedBackupProject.Description}">
                     <RibbonGroup.ItemTemplate>
                         <DataTemplate>
@@ -106,6 +105,13 @@
                                               Command="{Binding ImportSmartGraphCollectionCommand}"/>
                     <RibbonButton SmallImageSource="/Resources/Icons/Menu/blue-document-export.ico" Label="Export" KeyTip="E" 
                                                   Command="{Binding ExportSmartGraphCollectionCommand}"/>-->
+                </RibbonGroup>
+                <RibbonGroup>
+                    <RibbonButton LargeImageSource="/Resources/Icons/Ribbon/Start.ico" Label="Start" KeyTip="S"
+                                  Command="{Binding StartBackupCommand}"
+                                  CommandParameter="{Binding ProjectData.CurrentBackupProfile}" Margin="0,0"/>
+                    <RibbonButton LargeImageSource="/Resources/Icons/Ribbon/Pause.ico" Label="Pause" KeyTip="S" Command="{Binding PauseBackupCommand}"/>
+                    <RibbonButton LargeImageSource="/Resources/Icons/Ribbon/Stop.ico" Label="Stop" KeyTip="S" Command="{Binding StopBackupCommand}"/>
                 </RibbonGroup>
             </RibbonTab>
 

@@ -1,4 +1,6 @@
 ﻿using CompleteBackup.DataRepository;
+using CompleteBackup.Models.Backup.Project;
+using CompleteBackup.ViewModels.MainWindow.ICommands;
 using CompleteBackup.ViewModels.Profile;
 using System;
 using System.Collections.Generic;
@@ -10,6 +12,8 @@ namespace CompleteBackup.ViewModels.MainWindow
 {
     class MainWindowViewModel : ObservableObject
     {
+        public System.Windows.Input.ICommand StartBackupCommand { get; private set; } = new StartBackupICommand<object>();
+
         public MainWindowViewModel()
         {
 
@@ -33,10 +37,11 @@ namespace CompleteBackup.ViewModels.MainWindow
         
 
         public BackupProjectRepository Project { get; set; } = BackupProjectRepository.Instance;
+        public BackupProjectData ProjectData { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject;
 
 
 
-        
+
         private void UpdateCurrentMainView()
         {
             try

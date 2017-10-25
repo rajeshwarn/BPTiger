@@ -86,6 +86,7 @@
     <Compile Include="Utilities\Convertors\NullVisibilityConverter.cs" />
     <Compile Include="Utilities\ObservableObject.cs" />
     <Compile Include="Models\FolderSelection\FolderMenuItem.cs" />
+    <Compile Include="ViewModels\MainWindow\ICommands\StartBackupICommand.cs" />
     <Compile Include="ViewModels\Profile\SourceItemsSelection\ChangeBackupItemsWindowModel.cs" />
     <Compile Include="ViewModels\ExtendedControls\ChartGaugeViewModel.cs" />
     <Compile Include="ViewModels\MainBackupViewModel.cs" />
@@ -116,7 +117,6 @@
     <Compile Include="Views\Profile\SourceBackupItemsTreeView.xaml.cs">
       <DependentUpon>SourceBackupItemsTreeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ICommands\FolderTreeItemClickICommand.cs" />
     <Compile Include="Views\MainWindow\GenericStatusBarView.cs" />
     <Compile Include="Views\MainWindow\MainWindowStatusBarView.xaml.cs">
       <DependentUpon>MainWindowStatusBarView.xaml</DependentUpon>
@@ -213,6 +213,11 @@
     <Resource Include="Resources\Icons\Iconsmind-Outline-File.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Ribbon\Pause.ico" />
+    <Resource Include="Resources\Icons\Ribbon\Start.ico" />
+    <Resource Include="Resources\Icons\Ribbon\Stop.ico" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
