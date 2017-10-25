@@ -4,20 +4,28 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CompleteBackup.Views"
+             xmlns:extended_view="clr-namespace:CompleteBackup.Views.ExtendedControls"
              xmlns:profile_views="clr-namespace:CompleteBackup.Views.Profile"
              xmlns:view_model="clr-namespace:CompleteBackup.ViewModels"
+             xmlns:extended_view_model="clr-namespace:CompleteBackup.ViewModels.ExtendedControls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.DataContext>
         <view_model:MainBackupViewModel/>
     </UserControl.DataContext>
     <UserControl.Resources>
+        <DataTemplate
+            DataType="{x:Type extended_view_model:ProcessingSpinnerViewModel}">
+            <extended_view:ProcessingSpinnerView/>
+        </DataTemplate>
         <Style TargetType="GroupBox">
             <Setter Property="Margin" Value="11,11,11,11" />
         </Style>
     </UserControl.Resources>
     <DockPanel LastChildFill="True">
         <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
+            <extended_view:ProcessingSpinnerView/>
+
             <local:SourceBackupItemsTreeView x:Name="folderTree"/>
 
 

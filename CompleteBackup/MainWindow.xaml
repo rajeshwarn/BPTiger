@@ -32,7 +32,7 @@
         </DataTemplate>
         <DataTemplate
             DataType="{x:Type extended_view_model:ProcessingSpinnerViewModel}">
-            <view:MainRestoreView/>
+            <extended_view:ProcessingSpinnerView/>
         </DataTemplate>
     </Window.Resources>
 
@@ -41,7 +41,7 @@
             <!-- Help Pane, located at the right-hand side -->
             <Ribbon.HelpPaneContent>
                 <StackPanel Orientation="Horizontal">
-                    <extended_view:ProcessingSpinnerView/>
+                    <!--<extended_view:ProcessingSpinnerView/>-->
                     <RibbonButton SmallImageSource="/Resources/Icons/Iconsmind-Outline-File.ico" />
                 </StackPanel>
             </Ribbon.HelpPaneContent>
