@@ -34,7 +34,7 @@ namespace CompleteBackup.ViewModels.Profile
 
         private void ProfileDataUpdate(BackupProfileData profile)
         {
-            float ratio = (float)profile.m_BackupTargetUsedSizeNumber * 100 / (float)profile.m_BackupTargetDiskSizeNumber;
+            float ratio = (float)profile.m_BackupTargetUsedSizeNumber / (float)profile.m_BackupTargetDiskSizeNumber;
 
             ProfileGaugeList[0].GaugeValue = ratio;
         }
