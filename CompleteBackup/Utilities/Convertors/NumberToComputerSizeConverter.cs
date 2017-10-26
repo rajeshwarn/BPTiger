@@ -13,23 +13,23 @@ namespace CompleteBackup.Utilities.Convertors
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            long lSize = (long)value;
+            float lSize = (long)value;
 
             if ((lSize) > 1000000000000)
             {
-                return (lSize / 1000000000000).ToString("###,##0.0") + " TB";
+                return (lSize / 1000000000000).ToString("###,##0.#") + " TB";
             }
             if ((lSize) > 1000000000)
             {
-                return (lSize / 1000000000).ToString("###,##0.0") + " GB";
+                return (lSize / 1000000000).ToString("###,##0.#") + " GB";
             }
             else if ((lSize) > 1000000)
             {
-                return (lSize / 1000000).ToString("###,##0.0") + " MB";
+                return (lSize / 1000000).ToString("###,##0.#") + " MB";
             }
             else if ((lSize) > 1000)
             {
-                return (lSize / 1000).ToString("###,##0.0") + " KB";
+                return (lSize / 1000).ToString("###,##0.#") + " KB";
             }
             else
             {
