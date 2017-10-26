@@ -15,12 +15,11 @@ namespace CompleteBackup.Models.backup
 {
     public class OneWaySyncBackup : BackupManager
     {
-        public OneWaySyncBackup(string backupName, List<FolderData> sourcePath, string currSetPath, IStorageInterface storageInterface, GenericStatusBarView progressBar = null) : base(sourcePath, currSetPath, storageInterface, progressBar)
+        public OneWaySyncBackup(BackupProfileData profile, GenericStatusBarView progressBar = null) : base(profile, progressBar)
         {
             m_IStorage = new FileSystemStorage();
-            m_BackupName = backupName;
         }
-        public override string BackUpProfileSignature { get { return $"{BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile?.GUID.ToString("D")}-CBKP-SNAP"; } }
+//        public override string BackUpProfileSignature { get { return $"{BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile?.GUID.ToString("D")}-CBKP-SNAP"; } }
         string m_BackupName;
 
         public override void ProcessBackup()
@@ -29,7 +28,7 @@ namespace CompleteBackup.Models.backup
             {
                 DateTime d = DateTime.Now;
                 string dateSignature = $"{d.Year:0000}-{d.Month:00}-{d.Day:00}_{d.Hour:00}{d.Minute:00}{d.Hour:00}{d.Second:00}{d.Millisecond:000}";
-                m_BackupName = $"{BackUpProfileSignature}_{dateSignature}";
+                m_BackupName = $"{m_Profile.BackupSignature}_{dateSignature}";
             }
 
             var newTargetPath = m_IStorage.Combine(TargetPath, m_BackupName);

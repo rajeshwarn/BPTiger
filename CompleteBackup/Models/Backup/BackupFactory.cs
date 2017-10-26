@@ -13,6 +13,16 @@ namespace CompleteBackup.Models.backup
 {
     class BackupFactory
     {
+
+        //public static BackupManager CreateBackupManager(BackupProfileData profile)
+        //{
+        //    switch (profile.BackupType)
+        //        case BackupTypeEnum.Full:
+        //        {
+        //            return  IncrementalBackup(profile.FolderList.ToList(), profile.TargetBackupFolder, new FileSystemStorage(), m_ProgressBar);
+        //        }
+        //    }
+
         //public static BackgroundWorker CreateFullBackupTaskWithProgressBar(BackupProfileData profile)
         //{
         //    var progressBar = GenericStatusBarView.NewInstance;

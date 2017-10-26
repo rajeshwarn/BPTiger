@@ -19,8 +19,15 @@ using System.Xml.Serialization;
 
 namespace CompleteBackup.Models.Backup.Profile
 {
+    public enum BackupTypeEnum
+    {
+        Full,
+        Incremental,
+    }
+
     public class BackupProfileData : ObservableObject
     {
+
         public enum ProfileTargetFolderStatusEnum
         {
             AssosiatedWithThisProfile, //no error looks good
@@ -47,14 +54,20 @@ namespace CompleteBackup.Models.Backup.Profile
             InitStorageDataUpdaterTask();
         }
 
+
+        public string BackupSignature { get { return $"{GUID.ToString("D")}-BC-{BackupType}"; } }
+
+
+        public BackupTypeEnum BackupType { get; set; } = BackupTypeEnum.Full;
         public Guid GUID { get; set; } = Guid.NewGuid();
         public string Name { get; set; } = "My Backup Profile";
         public string Description { get { return Name; } set { } }
 
         IStorageInterface m_IStorage = new FileSystemStorage();
+        public IStorageInterface GetStorageInterface() { return m_IStorage; }
 
-        private string _TargetBackupFolder;
-        public string TargetBackupFolder { get { return _TargetBackupFolder; } set { _TargetBackupFolder = value; OnPropertyChanged(); } }
+        private string m_TargetBackupFolder;
+        public string TargetBackupFolder { get { return m_TargetBackupFolder; } set { m_TargetBackupFolder = value; OnPropertyChanged(); } }
 
         public ObservableCollection<FolderData> FolderList { get; set; } = new ObservableCollection<FolderData>();
 
@@ -77,10 +90,10 @@ namespace CompleteBackup.Models.Backup.Profile
 
 
         [XmlIgnore]
-        public bool IsValidProfileFolder { get { return GetProfileTargetFolderStatus(_TargetBackupFolder) != ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile; } }
+        public bool IsValidProfileFolder { get { return GetProfileTargetFolderStatus(m_TargetBackupFolder) != ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile; } }
 
         [XmlIgnore]
-        public ProfileTargetFolderStatusEnum ProfileTargetFolderStatus { get { return GetProfileTargetFolderStatus(_TargetBackupFolder); } }
+        public ProfileTargetFolderStatusEnum ProfileTargetFolderStatus { get { return GetProfileTargetFolderStatus(m_TargetBackupFolder); } }
 
 
         [XmlIgnore]
@@ -308,9 +321,9 @@ namespace CompleteBackup.Models.Backup.Profile
 
                     m_BackupTargetDiskSizeNumber = 0;
                     //Target disk size
-                    if (_TargetBackupFolder != null)
+                    if (m_TargetBackupFolder != null)
                     {
-                        string rootDrive = Path.GetPathRoot(_TargetBackupFolder);
+                        string rootDrive = Path.GetPathRoot(m_TargetBackupFolder);
                         foreach (DriveInfo drive in DriveInfo.GetDrives().Where(d => d.ToString().Contains(rootDrive)))
                         {
                             if (drive.IsReady)
@@ -328,9 +341,9 @@ namespace CompleteBackup.Models.Backup.Profile
 
                     m_BackupTargetUsedSizeNumber = 0;
                     //Target used Space
-                    if (_TargetBackupFolder != null)
+                    if (m_TargetBackupFolder != null)
                     {
-                        m_BackupTargetUsedSizeNumber = new DirectoryInfo(_TargetBackupFolder).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
+                        m_BackupTargetUsedSizeNumber = new DirectoryInfo(m_TargetBackupFolder).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
                         Application.Current.Dispatcher.Invoke(new Action(() =>
                         {
                             BackupTargetUsedSize = FileFolderSizeHelper.GetNumberSizeString(m_BackupTargetUsedSizeNumber);
@@ -339,9 +352,9 @@ namespace CompleteBackup.Models.Backup.Profile
 
                     //Target free space
                     m_BackupTargetFreeSizeNumber = 0;
-                    if (_TargetBackupFolder != null)
+                    if (m_TargetBackupFolder != null)
                     {
-                        string rootDrive = Path.GetPathRoot(_TargetBackupFolder);
+                        string rootDrive = Path.GetPathRoot(m_TargetBackupFolder);
                         foreach (DriveInfo drive in DriveInfo.GetDrives().Where(d => d.ToString().Contains(rootDrive)))
                         {
                             if (drive.IsReady)

@@ -20,21 +20,23 @@ namespace CompleteBackup.Models.backup
     public abstract class BackupManager
     {
         protected IStorageInterface m_IStorage;
+        protected BackupProfileData m_Profile;
 
-        BackupManager() { }
-        public BackupManager(List<FolderData> sourcePath, string currSetPath, IStorageInterface storageInterface, GenericStatusBarView progressBar)
+        public BackupManager(BackupProfileData profile, GenericStatusBarView progressBar)
+//        public BackupManager(List<FolderData> sourcePath, string currSetPath, IStorageInterface storageInterface, GenericStatusBarView progressBar)
         {
-            SourcePath = sourcePath;
-            TargetPath = currSetPath;
+            m_Profile = profile;
+            SourcePath = profile.FolderList.ToList();
+            TargetPath = profile.TargetBackupFolder;
 
-            m_IStorage = storageInterface;
+            m_IStorage = profile.GetStorageInterface();
             m_ProgressBar = progressBar;
         }
 
 
         public ManualResetEvent PauseWaitHandle { get; set; } = new ManualResetEvent(true);
 
-        public abstract string BackUpProfileSignature { get; }
+//        public abstract string BackUpProfileSignature { get; }
 
         public long NumberOfFiles { get; set; } = 0;
         public long ProcessFileCount { get; set; }
@@ -71,6 +73,21 @@ namespace CompleteBackup.Models.backup
         public abstract void ProcessBackup();
 
 
+        public static string GetLastBackupSetName(BackupProfileData profile)
+        {
+            var backupProfileList = new List<string>();
+            var storage = profile.GetStorageInterface();
+
+            string[] setEntries = storage.GetDirectories(profile.TargetBackupFolder);
+            foreach (var entry in setEntries.Where(s => storage.GetFileName(s).StartsWith(profile.BackupSignature)))
+            {
+                backupProfileList.Add(storage.GetFileName(entry));
+            }
+
+            var lastSet = backupProfileList.OrderBy(set => set).LastOrDefault();
+
+            return lastSet;
+        }
 
         public void Init()
         {

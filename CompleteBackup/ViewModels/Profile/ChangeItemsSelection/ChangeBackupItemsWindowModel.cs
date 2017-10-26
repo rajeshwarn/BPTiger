@@ -248,7 +248,7 @@ namespace CompleteBackup.ViewModels
 
                 if (m_bRefreshOnExpand)
                 {
-                    folderItem.SourceBackupItems.Clear();
+                //buggyyyyy    folderItem.SourceBackupItems.Clear();
                 }
 
                 if (folderItem.SourceBackupItems.Count() == 0)
@@ -264,7 +264,7 @@ namespace CompleteBackup.ViewModels
             SelectItemDown(item);
             SelectItemUp(item);
 
-//            UpdateSelectedFolderList(profile);
+            UpdateSelectedFolderList(profile);
         }
 
 

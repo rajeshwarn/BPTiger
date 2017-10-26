@@ -33,7 +33,7 @@ namespace CompleteBackup.ViewModels
         {
             new Thread(new System.Threading.ThreadStart(() =>
             {
-                RefreshRootFolders();
+                LoadBackupItems();
             }))
             {
                 IsBackground = true,
@@ -41,8 +41,11 @@ namespace CompleteBackup.ViewModels
             }.Start();
         }
 
+        private void LoadBackupItems()
+        {
 
-        private void RefreshRootFolders()
+        }
+        private void RefreshRootFolders__()
         {
             var ProfileData = ProjectData.CurrentBackupProfile;
 

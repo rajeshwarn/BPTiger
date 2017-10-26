@@ -17,24 +17,26 @@ namespace CompleteBackup.Models.backup
     {
         public string LastSetPath;
 
-        public IncrementalBackup(List<FolderData> sourcePath, string currSetPath, IStorageInterface storageInterface, GenericStatusBarView progressBar = null) : base(sourcePath, currSetPath, storageInterface, progressBar)
+        public IncrementalBackup(BackupProfileData profile, GenericStatusBarView progressBar = null) : base(profile, progressBar)
         {
         }
-        public override string BackUpProfileSignature { get { return $"{BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile?.GUID.ToString("D")}-CBKP-INC"; } }
+//        public override string BackUpProfileSignature { get { return $"{BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile?.GUID.ToString("D")}-CBKP-INC"; } }
 
         public override void ProcessBackup()
         {
-            var backupProfileList = new List<string>();
-            string[] setEntries = m_IStorage.GetDirectories(TargetPath);
-            foreach (var entry in setEntries.Where(s => m_IStorage.GetFileName(s).StartsWith(BackUpProfileSignature)))
-            {
-                backupProfileList.Add(m_IStorage.GetFileName(entry));
-            }
+            //var backupProfileList = new List<string>();
+            //string[] setEntries = m_IStorage.GetDirectories(TargetPath);
+            //foreach (var entry in setEntries.Where(s => m_IStorage.GetFileName(s).StartsWith(BackUpProfileSignature)))
+            //{
+            //    backupProfileList.Add(m_IStorage.GetFileName(entry));
+            //}
 
-            var lastSet = backupProfileList.OrderBy(set => set).LastOrDefault();
+            //var lastSet = backupProfileList.OrderBy(set => set).LastOrDefault();
+
+            var lastSet = BackupManager.GetLastBackupSetName(m_Profile);
 
             DateTime d = DateTime.Now;
-            var targetSet = $"{BackUpProfileSignature}_{d.Year:0000}-{d.Month:00}-{d.Day:00}_{d.Hour:00}{d.Minute:00}{d.Hour:00}{d.Second:00}{d.Millisecond:000}";
+            var targetSet = $"{m_Profile.BackupSignature}_{d.Year:0000}-{d.Month:00}-{d.Day:00}_{d.Hour:00}{d.Minute:00}{d.Hour:00}{d.Second:00}{d.Millisecond:000}";
 
             m_BackupSessionHistory.Clear();
 

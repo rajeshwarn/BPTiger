@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
+
 namespace CompleteBackup.DataRepository
 {
     class BackupProjectRepository : ObservableObject
@@ -48,6 +49,7 @@ namespace CompleteBackup.DataRepository
                         {
                             new BackupProfileData()
                             {
+                                BackupType =  BackupTypeEnum.Incremental,
                                 Name = "My first profile",
                                 Description = "home backup",
                                 FolderList = new ObservableCollection<FolderData>()
