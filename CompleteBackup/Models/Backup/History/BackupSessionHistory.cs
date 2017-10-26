@@ -1,5 +1,6 @@
 ﻿using CompleteBackup.Models.Backup.Storage;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,46 +11,64 @@ using System.Threading.Tasks;
 
 namespace CompleteBackup.Models.Backup.History
 {
+    public enum HistoryTypeEnum
+    {
+        NoChange,
+        Changed,
+        Added,
+        Deleted,
+    }
+    public enum HistoryItemTypeEnum
+    {
+        File,
+        Directory,
+    }
+
+    [Serializable]
+    public class HistoryItem
+    {
+        [JsonConverter(typeof(StringEnumConverter))]
+        public HistoryTypeEnum HistoryType { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public HistoryItemTypeEnum HistoryItemType { get; set; } = HistoryItemTypeEnum.File;
+
+        public string Path { get; set; }
+    }
+
     [Serializable]
     public class BackupSessionHistory
     {
-//        [field: NonSerialized]
+        public List<HistoryItem> HistoryItemList { get; set; } = new List<HistoryItem>();
 
-        public List<string> AddedFileList { get; set; } = new List<string>();
-        public List<string> ChangedFileList { get; set; } = new List<string>();
-        public List<string> NoChangedFileList { get; set; } = new List<string>();
-        public List<string> DeletedFileList { get; set; } = new List<string>();
-        public List<string> DeletedFolderList { get; set; } = new List<string>();
+        public DateTime TimeStamp { get; set; }
 
-        public void Clear()
+
+        public void Reset(DateTime dateTime)
         {
-            AddedFileList.Clear();
-            ChangedFileList.Clear();
-            NoChangedFileList.Clear();
-            DeletedFileList.Clear();
-            DeletedFolderList.Clear();
+            HistoryItemList.Clear();
+            TimeStamp = dateTime;
         }
 
         public void AddNewFile(string item)
         {
-            AddedFileList.Add(item);
-
+            HistoryItemList.Add(new HistoryItem() { Path = item, HistoryType = HistoryTypeEnum.Added });
         }
         public void AddUpdatedFile(string item)
         {
-            ChangedFileList.Add(item);
+            HistoryItemList.Add(new HistoryItem() { Path = item, HistoryType = HistoryTypeEnum.Changed});
         }
         public void AddDeletedFile(string item)
         {
-            DeletedFileList.Add(item);
+            HistoryItemList.Add(new HistoryItem() { Path = item, HistoryType = HistoryTypeEnum.Deleted });
         }
         public void AddDeletedFolder(string item)
         {
-            DeletedFolderList.Add(item);
+            HistoryItemList.Add(new HistoryItem() { Path = item, HistoryType = HistoryTypeEnum.Deleted, HistoryItemType = HistoryItemTypeEnum.Directory });
         }
         public void AddNoChangeFile(string item)
         {
-            NoChangedFileList.Add(item);
+            HistoryItemList.Add(new HistoryItem() { Path = item, HistoryType = HistoryTypeEnum.NoChange });
         }
 
 
@@ -61,7 +80,8 @@ namespace CompleteBackup.Models.Backup.History
         public static void SaveHistory(string path, string signature, BackupSessionHistory history)
         {
             var m_IStorage = new FileSystemStorage();
-            string historyFile = m_IStorage.Combine(path, $"{signature}_history.json");
+            var fullPath = m_IStorage.Combine(path, signature);
+            string historyFile = m_IStorage.Combine(fullPath, $"{signature}_history.json");
 
             var historyData = new object[1];
             historyData[0] = history;
@@ -77,7 +97,8 @@ namespace CompleteBackup.Models.Backup.History
         public static BackupSessionHistory LoadHistory(string path, string signature)
         {
             var m_IStorage = new FileSystemStorage();
-            string historyFile = m_IStorage.Combine(path, $"{signature}_history.json");
+            var fullPath = m_IStorage.Combine(path, signature);
+            string historyFile = m_IStorage.Combine(fullPath, $"{signature}_history.json");
             BackupSessionHistory history = null;
 
             using (StreamReader fileStream = File.OpenText(historyFile))

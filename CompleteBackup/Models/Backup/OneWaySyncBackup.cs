@@ -26,16 +26,15 @@ namespace CompleteBackup.Models.backup
         {
             if (m_BackupName == null)
             {
-                DateTime d = DateTime.Now;
-                string dateSignature = $"{d.Year:0000}-{d.Month:00}-{d.Day:00}_{d.Hour:00}{d.Minute:00}{d.Hour:00}{d.Second:00}{d.Millisecond:000}";
-                m_BackupName = $"{m_Profile.BackupSignature}_{dateSignature}";
+                TimeStamp = DateTime.Now;
+                m_BackupName = $"{m_Profile.BackupSignature}_{GetTimeStampString()}";
             }
 
             var newTargetPath = m_IStorage.Combine(TargetPath, m_BackupName);
     
             m_IStorage.CreateDirectory(newTargetPath);
 
-            m_BackupSessionHistory.Clear();
+            m_BackupSessionHistory.Reset(TimeStamp);
 
             foreach (var item in SourcePath)
             {
@@ -45,7 +44,7 @@ namespace CompleteBackup.Models.backup
                 ProcessSnapBackupStep(item.Path, targetPath);
             }
 
-            BackupSessionHistory.SaveHistory(newTargetPath, m_BackupName, m_BackupSessionHistory);
+            BackupSessionHistory.SaveHistory(TargetPath, m_BackupName, m_BackupSessionHistory);
         }
 
 

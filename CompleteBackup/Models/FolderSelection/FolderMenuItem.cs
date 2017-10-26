@@ -24,6 +24,9 @@ namespace CompleteBackup.Models.FolderSelection
         public string Name { get; set; }
         public string Path { get; set; }
 
+        public DateTime TimeStamp { get; set; }
+
+
         public FileAttributes Attributes { get; set; }
 
         private static Icon ExtractFromPath(string path)

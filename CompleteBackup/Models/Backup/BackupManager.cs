@@ -36,7 +36,15 @@ namespace CompleteBackup.Models.backup
 
         public ManualResetEvent PauseWaitHandle { get; set; } = new ManualResetEvent(true);
 
-//        public abstract string BackUpProfileSignature { get; }
+        //        public abstract string BackUpProfileSignature { get; }
+
+        public DateTime TimeStamp { get; set; }
+
+        protected string GetTimeStampString()
+        {
+            return  $"{TimeStamp.Year:0000}-{TimeStamp.Month:00}-{TimeStamp.Day:00}_{TimeStamp.Hour:00}{TimeStamp.Minute:00}{TimeStamp.Hour:00}{TimeStamp.Second:00}{TimeStamp.Millisecond:000}";
+        }
+
 
         public long NumberOfFiles { get; set; } = 0;
         public long ProcessFileCount { get; set; }
@@ -73,7 +81,7 @@ namespace CompleteBackup.Models.backup
         public abstract void ProcessBackup();
 
 
-        public static string GetLastBackupSetName(BackupProfileData profile)
+        public static List<string> GetBackupSetList(BackupProfileData profile)
         {
             var backupProfileList = new List<string>();
             var storage = profile.GetStorageInterface();
@@ -84,7 +92,14 @@ namespace CompleteBackup.Models.backup
                 backupProfileList.Add(storage.GetFileName(entry));
             }
 
-            var lastSet = backupProfileList.OrderBy(set => set).LastOrDefault();
+            return backupProfileList.OrderByDescending(set => set).ToList();
+        }
+
+        public static string GetLastBackupSetName(BackupProfileData profile)
+        {
+            var setList = GetBackupSetList(profile);
+
+            var lastSet = setList.FirstOrDefault();
 
             return lastSet;
         }
@@ -133,9 +148,7 @@ namespace CompleteBackup.Models.backup
                 if (m_IStorage.IsFileSame(sourceFilePath, currSetFilePath))
                 {
                     //File is the same, do nothing
-                    m_BackupSessionHistory.AddNoChangeFile(currSetFilePath);
-
-                    m_BackupSessionHistory.AddNoChangeFile(sourcePath);
+                    m_BackupSessionHistory.AddNoChangeFile(sourceFilePath);
                 }
                 else
                 {
@@ -155,7 +168,7 @@ namespace CompleteBackup.Models.backup
                     }
                     m_IStorage.CopyFile(sourceFilePath, currSetFilePath);
 
-                    m_BackupSessionHistory.AddUpdatedFile(currSetFilePath);
+                    m_BackupSessionHistory.AddUpdatedFile(sourceFilePath);
                 }
             }
             else
@@ -167,7 +180,7 @@ namespace CompleteBackup.Models.backup
                 }
                 m_IStorage.CopyFile(sourceFilePath, currSetFilePath);
 
-                m_BackupSessionHistory.AddNewFile(currSetFilePath);
+                m_BackupSessionHistory.AddNewFile(sourceFilePath);
             }
         }
 
@@ -181,14 +194,14 @@ namespace CompleteBackup.Models.backup
                 if (m_IStorage.IsFileSame(sourceFilePath, currSetFilePath))
                 {
                     //Do nothing
-                    m_BackupSessionHistory.AddNoChangeFile(currSetFilePath);
+                    m_BackupSessionHistory.AddNoChangeFile(sourceFilePath);
                 }
                 else
                 {
                     //update/overwrite file
                     m_IStorage.CopyFile(sourceFilePath, currSetFilePath, true);
 
-                    m_BackupSessionHistory.AddUpdatedFile(currSetFilePath);
+                    m_BackupSessionHistory.AddUpdatedFile(sourceFilePath);
                 }
             }
             else
@@ -199,7 +212,7 @@ namespace CompleteBackup.Models.backup
                 }
                 m_IStorage.CopyFile(sourceFilePath, currSetFilePath);
 
-                m_BackupSessionHistory.AddNewFile(currSetFilePath);
+                m_BackupSessionHistory.AddNewFile(sourceFilePath);
             }
         }
 

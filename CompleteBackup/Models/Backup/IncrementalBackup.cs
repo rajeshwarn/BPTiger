@@ -35,10 +35,10 @@ namespace CompleteBackup.Models.backup
 
             var lastSet = BackupManager.GetLastBackupSetName(m_Profile);
 
-            DateTime d = DateTime.Now;
-            var targetSet = $"{m_Profile.BackupSignature}_{d.Year:0000}-{d.Month:00}-{d.Day:00}_{d.Hour:00}{d.Minute:00}{d.Hour:00}{d.Second:00}{d.Millisecond:000}";
+            TimeStamp = DateTime.Now;
+            var targetSet = $"{m_Profile.BackupSignature}_{GetTimeStampString()}";
 
-            m_BackupSessionHistory.Clear();
+            m_BackupSessionHistory.Reset(TimeStamp);
 
             if (lastSet == null)
             {
@@ -54,7 +54,7 @@ namespace CompleteBackup.Models.backup
                     ProcessNewBackupStep(item.Path, targetPath);
                 }
 
-                BackupSessionHistory.SaveHistory(newTargetPath, targetSet, m_BackupSessionHistory);
+                BackupSessionHistory.SaveHistory(TargetPath, targetSet, m_BackupSessionHistory);
             }
             else
             {
@@ -106,7 +106,7 @@ namespace CompleteBackup.Models.backup
                     ProcessIncrementalStep(item.Path, targetPath, lastTargetPath);
                 }
 
-                BackupSessionHistory.SaveHistory(newTargetPath, targetSet, m_BackupSessionHistory);
+                BackupSessionHistory.SaveHistory(TargetPath, targetSet, m_BackupSessionHistory);
             }
         }
 
@@ -128,7 +128,7 @@ namespace CompleteBackup.Models.backup
 
                 m_IStorage.CopyFile(sourceFilePath, targetFilePath);
 
-                m_BackupSessionHistory.AddNewFile(targetFilePath);
+                m_BackupSessionHistory.AddNewFile(sourceFilePath);
             }
 
             //Process directories

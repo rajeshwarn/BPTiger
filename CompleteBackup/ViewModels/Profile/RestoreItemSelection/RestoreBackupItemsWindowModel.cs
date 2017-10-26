@@ -1,4 +1,6 @@
 ﻿using CompleteBackup.DataRepository;
+using CompleteBackup.Models.backup;
+using CompleteBackup.Models.Backup.History;
 using CompleteBackup.Models.Backup.Profile;
 using CompleteBackup.Models.Backup.Project;
 using CompleteBackup.Models.Backup.Storage;
@@ -26,6 +28,9 @@ namespace CompleteBackup.ViewModels
 
         public BackupProjectData ProjectData { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject;
 
+        public ObservableCollection<FolderMenuItem> RestoreItemList { get; set; } = new ObservableCollection<FolderMenuItem>();
+
+
         private bool m_DirtyFlag = false;
         public bool DirtyFlag { get { return m_DirtyFlag; } set { m_DirtyFlag = value; OnPropertyChanged(); } }
 
@@ -37,22 +42,92 @@ namespace CompleteBackup.ViewModels
             }))
             {
                 IsBackground = true,
-                Name = "Source folder reader"
+                Name = "Restore folder reader"
             }.Start();
         }
 
         private void LoadBackupItems()
         {
+            var profile = ProjectData.CurrentBackupProfile;
 
+            Application.Current.Dispatcher.Invoke(new Action(() =>
+            {
+                RestoreItemList.Clear();
+            }));
+
+            Application.Current.Dispatcher.Invoke(new Action(() =>
+            {
+                var setList = BackupManager.GetBackupSetList(profile);
+                foreach (var set in setList)
+                {
+                    var sessionHistory = BackupSessionHistory.LoadHistory(profile.TargetBackupFolder, set);
+
+                    foreach (var item in sessionHistory.HistoryItemList)
+                    {
+                        InsertNamesToTree(sessionHistory, item.Path, 0);
+                    }
+                    //   InsertNamesToTree(sessionHistory.HistoryItemList[0].Path);
+                    //  InsertNamesToTree(sessionHistory.HistoryItemList[1].Path);
+
+
+                    int tttt = 0;
+                }
+            }));
         }
+
+        FolderMenuItem InsertNamesToTree(BackupSessionHistory history, string path, int iCount)
+        {
+            if (path != null)
+            {
+                var name = m_IStorage.GetFileName(path);
+                if ((name != null) && (name != string.Empty))
+                {
+
+                    var newPath = path.Substring(0, path.Length - name.Length - 1);
+
+                    var menuItem = InsertNamesToTree(history, newPath, iCount + 1);
+                    var newMenuItem = menuItem.SourceBackupItems.Where(m => m.Name == name).FirstOrDefault();
+                    if (newMenuItem == null)
+                    {
+                        newMenuItem = new FolderMenuItem() { IsFolder = true, Path = path, Name = name };
+                        menuItem.SourceBackupItems.Add(newMenuItem);
+                    }
+
+                    if (iCount == 0)
+                    {
+                        var setTimeMenuItem = new FolderMenuItem() { Name = history.TimeStamp.ToString(), IsFolder = true };
+                        newMenuItem.SourceBackupItems.Add(setTimeMenuItem);
+                    }
+
+                    return newMenuItem;
+                }
+                else
+                {
+                    name = path;
+
+                    var menuItem = RestoreItemList.Where(m => m.Path == name).FirstOrDefault();
+                    if (menuItem == null)
+                    {
+                        menuItem = new FolderMenuItem() { IsFolder = true, Path = path, Name = name, };
+                        RestoreItemList.Add(menuItem);
+                    }
+
+                    return menuItem;
+                }
+            }
+
+            return null;
+        }
+
         private void RefreshRootFolders__()
         {
             var ProfileData = ProjectData.CurrentBackupProfile;
 
             Application.Current.Dispatcher.Invoke(new Action(() =>
             {
-                ProfileData.RootFolderItemList.Clear();
+//                RootFolderRestoreItemList.Clear();
             }));
+
 
             DriveInfo[] drives = DriveInfo.GetDrives();
 
@@ -246,6 +321,8 @@ namespace CompleteBackup.ViewModels
         bool m_bRefreshOnExpand = true;
         public void ExpandFolder(ItemCollection itemList)
         {
+            return;
+
             foreach (var item in itemList)
             {
                 var folderItem = item as FolderMenuItem;

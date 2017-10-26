@@ -74,7 +74,6 @@ namespace CompleteBackup.Models.Backup.Profile
         [XmlIgnore]
         public ObservableCollection<FolderMenuItem> RootFolderItemList { get; set; } = new ObservableCollection<FolderMenuItem>();
 
-
         public delegate void ProfileDataUpdateEvent(BackupProfileData tranData);
         public event ProfileDataUpdateEvent m_ProfileDataUpdateEventCallback;
 
