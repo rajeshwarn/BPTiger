@@ -13,8 +13,6 @@ namespace CompleteBackup.DataRepository
 {
     class BackupProjectRepository : ObservableObject
     {
-        private const bool bRestRepositoryonStartup = false;
-
         static public BackupProjectRepository Instance { get; private set; } = new BackupProjectRepository();
         private BackupProjectRepository()
         {
@@ -26,7 +24,7 @@ namespace CompleteBackup.DataRepository
         private BackupProjectData _SelectedBackupProject;
         public BackupProjectData SelectedBackupProject { get { return _SelectedBackupProject; } set { _SelectedBackupProject = value; OnPropertyChanged(); } }
 
-
+        private const bool bRestRepositoryonStartup = false;
         public void LoadProjects()
         {
             try
@@ -57,15 +55,15 @@ namespace CompleteBackup.DataRepository
                                     //empty folder list
                                 }
                             },
-                            new BackupProfileData()
-                            {
-                                Name = "My first profile2",
-                                Description = "home backup",
-                                FolderList = new ObservableCollection<FolderData>()
-                                {
-                                    //empty folder list
-                                }
-                            }
+                            //new BackupProfileData()
+                            //{
+                            //    Name = "My first profile2",
+                            //    Description = "home backup",
+                            //    FolderList = new ObservableCollection<FolderData>()
+                            //    {
+                            //        //empty folder list
+                            //    }
+                            //}
                         }
                     }
                 };

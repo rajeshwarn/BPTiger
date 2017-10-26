@@ -1,4 +1,5 @@
-﻿using CompleteBackup.Models.backup;
+﻿using CompleteBackup.DataRepository;
+using CompleteBackup.Models.backup;
 using CompleteBackup.Models.Backup.Storage;
 using CompleteBackup.Models.FolderSelection;
 using CompleteBackup.Models.Profile;
@@ -369,6 +370,9 @@ namespace CompleteBackup.Models.Backup.Profile
                     //}
 
                     m_ProfileDataUpdateEventCallback(this);
+                    
+                    //update data to persistent storage
+                    BackupProjectRepository.Instance.SaveProject();
                 }
                 catch (TaskCanceledException ex)
                 {

@@ -10,6 +10,11 @@ namespace CompleteBackup.Models.Backup.Project
 {
     public class BackupProjectData : ObservableObject
     {
+        public BackupProjectData()
+        {
+
+        }
+
         public string Name { get; set; } = "My Project";
         public string Description { get { return Name; } set { } }
 
