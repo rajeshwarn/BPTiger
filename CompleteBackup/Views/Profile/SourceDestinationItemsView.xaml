@@ -56,29 +56,31 @@
             </GroupBox.Header>
             <StackPanel Orientation="Vertical">
                 <DockPanel LastChildFill="True">
-                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                        <ListBox ItemsSource="{Binding ProjectData.CurrentBackupProfile.FolderList}" BorderThickness="0" HorizontalContentAlignment="Right">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Grid.Column="0" Orientation="Horizontal">
-                                        <TextBlock Text="{Binding NumberOfFiles, StringFormat={}{0:#,#,#,#,##0}}" Margin="0,0,4,0"/>
-                                        <TextBlock Text="Files"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-
+                    <StackPanel DockPanel.Dock="Right" Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
                             <ListBox ItemsSource="{Binding ProjectData.CurrentBackupProfile.FolderList}" BorderThickness="0" HorizontalContentAlignment="Right">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding TotalSize, Converter={StaticResource NumberToComputerSizeConverter}}"/>
+                                        <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                            <TextBlock Text="{Binding NumberOfFiles, StringFormat={}{0:#,#,#,#,##0}}" Margin="0,0,4,0"/>
+                                            <TextBlock Text="Files"/>
+                                        </StackPanel>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
+
+                            <StackPanel Orientation="Horizontal">
+                                <ListBox ItemsSource="{Binding ProjectData.CurrentBackupProfile.FolderList}" BorderThickness="0" HorizontalContentAlignment="Right">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding TotalSize, Converter={StaticResource NumberToComputerSizeConverter}}"/>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </StackPanel>
                         </StackPanel>
+                        <Separator/>
                     </StackPanel>
-                    
                     <ListBox ItemsSource="{Binding ProjectData.CurrentBackupProfile.FolderList}" BorderThickness="0" Margin="0,0,8,0">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
