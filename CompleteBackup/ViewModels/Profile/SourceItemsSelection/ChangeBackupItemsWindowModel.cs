@@ -323,8 +323,12 @@ namespace CompleteBackup.ViewModels
                 profile = ProjectData.CurrentBackupProfile;
             }
 
+            //Update source folder selection list
             profile.FolderList.Clear();
             UpdateSelectedFolderListStep(profile, profile.RootFolderItemList);
+
+            //update folder properties/size in UI window
+            profile.UpdateProfileProperties();
         }
         void UpdateSelectedFolderListStep(BackupProfileData profile, ObservableCollection<FolderMenuItem> folderList)
         {
