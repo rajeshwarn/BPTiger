@@ -62,15 +62,21 @@ namespace CompleteBackup.ViewModels
                 {
                     var sessionHistory = BackupSessionHistory.LoadHistory(profile.TargetBackupFolder, set);
 
-                    foreach (var item in sessionHistory.HistoryItemList)
+                    if (set == setList[0])
                     {
-                        InsertNamesToTree(sessionHistory, item.Path, 0);
+                        //last set add all items
+                        foreach (var item in sessionHistory.HistoryItemList)
+                        {
+                            InsertNamesToTree(sessionHistory, item.Path, 0);
+                        }
                     }
-                    //   InsertNamesToTree(sessionHistory.HistoryItemList[0].Path);
-                    //  InsertNamesToTree(sessionHistory.HistoryItemList[1].Path);
-
-
-                    int tttt = 0;
+                    else
+                    {
+                        foreach (var item in sessionHistory.HistoryItemList.Where(i => i.HistoryType != HistoryTypeEnum.NoChange))
+                        {
+                            InsertNamesToTree(sessionHistory, item.Path, 0);
+                        }
+                    }
                 }
             }));
         }
