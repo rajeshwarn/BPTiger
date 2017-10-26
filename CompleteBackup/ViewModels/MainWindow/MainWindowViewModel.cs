@@ -17,6 +17,9 @@ namespace CompleteBackup.ViewModels.MainWindow
         public ICommand PauseBackupCommand { get; private set; } = new PauseBackupICommand<object>();
         public ICommand StopBackupCommand { get; private set; } = new StopBackupICommand<object>();
 
+        public ICommand RestoreBackupCommand { get; private set; } = new RestoreBackupICommand<object>();
+        
+
         public MainWindowViewModel()
         {
 
@@ -35,7 +38,7 @@ namespace CompleteBackup.ViewModels.MainWindow
         private object m_CurrentPageViewModel;
         public object CurrentPageViewModel { get { return m_CurrentPageViewModel; } set { m_CurrentPageViewModel = value; OnPropertyChanged(); } }
 
-        private int m_SelectedRibbonIndex = 1;
+        private int m_SelectedRibbonIndex = 2;
         public int SelectedRibbonIndex { get { return m_SelectedRibbonIndex; } set { m_SelectedRibbonIndex = value; OnPropertyChanged(); UpdateCurrentMainView(); } }
         
 

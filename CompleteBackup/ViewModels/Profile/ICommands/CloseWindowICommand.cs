@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace CompleteBackup.ViewModels.FolderSelection.ICommands
 {
-    internal class CloseChangeBackupItemsWindowICommand<T> : ICommand
+    internal class CloseWindowICommand<T> : ICommand
     {
-        public CloseChangeBackupItemsWindowICommand()
+        public CloseWindowICommand()
         {
         }
         public event EventHandler CanExecuteChanged
@@ -33,7 +34,7 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
 
         public void Execute(object parameter)
         {
-            var window = parameter as ChangeBackupItemsWindow;
+            var window = parameter as Window;
 
             window.Close();
         }

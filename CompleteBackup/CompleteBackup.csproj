@@ -67,6 +67,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Models\Profile\FolderData.cs" />
+    <Compile Include="Models\Profile\ProfileManager.cs" />
     <Compile Include="Models\Project\BackupProjectData.cs" />
     <Compile Include="Models\Profile\BackupProfileData.cs" />
     <Compile Include="Models\Backup\Storage\NullStorage.cs" />
@@ -90,28 +91,33 @@
     <Compile Include="Utilities\ObservableObject.cs" />
     <Compile Include="Models\FolderSelection\FolderMenuItem.cs" />
     <Compile Include="ViewModels\ExtendedControls\ProcessingSpinnerViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ICommands\RestoreBackupICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\StopBackupICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\PauseBackupICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\StartBackupICommand.cs" />
-    <Compile Include="ViewModels\Profile\SourceItemsSelection\ChangeBackupItemsWindowModel.cs" />
+    <Compile Include="ViewModels\Profile\ChangeItemsSelection\ChangeBackupItemsWindowModel.cs" />
     <Compile Include="ViewModels\ExtendedControls\ChartGaugeViewModel.cs" />
     <Compile Include="ViewModels\MainBackupViewModel.cs" />
     <Compile Include="ViewModels\MainRestoreViewModel.cs" />
-    <Compile Include="ViewModels\Profile\SourceItemsSelection\ICommands\CloseChangeBackupItemsWindowICommand.cs" />
-    <Compile Include="ViewModels\Profile\SourceItemsSelection\ICommands\OpenChangeBackupItemsWindowICommand.cs" />
-    <Compile Include="ViewModels\Profile\SourceItemsSelection\SourceDestinationItemsViewModel.cs" />
-    <Compile Include="ViewModels\Profile\SourceItemsSelection\ICommands\ExpandFolderTreeICommand.cs" />
-    <Compile Include="ViewModels\Profile\SourceItemsSelection\ICommands\SelectFolderNameICommand.cs" />
-    <Compile Include="ViewModels\Profile\SourceItemsSelection\ICommands\SaveFolderSelectionICommand.cs" />
+    <Compile Include="ViewModels\Profile\ICommands\CloseWindowICommand.cs" />
+    <Compile Include="ViewModels\Profile\ChangeItemsSelection\ICommands\OpenChangeBackupItemsWindowICommand.cs" />
+    <Compile Include="ViewModels\Profile\ChangeItemsSelection\SourceDestinationItemsViewModel.cs" />
+    <Compile Include="ViewModels\Profile\ChangeItemsSelection\ICommands\ExpandFolderTreeICommand.cs" />
+    <Compile Include="ViewModels\Profile\ChangeItemsSelection\ICommands\SelectFolderNameICommand.cs" />
+    <Compile Include="ViewModels\Profile\ChangeItemsSelection\ICommands\SaveFolderSelectionICommand.cs" />
     <Compile Include="ViewModels\MainWindow\MainWindowStatusBarViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\MainWindowViewModel.cs" />
-    <Compile Include="ViewModels\Profile\SourceItemsSelection\Validators\BackupTargetLocationValidator.cs" />
+    <Compile Include="ViewModels\Profile\ChangeItemsSelection\Validators\BackupTargetLocationValidator.cs" />
     <Compile Include="ViewModels\Profile\ProfileDetails\ProfileDetailsPageViewModel.cs" />
     <Compile Include="ViewModels\Profile\ProfileList\ProfileListViewModel.cs" />
+    <Compile Include="ViewModels\Profile\RestoreItemSelection\RestoreBackupItemsWindowModel.cs" />
     <Compile Include="Views\ExtendedControls\ProcessingSpinnerView.xaml.cs">
       <DependentUpon>ProcessingSpinnerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Profile\ChangeBackupItemsWindow.xaml.cs">
+    <Compile Include="Views\Profile\FolderTree\RestoreBackupItemsWindow.xaml.cs">
+      <DependentUpon>RestoreBackupItemsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Profile\FolderTree\ChangeBackupItemsWindow.xaml.cs">
       <DependentUpon>ChangeBackupItemsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ExtendedControls\ChartGaugeView.xaml.cs">
@@ -152,7 +158,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Profile\ChangeBackupItemsWindow.xaml">
+    <Page Include="Views\Profile\FolderTree\RestoreBackupItemsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Profile\FolderTree\ChangeBackupItemsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -234,6 +244,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\Ribbon\ResumeStart.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Ribbon\Restore.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

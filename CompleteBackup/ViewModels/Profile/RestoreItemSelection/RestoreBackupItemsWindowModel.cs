@@ -18,17 +18,18 @@ using System.Windows.Input;
 
 namespace CompleteBackup.ViewModels
 {
-    class ChangeBackupItemsWindowModel : ObservableObject
+    class RestoreBackupItemsWindowModel : ObservableObject
     {
         public ICommand SaveFolderSelectionCommand { get; private set; } = new SaveFolderSelectionICommand<object>();
-        public ICommand CloseChangeBackupItemsWindowCommand { get; private set; } = new CloseChangeBackupItemsWindowICommand<object>();
+        public ICommand CloseWindowCommand { get; private set; } = new CloseWindowICommand<object>();
+
 
         public BackupProjectData ProjectData { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject;
 
         private bool m_DirtyFlag = false;
         public bool DirtyFlag { get { return m_DirtyFlag; } set { m_DirtyFlag = value; OnPropertyChanged(); } }
 
-        public ChangeBackupItemsWindowModel()
+        public RestoreBackupItemsWindowModel()
         {
             new Thread(new System.Threading.ThreadStart(() =>
             {

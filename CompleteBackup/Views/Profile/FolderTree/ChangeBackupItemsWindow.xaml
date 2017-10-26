@@ -52,7 +52,7 @@
                                     Command="{Binding SaveFolderSelectionCommand}"
                                     CommandParameter="{Binding Path=DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
                             <Button Width="80" Content="Close" Margin="20,5,0,5"
-                                    Command="{Binding CloseChangeBackupItemsWindowCommand}"
+                                    Command="{Binding CloseWindowCommand}"
                                     CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
                         </StackPanel>
                     </DockPanel>

@@ -179,6 +179,13 @@
             </RibbonTab>
 
             <RibbonTab Header="Restore" KeyTip="R" >
+                <RibbonGroup Header="Restore" ToolTip="Restore backup">
+                    <!--Restore backup-->
+                    <RibbonButton LargeImageSource="/Resources/Icons/Ribbon/Restore.ico" Label="Restore"  KeyTip="R"
+                                  Command="{Binding RestoreBackupCommand}"
+                                  CommandParameter="{Binding ProjectData.CurrentBackupProfile}">
+                    </RibbonButton>
+                </RibbonGroup>
             </RibbonTab>
 
 
