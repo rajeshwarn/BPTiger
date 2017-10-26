@@ -82,7 +82,8 @@ namespace CompleteBackup.DataRepository
         public void SaveProject()
         {
             if (BackupProjectList != null)
-            {                
+            {
+                Properties.BackupProjectRepositorySettings.Default.BackupProjectList = BackupProjectList;
                 Properties.BackupProjectRepositorySettings.Default.Save();
             }
         }
