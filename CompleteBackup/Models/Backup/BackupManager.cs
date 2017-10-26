@@ -1,4 +1,5 @@
 ﻿using CompleteBackup.Models.Backup.History;
+using CompleteBackup.Models.Backup.Profile;
 using CompleteBackup.Models.Backup.Storage;
 using CompleteBackup.Views.MainWindow;
 using System;
@@ -21,7 +22,7 @@ namespace CompleteBackup.Models.backup
         protected IStorageInterface m_IStorage;
 
         BackupManager() { }
-        public BackupManager(List<string> sourcePath, string currSetPath, IStorageInterface storageInterface, GenericStatusBarView progressBar)
+        public BackupManager(List<FolderData> sourcePath, string currSetPath, IStorageInterface storageInterface, GenericStatusBarView progressBar)
         {
             SourcePath = sourcePath;
             TargetPath = currSetPath;
@@ -38,7 +39,7 @@ namespace CompleteBackup.Models.backup
         public long NumberOfFiles { get; set; } = 0;
         public long ProcessFileCount { get; set; }
 
-        public List<string> SourcePath;
+        public List<FolderData> SourcePath;
         public string TargetPath;
         private GenericStatusBarView m_ProgressBar;
         public GenericStatusBarView ProgressBar { get { return m_ProgressBar; } set { } }
@@ -76,11 +77,11 @@ namespace CompleteBackup.Models.backup
             long files = 0;
             long directories = 0;
 
-            foreach (var path in SourcePath)
+            foreach (var item in SourcePath)
             {
                 long files_ = 0;
                 long directories_ = 0;
-                m_IStorage.GetNumberOfFiles(path, ref files_, ref directories_);
+                m_IStorage.GetNumberOfFiles(item.Path, ref files_, ref directories_);
 
                 directories += directories_;
                 files += files_;

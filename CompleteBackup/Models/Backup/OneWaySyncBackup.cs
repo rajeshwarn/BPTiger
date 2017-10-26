@@ -1,5 +1,6 @@
 ﻿using CompleteBackup.DataRepository;
 using CompleteBackup.Models.Backup.History;
+using CompleteBackup.Models.Backup.Profile;
 using CompleteBackup.Models.Backup.Storage;
 using CompleteBackup.Views.MainWindow;
 using System;
@@ -14,7 +15,7 @@ namespace CompleteBackup.Models.backup
 {
     public class OneWaySyncBackup : BackupManager
     {
-        public OneWaySyncBackup(string backupName, List<string> sourcePath, string currSetPath, IStorageInterface storageInterface, GenericStatusBarView progressBar = null) : base(sourcePath, currSetPath, storageInterface, progressBar)
+        public OneWaySyncBackup(string backupName, List<FolderData> sourcePath, string currSetPath, IStorageInterface storageInterface, GenericStatusBarView progressBar = null) : base(sourcePath, currSetPath, storageInterface, progressBar)
         {
             m_IStorage = new FileSystemStorage();
             m_BackupName = backupName;
@@ -37,12 +38,12 @@ namespace CompleteBackup.Models.backup
 
             m_BackupSessionHistory.Clear();
 
-            foreach (var path in SourcePath)
+            foreach (var item in SourcePath)
             {
-                var targetdirectoryName = m_IStorage.GetFileName(path);
+                var targetdirectoryName = m_IStorage.GetFileName(item.Path);
                 var targetPath = m_IStorage.Combine(newTargetPath, targetdirectoryName);
 
-                ProcessSnapBackupStep(path, targetPath);
+                ProcessSnapBackupStep(item.Path, targetPath);
             }
 
             BackupSessionHistory.SaveHistory(newTargetPath, m_BackupName, m_BackupSessionHistory);

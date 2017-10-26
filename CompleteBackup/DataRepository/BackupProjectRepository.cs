@@ -52,7 +52,7 @@ namespace CompleteBackup.DataRepository
                             {
                                 Name = "My first profile",
                                 Description = "home backup",
-                                FolderList = new ObservableCollection<string>()
+                                FolderList = new ObservableCollection<FolderData>()
                                 {
                                     //empty folder list
                                 }
@@ -61,7 +61,7 @@ namespace CompleteBackup.DataRepository
                             {
                                 Name = "My first profile2",
                                 Description = "home backup",
-                                FolderList = new ObservableCollection<string>()
+                                FolderList = new ObservableCollection<FolderData>()
                                 {
                                     //empty folder list
                                 }

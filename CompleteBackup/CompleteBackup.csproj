@@ -66,6 +66,7 @@
     <Compile Include="Models\Profile\BackupTask.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Models\Profile\FolderData.cs" />
     <Compile Include="Models\Project\BackupProjectData.cs" />
     <Compile Include="Models\Profile\BackupProfileData.cs" />
     <Compile Include="Models\Backup\Storage\NullStorage.cs" />
@@ -83,7 +84,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>BackupProjectRepositorySettings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\Convertors\NumberToComputerSizeConverter.cs" />
     <Compile Include="Utilities\Convertors\NullVisibilityConverter.cs" />
+    <Compile Include="Utilities\FileFolderSizeHelper.cs" />
     <Compile Include="Utilities\ObservableObject.cs" />
     <Compile Include="Models\FolderSelection\FolderMenuItem.cs" />
     <Compile Include="ViewModels\ExtendedControls\ProcessingSpinnerViewModel.cs" />

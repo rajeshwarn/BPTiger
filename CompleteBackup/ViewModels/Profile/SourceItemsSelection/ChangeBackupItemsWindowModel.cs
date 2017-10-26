@@ -85,12 +85,12 @@ namespace CompleteBackup.ViewModels
             {
                 foreach (var folder in ProfileData.FolderList)
                 {
-                    string pr = Directory.GetDirectoryRoot(folder);
+                    string pr = Directory.GetDirectoryRoot(folder.Path);
                     var match = ProfileData.RootFolderItemList.Where(f => String.Compare(f.Path, pr, true) == 0);
 
                     if (match.Count() > 0)
                     {
-                        var item = AddFolderName(match.ElementAt(0), folder);
+                        var item = AddFolderName(match.ElementAt(0), folder.Path);
                         itemList.Add(item);
                     }
                 }
@@ -332,7 +332,7 @@ namespace CompleteBackup.ViewModels
             {
                 if (folder.Selected == true)
                 {
-                    profile.FolderList.Add(folder.Path);
+                    profile.FolderList.Add(new FolderData { Path = folder.Path });
                 }
                 else if (folder.Selected == null)
                 {

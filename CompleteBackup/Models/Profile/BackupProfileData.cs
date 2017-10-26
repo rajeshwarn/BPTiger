@@ -2,6 +2,7 @@
 using CompleteBackup.Models.Backup.Storage;
 using CompleteBackup.Models.FolderSelection;
 using CompleteBackup.Models.Profile;
+using CompleteBackup.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -51,7 +52,10 @@ namespace CompleteBackup.Models.Backup.Profile
 
         IStorageInterface m_IStorage = new FileSystemStorage();
 
-        public ObservableCollection<string> FolderList { get; set; } = new ObservableCollection<string>();
+        private string _TargetBackupFolder;
+        public string TargetBackupFolder { get { return _TargetBackupFolder; } set { _TargetBackupFolder = value; OnPropertyChanged(); } }
+
+        public ObservableCollection<FolderData> FolderList { get; set; } = new ObservableCollection<FolderData>();
 
         [XmlIgnore]
         public ObservableCollection<FolderMenuItem> RootFolderItemList { get; set; } = new ObservableCollection<FolderMenuItem>();
@@ -244,8 +248,6 @@ namespace CompleteBackup.Models.Backup.Profile
         }
 
 
-        private string _TargetBackupFolder;
-        public string TargetBackupFolder { get { return _TargetBackupFolder; } set  { _TargetBackupFolder = value; OnPropertyChanged(); } }
 
         public List<string> GetDirectoriesNames(string path)
         {
@@ -272,35 +274,7 @@ namespace CompleteBackup.Models.Backup.Profile
 
         BackgroundWorker m_StorageDataUpdaterTask = new BackgroundWorker() { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
 
-
-        private string GetNumberSizeString(long lSize)
-        {
-            if ((lSize) > 1000000000000)
-            {
-                return (lSize / 1000000000000).ToString("###,##0.0") + " TBytes";
-
-            }
-            if ((lSize) > 1000000000)
-            {
-                return (lSize / 1000000000).ToString("###,##0.0") + " GBytes";
-
-            }
-            else if ((lSize) > 1000000)
-            {
-                return (lSize / 1000000).ToString("###,##0.0") + " MBytes";
-
-            }
-            else if ((lSize) > 1000)
-            {
-                return (lSize / 1000).ToString("###,##0.0") + " KBytes";
-
-            }
-            else
-            {
-                return (lSize).ToString("###,##0") + " Bytes";
-
-            }
-        }
+        
 
         void InitStorageDataUpdaterTask()
         {
@@ -315,9 +289,21 @@ namespace CompleteBackup.Models.Backup.Profile
                         BackupTargetDiskSize = "n/a";
                         BackupTargetUsedSize = "n/a";
                         BackupTargetFreeSize = "n/a";
-                        BackupSourceFoldersSize = "n/a";
                     }));
 
+                    //Source folders sizes and number of files
+                    BackupSourceFilesNumber = 0;
+                    BackupSourceFoldersSize = 0;
+                    foreach (var item in FolderList)
+                    {
+                        item.NumberOfFiles = new DirectoryInfo(item.Path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => 1);
+                        item.TotalSize = new DirectoryInfo(item.Path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
+                        Application.Current.Dispatcher.Invoke(new Action(() =>
+                        {
+                            BackupSourceFilesNumber += item.NumberOfFiles;
+                            BackupSourceFoldersSize += item.TotalSize;
+                        }));
+                    }
 
                     m_BackupTargetDiskSizeNumber = 0;
                     //Target disk size
@@ -331,7 +317,7 @@ namespace CompleteBackup.Models.Backup.Profile
                                 m_BackupTargetDiskSizeNumber = drive.TotalSize;
                                 Application.Current.Dispatcher.Invoke(new Action(() =>
                                 {
-                                    BackupTargetDiskSize = GetNumberSizeString(m_BackupTargetDiskSizeNumber);
+                                    BackupTargetDiskSize = FileFolderSizeHelper.GetNumberSizeString(m_BackupTargetDiskSizeNumber);
                                 }));
 
                                 break;
@@ -346,7 +332,7 @@ namespace CompleteBackup.Models.Backup.Profile
                         m_BackupTargetUsedSizeNumber = new DirectoryInfo(_TargetBackupFolder).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
                         Application.Current.Dispatcher.Invoke(new Action(() =>
                         {
-                            BackupTargetUsedSize = GetNumberSizeString(m_BackupTargetUsedSizeNumber);
+                            BackupTargetUsedSize = FileFolderSizeHelper.GetNumberSizeString(m_BackupTargetUsedSizeNumber);
                         }));
                     }
 
@@ -363,7 +349,7 @@ namespace CompleteBackup.Models.Backup.Profile
                                 //m_BackupTargetFreeSizeNumber = drive.TotalFreeSpace;
                                 Application.Current.Dispatcher.Invoke(new Action(() =>
                                 {
-                                    BackupTargetFreeSize = GetNumberSizeString(m_BackupTargetFreeSizeNumber);
+                                    BackupTargetFreeSize = FileFolderSizeHelper.GetNumberSizeString(m_BackupTargetFreeSizeNumber);
                                 }));
 
                                 break;
@@ -371,16 +357,16 @@ namespace CompleteBackup.Models.Backup.Profile
                         }
                     }
 
-                    //Source Foldes Size
-                    m_BackupSourceFoldersSizeNumber = 0;
-                    foreach (var folder in FolderList)
-                    {
-                        m_BackupSourceFoldersSizeNumber += new DirectoryInfo(folder).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
-                        Application.Current.Dispatcher.Invoke(new Action(() =>
-                        {
-                            BackupSourceFoldersSize = GetNumberSizeString(m_BackupSourceFoldersSizeNumber);
-                        }));
-                    }
+                    ////Source Foldes Size
+                    //m_BackupSourceFoldersSizeNumber = 0;
+                    //foreach (var item in FolderList)
+                    //{
+                    //    m_BackupSourceFoldersSizeNumber += new DirectoryInfo(item.Path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
+                    //    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    //    {
+                    //        BackupSourceFoldersSize = FileFolderSizeHelper.GetNumberSizeString(m_BackupSourceFoldersSizeNumber);
+                    //    }));
+                    //}
 
                     m_ProfileDataUpdateEventCallback(this);
                 }
@@ -415,8 +401,10 @@ namespace CompleteBackup.Models.Backup.Profile
         public string BackupTargetFreeSize { get { return m_BackupTargetFreeSize; } set { m_BackupTargetFreeSize = value; OnPropertyChanged(); } }
 
 
-        public long m_BackupSourceFoldersSizeNumber { get; set; } = 0;
-        private string m_BackupSourceFoldersSize = "Data Not available";
-        public string BackupSourceFoldersSize { get { return m_BackupSourceFoldersSize; } set { m_BackupSourceFoldersSize = value; OnPropertyChanged(); } }
+        public long m_BackupSourceFilesNumber { get; set; } = 0;
+        public long BackupSourceFilesNumber { get { return m_BackupSourceFilesNumber; } set { m_BackupSourceFilesNumber = value; OnPropertyChanged(); } }
+
+        public long m_BackupSourceFoldersSize { get; set; } = 0;
+        public long BackupSourceFoldersSize { get { return m_BackupSourceFoldersSize; } set { m_BackupSourceFoldersSize = value; OnPropertyChanged(); } }
     }
 }

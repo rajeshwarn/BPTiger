@@ -17,6 +17,7 @@
     </UserControl.DataContext>
     <UserControl.Resources>
         <convertors:NullVisibilityConverter x:Key="NullToVisibilityConverter"/>
+        <convertors:NumberToComputerSizeConverter x:Key="NumberToComputerSizeConverter"/>
         <ControlTemplate x:Key="validationTargetFolderErrorTemplate">
             <DockPanel>
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
@@ -53,23 +54,57 @@
             <GroupBox.Header>
                 <Label FontWeight="Bold">Source Items</Label>
             </GroupBox.Header>
-            <DockPanel LastChildFill="True">
-                <StackPanel DockPanel.Dock="Right" Orientation="Vertical" HorizontalAlignment="Right">
+            <StackPanel Orientation="Vertical">
+                <DockPanel LastChildFill="True">
+                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                        <ListBox ItemsSource="{Binding ProjectData.CurrentBackupProfile.FolderList}" BorderThickness="0" HorizontalContentAlignment="Right">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                        <TextBlock Text="{Binding NumberOfFiles, StringFormat={}{0:#,#,#,#,##0}}" Margin="0,0,4,0"/>
+                                        <TextBlock Text="Files"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                        <StackPanel Orientation="Horizontal">
+                            <ListBox ItemsSource="{Binding ProjectData.CurrentBackupProfile.FolderList}" BorderThickness="0" HorizontalContentAlignment="Right">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding TotalSize, Converter={StaticResource NumberToComputerSizeConverter}}"/>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
+                    </StackPanel>
+                    
+                    <ListBox ItemsSource="{Binding ProjectData.CurrentBackupProfile.FolderList}" BorderThickness="0" Margin="0,0,8,0">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <DockPanel LastChildFill="True">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Path}"/>
+                                    </StackPanel>
+                                </DockPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
+                
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock Text="Total of "/>
+                    <TextBlock Text="{Binding ProjectData.CurrentBackupProfile.BackupSourceFilesNumber, StringFormat={}{0:#,#,#,#,##0}}" FontWeight="Bold"></TextBlock>
+                    <TextBlock Text=" files, "/>
+                    <TextBlock Text="{Binding ProjectData.CurrentBackupProfile.BackupSourceFoldersSize, Converter={StaticResource NumberToComputerSizeConverter}}" FontWeight="Bold"></TextBlock>
+                </StackPanel>
+            
+                <StackPanel Orientation="Horizontal">
                     <Button Content="Change"
                         Command="{Binding OpenChangeBackupItemsWindowCommand}">
                     </Button>
                 </StackPanel>
-                <ListBox ItemsSource="{Binding ProjectData.CurrentBackupProfile.FolderList}"
-                         BorderThickness="0">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding }" VerticalAlignment="Center" Padding="4,0" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </DockPanel>
+            </StackPanel>
         </GroupBox>
 
         <GroupBox Grid.Column="0" Grid.Row="1">
@@ -77,13 +112,7 @@
                 <Label FontWeight="Bold">Destination</Label>
             </GroupBox.Header>
             <StackPanel Orientation="Vertical">
-                <DockPanel LastChildFill="True">
-                    <Button Content="Change" DockPanel.Dock="Right"                
-                        Command="{Binding SelectFolderNameCommand}"
-                        CommandParameter="{Binding ProjectData.CurrentBackupProfile}" Margin="0,0">
-                    </Button>
-
-                    <TextBlock x:Name="txTaggetFolder"                        
+                <TextBlock x:Name="txTaggetFolder"                        
                          Validation.ErrorTemplate="{StaticResource validationTargetFolderErrorTemplate}" Margin="8,0,0,0">
                         <TextBlock.Text>
                             <Binding Path="ProjectData.CurrentBackupProfile.TargetBackupFolder"
@@ -110,7 +139,13 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
-                </DockPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Change"
+                        Command="{Binding SelectFolderNameCommand}"
+                        CommandParameter="{Binding ProjectData.CurrentBackupProfile}" Margin="0,0">
+                    </Button>
+                </StackPanel>
+
             </StackPanel>
         </GroupBox>
 

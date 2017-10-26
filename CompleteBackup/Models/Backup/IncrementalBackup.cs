@@ -1,5 +1,6 @@
 ﻿using CompleteBackup.DataRepository;
 using CompleteBackup.Models.Backup.History;
+using CompleteBackup.Models.Backup.Profile;
 using CompleteBackup.Models.Backup.Storage;
 using CompleteBackup.Views.MainWindow;
 using System;
@@ -16,7 +17,7 @@ namespace CompleteBackup.Models.backup
     {
         public string LastSetPath;
 
-        public IncrementalBackup(List<string> sourcePath, string currSetPath, IStorageInterface storageInterface, GenericStatusBarView progressBar = null) : base(sourcePath, currSetPath, storageInterface, progressBar)
+        public IncrementalBackup(List<FolderData> sourcePath, string currSetPath, IStorageInterface storageInterface, GenericStatusBarView progressBar = null) : base(sourcePath, currSetPath, storageInterface, progressBar)
         {
         }
         public override string BackUpProfileSignature { get { return $"{BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile?.GUID.ToString("D")}-CBKP-INC"; } }
@@ -43,12 +44,12 @@ namespace CompleteBackup.Models.backup
 
                 m_IStorage.CreateDirectory(newTargetPath);
 
-                foreach (var path in SourcePath)
+                foreach (var item in SourcePath)
                 {
-                    var targetdirectoryName = m_IStorage.GetFileName(path);
+                    var targetdirectoryName = m_IStorage.GetFileName(item.Path);
                     var targetPath = m_IStorage.Combine(newTargetPath, targetdirectoryName);
 
-                    ProcessNewBackupStep(path, targetPath);
+                    ProcessNewBackupStep(item.Path, targetPath);
                 }
 
                 BackupSessionHistory.SaveHistory(newTargetPath, targetSet, m_BackupSessionHistory);
@@ -80,10 +81,10 @@ namespace CompleteBackup.Models.backup
                 foreach (var path in prevSetList)
                 {
                     var setName = m_IStorage.GetFileName(path);
-                    var foundMatch = SourcePath.Where(f => m_IStorage.GetFileName(f) == setName);
+                    var foundMatch = SourcePath.Where(f => m_IStorage.GetFileName(f.Path) == setName);
                     if (foundMatch.Count() == 0)
                     {
-                        var sourcePath = m_IStorage.Combine(m_IStorage.GetDirectoryName(SourcePath.FirstOrDefault()), setName);
+                        var sourcePath = m_IStorage.Combine(m_IStorage.GetDirectoryName(SourcePath.FirstOrDefault().Path), setName);
 
                         var targetPath = m_IStorage.Combine(newTargetPath, setName);
                         var lastTargetPath = m_IStorage.Combine(lastTargetPath_, setName);
@@ -93,14 +94,14 @@ namespace CompleteBackup.Models.backup
                     }
                 }
 
-                foreach (var path in SourcePath)
+                foreach (var item in SourcePath)
                 {
-                    var targetdirectoryName = m_IStorage.GetFileName(path);
+                    var targetdirectoryName = m_IStorage.GetFileName(item.Path);
 
                     var targetPath = m_IStorage.Combine(newTargetPath, targetdirectoryName);
                     var lastTargetPath = m_IStorage.Combine(lastTargetPath_, targetdirectoryName);
 
-                    ProcessIncrementalStep(path, targetPath, lastTargetPath);
+                    ProcessIncrementalStep(item.Path, targetPath, lastTargetPath);
                 }
 
                 BackupSessionHistory.SaveHistory(newTargetPath, targetSet, m_BackupSessionHistory);
