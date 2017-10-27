@@ -20,7 +20,7 @@ using System.Windows.Input;
 
 namespace CompleteBackup.ViewModels
 {
-    class RestoreBackupItemsWindowModel : ObservableObject
+    class RestoreBackupItemsWindowModel : BackupItemsTreeBase
     {
         public ICommand SaveFolderSelectionCommand { get; private set; } = new SaveFolderSelectionICommand<object>();
         public ICommand CloseWindowCommand { get; private set; } = new CloseWindowICommand<object>();

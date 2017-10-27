@@ -33,7 +33,7 @@ namespace CompleteBackup.Models.FolderSelection
                     case HistoryTypeEnum.Deleted:
                         return "/Resources/Icons/FolderTreeView/DeleteItem.ico";
                     case HistoryTypeEnum.NoChange:
-                        return "/Resources/Icons/FolderTreeView/LatestItem.ico";
+                        return "/Resources/Icons/FolderTreeView/Item.ico";
                     default:
                         return null;
                 }

@@ -92,27 +92,28 @@
     <Compile Include="Utilities\FileFolderSizeHelper.cs" />
     <Compile Include="Utilities\ObservableObject.cs" />
     <Compile Include="Models\FolderSelection\FolderMenuItem.cs" />
+    <Compile Include="ViewModels\Share\BackupItemsTreeBase.cs" />
     <Compile Include="ViewModels\ExtendedControls\ProcessingSpinnerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\RestoreBackupICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\StopBackupICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\PauseBackupICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\StartBackupICommand.cs" />
-    <Compile Include="ViewModels\Profile\ChangeItemsSelection\ChangeBackupItemsWindowModel.cs" />
+    <Compile Include="ViewModels\Backup\FileTreeBackupWindowModel\ChangeBackupItemsWindowModel.cs" />
     <Compile Include="ViewModels\ExtendedControls\ChartGaugeViewModel.cs" />
-    <Compile Include="ViewModels\MainBackupViewModel.cs" />
-    <Compile Include="ViewModels\MainRestoreViewModel.cs" />
+    <Compile Include="ViewModels\Backup\MainBackupViewModel.cs" />
+    <Compile Include="ViewModels\Restore\MainRestoreViewModel.cs" />
     <Compile Include="ViewModels\Profile\ICommands\CloseWindowICommand.cs" />
-    <Compile Include="ViewModels\Profile\ChangeItemsSelection\ICommands\OpenChangeBackupItemsWindowICommand.cs" />
-    <Compile Include="ViewModels\Profile\ChangeItemsSelection\SourceDestinationItemsViewModel.cs" />
-    <Compile Include="ViewModels\Profile\ChangeItemsSelection\ICommands\ExpandFolderTreeICommand.cs" />
-    <Compile Include="ViewModels\Profile\ChangeItemsSelection\ICommands\SelectFolderNameICommand.cs" />
-    <Compile Include="ViewModels\Profile\ChangeItemsSelection\ICommands\SaveFolderSelectionICommand.cs" />
+    <Compile Include="ViewModels\Backup\FileTreeBackupWindowModel\ICommands\OpenChangeBackupItemsWindowICommand.cs" />
+    <Compile Include="ViewModels\Backup\FileTreeBackupWindowModel\SourceDestinationItemsViewModel.cs" />
+    <Compile Include="ViewModels\Backup\FileTreeBackupWindowModel\ICommands\ExpandFolderTreeICommand.cs" />
+    <Compile Include="ViewModels\Backup\FileTreeBackupWindowModel\ICommands\SelectFolderNameICommand.cs" />
+    <Compile Include="ViewModels\Backup\FileTreeBackupWindowModel\ICommands\SaveFolderSelectionICommand.cs" />
     <Compile Include="ViewModels\MainWindow\MainWindowStatusBarViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\MainWindowViewModel.cs" />
-    <Compile Include="ViewModels\Profile\ChangeItemsSelection\Validators\BackupTargetLocationValidator.cs" />
+    <Compile Include="ViewModels\Backup\FileTreeBackupWindowModel\Validators\BackupTargetLocationValidator.cs" />
     <Compile Include="ViewModels\Profile\ProfileDetails\ProfileDetailsPageViewModel.cs" />
     <Compile Include="ViewModels\Profile\ProfileList\ProfileListViewModel.cs" />
-    <Compile Include="ViewModels\Profile\RestoreItemSelection\RestoreBackupItemsWindowModel.cs" />
+    <Compile Include="ViewModels\Restore\FileTreeRestoreWindowModel\RestoreBackupItemsWindowModel.cs" />
     <Compile Include="Views\ExtendedControls\ProcessingSpinnerView.xaml.cs">
       <DependentUpon>ProcessingSpinnerView.xaml</DependentUpon>
     </Compile>
@@ -258,5 +259,9 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\FolderTreeView\LatestItem.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\FolderTreeView\Item.ico" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

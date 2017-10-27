@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CompleteBackup.ViewModels
 {
-    class MainBackupViewModel
+    class BackupItemsTreeBase : ObservableObject
     {
     }
 }
