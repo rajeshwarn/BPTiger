@@ -23,10 +23,7 @@ namespace CompleteBackup.ViewModels
     class RestoreBackupItemsWindowModel : BackupItemsTreeBase
     {
         public ICommand SaveFolderSelectionCommand { get; private set; } = new SaveFolderSelectionICommand<object>();
-        public ICommand CloseWindowCommand { get; private set; } = new CloseWindowICommand<object>();
 
-
-        public BackupProjectData ProjectData { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject;
 
         public ObservableCollection<RestoreFolderMenuItem> RestoreItemList { get; set; } = new ObservableCollection<RestoreFolderMenuItem>();
 
@@ -34,19 +31,8 @@ namespace CompleteBackup.ViewModels
         private bool m_DirtyFlag = false;
         public bool DirtyFlag { get { return m_DirtyFlag; } set { m_DirtyFlag = value; OnPropertyChanged(); } }
 
-        public RestoreBackupItemsWindowModel()
-        {
-            new Thread(new System.Threading.ThreadStart(() =>
-            {
-                LoadBackupItems();
-            }))
-            {
-                IsBackground = true,
-                Name = "Restore folder reader"
-            }.Start();
-        }
 
-        private void LoadBackupItems()
+        protected override void AddRootItemsToTree()
         {
             var profile = ProjectData.CurrentBackupProfile;
 
