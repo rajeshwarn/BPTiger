@@ -31,6 +31,23 @@ namespace CompleteBackup.ViewModels
             SetMenuItemTree(ProjectData?.CurrentBackupProfile?.RootFolderItemList);
         }
 
+
+        protected override FolderMenuItem CreateMenuItem(bool isFolder, bool isSelected, string path, string name, FolderMenuItem parentItem, FileAttributes attr)
+        {
+            var menuItem = new BackupFolderMenuItem()
+            {
+                IsFolder = isFolder,
+                Attributes = attr,
+                Path = path,
+                Name = name,
+                ParentItem = parentItem,
+                Selected = isSelected
+            };
+
+            return menuItem;
+        }
+
+
         protected override void AddRootItemsToTree()
         {
             var ProfileData = ProjectData.CurrentBackupProfile;

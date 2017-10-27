@@ -49,6 +49,7 @@ namespace CompleteBackup.ViewModels
         }
 
         protected abstract void AddRootItemsToTree();
+        protected abstract FolderMenuItem CreateMenuItem(bool isFolder, bool isSelected, string path, string name, FolderMenuItem parentItem, FileAttributes attr);
 
         protected List<string> GetDirectoriesNames(string path)
         {
@@ -98,8 +99,7 @@ namespace CompleteBackup.ViewModels
                             bSelected = true;
                         }
 
-                        var newItem = new BackupFolderMenuItem() { IsFolder = true, Attributes = attr, Path = newPath, Name = subdirectory, ParentItem = item, Selected = bSelected };
-                        item.SourceBackupItems.Add(newItem);
+                        item.SourceBackupItems.Add(CreateMenuItem(true, bSelected, newPath, subdirectory, item, attr));
                     }
                 }
 
@@ -111,7 +111,8 @@ namespace CompleteBackup.ViewModels
                     FileAttributes attr = File.GetAttributes(filePath);
                     if (!IsHidden(attr))
                     {
-                        item.SourceBackupItems.Add(new BackupFolderMenuItem() { IsFolder = false, Attributes = attr, Name = file, Path = filePath, Image = null });
+                        bool bSelected = false;
+                        item.SourceBackupItems.Add(CreateMenuItem(false, bSelected, filePath, file, item, attr));
                     }
                 }
             }

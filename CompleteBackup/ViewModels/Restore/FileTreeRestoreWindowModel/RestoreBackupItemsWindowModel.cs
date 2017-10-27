@@ -31,6 +31,19 @@ namespace CompleteBackup.ViewModels
         private bool m_DirtyFlag = false;
         public bool DirtyFlag { get { return m_DirtyFlag; } set { m_DirtyFlag = value; OnPropertyChanged(); } }
 
+        protected override FolderMenuItem CreateMenuItem(bool isFolder, bool isSelected, string path, string name, FolderMenuItem parentItem, FileAttributes attr)
+        {
+            var menuItem = new RestoreFolderMenuItem()
+            {
+                IsFolder = isFolder,
+                Path = path,
+                Name = name,
+                ParentItem = parentItem,
+                Selected = isSelected
+            };
+
+            return menuItem;
+        }
 
         protected override void AddRootItemsToTree()
         {
