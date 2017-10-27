@@ -24,12 +24,14 @@ namespace CompleteBackup.ViewModels
     {
         public ICommand SaveFolderSelectionCommand { get; private set; } = new SaveFolderSelectionICommand<object>();
 
-
-        public ObservableCollection<RestoreFolderMenuItem> RestoreItemList { get; set; } = new ObservableCollection<RestoreFolderMenuItem>();
-
-
         private bool m_DirtyFlag = false;
         public bool DirtyFlag { get { return m_DirtyFlag; } set { m_DirtyFlag = value; OnPropertyChanged(); } }
+
+
+        public RestoreBackupItemsWindowModel () : base()
+        {
+            //SelectedItemList = new ObservableCollection<FolderData>();
+        }
 
         protected override FolderMenuItem CreateMenuItem(bool isFolder, bool isSelected, string path, string name, FolderMenuItem parentItem, FileAttributes attr)
         {
@@ -49,10 +51,7 @@ namespace CompleteBackup.ViewModels
         {
             var profile = ProjectData.CurrentBackupProfile;
 
-            Application.Current.Dispatcher.Invoke(new Action(() =>
-            {
-                RestoreItemList.Clear();
-            }));
+            ClearItemList();
 
             Application.Current.Dispatcher.Invoke(new Action(() =>
             {
@@ -110,11 +109,11 @@ namespace CompleteBackup.ViewModels
                 {
                     name = path;
 
-                    var menuItem = RestoreItemList.Where(m => m.Path == name).FirstOrDefault();
+                    FolderMenuItem menuItem = FolderMenuItemTree.Where(m => m.Path == name).FirstOrDefault();
                     if (menuItem == null)
                     {
                         menuItem = new RestoreFolderMenuItem() { IsFolder = true, Path = path, Name = name};
-                        RestoreItemList.Add(menuItem);
+                        FolderMenuItemTree.Add(menuItem);
                     }
 
                     return menuItem;
@@ -247,16 +246,16 @@ namespace CompleteBackup.ViewModels
         //}
 
 
-        public void FolderTreeClick(RestoreFolderMenuItem item, bool bSelected)
-        {
-            if (item != null)
-            {
-                DirtyFlag = true;
-                item.Selected = bSelected;
+        //public void FolderTreeClick(RestoreFolderMenuItem item, bool bSelected)
+        //{
+        //    if (item != null)
+        //    {
+        //        DirtyFlag = true;
+        //        item.Selected = bSelected;
 
-          //      UpdateSelectedFolders(ProjectData.CurrentBackupProfile, item);
-            }
-        }
+        //  //      UpdateSelectedFolders(ProjectData.CurrentBackupProfile, item);
+        //    }
+        //}
 
         bool m_bRefreshOnExpand = true;
         public void ExpandFolder(ItemCollection itemList)

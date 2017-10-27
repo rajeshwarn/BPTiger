@@ -20,7 +20,7 @@
                     <RowDefinition Height="40" />
                 </Grid.RowDefinitions>
                 <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                    <TreeView ItemsSource="{Binding RestoreItemList}"
+                    <TreeView ItemsSource="{Binding FolderMenuItemTree}"
                       TreeViewItem.Expanded="TreeViewItem_Expanded">
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate DataType="{x:Type folder_models:RestoreFolderMenuItem}" ItemsSource="{Binding SourceBackupItems}">
