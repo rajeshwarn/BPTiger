@@ -363,7 +363,21 @@ namespace CompleteBackup.Models.Backup.Storage
         }
 
 
-        #region misc helpers
+        private const uint SHGFI_ICON = 0x100;
+        private const uint SHGFI_LARGEICON = 0x0;
+        private const uint SHGFI_SMALLICON = 0x000000001;
+
+        public System.Drawing.Icon ExtractIconFromPath(string path)
+        {
+            Win32FileSystem.SHFILEINFO shinfo = new Win32FileSystem.SHFILEINFO();
+            Win32FileSystem.SHGetFileInfo(path,0, ref shinfo,
+                                          (uint)System.Runtime.InteropServices.Marshal.SizeOf(shinfo),
+                                          SHGFI_ICON | SHGFI_LARGEICON);
+
+            return System.Drawing.Icon.FromHandle(shinfo.hIcon);
+        }
+
+    #region misc helpers
         public bool GetNumberOfFiles(string path, ref long files, ref long directories)
         {
             DirectoryInfo dir = new DirectoryInfo(path);

@@ -8,6 +8,7 @@ namespace CompleteBackup.Models.Backup.Storage
 {
     public interface IStorageInterface
     {
+        System.Drawing.Icon ExtractIconFromPath(string path);
         System.IO.FileAttributes GetFileAttributes(string path);
         string Combine(string path1, string path2);
         string GetDirectoryName(string path);

@@ -187,5 +187,10 @@ namespace CompleteBackup.Models.Backup.Storage
                 return Win32LongPathFile.GetAttributes(path);
             }
         }
+
+        public System.Drawing.Icon ExtractIconFromPath(string path)
+        {
+            return null;
+        }
     }
 }

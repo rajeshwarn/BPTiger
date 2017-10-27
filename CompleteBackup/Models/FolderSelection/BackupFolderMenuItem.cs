@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CompleteBackup.Models.Backup.Storage;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -14,57 +15,31 @@ using System.Windows.Media;
 namespace CompleteBackup.Models.FolderSelection
 {
 
+    //public class BackupFolderMenuItem : FolderMenuItem
+    //{
+    //    public FileAttributes Attributes { get; set; }
+    //}
+
+
     public class BackupFolderMenuItem : FolderMenuItem
     {
 
         public FileAttributes Attributes { get; set; }
 
-        private static Icon ExtractFromPath(string path)
+        public ImageSource Image
         {
-            SHFILEINFO shinfo = new SHFILEINFO();
-            SHGetFileInfo(
-                path,
-                0, ref shinfo, (uint)Marshal.SizeOf(shinfo),
-                SHGFI_ICON | SHGFI_LARGEICON);
-            return System.Drawing.Icon.FromHandle(shinfo.hIcon);
-        }
-        //Struct used by SHGetFileInfo function
-        [StructLayout(LayoutKind.Sequential)]
-        private struct SHFILEINFO
-        {
-            public IntPtr hIcon;
-            public int iIcon;
-            public uint dwAttributes;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
-            public string szDisplayName;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 80)]
-            public string szTypeName;
-        };
-
-        [DllImport("shell32.dll")]
-        private static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, ref SHFILEINFO psfi, uint cbSizeFileInfo, uint uFlags);
-
-        private const uint SHGFI_ICON = 0x100;
-        private const uint SHGFI_LARGEICON = 0x0;
-        private const uint SHGFI_SMALLICON = 0x000000001;
-        public ImageSource Image {
             get
             {
                 ImageSource imageSource = null;
-                //                if (((Attributes & FileAttributes.Archive) == FileAttributes.Archive) &&
-                //                if (!IsFolder && !IsSystemFile)
-                //if (!IsFolder)
                 try
                 {
-                    var icon = ExtractFromPath(Path);
-
-//                    var icon = Icon.ExtractAssociatedIcon(Path);
-                        imageSource = Imaging.CreateBitmapSourceFromHIcon(
+                    var icon = m_IStorage.ExtractIconFromPath(Path);
+                    imageSource = Imaging.CreateBitmapSourceFromHIcon(
                         icon.Handle,
                         System.Windows.Int32Rect.Empty,
                         System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
                 }
-                catch( Exception ex)
+                catch (Exception ex)
                 {
                     Trace.WriteLine($"Failed to get Icon {Path}\n{ex.Message}");
                 }
@@ -73,19 +48,7 @@ namespace CompleteBackup.Models.FolderSelection
             }
             set { }
         }
-        public bool IsSystemFile
-        {
-            get
-            {
-                bool bSystem = (((Attributes & FileAttributes.System) == FileAttributes.System) ||
-                                ((Attributes & FileAttributes.Directory) == FileAttributes.Directory));
-//                ((Attributes & FileAttributes.Hidden) != FileAttributes.Hidden));
 
-                return bSystem;
-            }
-            set { }
-        }
-
+        static IStorageInterface  m_IStorage = new FileSystemStorage();
     }
-
 }

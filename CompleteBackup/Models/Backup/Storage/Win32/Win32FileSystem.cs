@@ -12,6 +12,23 @@ namespace CompleteBackup.Models.Backup.Storage
 {
     class Win32FileSystem
     {
+        //Struct used by SHGetFileInfo function
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct SHFILEINFO
+        {
+            public IntPtr hIcon;
+            public int iIcon;
+            public uint dwAttributes;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+            public string szDisplayName;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 80)]
+            public string szTypeName;
+        };
+
+        [DllImport("shell32.dll")]
+        internal static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, ref SHFILEINFO psfi, uint cbSizeFileInfo, uint uFlags);
+
+
         internal const int FILE_ATTRIBUTE_ARCHIVE = 0x20;
         internal const int INVALID_FILE_ATTRIBUTES = -1;
 

@@ -36,7 +36,8 @@ namespace CompleteBackup.ViewModels
                 Path = path,
                 Name = name,
                 ParentItem = parentItem,
-                Selected = isSelected
+                Selected = isSelected,
+                Image = GetImageSource(path),
             };
 
             return menuItem;
@@ -63,12 +64,7 @@ namespace CompleteBackup.ViewModels
                     var directoryName = m_IStorage.GetFileName(item.Path);
                     var restorePath = m_IStorage.Combine(lastSetPath, directoryName);
 
-                    var rootItem = new RestoreFolderMenuItem()
-                    {
-                        IsFolder = true,
-                        Path = restorePath,
-                        Name = directoryName,
-                    };
+                    var rootItem = CreateMenuItem(true, false, restorePath, directoryName, null, 0);
 
                     UpdateChildItemsInMenuItem(rootItem);
 

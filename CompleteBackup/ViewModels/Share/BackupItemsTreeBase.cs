@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
 
 namespace CompleteBackup.ViewModels
 {
@@ -31,6 +32,26 @@ namespace CompleteBackup.ViewModels
         public bool DirtyFlag { get { return m_DirtyFlag; } set { m_DirtyFlag = value; OnPropertyChanged(); } }
 
         protected IStorageInterface m_IStorage;
+
+        protected System.Windows.Media.ImageSource GetImageSource(string path)
+        {
+            System.Windows.Media.ImageSource imageSource = null;
+            try
+            {
+                var icon = m_IStorage.ExtractIconFromPath(path);
+
+                imageSource = Imaging.CreateBitmapSourceFromHIcon(
+                    icon.Handle,
+                    System.Windows.Int32Rect.Empty,
+                    System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine($"Failed to get Icon {path}\n{ex.Message}");
+            }
+
+            return imageSource;
+        }
 
 
         public BackupItemsTreeBase()

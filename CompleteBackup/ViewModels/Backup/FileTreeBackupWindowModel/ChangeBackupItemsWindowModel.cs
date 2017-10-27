@@ -22,8 +22,6 @@ namespace CompleteBackup.ViewModels
     {
         public ICommand SaveFolderSelectionCommand { get; private set; } = new SaveFolderSelectionICommand<object>();
 
-
-
         public ChangeBackupItemsWindowModel() : base()
         {
             foreach (var item in ProjectData?.CurrentBackupProfile.FolderList)
@@ -41,7 +39,7 @@ namespace CompleteBackup.ViewModels
                 Path = path,
                 Name = name,
                 ParentItem = parentItem,
-                Selected = isSelected
+                Selected = isSelected,
             };
 
             return menuItem;
@@ -142,11 +140,6 @@ namespace CompleteBackup.ViewModels
                 return item;
             }
         }
-
-
-
-
-
 
     }
 }

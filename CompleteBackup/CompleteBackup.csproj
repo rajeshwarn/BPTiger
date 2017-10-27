@@ -262,6 +262,10 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\FolderTreeView\Item.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\Icons\FolderTreeView\DeleteFolder.ico" />
+    <Resource Include="Resources\Icons\FolderTreeView\Folder.ico" />
+    <Resource Include="Resources\Icons\FolderTreeView\NewFolder.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
