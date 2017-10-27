@@ -23,7 +23,7 @@
                     <TreeView ItemsSource="{Binding ProjectData.CurrentBackupProfile.RootFolderItemList}"
                       TreeViewItem.Expanded="TreeViewItem_Expanded">
                         <TreeView.ItemTemplate>
-                            <HierarchicalDataTemplate DataType="{x:Type folder_models:FolderMenuItem}" ItemsSource="{Binding SourceBackupItems}">
+                            <HierarchicalDataTemplate DataType="{x:Type folder_models:BackupFolderMenuItem}" ItemsSource="{Binding SourceBackupItems}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Width="16" Source="{Binding Image}"/>
                                     <CheckBox IsThreeState="True" IsChecked="{Binding Selected}" Click="FolderCheckBox_Click">

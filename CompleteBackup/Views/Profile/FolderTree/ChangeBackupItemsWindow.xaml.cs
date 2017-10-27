@@ -43,7 +43,7 @@ namespace CompleteBackup.Views
                 checkBox.IsChecked = false;
             }
 
-            var dc = checkBox.DataContext as FolderMenuItem;
+            var dc = checkBox.DataContext as BackupFolderMenuItem;
             var viewModel = DataContext as ChangeBackupItemsWindowModel;
             viewModel.FolderTreeClick(dc, (bool)checkBox.IsChecked);
         }

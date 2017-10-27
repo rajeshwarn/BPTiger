@@ -59,7 +59,7 @@ namespace CompleteBackup.ViewModels
                 try
                 {
                     FileAttributes attr = File.GetAttributes(drive.Name);
-                    var rootItem = new FolderMenuItem()
+                    var rootItem = new BackupFolderMenuItem()
                     {
                         IsFolder = true,
                         Attributes = attr,
@@ -125,7 +125,7 @@ namespace CompleteBackup.ViewModels
                 if (found.Count() == 0)
                 {
                     FileAttributes attr = File.GetAttributes(path);
-                    var newItem = new FolderMenuItem() { IsFolder = true, Attributes = attr, Path = path, Name = path, ParentItem = parent, Selected = false };
+                    var newItem = new BackupFolderMenuItem() { IsFolder = true, Attributes = attr, Path = path, Name = path, ParentItem = parent, Selected = false };
                     parent.SourceBackupItems.Add(newItem);
                     return newItem;
                 }
@@ -166,7 +166,7 @@ namespace CompleteBackup.ViewModels
                     if (((attr & FileAttributes.System) != FileAttributes.System) &&
                         ((attr & FileAttributes.Hidden) != FileAttributes.Hidden))
                     {
-                        var newItem = new FolderMenuItem() { IsFolder = true, Attributes = attr, Path = newPath, Name = subdirectory, ParentItem = item, Selected = false };
+                        var newItem = new BackupFolderMenuItem() { IsFolder = true, Attributes = attr, Path = newPath, Name = subdirectory, ParentItem = item, Selected = false };
                         item.SourceBackupItems.Add(newItem);
 
                         //var match = ProjectData.FolderList.Where(f => String.Compare(f, newPath, true) == 0);
@@ -203,7 +203,7 @@ namespace CompleteBackup.ViewModels
                     var filePath = m_IStorage.Combine(item.Path, file);
                     FileAttributes attr = File.GetAttributes(filePath);
 
-                    item.SourceBackupItems.Add(new FolderMenuItem() { IsFolder = false, Attributes = attr, Name = file, Path = filePath, Image = null });
+                    item.SourceBackupItems.Add(new BackupFolderMenuItem() { IsFolder = false, Attributes = attr, Name = file, Path = filePath, Image = null });
                 }
             }
         }
@@ -228,7 +228,7 @@ namespace CompleteBackup.ViewModels
         }
 
 
-        public void FolderTreeClick(FolderMenuItem item, bool bSelected)
+        public void FolderTreeClick(BackupFolderMenuItem item, bool bSelected)
         {
             if (item != null)
             {
@@ -244,7 +244,7 @@ namespace CompleteBackup.ViewModels
         {
             foreach (var item in itemList)
             {
-                var folderItem = item as FolderMenuItem;
+                var folderItem = item as BackupFolderMenuItem;
 
                 if (m_bRefreshOnExpand)
                 {
