@@ -145,26 +145,6 @@ namespace CompleteBackup.ViewModels
 
 
 
-        bool m_bRefreshOnExpand = true;
-        public void ExpandFolder(ItemCollection itemList)
-        {
-            foreach (var item in itemList)
-            {
-                var folderItem = item as BackupFolderMenuItem;
-
-                if (m_bRefreshOnExpand)
-                {
-                //buggyyyyy    folderItem.SourceBackupItems.Clear();
-                }
-
-                if (folderItem.SourceBackupItems.Count() == 0)
-                {
-                    UpdateChildItemsInMenuItem(folderItem);
-                }
-            }
-        }
-
-
 
 
 

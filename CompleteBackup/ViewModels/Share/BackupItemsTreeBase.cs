@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace CompleteBackup.ViewModels
@@ -118,12 +119,13 @@ namespace CompleteBackup.ViewModels
                 var fileList = m_IStorage.GetFiles(item.Path);
                 foreach (var file in fileList)
                 {
-                    var filePath = m_IStorage.Combine(item.Path, file);
-                    FileAttributes attr = File.GetAttributes(filePath);
+                    //var filePath = m_IStorage.Combine(item.Path, file);
+                    var fileName = m_IStorage.GetFileName(file);
+                    FileAttributes attr = File.GetAttributes(file);
                     if (!IsHidden(attr))
                     {
                         bool bSelected = false;
-                        item.SourceBackupItems.Add(CreateMenuItem(false, bSelected, filePath, file, item, attr));
+                        item.SourceBackupItems.Add(CreateMenuItem(false, bSelected, file, fileName, item, attr));
                     }
                 }
             }
@@ -207,6 +209,18 @@ namespace CompleteBackup.ViewModels
             }
         }
 
+
+        public void ExpandFolder(ItemCollection itemList)
+        {
+            foreach (var item in itemList)
+            {
+                var folderItem = item as FolderMenuItem;
+                if (folderItem.SourceBackupItems.Count() == 0)
+                {
+                    UpdateChildItemsInMenuItem(folderItem);
+                }
+            }
+        }
 
 
         public void FolderTreeClick(FolderMenuItem item, bool bSelected)
