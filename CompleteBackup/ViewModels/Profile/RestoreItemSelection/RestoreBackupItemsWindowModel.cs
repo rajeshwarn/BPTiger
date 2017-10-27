@@ -67,21 +67,21 @@ namespace CompleteBackup.ViewModels
                         //last set add all items
                         foreach (var item in sessionHistory.HistoryItemList)
                         {
-                            InsertNamesToTree(sessionHistory, item.Path, 0);
+                            InsertNamesToTree(sessionHistory, item, item.Path, 0);
                         }
                     }
                     else
                     {
                         foreach (var item in sessionHistory.HistoryItemList.Where(i => i.HistoryType != HistoryTypeEnum.NoChange))
                         {
-                            InsertNamesToTree(sessionHistory, item.Path, 0);
+                            InsertNamesToTree(sessionHistory, item, item.Path, 0);
                         }
                     }
                 }
             }));
         }
 
-        FolderMenuItem InsertNamesToTree(BackupSessionHistory history, string path, int iCount)
+        FolderMenuItem InsertNamesToTree(BackupSessionHistory history, HistoryItem item, string path, int iCount)
         {
             if (path != null)
             {
@@ -91,17 +91,17 @@ namespace CompleteBackup.ViewModels
 
                     var newPath = path.Substring(0, path.Length - name.Length - 1);
 
-                    var menuItem = InsertNamesToTree(history, newPath, iCount + 1);
+                    var menuItem = InsertNamesToTree(history, item, newPath, iCount + 1);
                     var newMenuItem = menuItem.SourceBackupItems.Where(m => m.Name == name).FirstOrDefault();
                     if (newMenuItem == null)
                     {
-                        newMenuItem = new RestoreFolderMenuItem() { IsFolder = true, Path = path, Name = name };
+                        newMenuItem = new RestoreFolderMenuItem() { IsFolder = true, Path = path, Name = name};
                         menuItem.SourceBackupItems.Add(newMenuItem);
                     }
 
                     if (iCount == 0)
                     {
-                        var setTimeMenuItem = new RestoreFolderMenuItem() { Name = history.TimeStamp.ToString(), IsFolder = true };
+                        var setTimeMenuItem = new RestoreFolderMenuItem() { Name = history.TimeStamp.ToString(), IsFolder = true, HistoryType = item.HistoryType };
                         newMenuItem.SourceBackupItems.Add(setTimeMenuItem);
                     }
 
@@ -114,7 +114,7 @@ namespace CompleteBackup.ViewModels
                     var menuItem = RestoreItemList.Where(m => m.Path == name).FirstOrDefault();
                     if (menuItem == null)
                     {
-                        menuItem = new RestoreFolderMenuItem() { IsFolder = true, Path = path, Name = name, };
+                        menuItem = new RestoreFolderMenuItem() { IsFolder = true, Path = path, Name = name};
                         RestoreItemList.Add(menuItem);
                     }
 

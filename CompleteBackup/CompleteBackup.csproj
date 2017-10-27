@@ -250,5 +250,13 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\Ribbon\Restore.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\FolderTreeView\DeleteItem.ico" />
+    <Resource Include="Resources\Icons\FolderTreeView\EditItem.ico" />
+    <Resource Include="Resources\Icons\FolderTreeView\NewItem.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\FolderTreeView\LatestItem.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
