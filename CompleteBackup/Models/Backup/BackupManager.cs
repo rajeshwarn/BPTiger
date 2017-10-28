@@ -21,6 +21,7 @@ namespace CompleteBackup.Models.backup
     {
         protected IStorageInterface m_IStorage;
         protected BackupProfileData m_Profile;
+        protected BackupSessionHistory m_BackupSessionHistory;
 
         public BackupManager(BackupProfileData profile, GenericStatusBarView progressBar)
 //        public BackupManager(List<FolderData> sourcePath, string currSetPath, IStorageInterface storageInterface, GenericStatusBarView progressBar)
@@ -30,6 +31,9 @@ namespace CompleteBackup.Models.backup
             TargetPath = profile.TargetBackupFolder;
 
             m_IStorage = profile.GetStorageInterface();
+
+            m_BackupSessionHistory = new BackupSessionHistory(profile.GetStorageInterface());
+
             m_ProgressBar = progressBar;
         }
 
@@ -75,7 +79,7 @@ namespace CompleteBackup.Models.backup
             }
         }
 
-        protected BackupSessionHistory m_BackupSessionHistory = new BackupSessionHistory();
+
 
 
         public abstract void ProcessBackup();
@@ -161,7 +165,7 @@ namespace CompleteBackup.Models.backup
                 if (m_IStorage.IsFileSame(sourceFilePath, currSetFilePath))
                 {
                     //File is the same, do nothing
-                    m_BackupSessionHistory.AddNoChangeFile(sourceFilePath);
+                    m_BackupSessionHistory.AddNoChangeFile(sourceFilePath, currSetFilePath);
                 }
                 else
                 {
@@ -181,7 +185,7 @@ namespace CompleteBackup.Models.backup
                     }
                     m_IStorage.CopyFile(sourceFilePath, currSetFilePath);
 
-                    m_BackupSessionHistory.AddUpdatedFile(sourceFilePath);
+                    m_BackupSessionHistory.AddUpdatedFile(sourceFilePath, currSetFilePath);
                 }
             }
             else
@@ -193,7 +197,7 @@ namespace CompleteBackup.Models.backup
                 }
                 m_IStorage.CopyFile(sourceFilePath, currSetFilePath);
 
-                m_BackupSessionHistory.AddNewFile(sourceFilePath);
+                m_BackupSessionHistory.AddNewFile(sourceFilePath, currSetFilePath);
             }
         }
 
@@ -207,14 +211,14 @@ namespace CompleteBackup.Models.backup
                 if (m_IStorage.IsFileSame(sourceFilePath, currSetFilePath))
                 {
                     //Do nothing
-                    m_BackupSessionHistory.AddNoChangeFile(sourceFilePath);
+                    m_BackupSessionHistory.AddNoChangeFile(sourceFilePath, currSetFilePath);
                 }
                 else
                 {
                     //update/overwrite file
                     m_IStorage.CopyFile(sourceFilePath, currSetFilePath, true);
 
-                    m_BackupSessionHistory.AddUpdatedFile(sourceFilePath);
+                    m_BackupSessionHistory.AddUpdatedFile(sourceFilePath, currSetFilePath);
                 }
             }
             else
@@ -225,7 +229,7 @@ namespace CompleteBackup.Models.backup
                 }
                 m_IStorage.CopyFile(sourceFilePath, currSetFilePath);
 
-                m_BackupSessionHistory.AddNewFile(sourceFilePath);
+                m_BackupSessionHistory.AddNewFile(sourceFilePath, currSetFilePath);
             }
         }
 
@@ -244,7 +248,7 @@ namespace CompleteBackup.Models.backup
                     //Move file to last set
                     m_IStorage.MoveFile(filePath, prevSetfilePath, true);
 
-                    m_BackupSessionHistory.AddDeletedFile(filePath);
+                    m_BackupSessionHistory.AddDeletedFile(filePath, prevSetfilePath);
                 }
             }
         }
@@ -262,7 +266,7 @@ namespace CompleteBackup.Models.backup
                     //if not exists in source, delete the file
                     File.Delete(filePath);
 
-                    m_BackupSessionHistory.AddDeletedFile(filePath);
+                    m_BackupSessionHistory.AddDeletedFile(filePath, currSetPath);
                 }
             }
         }
@@ -289,9 +293,10 @@ namespace CompleteBackup.Models.backup
                 //Delete deleted items
                 foreach (var entry in deleteList)
                 {
-                    m_IStorage.MoveDirectory(entry, m_IStorage.Combine(lastSetPath, m_IStorage.GetFileName(entry)), true);
+                    var destPath = m_IStorage.Combine(lastSetPath, m_IStorage.GetFileName(entry));
+                    m_IStorage.MoveDirectory(entry, destPath, true);
 
-                    m_BackupSessionHistory.AddDeletedFolder(entry);
+                    m_BackupSessionHistory.AddDeletedFolder(entry, destPath);
                 }
             }
         }
@@ -316,7 +321,7 @@ namespace CompleteBackup.Models.backup
                 {
                     m_IStorage.DeleteDirectory(entry);
 
-                    m_BackupSessionHistory.AddDeletedFolder(entry);
+                    m_BackupSessionHistory.AddDeletedFolder(entry, currSetPath);
                 }
             }
         }

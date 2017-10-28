@@ -92,7 +92,7 @@ namespace CompleteBackup.Models.backup
                         var lastTargetPath = m_IStorage.Combine(lastTargetPath_, setName);
                         m_IStorage.MoveDirectory(targetPath, lastTargetPath);
 
-                        m_BackupSessionHistory.AddDeletedFolder(sourcePath);
+                        m_BackupSessionHistory.AddDeletedFolder(sourcePath, newTargetPath);
                     }
                 }
 
@@ -128,7 +128,7 @@ namespace CompleteBackup.Models.backup
 
                 m_IStorage.CopyFile(sourceFilePath, targetFilePath);
 
-                m_BackupSessionHistory.AddNewFile(sourceFilePath);
+                m_BackupSessionHistory.AddNewFile(sourceFilePath, targetFilePath);
             }
 
             //Process directories

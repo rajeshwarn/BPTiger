@@ -33,12 +33,22 @@ namespace CompleteBackup.Models.Backup.History
         [JsonConverter(typeof(StringEnumConverter))]
         public HistoryItemTypeEnum HistoryItemType { get; set; } = HistoryItemTypeEnum.File;
 
-        public string Path { get; set; }
+        public string SourcePath { get; set; }
+        public string TargetPath { get; set; }
     }
 
     [Serializable]
     public class BackupSessionHistory
     {
+        IStorageInterface m_Storage;
+
+        BackupSessionHistory() { }
+
+        public BackupSessionHistory(IStorageInterface storage)
+        {
+            m_Storage = storage;
+        }
+
         public List<HistoryItem> HistoryItemList { get; set; } = new List<HistoryItem>();
 
         public DateTime TimeStamp { get; set; }
@@ -50,31 +60,45 @@ namespace CompleteBackup.Models.Backup.History
             TimeStamp = dateTime;
         }
 
-        public void AddNewFile(string item)
+        public void AddNewFile(string source, string dest)
         {
-            HistoryItemList.Add(new HistoryItem() { Path = item, HistoryType = HistoryTypeEnum.Added });
+            HistoryItemList.Add(new HistoryItem() { SourcePath = source, TargetPath = dest, HistoryType = HistoryTypeEnum.Added });
         }
-        public void AddUpdatedFile(string item)
+        public void AddUpdatedFile(string source, string dest)
         {
-            HistoryItemList.Add(new HistoryItem() { Path = item, HistoryType = HistoryTypeEnum.Changed});
+            var hItem = new HistoryItem() { SourcePath = source, TargetPath = dest, HistoryType = HistoryTypeEnum.Changed };
+            SaveHistoryItem(dest, hItem);
+            HistoryItemList.Add(hItem);
         }
-        public void AddDeletedFile(string item)
+        public void AddDeletedFile(string source, string dest)
         {
-            HistoryItemList.Add(new HistoryItem() { Path = item, HistoryType = HistoryTypeEnum.Deleted });
+            HistoryItemList.Add(new HistoryItem() { SourcePath = source, TargetPath = dest, HistoryType = HistoryTypeEnum.Deleted });
         }
-        public void AddDeletedFolder(string item)
+        public void AddDeletedFolder(string source, string dest)
         {
-            HistoryItemList.Add(new HistoryItem() { Path = item, HistoryType = HistoryTypeEnum.Deleted, HistoryItemType = HistoryItemTypeEnum.Directory });
+            HistoryItemList.Add(new HistoryItem() { SourcePath = source, TargetPath = dest, HistoryType = HistoryTypeEnum.Deleted, HistoryItemType = HistoryItemTypeEnum.Directory });
         }
-        public void AddNoChangeFile(string item)
+        public void AddNoChangeFile(string source, string dest)
         {
-            //HistoryItemList.Add(new HistoryItem() { Path = item, HistoryType = HistoryTypeEnum.NoChange });
+            //HistoryItemList.Add(new HistoryItem() { Path = source, HistoryType = HistoryTypeEnum.NoChange });
         }
 
 
         public static bool IsHistoryFile(string path)
         {
             return path.EndsWith(".json", true, null);
+        }
+
+
+        public void SaveHistoryItem(string path, HistoryItem item)
+        {
+            var fileName = m_Storage.GetFileName(path);
+            var directory = m_Storage.GetDirectoryName(path);
+            var destPath = m_Storage.Combine(directory, fileName + "_history.json");
+
+            string json = json = JsonConvert.SerializeObject(item, Formatting.Indented);
+
+            File.WriteAllText(destPath, json);
         }
 
         public static void SaveHistory(string path, string signature, BackupSessionHistory history)

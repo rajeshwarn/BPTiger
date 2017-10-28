@@ -140,14 +140,14 @@ namespace CompleteBackup.ViewModels
                         //last set add all items
                         foreach (var item in sessionHistory.HistoryItemList)
                         {
-                            InsertNamesToTreeFromHistory(sessionHistory, item, item.Path, 0);
+                            InsertNamesToTreeFromHistory(sessionHistory, item, item.SourcePath, 0);
                         }
                     }
                     else
                     {
                         foreach (var item in sessionHistory.HistoryItemList.Where(i => i.HistoryType != HistoryTypeEnum.NoChange))
                         {
-                            InsertNamesToTreeFromHistory(sessionHistory, item, item.Path, 0);
+                            InsertNamesToTreeFromHistory(sessionHistory, item, item.SourcePath, 0);
                         }
                     }
                 }
