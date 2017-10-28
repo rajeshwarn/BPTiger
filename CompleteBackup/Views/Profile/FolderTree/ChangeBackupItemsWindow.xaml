@@ -23,7 +23,7 @@
                     <TreeView ItemsSource="{Binding FolderMenuItemTree}"
                       TreeViewItem.Expanded="TreeViewItem_Expanded">
                         <TreeView.ItemTemplate>
-                            <HierarchicalDataTemplate DataType="{x:Type folder_models:BackupFolderMenuItem}" ItemsSource="{Binding SourceBackupItems}">
+                            <HierarchicalDataTemplate DataType="{x:Type folder_models:BackupFolderMenuItem}" ItemsSource="{Binding ChildFolderMenuItems}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Width="16" Source="{Binding Image}"/>
                                     <CheckBox IsThreeState="True" IsChecked="{Binding Selected}" Click="FolderCheckBox_Click">
@@ -31,7 +31,7 @@
                                             <Style TargetType="CheckBox">
                                                 <Setter Property="Visibility" Value="Collapsed"/>
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsFolder}" Value="True">
+                                                    <DataTrigger Binding="{Binding IsSelectable}" Value="True">
                                                         <Setter Property="Visibility" Value="Visible"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>

@@ -26,15 +26,15 @@ namespace CompleteBackup.Models.backup
         {
             if (m_BackupName == null)
             {
-                TimeStamp = DateTime.Now;
-                m_BackupName = $"{m_Profile.BackupSignature}_{GetTimeStampString()}";
+                //TimeStamp = DateTime.Now;
+                m_BackupName = GetTargetSetName();// $"{m_Profile.BackupSignature}_{GetTimeStampString()}";
             }
 
             var newTargetPath = m_IStorage.Combine(TargetPath, m_BackupName);
     
             m_IStorage.CreateDirectory(newTargetPath);
 
-            m_BackupSessionHistory.Reset(TimeStamp);
+            m_BackupSessionHistory.Reset(GetTimeStamp());
 
             foreach (var item in SourcePath)
             {

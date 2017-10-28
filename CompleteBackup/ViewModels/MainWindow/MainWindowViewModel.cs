@@ -29,7 +29,7 @@ namespace CompleteBackup.ViewModels.MainWindow
                 { 2, new MainRestoreViewModel() },
             };
 
-            m_CurrentPageViewModel = m_MainViewDictionary[1];
+            m_CurrentPageViewModel = m_MainViewDictionary[2];
         }
 
         private Dictionary<int, object> m_MainViewDictionary;
@@ -48,7 +48,7 @@ namespace CompleteBackup.ViewModels.MainWindow
 
 
 
-        private void UpdateCurrentMainView()
+        public void UpdateCurrentMainView()
         {
             try
             {

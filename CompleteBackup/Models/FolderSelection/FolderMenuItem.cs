@@ -21,12 +21,13 @@ namespace CompleteBackup.Models.FolderSelection
         public string RelativePath { get; set; }
 
         public bool IsFolder { get; set; } = false;
+        public bool IsSelectable { get; set; } = true;
 
         public bool? _Selected = false;
         public bool? Selected { get { return _Selected; } set { _Selected = value; OnPropertyChanged(); } }
 
         public FolderMenuItem ParentItem { get; set; }
-        public ObservableCollection<FolderMenuItem> SourceBackupItems { get; set; } = new ObservableCollection<FolderMenuItem>();
+        public ObservableCollection<FolderMenuItem> ChildFolderMenuItems { get; set; } = new ObservableCollection<FolderMenuItem>();
 
     }
 }

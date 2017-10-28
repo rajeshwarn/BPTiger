@@ -165,17 +165,17 @@ namespace CompleteBackup.ViewModels
                     var newPath = path.Substring(0, path.Length - name.Length - 1);
 
                     var menuItem = InsertNamesToTreeFromHistory(history, item, newPath, iCount + 1);
-                    var newMenuItem = menuItem.SourceBackupItems.Where(m => m.Name == name).FirstOrDefault();
+                    var newMenuItem = menuItem.ChildFolderMenuItems.Where(m => m.Name == name).FirstOrDefault();
                     if (newMenuItem == null)
                     {
                         newMenuItem = new RestoreFolderMenuItem() { IsFolder = true, Path = path, Name = name };
-                        menuItem.SourceBackupItems.Add(newMenuItem);
+                        menuItem.ChildFolderMenuItems.Add(newMenuItem);
                     }
 
                     if (iCount == 0)
                     {
                         var setTimeMenuItem = new RestoreFolderMenuItem() { Name = history.TimeStamp.ToString(), IsFolder = true, HistoryType = item.HistoryType };
-                        newMenuItem.SourceBackupItems.Add(setTimeMenuItem);
+                        newMenuItem.ChildFolderMenuItems.Add(setTimeMenuItem);
                     }
 
                     return newMenuItem;

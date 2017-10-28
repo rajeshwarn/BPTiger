@@ -123,12 +123,12 @@ namespace CompleteBackup.ViewModels
                 string name = parentPath.FullName;
                 var parent = AddPathToMenuItemTree(item, name);
 
-                var found = parent.SourceBackupItems.FirstOrDefault(i => String.Compare(i.Path, path, true) == 0);
+                var found = parent.ChildFolderMenuItems.FirstOrDefault(i => String.Compare(i.Path, path, true) == 0);
                 if (found == null)
                 {
                     FileAttributes attr = File.GetAttributes(path);
                     var newItem = new BackupFolderMenuItem() { IsFolder = true, Attributes = attr, Path = path, Name = path, ParentItem = parent, Selected = false };
-                    parent.SourceBackupItems.Add(newItem);
+                    parent.ChildFolderMenuItems.Add(newItem);
                     return newItem;
                 }
                 else

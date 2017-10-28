@@ -26,6 +26,7 @@ namespace CompleteBackup.Models.backup
         public BackupManager(BackupProfileData profile, GenericStatusBarView progressBar)
 //        public BackupManager(List<FolderData> sourcePath, string currSetPath, IStorageInterface storageInterface, GenericStatusBarView progressBar)
         {
+            m_TimeStamp = DateTime.Now;
             m_Profile = profile;
             SourcePath = profile.FolderList.ToList();
             TargetPath = profile.TargetBackupFolder;
@@ -42,11 +43,21 @@ namespace CompleteBackup.Models.backup
 
         //        public abstract string BackUpProfileSignature { get; }
 
-        public DateTime TimeStamp { get; set; }
+        private DateTime m_TimeStamp;
+        protected DateTime GetTimeStamp()
+        {
+            return m_TimeStamp;
+        }
+
+
+        protected string GetTargetSetName()
+        {
+            return $"{m_Profile.BackupSignature}_{GetTimeStampString()}";
+        }
 
         protected string GetTimeStampString()
         {
-            return  $"{TimeStamp.Year:0000}-{TimeStamp.Month:00}-{TimeStamp.Day:00}_{TimeStamp.Hour:00}{TimeStamp.Minute:00}{TimeStamp.Hour:00}{TimeStamp.Second:00}{TimeStamp.Millisecond:000}";
+            return  $"{m_TimeStamp.Year:0000}-{m_TimeStamp.Month:00}-{m_TimeStamp.Day:00}_{m_TimeStamp.Hour:00}{m_TimeStamp.Minute:00}{m_TimeStamp.Hour:00}{m_TimeStamp.Second:00}{m_TimeStamp.Millisecond:000}";
         }
 
 
@@ -54,7 +65,9 @@ namespace CompleteBackup.Models.backup
         public long ProcessFileCount { get; set; }
 
         public List<FolderData> SourcePath;
+
         public string TargetPath;
+
         private GenericStatusBarView m_ProgressBar;
         public GenericStatusBarView ProgressBar { get { return m_ProgressBar; } set { } }
 

@@ -35,10 +35,10 @@ namespace CompleteBackup.Models.backup
 
             var lastSet = BackupManager.GetLastBackupSetName(m_Profile);
 
-            TimeStamp = DateTime.Now;
-            var targetSet = $"{m_Profile.BackupSignature}_{GetTimeStampString()}";
+//            TimeStamp = DateTime.Now;
+            var targetSet = GetTargetSetName();//  $"{m_Profile.BackupSignature}_{GetTimeStampString()}";
 
-            m_BackupSessionHistory.Reset(TimeStamp);
+            m_BackupSessionHistory.Reset(GetTimeStamp());
 
             if (lastSet == null)
             {

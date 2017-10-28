@@ -1,4 +1,5 @@
-﻿using CompleteBackup.Models.Backup.Storage;
+﻿using CompleteBackup.Models.Backup.Profile;
+using CompleteBackup.Models.Backup.Storage;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
@@ -41,12 +42,14 @@ namespace CompleteBackup.Models.Backup.History
     public class BackupSessionHistory
     {
         IStorageInterface m_Storage;
+        string signature;
 
         BackupSessionHistory() { }
 
         public BackupSessionHistory(IStorageInterface storage)
         {
             m_Storage = storage;
+            //signature = profile.
         }
 
         public List<HistoryItem> HistoryItemList { get; set; } = new List<HistoryItem>();
@@ -67,7 +70,7 @@ namespace CompleteBackup.Models.Backup.History
         public void AddUpdatedFile(string source, string dest)
         {
             var hItem = new HistoryItem() { SourcePath = source, TargetPath = dest, HistoryType = HistoryTypeEnum.Changed };
-            SaveHistoryItem(dest, hItem);
+//            SaveHistoryItem(dest, hItem);
             HistoryItemList.Add(hItem);
         }
         public void AddDeletedFile(string source, string dest)
