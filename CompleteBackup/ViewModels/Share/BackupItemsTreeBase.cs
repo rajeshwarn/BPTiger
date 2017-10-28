@@ -116,6 +116,13 @@ namespace CompleteBackup.ViewModels
         protected abstract List<string> GetAllActiveSets(FolderMenuItem item);
         
 
+        private bool NoTExistsinTreeList(string path, ObservableCollection<FolderMenuItem> list)
+        {
+            var item = list.Where(i => i.Path == path).FirstOrDefault();
+
+            return item == null;
+        }
+
         //Add and update all subitems
         protected void UpdateChildItemsInMenuItem(FolderMenuItem item)
         {
@@ -140,7 +147,7 @@ namespace CompleteBackup.ViewModels
                         {
                             string newPath = m_IStorage.Combine(item.Path, subdirectory);
                             FileAttributes attr = m_IStorage.GetFileAttributes(newPath);
-                            if (!IsHidden(attr))
+                            if (!IsHidden(attr) && NoTExistsinTreeList(newPath, item.SourceBackupItems))
                             {
                                 bool bSelected = false;
                                 if (item.Selected == true)
@@ -155,7 +162,7 @@ namespace CompleteBackup.ViewModels
 
                         //Add all files under item.Path
                         var fileList = m_IStorage.GetFiles(path);
-                        foreach (var file in fileList)
+                        foreach (var file in fileList.Where(f => NoTExistsinTreeList(f, item.SourceBackupItems)))
                         {
                             //var filePath = m_IStorage.Combine(item.Path, file);
                             var fileName = m_IStorage.GetFileName(file);
