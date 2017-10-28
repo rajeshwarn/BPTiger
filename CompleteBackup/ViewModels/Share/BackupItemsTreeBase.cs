@@ -81,7 +81,7 @@ namespace CompleteBackup.ViewModels
         }
 
         protected abstract void AddRootItemsToTree();
-        protected abstract FolderMenuItem CreateMenuItem(bool isFolder, bool isSelected, string path, string name, FolderMenuItem parentItem, FileAttributes attr);
+        protected abstract FolderMenuItem CreateMenuItem(bool isFolder, bool isSelected, string path, string relativePath, string name, FolderMenuItem parentItem, FileAttributes attr);
 
         protected List<string> GetDirectoriesNames(string path)
         {
@@ -113,40 +113,75 @@ namespace CompleteBackup.ViewModels
             return true;
         }
 
+        protected abstract List<string> GetAllActiveSets(FolderMenuItem item);
+        
+
         //Add and update all subitems
         protected void UpdateChildItemsInMenuItem(FolderMenuItem item)
         {
             if (item.IsFolder)
             {
-                //Add all folders under item.Path
-                var sourceSubdirectoryEntriesList = GetDirectoriesNames(item.Path);                
-                foreach (string subdirectory in sourceSubdirectoryEntriesList)
+                var pathList = GetAllActiveSets(item);
+
+                int i = 0;
+                foreach (var path in pathList)
                 {
-                    string newPath = m_IStorage.Combine(item.Path, subdirectory);
-                    FileAttributes attr = m_IStorage.GetFileAttributes(newPath);
-                    if (!IsHidden(attr))
+                    i++;
+                    //Add all folders under item.Path
+                    if (m_IStorage.DirectoryExists(path))
                     {
-                        bool bSelected = false;
-                        if (item.Selected == true)
+                        if (i > 1)
                         {
-                            bSelected = true;
+                            int tttt = 0;
                         }
 
-                        item.SourceBackupItems.Add(CreateMenuItem(true, bSelected, newPath, subdirectory, item, attr));
-                    }
-                }
+                        var sourceSubdirectoryEntriesList = GetDirectoriesNames(path);
+                        foreach (string subdirectory in sourceSubdirectoryEntriesList)
+                        {
+                            string newPath = m_IStorage.Combine(item.Path, subdirectory);
+                            FileAttributes attr = m_IStorage.GetFileAttributes(newPath);
+                            if (!IsHidden(attr))
+                            {
+                                bool bSelected = false;
+                                if (item.Selected == true)
+                                {
+                                    bSelected = true;
+                                }
 
-                //Add all files under item.Path
-                var fileList = m_IStorage.GetFiles(item.Path);
-                foreach (var file in fileList)
-                {
-                    //var filePath = m_IStorage.Combine(item.Path, file);
-                    var fileName = m_IStorage.GetFileName(file);
-                    FileAttributes attr = File.GetAttributes(file);
-                    if (!IsHidden(attr))
-                    {
-                        bool bSelected = false;
-                        item.SourceBackupItems.Add(CreateMenuItem(false, bSelected, file, fileName, item, attr));
+                                var rp = m_IStorage.Combine(item.RelativePath, subdirectory);
+                                item.SourceBackupItems.Add(CreateMenuItem(true, bSelected, newPath, rp, subdirectory, item, attr));
+                            }
+                        }
+
+                        //Add all files under item.Path
+                        var fileList = m_IStorage.GetFiles(path);
+                        foreach (var file in fileList)
+                        {
+                            //var filePath = m_IStorage.Combine(item.Path, file);
+                            var fileName = m_IStorage.GetFileName(file);
+                            FileAttributes attr = File.GetAttributes(file);
+                            if (!IsHidden(attr))
+                            {
+                                //find if item already added
+                                var eItem = item.SourceBackupItems.FirstOrDefault(it => !it.IsFolder && it.Name == fileName);
+                                if (eItem == null)
+                                {                                    
+                                    var rpeItemPath = m_IStorage.Combine(item.RelativePath, fileName);
+                                    var repItem = CreateMenuItem(false, false, file, rpeItemPath, fileName, item, attr);
+                                    item.SourceBackupItems.Add(repItem);
+
+                                    eItem = repItem;
+                                }
+
+                                bool bSelected = false;
+                                var rp = m_IStorage.Combine(item.RelativePath, fileName);
+                                eItem.SourceBackupItems.Add(CreateMenuItem(false, bSelected, file, rp, "SIG", item, attr));
+
+                                //bool bSelected = false;
+                                //var rp = m_IStorage.Combine(item.RelativePath, fileName);
+                                //item.SourceBackupItems.Add(CreateMenuItem(false, bSelected, file, rp, fileName, item, attr));
+                            }
+                        }
                     }
                 }
             }

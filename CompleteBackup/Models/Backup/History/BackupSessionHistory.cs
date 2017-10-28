@@ -68,7 +68,7 @@ namespace CompleteBackup.Models.Backup.History
         }
         public void AddNoChangeFile(string item)
         {
-            HistoryItemList.Add(new HistoryItem() { Path = item, HistoryType = HistoryTypeEnum.NoChange });
+            //HistoryItemList.Add(new HistoryItem() { Path = item, HistoryType = HistoryTypeEnum.NoChange });
         }
 
 

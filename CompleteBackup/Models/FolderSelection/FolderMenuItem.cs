@@ -18,6 +18,7 @@ namespace CompleteBackup.Models.FolderSelection
     {
         public string Name { get; set; }
         public string Path { get; set; }
+        public string RelativePath { get; set; }
 
         public bool IsFolder { get; set; } = false;
 
@@ -27,41 +28,5 @@ namespace CompleteBackup.Models.FolderSelection
         public FolderMenuItem ParentItem { get; set; }
         public ObservableCollection<FolderMenuItem> SourceBackupItems { get; set; } = new ObservableCollection<FolderMenuItem>();
 
-        //protected ImageSource m_Image;
-        //public ImageSource Image2
-        //{
-        //    get { return m_Image; }
-        //    set { m_Image = value; OnPropertyChanged(); }
-        //}
-
-//        m_Image = GetImageSource(path),
-
-//        m_Image = GetImageSource(path),
-
-
-
-        //public ImageSource Image
-        //{
-        //    get
-        //    {
-        //        ImageSource imageSource = null;
-        //        try
-        //        {
-        //            var icon = m_ ExtractFromPath(Path);
-
-        //            imageSource = Imaging.CreateBitmapSourceFromHIcon(
-        //                icon.Handle,
-        //                System.Windows.Int32Rect.Empty,
-        //                System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Trace.WriteLine($"Failed to get Icon {Path}\n{ex.Message}");
-        //        }
-
-        //        return imageSource;
-        //    }
-        //    set { }
-        //}
     }
 }

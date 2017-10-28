@@ -30,13 +30,14 @@ namespace CompleteBackup.ViewModels
             }
         }
 
-        protected override FolderMenuItem CreateMenuItem(bool isFolder, bool isSelected, string path, string name, FolderMenuItem parentItem, FileAttributes attr)
+        protected override FolderMenuItem CreateMenuItem(bool isFolder, bool isSelected, string path, string relativePath, string name, FolderMenuItem parentItem, FileAttributes attr)
         {
             var menuItem = new BackupFolderMenuItem()
             {
                 IsFolder = isFolder,
                 Attributes = attr,
                 Path = path,
+                RelativePath = relativePath,
                 Name = name,
                 ParentItem = parentItem,
                 Selected = isSelected,
@@ -139,6 +140,11 @@ namespace CompleteBackup.ViewModels
             {
                 return item;
             }
+        }
+
+        protected override List<string> GetAllActiveSets(FolderMenuItem item)
+        {
+            return new List<string>() { item.Path };
         }
 
     }

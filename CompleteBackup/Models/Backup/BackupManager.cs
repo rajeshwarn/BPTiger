@@ -94,6 +94,19 @@ namespace CompleteBackup.Models.backup
 
             return backupProfileList.OrderByDescending(set => set).ToList();
         }
+        public static List<string> GetBackupSetWithTimeList(BackupProfileData profile)
+        {
+            var backupProfileList = new List<string>();
+            var storage = profile.GetStorageInterface();
+
+            string[] setEntries = storage.GetDirectories(profile.TargetBackupFolder);
+            foreach (var entry in setEntries.Where(s => storage.GetFileName(s).StartsWith(profile.BackupSignature)))
+            {
+                backupProfileList.Add(storage.GetFileName(entry));
+            }
+
+            return backupProfileList.OrderByDescending(set => set).ToList();
+        }
 
         public static string GetLastBackupSetName(BackupProfileData profile)
         {

@@ -28,12 +28,13 @@ namespace CompleteBackup.ViewModels
         {
         }
 
-        protected override FolderMenuItem CreateMenuItem(bool isFolder, bool isSelected, string path, string name, FolderMenuItem parentItem, FileAttributes attr)
+        protected override FolderMenuItem CreateMenuItem(bool isFolder, bool isSelected, string path, string relativePath, string name, FolderMenuItem parentItem, FileAttributes attr)
         {
             var menuItem = new RestoreFolderMenuItem()
             {
                 IsFolder = isFolder,
                 Path = path,
+                RelativePath = relativePath,
                 Name = name,
                 ParentItem = parentItem,
                 Selected = isSelected,
@@ -44,11 +45,21 @@ namespace CompleteBackup.ViewModels
         }
 
 
+        List<string> m_BackupSetPathList = new List<string>();
+
         bool bLoadFromHistory = false;
         protected override void AddRootItemsToTree()
         {
             var profile = ProjectData.CurrentBackupProfile;
             ClearItemList();
+            m_BackupSetPathList.Clear();
+
+            var lastSet = BackupManager.GetLastBackupSetName(profile);
+            var backSetList = BackupManager.GetBackupSetList(profile);
+            foreach(var setPath in backSetList.Where(p => p != lastSet))
+            {
+                m_BackupSetPathList.Add(m_IStorage.Combine(profile.TargetBackupFolder, setPath));
+            }
 
             if (bLoadFromHistory)
             {
@@ -56,7 +67,6 @@ namespace CompleteBackup.ViewModels
             }
             else
             {
-                var lastSet = BackupManager.GetLastBackupSetName(profile);
                 var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, lastSet);
 
                 foreach (var item in profile.FolderList)
@@ -64,7 +74,7 @@ namespace CompleteBackup.ViewModels
                     var directoryName = m_IStorage.GetFileName(item.Path);
                     var restorePath = m_IStorage.Combine(lastSetPath, directoryName);
 
-                    var rootItem = CreateMenuItem(true, false, restorePath, directoryName, null, 0);
+                    var rootItem = CreateMenuItem(true, false, restorePath, directoryName, directoryName, null, 0);
 
                     UpdateChildItemsInMenuItem(rootItem);
 
@@ -78,8 +88,36 @@ namespace CompleteBackup.ViewModels
 
 
 
+        protected override List<string> GetAllActiveSets(FolderMenuItem item)
+        {
+            var activeSetList = new List<string>() { item.Path };
 
-        
+            foreach(var set in m_BackupSetPathList)
+            {
+                activeSetList.Add(m_IStorage.Combine(set, item.Name));
+            }
+
+            return activeSetList;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         /// <summary>
         /// Load from history file
