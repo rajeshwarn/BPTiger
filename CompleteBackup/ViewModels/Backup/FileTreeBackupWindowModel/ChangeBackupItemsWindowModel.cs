@@ -68,6 +68,7 @@ namespace CompleteBackup.ViewModels
                         IsFolder = true,
                         Attributes = attr,
                         Path = drive.Name,
+                        RelativePath = drive.Name,
                         Name = $"{drive.VolumeLabel} ({drive.DriveType}) ({drive.Name})"
                     };
 
@@ -87,14 +88,14 @@ namespace CompleteBackup.ViewModels
             var itemList = new List<FolderMenuItem>();
             Application.Current.Dispatcher.Invoke(new Action(() =>
             {
-                foreach (var folder in ProfileData.FolderList)
+                foreach (var folder in SelectedItemList)
                 {
                     string pr = Directory.GetDirectoryRoot(folder.Path);
-                    var match = FolderMenuItemTree.Where(f => String.Compare(f.Path, pr, true) == 0);
+                    var match = FolderMenuItemTree.FirstOrDefault(f => String.Compare(f.Path, pr, true) == 0);
 
-                    if (match.Count() > 0)
+                    if (match != null)
                     {
-                        var item = AddPathToMenuItemTree(match.ElementAt(0), folder.Path);
+                        var item = AddPathToMenuItemTree(match, folder.Path);
                         itemList.Add(item);
                     }
                 }
@@ -122,8 +123,8 @@ namespace CompleteBackup.ViewModels
                 string name = parentPath.FullName;
                 var parent = AddPathToMenuItemTree(item, name);
 
-                var found = parent.SourceBackupItems.Where(i => String.Compare(i.Path, path, true) == 0);
-                if (found.Count() == 0)
+                var found = parent.SourceBackupItems.FirstOrDefault(i => String.Compare(i.Path, path, true) == 0);
+                if (found == null)
                 {
                     FileAttributes attr = File.GetAttributes(path);
                     var newItem = new BackupFolderMenuItem() { IsFolder = true, Attributes = attr, Path = path, Name = path, ParentItem = parent, Selected = false };
@@ -132,8 +133,8 @@ namespace CompleteBackup.ViewModels
                 }
                 else
                 {
-                    UpdateChildItemsInMenuItem(found.ElementAt(0));
-                    return found.ElementAt(0);
+                    UpdateChildItemsInMenuItem(found);
+                    return found;
                 }
             }
             else

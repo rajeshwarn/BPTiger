@@ -162,10 +162,11 @@ namespace CompleteBackup.ViewModels
                             FileAttributes attr = File.GetAttributes(file);
                             if (!IsHidden(attr))
                             {
-                                //find if item already added
-                                var eItem = item.SourceBackupItems.FirstOrDefault(it => !it.IsFolder && it.Name == fileName);
+                                //                                find if item already added
+                                //                              var eItem = item.SourceBackupItems.FirstOrDefault(it => !it.IsFolder && it.Name == fileName);
+                                FolderMenuItem eItem = null;
                                 if (eItem == null)
-                                {                                    
+                                {
                                     var rpeItemPath = m_IStorage.Combine(item.RelativePath, fileName);
                                     var repItem = CreateMenuItem(false, false, file, rpeItemPath, fileName, item, attr);
                                     item.SourceBackupItems.Add(repItem);
@@ -173,9 +174,9 @@ namespace CompleteBackup.ViewModels
                                     eItem = repItem;
                                 }
 
-                                bool bSelected = false;
-                                var rp = m_IStorage.Combine(item.RelativePath, fileName);
-                                eItem.SourceBackupItems.Add(CreateMenuItem(false, bSelected, file, rp, "SIG", item, attr));
+                              //  bool bSelected = false;
+                            //    var rp = m_IStorage.Combine(item.RelativePath, fileName);
+                              //  eItem.SourceBackupItems.Add(CreateMenuItem(false, bSelected, file, rp, "SIG", eItem, attr));
 
                                 //bool bSelected = false;
                                 //var rp = m_IStorage.Combine(item.RelativePath, fileName);
