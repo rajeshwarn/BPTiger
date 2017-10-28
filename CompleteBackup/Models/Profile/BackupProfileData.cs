@@ -309,13 +309,23 @@ namespace CompleteBackup.Models.Backup.Profile
                     BackupSourceFoldersSize = 0;
                     foreach (var item in FolderList)
                     {
-                        item.NumberOfFiles = new DirectoryInfo(item.Path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => 1);
-                        item.TotalSize = new DirectoryInfo(item.Path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
-                        Application.Current.Dispatcher.Invoke(new Action(() =>
+                        if (item.IsFolder)
                         {
-                            BackupSourceFilesNumber += item.NumberOfFiles;
-                            BackupSourceFoldersSize += item.TotalSize;
-                        }));
+                            item.NumberOfFiles = new DirectoryInfo(item.Path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => 1);
+                            item.TotalSize = new DirectoryInfo(item.Path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
+                            Application.Current.Dispatcher.Invoke(new Action(() =>
+                            {
+                                BackupSourceFilesNumber += item.NumberOfFiles;
+                                BackupSourceFoldersSize += item.TotalSize;
+                            }));
+                        }
+                        else
+                        {
+                            Application.Current.Dispatcher.Invoke(new Action(() =>
+                            {
+                                BackupSourceFilesNumber++;
+                            }));
+                        }
                     }
 
                     m_BackupTargetDiskSizeNumber = 0;

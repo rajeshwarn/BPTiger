@@ -267,15 +267,15 @@ namespace CompleteBackup.ViewModels
         }
         void UpdateSelectedFolderListStep(BackupProfileData profile, ObservableCollection<FolderMenuItem> folderList)
         {
-            foreach (var folder in folderList.Where(i => (i.IsSelectable)))
+            foreach (var item in folderList.Where(i => (i.IsSelectable)))
             {
-                if (folder.Selected == true)
+                if (item.Selected == true)
                 {
-                    SelectedItemList.Add(new FolderData { Path = folder.Path });
+                    SelectedItemList.Add(new FolderData { Path = item.Path, IsFolder = item.IsFolder });
                 }
-                else if (folder.Selected == null)
+                else if (item.Selected == null)
                 {
-                    UpdateSelectedFolderListStep(profile, folder.ChildFolderMenuItems);
+                    UpdateSelectedFolderListStep(profile, item.ChildFolderMenuItems);
                 }
             }
         }

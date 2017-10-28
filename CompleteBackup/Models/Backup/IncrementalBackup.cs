@@ -51,7 +51,22 @@ namespace CompleteBackup.Models.backup
                     var targetdirectoryName = m_IStorage.GetFileName(item.Path);
                     var targetPath = m_IStorage.Combine(newTargetPath, targetdirectoryName);
 
-                    ProcessNewBackupStep(item.Path, targetPath);
+                    if (item.IsFolder)
+                    {
+                        ProcessNewBackupStep(item.Path, targetPath);
+                    }
+                    else
+                    {
+                        UpdateProgress("Running... ", ++ProcessFileCount);
+
+                        var fileName = m_IStorage.GetFileName(item.Path);
+                        // first set, copy to new set
+                        var targetFilePath = m_IStorage.Combine(newTargetPath, fileName);
+
+                        m_IStorage.CopyFile(item.Path, targetFilePath);
+
+                        m_BackupSessionHistory.AddNewFile(item.Path, targetFilePath);
+                    }
                 }
 
                 BackupSessionHistory.SaveHistory(TargetPath, targetSet, m_BackupSessionHistory);
@@ -103,7 +118,15 @@ namespace CompleteBackup.Models.backup
                     var targetPath = m_IStorage.Combine(newTargetPath, targetdirectoryName);
                     var lastTargetPath = m_IStorage.Combine(lastTargetPath_, targetdirectoryName);
 
-                    ProcessIncrementalStep(item.Path, targetPath, lastTargetPath);
+                    if (item.IsFolder)
+                    {
+                        ProcessIncrementalStep(item.Path, targetPath, lastTargetPath);
+                    }
+                    else
+                    {
+                        UpdateProgress("Running... ", ++ProcessFileCount);
+                        HandleFile(m_IStorage.GetDirectoryName(item.Path), newTargetPath, lastTargetPath, targetdirectoryName);
+                    }
                 }
 
                 BackupSessionHistory.SaveHistory(TargetPath, targetSet, m_BackupSessionHistory);
@@ -142,7 +165,7 @@ namespace CompleteBackup.Models.backup
                 ProcessNewBackupStep(newSourceSetPath, newCurrSetPath);
             }
         }
-    
+
 
         public void ProcessIncrementalStep(string sourcePath, string currSetPath, string lastSetPath)
         {

@@ -9,6 +9,7 @@ namespace CompleteBackup.Models.Backup.Profile
     public class FolderData :ObservableObject
     {
         public string Path { get; set; }
+        public bool IsFolder { get; set; }
 
         private long m_NumberOfFiles { get; set; }
         public long NumberOfFiles { get { return m_NumberOfFiles; } set { m_NumberOfFiles = value; OnPropertyChanged(); } }

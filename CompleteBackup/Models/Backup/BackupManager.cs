@@ -141,12 +141,18 @@ namespace CompleteBackup.Models.backup
 
             foreach (var item in SourcePath)
             {
-                long files_ = 0;
-                long directories_ = 0;
-                m_IStorage.GetNumberOfFiles(item.Path, ref files_, ref directories_);
-
-                directories += directories_;
-                files += files_;
+                if (item.IsFolder)
+                {
+                    long files_ = 0;
+                    long directories_ = 0;
+                    m_IStorage.GetNumberOfFiles(item.Path, ref files_, ref directories_);
+                    directories += directories_;
+                    files += files_;
+                }
+                else
+                {
+                    files++;
+                }
             }
 
             NumberOfFiles = files;
