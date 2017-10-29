@@ -29,7 +29,8 @@
     </UserControl.Resources>
     <DockPanel LastChildFill="True">
         <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
-            <local:SourceDestinationItemsView x:Name="folderTree" DataContext="{Binding Path=SourceDestinationItemsViewModel}"/>
+            <local:SourceDestinationItemsView x:Name="folderTree"/>
+            <!--DataContext="{Binding Path=SourceDestinationItemsViewModel}"/>-->
             <!--<local:SourceDestinationItemsView x:Name="folderTree"/>-->
             <!--<DockPanel>
                 <extended_view:ProcessingSpinnerView HorizontalAlignment="Right"/>

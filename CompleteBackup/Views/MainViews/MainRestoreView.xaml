@@ -21,7 +21,8 @@
     <Grid>
         <DockPanel LastChildFill="True">
             <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
-                <local:SourceDestinationItemsView x:Name="folderTree" DataContext="{Binding Path=RestoreSourceDestinationItemsViewModelDataContext}"/>
+                <local:SourceDestinationItemsView x:Name="folderTree"/>
+                <!--DataContext="{Binding Path=RestoreSourceDestinationItemsViewModelDataContext}"/>-->
             </StackPanel>
 
             <!--<profile_views:ProfileDetailsPageView x:Name="profileDetailsPageView" Margin="0,20,0,0"/>-->

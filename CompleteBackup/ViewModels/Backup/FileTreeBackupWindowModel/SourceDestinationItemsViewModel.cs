@@ -24,7 +24,7 @@ namespace CompleteBackup.ViewModels
 {
     public class SourceDestinationItemsViewModel : ObservableObject
     {
-        public ICommand OpenChangeBackupItemsWindowCommand { get; private set; } = new OpenChangeBackupItemsWindowICommand<object>();
+        public ICommand OpenSelectBackupItemsWindowCommand { get; private set; } = new OpenSelectBackupItemsWindowICommand<object>();
         public ICommand SelectFolderNameCommand { get; private set; } = new SelectFolderNameICommand<object>();
 
 
@@ -35,8 +35,9 @@ namespace CompleteBackup.ViewModels
 
         public void OpenSelectionWindow()
         {
-            new ChangeBackupItemsWindow().ShowDialog();
+            new SelectBackupItemsWindow().ShowDialog();
         }
+
 
         public string SourceFileListGroupTitle { get; set; } = "Source Items";
         public string SourceFileActionTitle { get; set; } = "Change";

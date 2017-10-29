@@ -329,6 +329,41 @@ namespace CompleteBackup.Models.Backup.Profile
                         }
                     }
 
+
+                    //Restore folders sizes and number of files
+                    RestoreSourceFilesNumber = 0;
+                    RestoreSourceFoldersSize = 0;
+                    foreach (var item in RestoreFolderList)
+                    {
+                        if (item.IsFolder)
+                        {
+                            item.NumberOfFiles = new DirectoryInfo(item.Path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => 1);
+                            item.TotalSize = new DirectoryInfo(item.Path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
+                            Application.Current.Dispatcher.Invoke(new Action(() =>
+                            {
+                                RestoreSourceFilesNumber += item.NumberOfFiles;
+                                RestoreSourceFoldersSize += item.TotalSize;
+                            }));
+                        }
+                        else
+                        {
+                            Application.Current.Dispatcher.Invoke(new Action(() =>
+                            {
+                                RestoreSourceFilesNumber++;
+                            }));
+                        }
+                    }
+
+
+
+
+
+
+
+
+
+
+
                     m_BackupTargetDiskSizeNumber = 0;
                     //Target disk size
                     if (m_TargetBackupFolder != null)
@@ -433,5 +468,14 @@ namespace CompleteBackup.Models.Backup.Profile
 
         public long m_BackupSourceFoldersSize { get; set; } = 0;
         public long BackupSourceFoldersSize { get { return m_BackupSourceFoldersSize; } set { m_BackupSourceFoldersSize = value; OnPropertyChanged(); } }
+
+
+        public long m_RestoreSourceFilesNumber { get; set; } = 0;
+        public long RestoreSourceFilesNumber { get { return m_RestoreSourceFilesNumber; } set { m_RestoreSourceFilesNumber = value; OnPropertyChanged(); } }
+
+        public long m_RestoreSourceFoldersSize { get; set; } = 0;
+        public long RestoreSourceFoldersSize { get { return m_RestoreSourceFoldersSize; } set { m_RestoreSourceFoldersSize = value; OnPropertyChanged(); } }
+
+
     }
 }

@@ -8,9 +8,9 @@ using System.Windows.Input;
 
 namespace CompleteBackup.ViewModels.FolderSelection.ICommands
 {
-    internal class OpenChangeBackupItemsWindowICommand<T> : ICommand
+    internal class OpenSelectBackupItemsWindowICommand<T> : ICommand
     {
-        public OpenChangeBackupItemsWindowICommand()
+        public OpenSelectBackupItemsWindowICommand()
         {
         }
         public event EventHandler CanExecuteChanged
@@ -46,7 +46,7 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
                 vmBackup.OpenSelectionWindow();
             }
 
-            //            new ChangeBackupItemsWindow().ShowDialog();
+            //            new SelectBackupItemsWindow().ShowDialog();
         }
     }
 }

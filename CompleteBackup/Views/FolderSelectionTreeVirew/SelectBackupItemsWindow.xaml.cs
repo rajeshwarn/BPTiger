@@ -17,11 +17,11 @@ using System.Windows.Shapes;
 namespace CompleteBackup.Views
 {
     /// <summary>
-    /// Interaction logic for ChangeBackupItemsWindow.xaml
+    /// Interaction logic for SelectBackupItemsWindow.xaml
     /// </summary>
-    public partial class ChangeBackupItemsWindow : Window
+    public partial class SelectBackupItemsWindow : Window
     {
-        public ChangeBackupItemsWindow()
+        public SelectBackupItemsWindow()
         {
             InitializeComponent();
         }
@@ -30,7 +30,7 @@ namespace CompleteBackup.Views
             TreeViewItem tvi = e.OriginalSource as TreeViewItem;
             var itemList = tvi.Items;
 
-            var vm = DataContext as ChangeBackupItemsWindowModel;
+            var vm = DataContext as SelectBackupItemsWindowModel;
             vm.ExpandFolder(itemList);
         }
 
@@ -44,7 +44,7 @@ namespace CompleteBackup.Views
             }
 
             var dc = checkBox.DataContext as BackupFolderMenuItem;
-            var viewModel = DataContext as ChangeBackupItemsWindowModel;
+            var viewModel = DataContext as SelectBackupItemsWindowModel;
             viewModel.FolderTreeClick(dc, (bool)checkBox.IsChecked);
         }
     }

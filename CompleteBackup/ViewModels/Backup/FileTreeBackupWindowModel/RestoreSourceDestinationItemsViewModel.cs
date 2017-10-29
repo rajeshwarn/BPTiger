@@ -24,7 +24,7 @@ namespace CompleteBackup.ViewModels
 {
     public class RestoreSourceDestinationItemsViewModel : ObservableObject
     {
-        public ICommand OpenChangeBackupItemsWindowCommand { get; private set; } = new OpenChangeBackupItemsWindowICommand<object>();
+        public ICommand OpenSelectBackupItemsWindowCommand { get; private set; } = new OpenSelectBackupItemsWindowICommand<object>();
         public ICommand SelectFolderNameCommand { get; private set; } = new SelectFolderNameICommand<object>();
 
 

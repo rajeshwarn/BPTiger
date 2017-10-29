@@ -100,7 +100,7 @@
     <Compile Include="ViewModels\MainWindow\ICommands\StopBackupICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\PauseBackupICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\StartBackupICommand.cs" />
-    <Compile Include="ViewModels\Backup\FileTreeBackupWindowModel\ChangeBackupItemsWindowModel.cs" />
+    <Compile Include="ViewModels\Backup\FileTreeBackupWindowModel\SelectBackupItemsWindowModel.cs" />
     <Compile Include="ViewModels\ExtendedControls\ChartGaugeViewModel.cs" />
     <Compile Include="ViewModels\Backup\MainBackupViewModel.cs" />
     <Compile Include="ViewModels\Restore\MainRestoreViewModel.cs" />
@@ -119,19 +119,19 @@
     <Compile Include="Views\ExtendedControls\ProcessingSpinnerView.xaml.cs">
       <DependentUpon>ProcessingSpinnerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Profile\FolderTree\RestoreBackupItemsWindow.xaml.cs">
+    <Compile Include="Views\FolderSelectionTreeVirew\RestoreBackupItemsWindow.xaml.cs">
       <DependentUpon>RestoreBackupItemsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Profile\FolderTree\ChangeBackupItemsWindow.xaml.cs">
-      <DependentUpon>ChangeBackupItemsWindow.xaml</DependentUpon>
+    <Compile Include="Views\FolderSelectionTreeVirew\SelectBackupItemsWindow.xaml.cs">
+      <DependentUpon>SelectBackupItemsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ExtendedControls\ChartGaugeView.xaml.cs">
       <DependentUpon>ChartGaugeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainTab\MainBackupView.xaml.cs">
+    <Compile Include="Views\MainViews\MainBackupView.xaml.cs">
       <DependentUpon>MainBackupView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainTab\MainRestoreView.xaml.cs">
+    <Compile Include="Views\MainViews\MainRestoreView.xaml.cs">
       <DependentUpon>MainRestoreView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Profile\SourceDestinationItemsView.xaml.cs">
@@ -163,11 +163,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Profile\FolderTree\RestoreBackupItemsWindow.xaml">
+    <Page Include="Views\FolderSelectionTreeVirew\RestoreBackupItemsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Profile\FolderTree\ChangeBackupItemsWindow.xaml">
+    <Page Include="Views\FolderSelectionTreeVirew\SelectBackupItemsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -175,11 +175,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainTab\MainBackupView.xaml">
+    <Page Include="Views\MainViews\MainBackupView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainTab\MainRestoreView.xaml">
+    <Page Include="Views\MainViews\MainRestoreView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
