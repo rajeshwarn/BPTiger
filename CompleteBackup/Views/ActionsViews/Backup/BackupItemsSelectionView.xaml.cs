@@ -38,7 +38,7 @@ namespace CompleteBackup.Views
         //     {
         //         var profile = BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile;
 
-        //         var vm = this.DataContext as SourceDestinationItemsViewModel;
+        //         var vm = this.DataContext as BackupItemsSelectionViewModel;
         ////         vm.Init();
         //     }
 

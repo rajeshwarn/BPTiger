@@ -8,6 +8,6 @@ namespace CompleteBackup.ViewModels
 {
     class MainBackupViewModel
     {
-        public SourceDestinationItemsViewModel SourceDestinationItemsViewModel { get; set; } = new SourceDestinationItemsViewModel();
+        public BackupItemsSelectionViewModel BackupItemsSelectionViewModel { get; set; } = new BackupItemsSelectionViewModel();
     }
 }

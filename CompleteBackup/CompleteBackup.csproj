@@ -106,7 +106,7 @@
     <Compile Include="ViewModels\Restore\MainRestoreViewModel.cs" />
     <Compile Include="ViewModels\Profile\ICommands\CloseWindowICommand.cs" />
     <Compile Include="ViewModels\Backup\FileTreeBackupWindowModel\ICommands\OpenChangeBackupItemsWindowICommand.cs" />
-    <Compile Include="ViewModels\Backup\FileTreeBackupWindowModel\SourceDestinationItemsViewModel.cs" />
+    <Compile Include="ViewModels\Backup\FileTreeBackupWindowModel\BackupItemsSelectionViewModel.cs" />
     <Compile Include="ViewModels\Backup\FileTreeBackupWindowModel\ICommands\ExpandFolderTreeICommand.cs" />
     <Compile Include="ViewModels\Backup\FileTreeBackupWindowModel\ICommands\SelectFolderNameICommand.cs" />
     <Compile Include="ViewModels\ItemTreeSelection\ICommands\SaveFolderSelectionICommand.cs" />

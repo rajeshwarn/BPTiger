@@ -13,7 +13,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.DataContext>
-        <view_models:SourceDestinationItemsViewModel/>
+        <view_models:BackupItemsSelectionViewModel/>
     </UserControl.DataContext>
     <UserControl.Resources>
         <convertors:NullVisibilityConverter x:Key="NullToVisibilityConverter"/>

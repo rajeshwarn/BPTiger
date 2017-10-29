@@ -35,7 +35,7 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
         {
             //CHANGE to poolomorphsimmm
             var vmRestore = parameter as RestoreSourceDestinationItemsViewModel;
-            var vmBackup = parameter as SourceDestinationItemsViewModel;
+            var vmBackup = parameter as BackupItemsSelectionViewModel;
 
             if (vmRestore != null)
             {

@@ -19,7 +19,7 @@
             <extended_view:ProcessingSpinnerView/>
         </DataTemplate>
         <DataTemplate
-            DataType="{x:Type view_model:SourceDestinationItemsViewModel}">
+            DataType="{x:Type view_model:BackupItemsSelectionViewModel}">
             <local:BackupItemsSelectionView/>
         </DataTemplate>
         
@@ -30,7 +30,7 @@
     <DockPanel LastChildFill="True">
         <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
             <local:BackupItemsSelectionView x:Name="folderTree"/>
-            <!--DataContext="{Binding Path=SourceDestinationItemsViewModel}"/>-->
+            <!--DataContext="{Binding Path=BackupItemsSelectionViewModel}"/>-->
             <!--<local:BackupItemsSelectionView x:Name="folderTree"/>-->
             <!--<DockPanel>
                 <extended_view:ProcessingSpinnerView HorizontalAlignment="Right"/>
