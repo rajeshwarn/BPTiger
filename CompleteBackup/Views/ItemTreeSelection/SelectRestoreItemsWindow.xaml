@@ -1,4 +1,4 @@
-﻿<Window x:Class="CompleteBackup.Views.RestoreBackupItemsWindow"
+﻿<Window x:Class="CompleteBackup.Views.SelectRestoreItemsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,9 +7,9 @@
         xmlns:view_models="clr-namespace:CompleteBackup.ViewModels"
         xmlns:folder_models="clr-namespace:CompleteBackup.Models.FolderSelection"
         mc:Ignorable="d"
-        Title="RestoreBackupItemsWindow" Height="600" Width="500">
+        Title="SelectRestoreItemsWindow" Height="600" Width="500">
     <Window.DataContext>
-        <view_models:RestoreBackupItemsWindowModel/>
+        <view_models:SelectRestoreItemsWindowModel/>
     </Window.DataContext>
     
     <Grid>

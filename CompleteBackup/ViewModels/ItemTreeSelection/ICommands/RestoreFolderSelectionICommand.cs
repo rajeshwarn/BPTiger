@@ -28,7 +28,7 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
         public bool CanExecute(object parameter)
         {
             bool bExecute = false;
-            var viewModel = parameter as RestoreBackupItemsWindowModel;
+            var viewModel = parameter as SelectRestoreItemsWindowModel;
         
             if (viewModel?.DirtyFlag == true)
             {
@@ -40,7 +40,7 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
 
         public void Execute(object parameter)
         {
-            var viewModel = parameter as RestoreBackupItemsWindowModel;
+            var viewModel = parameter as SelectRestoreItemsWindowModel;
 
             if (viewModel != null)
             {

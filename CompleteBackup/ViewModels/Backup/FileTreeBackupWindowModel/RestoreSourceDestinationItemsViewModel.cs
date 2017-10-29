@@ -34,7 +34,7 @@ namespace CompleteBackup.ViewModels
 
         public void OpenSelectionWindow()
         {
-            new RestoreBackupItemsWindow().Show();
+            new SelectRestoreItemsWindow().Show();
         }
 
 

@@ -20,11 +20,11 @@ using System.Windows.Input;
 
 namespace CompleteBackup.ViewModels
 {
-    class RestoreBackupItemsWindowModel : BackupItemsTreeBase
+    class SelectRestoreItemsWindowModel : BackupItemsTreeBase
     {
         public ICommand RestoreFolderSelectionCommand { get; private set; } = new RestoreFolderSelectionICommand<object>();
 
-        public RestoreBackupItemsWindowModel () : base()
+        public SelectRestoreItemsWindowModel() : base()
         {
         }
 
