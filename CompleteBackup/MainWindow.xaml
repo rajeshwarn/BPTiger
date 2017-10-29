@@ -13,7 +13,7 @@
         xmlns:main_viewmodels="clr-namespace:CompleteBackup.ViewModels.MainWindow"  
         xmlns:local="clr-namespace:CompleteBackup"
         mc:Ignorable="d"
-        Title="MainWindow" Height="750" Width="825">
+        Title="{Binding ProjectData.CurrentBackupProfile.Name}" Height="750" Width="825">
     <Window.DataContext>
         <main_viewmodels:MainWindowViewModel/>
     </Window.DataContext>
@@ -235,8 +235,8 @@
                     </Grid>
                     <Grid Grid.Column="1">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Last backup time: "/>
-                            <TextBlock Text=""/>
+                            <!--<TextBlock Text="Last backup time: "/>
+                            <TextBlock Text=""/>-->
                         </StackPanel>
                     </Grid>
                 </Grid>
