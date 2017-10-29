@@ -128,14 +128,14 @@
     <Compile Include="Views\ExtendedControls\ChartGaugeView.xaml.cs">
       <DependentUpon>ChartGaugeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainViews\MainBackupView.xaml.cs">
+    <Compile Include="Views\ActionsViews\MainBackupView.xaml.cs">
       <DependentUpon>MainBackupView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainViews\MainRestoreView.xaml.cs">
+    <Compile Include="Views\ActionsViews\MainRestoreView.xaml.cs">
       <DependentUpon>MainRestoreView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainViews\Backup\SourceDestinationItemsView.xaml.cs">
-      <DependentUpon>SourceDestinationItemsView.xaml</DependentUpon>
+    <Compile Include="Views\ActionsViews\Backup\BackupItemsSelectionView.xaml.cs">
+      <DependentUpon>BackupItemsSelectionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\GenericStatusBarView.cs" />
     <Compile Include="Views\MainWindow\MainWindowStatusBarView.xaml.cs">
@@ -175,15 +175,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainViews\MainBackupView.xaml">
+    <Page Include="Views\ActionsViews\MainBackupView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainViews\MainRestoreView.xaml">
+    <Page Include="Views\ActionsViews\MainRestoreView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainViews\Backup\SourceDestinationItemsView.xaml">
+    <Page Include="Views\ActionsViews\Backup\BackupItemsSelectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -271,7 +271,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ViewModels\Restore\FileTreeRestoreWindowModel\" />
-    <Folder Include="Views\MainViews\Restore\" />
+    <Folder Include="Views\ActionsViews\Restore\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

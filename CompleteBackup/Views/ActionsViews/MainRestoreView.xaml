@@ -14,14 +14,14 @@
     <UserControl.Resources>
         <DataTemplate x:Key="RestoreTreeFileTemplate"
             DataType="{x:Type view_model:RestoreSourceDestinationItemsViewModel}">
-            <local:SourceDestinationItemsView/>
+            <local:BackupItemsSelectionView/>
         </DataTemplate>
 
     </UserControl.Resources>
     <Grid>
         <DockPanel LastChildFill="True">
             <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
-                <local:SourceDestinationItemsView x:Name="folderTree"/>
+                <local:BackupItemsSelectionView x:Name="folderTree"/>
                 <!--DataContext="{Binding Path=RestoreSourceDestinationItemsViewModelDataContext}"/>-->
             </StackPanel>
 

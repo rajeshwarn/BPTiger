@@ -20,7 +20,7 @@
         </DataTemplate>
         <DataTemplate
             DataType="{x:Type view_model:SourceDestinationItemsViewModel}">
-            <local:SourceDestinationItemsView/>
+            <local:BackupItemsSelectionView/>
         </DataTemplate>
         
         <Style TargetType="GroupBox">
@@ -29,9 +29,9 @@
     </UserControl.Resources>
     <DockPanel LastChildFill="True">
         <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
-            <local:SourceDestinationItemsView x:Name="folderTree"/>
+            <local:BackupItemsSelectionView x:Name="folderTree"/>
             <!--DataContext="{Binding Path=SourceDestinationItemsViewModel}"/>-->
-            <!--<local:SourceDestinationItemsView x:Name="folderTree"/>-->
+            <!--<local:BackupItemsSelectionView x:Name="folderTree"/>-->
             <!--<DockPanel>
                 <extended_view:ProcessingSpinnerView HorizontalAlignment="Right"/>
             </DockPanel>-->
