@@ -92,6 +92,7 @@
     <Compile Include="Utilities\FileFolderSizeHelper.cs" />
     <Compile Include="Utilities\ObservableObject.cs" />
     <Compile Include="Models\FolderSelection\FolderMenuItem.cs" />
+    <Compile Include="ViewModels\Restore\FileTreeRestoreWindowModel\ICommands\RestoreFolderSelectionICommand.cs" />
     <Compile Include="ViewModels\Share\BackupItemsTreeBase.cs" />
     <Compile Include="ViewModels\ExtendedControls\ProcessingSpinnerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\RestoreBackupICommand.cs" />

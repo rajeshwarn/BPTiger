@@ -22,7 +22,7 @@ namespace CompleteBackup.ViewModels
 {
     class RestoreBackupItemsWindowModel : BackupItemsTreeBase
     {
-//        public ICommand SaveFolderSelectionCommand { get; private set; } = new SaveFolderSelectionICommand<object>();
+        public ICommand RestoreFolderSelectionCommand { get; private set; } = new RestoreFolderSelectionICommand<object>();
 
         public RestoreBackupItemsWindowModel () : base()
         {
