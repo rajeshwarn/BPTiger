@@ -96,9 +96,9 @@
                 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <TextBlock Text="Total of "/>
-                    <TextBlock Text="{Binding ProjectData.CurrentBackupProfile.BackupSourceFilesNumber, StringFormat={}{0:#,#,#,#,##0}}" FontWeight="Bold"></TextBlock>
+                    <TextBlock Text="{Binding ProjectData.CurrentBackupProfile.RestoreSourceFilesNumber, StringFormat={}{0:#,#,#,#,##0}}" FontWeight="Bold"></TextBlock>
                     <TextBlock Text=" files, "/>
-                    <TextBlock Text="{Binding ProjectData.CurrentBackupProfile.BackupSourceFoldersSize, Converter={StaticResource NumberToComputerSizeConverter}}" FontWeight="Bold"></TextBlock>
+                    <TextBlock Text="{Binding ProjectData.CurrentBackupProfile.RestoreSourceFoldersSize, Converter={StaticResource NumberToComputerSizeConverter}}" FontWeight="Bold"></TextBlock>
                 </StackPanel>
             
                 <StackPanel Orientation="Horizontal">
@@ -117,7 +117,7 @@
                 <TextBlock x:Name="txTaggetFolder"                        
                          Validation.ErrorTemplate="{StaticResource validationTargetFolderErrorTemplate}" Margin="8,0,0,0">
                         <TextBlock.Text>
-                            <Binding Path="ProjectData.CurrentBackupProfile.TargetBackupFolder"
+                        <Binding Path="ProjectData.CurrentBackupProfile.TargetRestoreFolder"
                                  Mode="TwoWay"
                                  TargetNullValue=''
                                  UpdateSourceTrigger="Default">

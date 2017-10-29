@@ -69,7 +69,13 @@ namespace CompleteBackup.Models.Backup.Profile
         private string m_TargetBackupFolder;
         public string TargetBackupFolder { get { return m_TargetBackupFolder; } set { m_TargetBackupFolder = value; OnPropertyChanged(); } }
 
+
+        private string m_TargetRestoreFolder;
+        public string TargetRestoreFolder { get { return m_TargetRestoreFolder; } set { m_TargetRestoreFolder = value; OnPropertyChanged(); } }
+
         public ObservableCollection<FolderData> FolderList { get; set; } = new ObservableCollection<FolderData>();
+
+        [XmlIgnore]
         public ObservableCollection<FolderData> RestoreFolderList { get; set; } = new ObservableCollection<FolderData>();
 
         //[XmlIgnore]
