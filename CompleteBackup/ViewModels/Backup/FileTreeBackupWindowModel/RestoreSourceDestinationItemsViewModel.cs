@@ -4,6 +4,7 @@ using CompleteBackup.Models.Backup.Project;
 using CompleteBackup.Models.Backup.Storage;
 using CompleteBackup.Models.FolderSelection;
 using CompleteBackup.ViewModels.FolderSelection.ICommands;
+using CompleteBackup.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -29,9 +30,16 @@ namespace CompleteBackup.ViewModels
 
         public BackupProjectData ProjectData { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject;
 
+        public ObservableCollection<FolderData> SelectionFolderList { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile.RestoreFolderList;//= new ObservableCollection<FolderData>();
+
+        public void OpenSelectionWindow()
+        {
+            new RestoreBackupItemsWindow().Show();
+        }
 
 
         public string SourceFileListGroupTitle { get; set; } = "Items To Restore";
+        public string SourceFileActionTitle { get; set; } = "Select Items";
         public string DestinationGroupTitle { get; set; } = "Destination";
 
         private void ProfileDataUpdate(BackupProfileData profile)

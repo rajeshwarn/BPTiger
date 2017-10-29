@@ -42,18 +42,18 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
         {
             var viewModel = parameter as RestoreBackupItemsWindowModel;
 
-            //if (viewModel != null)
-            //{
-            //    viewModel.DirtyFlag = false;
-            //}
+            if (viewModel != null)
+            {
+                viewModel.DirtyFlag = false;
+            }
 
-            //viewModel.UpdateSelectedFolderList();
+            viewModel.UpdateSelectedFolderList();
 
-            //viewModel.ProjectData?.CurrentBackupProfile.FolderList.Clear();
-            //foreach (var item in viewModel.SelectedItemList)
-            //{
-            //    viewModel.ProjectData?.CurrentBackupProfile.FolderList.Add(item);
-            //}
+            viewModel.ProjectData?.CurrentBackupProfile.RestoreFolderList.Clear();
+            foreach (var item in viewModel.SelectedItemList)
+            {
+                viewModel.ProjectData?.CurrentBackupProfile.RestoreFolderList.Add(item);
+            }
 
             //viewModel.ProjectData?.CurrentBackupProfile.UpdateProfileProperties();
 

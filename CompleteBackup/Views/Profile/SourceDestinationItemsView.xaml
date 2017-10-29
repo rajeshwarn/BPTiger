@@ -12,9 +12,9 @@
              xmlns:local="clr-namespace:CompleteBackup.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <UserControl.DataContext>
+    <!--<UserControl.DataContext>
         <view_models:SourceDestinationItemsViewModel/>
-    </UserControl.DataContext>
+    </UserControl.DataContext>-->
     <UserControl.Resources>
         <convertors:NullVisibilityConverter x:Key="NullToVisibilityConverter"/>
         <convertors:NumberToComputerSizeConverter x:Key="NumberToComputerSizeConverter"/>
@@ -52,13 +52,13 @@
 
         <GroupBox Grid.Column="0" Grid.Row="0">
             <GroupBox.Header>
-                <Label FontWeight="Bold">Source Items</Label>
+                <TextBlock FontWeight="Bold" Text="{Binding SourceFileListGroupTitle}"></TextBlock>
             </GroupBox.Header>
             <StackPanel Orientation="Vertical">
                 <DockPanel LastChildFill="True">
                     <StackPanel DockPanel.Dock="Right" Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
-                            <ListBox ItemsSource="{Binding ProjectData.CurrentBackupProfile.FolderList}" BorderThickness="0" HorizontalContentAlignment="Right">
+                            <ListBox ItemsSource="{Binding SelectionFolderList}" BorderThickness="0" HorizontalContentAlignment="Right">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Grid.Column="0" Orientation="Horizontal">
@@ -70,7 +70,7 @@
                             </ListBox>
 
                             <StackPanel Orientation="Horizontal">
-                                <ListBox ItemsSource="{Binding ProjectData.CurrentBackupProfile.FolderList}" BorderThickness="0" HorizontalContentAlignment="Right">
+                                <ListBox ItemsSource="{Binding SelectionFolderList}" BorderThickness="0" HorizontalContentAlignment="Right">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding TotalSize, Converter={StaticResource NumberToComputerSizeConverter}}"/>
@@ -81,7 +81,7 @@
                         </StackPanel>
                         <Separator/>
                     </StackPanel>
-                    <ListBox ItemsSource="{Binding ProjectData.CurrentBackupProfile.FolderList}" BorderThickness="0" Margin="0,0,8,0">
+                    <ListBox ItemsSource="{Binding SelectionFolderList}" BorderThickness="0" Margin="0,0,8,0">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <DockPanel LastChildFill="True">
@@ -102,8 +102,8 @@
                 </StackPanel>
             
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="Change"
-                        Command="{Binding OpenChangeBackupItemsWindowCommand}">
+                    <Button Content="{Binding SourceFileActionTitle}"
+                        Command="{Binding OpenChangeBackupItemsWindowCommand}" CommandParameter="{Binding Path=.}">
                     </Button>
                 </StackPanel>
             </StackPanel>
@@ -111,7 +111,7 @@
 
         <GroupBox Grid.Column="0" Grid.Row="1">
             <GroupBox.Header>
-                <Label FontWeight="Bold">Destination</Label>
+                <TextBlock FontWeight="Bold" Text="{Binding DestinationGroupTitle}"/>
             </GroupBox.Header>
             <StackPanel Orientation="Vertical">
                 <TextBlock x:Name="txTaggetFolder"                        

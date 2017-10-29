@@ -41,7 +41,7 @@ namespace CompleteBackup.ViewModels.ICommands
         {
             var profile = parameter as BackupProfileData;
 
-            new RestoreBackupItemsWindow().Show();
+//            new RestoreBackupItemsWindow().Show();
 
 
             if (profile.IsBackupWorkerBusy && profile.IsBackupWorkerPaused)

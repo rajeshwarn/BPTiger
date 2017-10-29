@@ -33,7 +33,20 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
 
         public void Execute(object parameter)
         {
-            new ChangeBackupItemsWindow().ShowDialog();
+            //CHANGE to poolomorphsimmm
+            var vmRestore = parameter as RestoreSourceDestinationItemsViewModel;
+            var vmBackup = parameter as SourceDestinationItemsViewModel;
+
+            if (vmRestore != null)
+            {
+                vmRestore.OpenSelectionWindow();
+            }
+            else if (vmBackup != null)
+            {
+                vmBackup.OpenSelectionWindow();
+            }
+
+            //            new ChangeBackupItemsWindow().ShowDialog();
         }
     }
 }
