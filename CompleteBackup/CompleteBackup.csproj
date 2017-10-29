@@ -92,30 +92,33 @@
     <Compile Include="Utilities\FileFolderSizeHelper.cs" />
     <Compile Include="Utilities\ObservableObject.cs" />
     <Compile Include="Models\FolderSelection\FolderMenuItem.cs" />
-    <Compile Include="ViewModels\Backup\FileTreeBackupWindowModel\RestoreSourceDestinationItemsViewModel.cs" />
-    <Compile Include="ViewModels\ItemTreeSelection\ICommands\RestoreFolderSelectionICommand.cs" />
+    <Compile Include="ViewModels\ActionRestore\RestoreItemsSelectionViewModel.cs" />
+    <Compile Include="ViewModels\ActionRestore\ICommands\RestoreFolderSelectionICommand.cs" />
     <Compile Include="ViewModels\Share\BackupItemsTreeBase.cs" />
     <Compile Include="ViewModels\ExtendedControls\ProcessingSpinnerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\RestoreBackupICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\StopBackupICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\PauseBackupICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\StartBackupICommand.cs" />
-    <Compile Include="ViewModels\ItemTreeSelection\SelectBackupItemsWindowModel.cs" />
+    <Compile Include="ViewModels\ActionBackup\SelectBackupItemsWindowModel.cs" />
     <Compile Include="ViewModels\ExtendedControls\ChartGaugeViewModel.cs" />
-    <Compile Include="ViewModels\Backup\MainBackupViewModel.cs" />
-    <Compile Include="ViewModels\Restore\MainRestoreViewModel.cs" />
+    <Compile Include="ViewModels\ActionBackup\MainBackupViewModel.cs" />
+    <Compile Include="ViewModels\ActionRestore\MainRestoreViewModel.cs" />
     <Compile Include="ViewModels\Profile\ICommands\CloseWindowICommand.cs" />
-    <Compile Include="ViewModels\Backup\FileTreeBackupWindowModel\ICommands\OpenChangeBackupItemsWindowICommand.cs" />
-    <Compile Include="ViewModels\Backup\FileTreeBackupWindowModel\BackupItemsSelectionViewModel.cs" />
-    <Compile Include="ViewModels\Backup\FileTreeBackupWindowModel\ICommands\ExpandFolderTreeICommand.cs" />
-    <Compile Include="ViewModels\Backup\FileTreeBackupWindowModel\ICommands\SelectFolderNameICommand.cs" />
-    <Compile Include="ViewModels\ItemTreeSelection\ICommands\SaveFolderSelectionICommand.cs" />
+    <Compile Include="ViewModels\ActionBackup\ICommands\OpenChangeBackupItemsWindowICommand.cs" />
+    <Compile Include="ViewModels\ActionBackup\BackupItemsSelectionViewModel.cs" />
+    <Compile Include="ViewModels\ActionBackupRestoreShared\ICommands\ExpandFolderTreeICommand.cs" />
+    <Compile Include="ViewModels\ActionBackupRestoreShared\ICommands\SelectFolderNameICommand.cs" />
+    <Compile Include="ViewModels\ActionBackup\ICommands\SaveFolderSelectionICommand.cs" />
     <Compile Include="ViewModels\MainWindow\MainWindowStatusBarViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\MainWindowViewModel.cs" />
-    <Compile Include="ViewModels\Backup\FileTreeBackupWindowModel\Validators\BackupTargetLocationValidator.cs" />
+    <Compile Include="ViewModels\ActionBackup\Validators\BackupTargetLocationValidator.cs" />
     <Compile Include="ViewModels\Profile\ProfileDetails\ProfileDetailsPageViewModel.cs" />
     <Compile Include="ViewModels\Profile\ProfileList\ProfileListViewModel.cs" />
-    <Compile Include="ViewModels\ItemTreeSelection\SelectRestoreItemsWindowModel.cs" />
+    <Compile Include="ViewModels\ActionRestore\SelectRestoreItemsWindowModel.cs" />
+    <Compile Include="Views\ActionRestore\RestoreItemsSelectionView.xaml.cs">
+      <DependentUpon>RestoreItemsSelectionView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ExtendedControls\ProcessingSpinnerView.xaml.cs">
       <DependentUpon>ProcessingSpinnerView.xaml</DependentUpon>
     </Compile>
@@ -128,13 +131,13 @@
     <Compile Include="Views\ExtendedControls\ChartGaugeView.xaml.cs">
       <DependentUpon>ChartGaugeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ActionsViews\MainBackupView.xaml.cs">
+    <Compile Include="Views\ActionBackup\MainBackupView.xaml.cs">
       <DependentUpon>MainBackupView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ActionsViews\MainRestoreView.xaml.cs">
+    <Compile Include="Views\ActionRestore\MainRestoreView.xaml.cs">
       <DependentUpon>MainRestoreView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ActionsViews\Backup\BackupItemsSelectionView.xaml.cs">
+    <Compile Include="Views\ActionBackup\BackupItemsSelectionView.xaml.cs">
       <DependentUpon>BackupItemsSelectionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow\GenericStatusBarView.cs" />
@@ -159,6 +162,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\ActionRestore\RestoreItemsSelectionView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\ExtendedControls\ProcessingSpinnerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -175,15 +182,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ActionsViews\MainBackupView.xaml">
+    <Page Include="Views\ActionBackup\MainBackupView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ActionsViews\MainRestoreView.xaml">
+    <Page Include="Views\ActionRestore\MainRestoreView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ActionsViews\Backup\BackupItemsSelectionView.xaml">
+    <Page Include="Views\ActionBackup\BackupItemsSelectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -269,9 +276,6 @@
     <Resource Include="Resources\Icons\FolderTreeView\Folder.ico" />
     <Resource Include="Resources\Icons\FolderTreeView\NewFolder.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModels\Restore\FileTreeRestoreWindowModel\" />
-    <Folder Include="Views\ActionsViews\Restore\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

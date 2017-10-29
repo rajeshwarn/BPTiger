@@ -13,16 +13,16 @@
     </UserControl.DataContext>
     <UserControl.Resources>
         <DataTemplate x:Key="RestoreTreeFileTemplate"
-            DataType="{x:Type view_model:RestoreSourceDestinationItemsViewModel}">
-            <local:BackupItemsSelectionView/>
+            DataType="{x:Type view_model:RestoreItemsSelectionViewModel}">
+            <local:RestoreItemsSelectionView/>
         </DataTemplate>
 
     </UserControl.Resources>
     <Grid>
         <DockPanel LastChildFill="True">
             <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
-                <local:BackupItemsSelectionView x:Name="folderTree"/>
-                <!--DataContext="{Binding Path=RestoreSourceDestinationItemsViewModelDataContext}"/>-->
+                <local:RestoreItemsSelectionView />
+                <!--DataContext="{Binding Path=RestoreItemsSelectionViewModel}"/>-->
             </StackPanel>
 
             <!--<profile_views:ProfileDetailsPageView x:Name="profileDetailsPageView" Margin="0,20,0,0"/>-->

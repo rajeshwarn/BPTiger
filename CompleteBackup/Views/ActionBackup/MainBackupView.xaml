@@ -29,7 +29,7 @@
     </UserControl.Resources>
     <DockPanel LastChildFill="True">
         <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
-            <local:BackupItemsSelectionView x:Name="folderTree"/>
+            <local:BackupItemsSelectionView/>
             <!--DataContext="{Binding Path=BackupItemsSelectionViewModel}"/>-->
             <!--<local:BackupItemsSelectionView x:Name="folderTree"/>-->
             <!--<DockPanel>
