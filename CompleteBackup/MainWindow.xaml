@@ -221,11 +221,29 @@
 
         <main_window_views:MainWindowStatusBarView DockPanel.Dock="Bottom"/>
 
-        <!--<ContentControl Content="{Binding ViewManager.CurrentPageViewModel}"/>-->
-        <!--<ContentControl DockPanel.Dock="Right" Content="{Binding CurrentPageViewModel}"/>-->
-
-        <ContentControl DockPanel.Dock="Right" Content="{Binding CurrentPageViewModel}"/>
-        <!--<main_views:MainBackupView />-->
+        <DockPanel LastChildFill="True">
+            <Border DockPanel.Dock="Top" Background="LightGoldenrodYellow" BorderThickness="1" CornerRadius="4" BorderBrush="DarkGray" Margin="0,0,0,0" Padding="4">
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontStyle="Italic" Text="{Binding ProjectData.CurrentBackupProfile.Name}"/>
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Last backup time: "/>
+                            <TextBlock Text=""/>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Border>
+            
+            <ContentControl Content="{Binding CurrentPageViewModel}"/>
+        </DockPanel>
 
     </DockPanel>
 
