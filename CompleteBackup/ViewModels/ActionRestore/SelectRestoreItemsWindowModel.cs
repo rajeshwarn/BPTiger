@@ -22,7 +22,14 @@ namespace CompleteBackup.ViewModels
 {
     class SelectRestoreItemsWindowModel : BackupItemsTreeBase
     {
-        bool RestoreLatestVersion = false;
+
+        enum RestoreActionTypeEnum
+        {
+            LatestVersion,
+            SpecificFileVersion
+        }
+
+        RestoreActionTypeEnum RestoreActionType { get; set; }  = RestoreActionTypeEnum.SpecificFileVersion;
 
         public ICommand RestoreFolderSelectionCommand { get; private set; } = new RestoreFolderSelectionICommand<object>();
 
@@ -93,7 +100,7 @@ namespace CompleteBackup.ViewModels
 
         public override void ExpandFolder(ItemCollection itemList)
         {
-            if (RestoreLatestVersion)
+            if (RestoreActionType == RestoreActionTypeEnum.LatestVersion)
             {
                 base.ExpandFolder(itemList);
             }
@@ -202,7 +209,7 @@ namespace CompleteBackup.ViewModels
 
         protected override void AddFilesToFolderMenuItem(FolderMenuItem item, string itemPath, BackupSessionHistory history)
         {
-            if (RestoreLatestVersion)
+            if (RestoreActionType == RestoreActionTypeEnum.LatestVersion)
             {
                 var fileList = m_IStorage.GetFiles(itemPath);
                 foreach (var file in fileList.Where(f => NoTExistsinTreeList(f, item.ChildFolderMenuItems)))
@@ -221,7 +228,6 @@ namespace CompleteBackup.ViewModels
             else
             {
                 var fileList = m_IStorage.GetFiles(itemPath);
-//                foreach (var file in fileList.Where(f => NoTExistsinTreeList(f, item.ChildFolderMenuItems)))
                 foreach (var file in fileList)
                 {
                     //var filePath = m_IStorage.Combine(item.Path, file);
@@ -242,39 +248,13 @@ namespace CompleteBackup.ViewModels
                         }
 
                         var timeDate = history.TimeStamp;
-                        foundItem.ChildFolderMenuItems.Add(CreateMenuItem(m_IStorage.IsFolder(file), bSelected, file, rp, timeDate.ToString(), item, attr));
+                        foundItem.ChildFolderMenuItems.Add(CreateMenuItem(m_IStorage.IsFolder(file), bSelected, file, rp, timeDate.ToString(), foundItem, attr));
                     }
                 }
             }
         }
 
-        //DateTime GetTimeStamp(string file, string rp)
-        //{
-
-        //    var timeString = DateTime.Parse("2017-10-30");
-        //  //  var timeString2 = DateTime.Parse("2017-10-30_12491253637");
-
-
-        //    var relPath = string.Empty;
-        //    var path = file;
-        //    var dName = m_IStorage.GetDirectoryName(path);
-
-        //    while (path != null)
-        //    {
-        //        var fName = m_IStorage.GetFileName(path);
-        //        path = m_IStorage.GetDirectoryName(path);
-        //        relPath = m_IStorage.Combine(fName, relPath);
-        //        if (relPath == rp)
-        //        {
-        //            var dateTime = 1;
-        //            int ttt = 0;
-        //        }
-        //    }
-
-        //    return DateTime.Now;
-        //}
-
-
+ 
         protected override List<string> GetAllActiveSets(FolderMenuItem item)
         {
             var activeSetList = new List<string>() { item.Path };
