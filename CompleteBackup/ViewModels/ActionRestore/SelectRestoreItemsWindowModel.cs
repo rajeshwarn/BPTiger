@@ -45,6 +45,50 @@ namespace CompleteBackup.ViewModels
         }
 
 
+
+        protected FolderMenuItem GetExistingMenuItem(bool isFolder, bool isSelected, string path, string relativePath, string name, FolderMenuItem parentItem, FileAttributes attr)
+        {
+            FolderMenuItem menuItem = null;
+            foreach (var item in FolderMenuItemTree)
+            {
+                menuItem = GetMenuItemTree(item);
+                if (menuItem != null)
+                {
+                    return menuItem;
+                }
+            }
+
+
+            //menuItem = new RestoreFolderMenuItem()
+            //{
+            //    IsFolder = isFolder,
+            //    Path = path,
+            //    RelativePath = relativePath,
+            //    Name = name,
+            //    ParentItem = parentItem,
+            //    Selected = isSelected,
+            //    Image = GetImageSource(path),
+            //};
+
+            return menuItem;
+        }
+
+        FolderMenuItem  GetMenuItemTree(FolderMenuItem item)
+        {
+            if (item.RelativePath == item.RelativePath)
+            {
+                return item;
+            }
+
+            foreach (var childItem in item.ChildFolderMenuItems)
+            {
+                return GetMenuItemTree(childItem);
+            }
+
+            return null;
+        }
+
+
         List<string> m_BackupSetPathList = new List<string>();
 
         bool bLoadFromHistory = false;
@@ -80,14 +124,22 @@ namespace CompleteBackup.ViewModels
                             var directoryName = m_IStorage.GetFileName(item.Path);
                             var restorePath = m_IStorage.Combine(lastSetPath, directoryName);
 
-                            var rootItem = CreateMenuItem(true, false, restorePath, directoryName, directoryName, null, 0);
-
-                            UpdateChildItemsInMenuItem(rootItem);
-
-                            Application.Current.Dispatcher.Invoke(new Action(() =>
+                            var rootItem = GetExistingMenuItem(true, false, restorePath, directoryName, directoryName, null, 0);
+                            if (rootItem == null)
                             {
-                                FolderMenuItemTree.Add(rootItem);
-                            }));
+                                rootItem = CreateMenuItem(true, false, restorePath, directoryName, directoryName, null, 0);
+
+                                UpdateChildItemsInMenuItem(rootItem);
+
+                                Application.Current.Dispatcher.Invoke(new Action(() =>
+                                {
+                                    FolderMenuItemTree.Add(rootItem);
+                                }));
+                            }
+                            else
+                            {
+                                UpdateChildItemsInMenuItem(rootItem);
+                            }
                         }
                     }
                 }
