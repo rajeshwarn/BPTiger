@@ -235,8 +235,8 @@
                     </Grid>
                     <Grid Grid.Column="1">
                         <StackPanel Orientation="Horizontal">
-                            <!--<TextBlock Text="Last backup time: "/>
-                            <TextBlock Text=""/>-->
+                            <TextBlock Text="Last backup time: "/>
+                            <TextBlock Text="{Binding ProjectData.CurrentBackupProfile.LastBackupDateTime}"/>
                         </StackPanel>
                     </Grid>
                 </Grid>

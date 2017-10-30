@@ -1,5 +1,6 @@
 ﻿using CompleteBackup.DataRepository;
 using CompleteBackup.Models.backup;
+using CompleteBackup.Models.Backup.History;
 using CompleteBackup.Models.Backup.Storage;
 using CompleteBackup.Models.FolderSelection;
 using CompleteBackup.Models.Profile;
@@ -56,6 +57,10 @@ namespace CompleteBackup.Models.Backup.Profile
 
 
         public string BackupSignature { get { return $"{GUID.ToString("D")}-BC-{BackupType}"; } }
+
+
+        private DateTime m_LastBackupDateTime { get; set; }
+        public DateTime LastBackupDateTime { get { return m_LastBackupDateTime; } set { m_LastBackupDateTime = value; OnPropertyChanged(); } }
 
 
         public BackupTypeEnum BackupType { get; set; } = BackupTypeEnum.Full;
@@ -356,13 +361,13 @@ namespace CompleteBackup.Models.Backup.Profile
                     }
 
 
-
-
-
-
-
-
-
+                    //last backup time
+                    var lastSet = BackupManager.GetLastBackupSetName(this);
+                    var sessionHistory = BackupSessionHistory.LoadHistory(TargetBackupFolder, lastSet);
+                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    {
+                        LastBackupDateTime = sessionHistory.TimeStamp;
+                    }));
 
 
                     m_BackupTargetDiskSizeNumber = 0;

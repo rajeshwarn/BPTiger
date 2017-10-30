@@ -247,7 +247,7 @@ namespace CompleteBackup.ViewModels
                             foundItem = newItem;
                         }
 
-                        var timeDate = history.TimeStamp;
+                        var timeDate = history?.TimeStamp;
                         foundItem.ChildFolderMenuItems.Add(CreateMenuItem(m_IStorage.IsFolder(file), bSelected, file, rp, timeDate.ToString(), foundItem, attr));
                     }
                 }
