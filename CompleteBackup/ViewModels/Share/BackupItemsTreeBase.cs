@@ -126,7 +126,7 @@ namespace CompleteBackup.ViewModels
 
 
         //Add and update all subitems
-        protected void UpdateChildItemsInMenuItem(FolderMenuItem item)
+        protected void UpdateChildItemsInMenuItem(FolderMenuItem item, string overridePath = null)
         {
             if (item.IsFolder)
             {
@@ -152,7 +152,18 @@ namespace CompleteBackup.ViewModels
                     }
 
                     //Add all files under item.Path
-                    var fileList = m_IStorage.GetFiles(item.Path);
+                    string itemPath = item.Path;
+                    if (overridePath != null)
+                    {
+                        itemPath = overridePath;
+                        if (!m_IStorage.DirectoryExists(itemPath))
+                        {
+                            return;
+                        }
+                    }
+
+
+                    var fileList = m_IStorage.GetFiles(itemPath);
                     foreach (var file in fileList.Where(f => NoTExistsinTreeList(f, item.ChildFolderMenuItems)))
                     {
                         //var filePath = m_IStorage.Combine(item.Path, file);

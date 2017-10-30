@@ -99,12 +99,14 @@ namespace CompleteBackup.ViewModels
             {
                 foreach (var setPath in backSetList)
                 {
-                    var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, setPath);
-
                     var folderItem = item as FolderMenuItem;
-                    if (folderItem.ChildFolderMenuItems.Count() == 0)
+
+                    var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, setPath);
+                    var lastSetPath2 = m_IStorage.Combine(lastSetPath, folderItem.RelativePath);
+
+                    //if (folderItem.ChildFolderMenuItems.Count() == 0)
                     {
-                        UpdateChildItemsInMenuItem(folderItem);
+                        UpdateChildItemsInMenuItem(folderItem, lastSetPath2);
                     }
                 }
             }
