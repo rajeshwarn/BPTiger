@@ -25,9 +25,6 @@ namespace CompleteBackup.Views.Profile
         public ProfileDetailsPageView()
         {
             InitializeComponent();
-
-            var profile = BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile;
-            profile?.UpdateProfileProperties();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

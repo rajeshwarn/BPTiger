@@ -59,7 +59,6 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="Models\Backup\Storage\FileSystemStorageTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +69,9 @@
       <Project>{587E07C2-8BFF-4318-B67B-5E0B6B531EC9}</Project>
       <Name>CompleteBackup</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\Backup\Storage\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
