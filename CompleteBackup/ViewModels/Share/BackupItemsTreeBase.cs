@@ -114,7 +114,7 @@ namespace CompleteBackup.ViewModels
         }
 
         protected abstract List<string> GetAllActiveSets(FolderMenuItem item);
-        
+
 
         private bool NoTExistsinTreeList(string path, ObservableCollection<FolderMenuItem> list)
         {

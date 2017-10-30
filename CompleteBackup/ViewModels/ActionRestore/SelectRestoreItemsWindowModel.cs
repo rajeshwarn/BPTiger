@@ -67,21 +67,48 @@ namespace CompleteBackup.ViewModels
             }
             else
             {
-                var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, lastSet);
+                bool bIncremental = true;
 
-                foreach (var item in profile.FolderList)
+                if (bIncremental)
                 {
-                    var directoryName = m_IStorage.GetFileName(item.Path);
-                    var restorePath = m_IStorage.Combine(lastSetPath, directoryName);
-
-                    var rootItem = CreateMenuItem(true, false, restorePath, directoryName, directoryName, null, 0);
-
-                    UpdateChildItemsInMenuItem(rootItem);
-
-                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    foreach (var setPath in backSetList)
                     {
-                        FolderMenuItemTree.Add(rootItem);
-                    }));
+                        var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, setPath);
+
+                        foreach (var item in profile.FolderList)
+                        {
+                            var directoryName = m_IStorage.GetFileName(item.Path);
+                            var restorePath = m_IStorage.Combine(lastSetPath, directoryName);
+
+                            var rootItem = CreateMenuItem(true, false, restorePath, directoryName, directoryName, null, 0);
+
+                            UpdateChildItemsInMenuItem(rootItem);
+
+                            Application.Current.Dispatcher.Invoke(new Action(() =>
+                            {
+                                FolderMenuItemTree.Add(rootItem);
+                            }));
+                        }
+                    }
+                }
+                else
+                {
+                    var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, lastSet);
+
+                    foreach (var item in profile.FolderList)
+                    {
+                        var directoryName = m_IStorage.GetFileName(item.Path);
+                        var restorePath = m_IStorage.Combine(lastSetPath, directoryName);
+
+                        var rootItem = CreateMenuItem(true, false, restorePath, directoryName, directoryName, null, 0);
+
+                        UpdateChildItemsInMenuItem(rootItem);
+
+                        Application.Current.Dispatcher.Invoke(new Action(() =>
+                        {
+                            FolderMenuItemTree.Add(rootItem);
+                        }));
+                    }
                 }
             }
         }
