@@ -1,4 +1,5 @@
 ﻿using CompleteBackup.DataRepository;
+using CompleteBackup.Models.Backup.History;
 using CompleteBackup.Models.Backup.Profile;
 using CompleteBackup.Models.Backup.Project;
 using CompleteBackup.Models.Backup.Storage;
@@ -126,7 +127,7 @@ namespace CompleteBackup.ViewModels
 
 
         //Add and update all subitems
-        protected void UpdateChildItemsInMenuItem(FolderMenuItem item, string overridePath = null)
+        protected void UpdateChildItemsInMenuItem(FolderMenuItem item, string overridePath = null, BackupSessionHistory history = null)
         {
             if (item.IsFolder)
             {
@@ -164,7 +165,7 @@ namespace CompleteBackup.ViewModels
 
 
                     //Add files to Item
-                    AddFilesToFolderMenuItem(item, itemPath);
+                    AddFilesToFolderMenuItem(item, itemPath, history);
 
                     //var fileList = m_IStorage.GetFiles(itemPath);
                     //foreach (var file in fileList.Where(f => NoTExistsinTreeList(f, item.ChildFolderMenuItems)))
@@ -184,10 +185,10 @@ namespace CompleteBackup.ViewModels
             }
         }
 
-        protected abstract void AddFilesToFolderMenuItem(FolderMenuItem item, string itemPath);
+        protected abstract void AddFilesToFolderMenuItem(FolderMenuItem item, string itemPath, BackupSessionHistory history);
 
 
-        protected void AddFilesToFolderMenuItemBase(FolderMenuItem item, string itemPath)
+        protected void AddFilesToFolderMenuItemBase(FolderMenuItem item, string itemPath, BackupSessionHistory history)
         {
             var fileList = m_IStorage.GetFiles(itemPath);
             foreach (var file in fileList.Where(f => NoTExistsinTreeList(f, item.ChildFolderMenuItems)))

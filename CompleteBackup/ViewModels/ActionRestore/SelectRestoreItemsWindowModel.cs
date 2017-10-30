@@ -101,19 +101,23 @@ namespace CompleteBackup.ViewModels
             {
                 var profile = ProjectData.CurrentBackupProfile;
                 var backSetList = BackupManager.GetBackupSetList(profile);
-                //xxxxx
+
+                    //xxxxx
                 foreach (var item in itemList)
                 {
                     foreach (var setPath in backSetList)
                     {
+                        var sessionHistory = BackupSessionHistory.LoadHistory(profile.TargetBackupFolder, setPath);
+
+
                         var folderItem = item as FolderMenuItem;
 
                         var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, setPath);
                         var lastSetPath2 = m_IStorage.Combine(lastSetPath, folderItem.RelativePath);
 
                         //if (folderItem.ChildFolderMenuItems.Count() == 0)
-                        {
-                            UpdateChildItemsInMenuItem(folderItem, lastSetPath2);
+                        {                            
+                            UpdateChildItemsInMenuItem(folderItem, lastSetPath2, sessionHistory);
                         }
                     }
                 }
@@ -196,7 +200,7 @@ namespace CompleteBackup.ViewModels
             }
         }
 
-        protected override void AddFilesToFolderMenuItem(FolderMenuItem item, string itemPath)
+        protected override void AddFilesToFolderMenuItem(FolderMenuItem item, string itemPath, BackupSessionHistory history)
         {
             if (RestoreLatestVersion)
             {
@@ -237,13 +241,38 @@ namespace CompleteBackup.ViewModels
                             foundItem = newItem;
                         }
 
-
-                        foundItem.ChildFolderMenuItems.Add(CreateMenuItem(m_IStorage.IsFolder(file), bSelected, file, rp, fileName, item, attr));
+                        var timeDate = history.TimeStamp;
+                        foundItem.ChildFolderMenuItems.Add(CreateMenuItem(m_IStorage.IsFolder(file), bSelected, file, rp, timeDate.ToString(), item, attr));
                     }
                 }
             }
         }
 
+        //DateTime GetTimeStamp(string file, string rp)
+        //{
+
+        //    var timeString = DateTime.Parse("2017-10-30");
+        //  //  var timeString2 = DateTime.Parse("2017-10-30_12491253637");
+
+
+        //    var relPath = string.Empty;
+        //    var path = file;
+        //    var dName = m_IStorage.GetDirectoryName(path);
+
+        //    while (path != null)
+        //    {
+        //        var fName = m_IStorage.GetFileName(path);
+        //        path = m_IStorage.GetDirectoryName(path);
+        //        relPath = m_IStorage.Combine(fName, relPath);
+        //        if (relPath == rp)
+        //        {
+        //            var dateTime = 1;
+        //            int ttt = 0;
+        //        }
+        //    }
+
+        //    return DateTime.Now;
+        //}
 
 
         protected override List<string> GetAllActiveSets(FolderMenuItem item)

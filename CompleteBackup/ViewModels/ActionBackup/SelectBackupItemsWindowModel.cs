@@ -1,4 +1,5 @@
 ﻿using CompleteBackup.DataRepository;
+using CompleteBackup.Models.Backup.History;
 using CompleteBackup.Models.Backup.Profile;
 using CompleteBackup.Models.Backup.Project;
 using CompleteBackup.Models.Backup.Storage;
@@ -146,9 +147,9 @@ namespace CompleteBackup.ViewModels
         }
 
 
-        protected override void AddFilesToFolderMenuItem(FolderMenuItem item, string itemPath)
+        protected override void AddFilesToFolderMenuItem(FolderMenuItem item, string itemPath, BackupSessionHistory history)
         {
-            AddFilesToFolderMenuItemBase(item, itemPath);
+            AddFilesToFolderMenuItemBase(item, itemPath, history);
         }
 
 
