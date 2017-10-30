@@ -22,6 +22,8 @@ namespace CompleteBackup.ViewModels
 {
     class SelectRestoreItemsWindowModel : BackupItemsTreeBase
     {
+        bool RestoreLatestVersion = false;
+
         public ICommand RestoreFolderSelectionCommand { get; private set; } = new RestoreFolderSelectionICommand<object>();
 
         public SelectRestoreItemsWindowModel() : base()
@@ -89,37 +91,33 @@ namespace CompleteBackup.ViewModels
         }
 
 
-        public void ExpandFolder(ItemCollection itemList)
+        public override void ExpandFolder(ItemCollection itemList)
         {
-            var profile = ProjectData.CurrentBackupProfile;
-            var backSetList = BackupManager.GetBackupSetList(profile);
-
-            //xxxxx
-            foreach (var item in itemList)
+            if (RestoreLatestVersion)
             {
-                foreach (var setPath in backSetList)
+                base.ExpandFolder(itemList);
+            }
+            else
+            {
+                var profile = ProjectData.CurrentBackupProfile;
+                var backSetList = BackupManager.GetBackupSetList(profile);
+                //xxxxx
+                foreach (var item in itemList)
                 {
-                    var folderItem = item as FolderMenuItem;
-
-                    var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, setPath);
-                    var lastSetPath2 = m_IStorage.Combine(lastSetPath, folderItem.RelativePath);
-
-                    //if (folderItem.ChildFolderMenuItems.Count() == 0)
+                    foreach (var setPath in backSetList)
                     {
-                        UpdateChildItemsInMenuItem(folderItem, lastSetPath2);
+                        var folderItem = item as FolderMenuItem;
+
+                        var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, setPath);
+                        var lastSetPath2 = m_IStorage.Combine(lastSetPath, folderItem.RelativePath);
+
+                        //if (folderItem.ChildFolderMenuItems.Count() == 0)
+                        {
+                            UpdateChildItemsInMenuItem(folderItem, lastSetPath2);
+                        }
                     }
                 }
             }
-
-
-            //foreach (var item in itemList)
-            //{
-            //    var folderItem = item as FolderMenuItem;
-            //    if (folderItem.ChildFolderMenuItems.Count() == 0)
-            //    {
-            //        UpdateChildItemsInMenuItem(folderItem);
-            //    }
-            //}
         }
 
         List<string> m_BackupSetPathList = new List<string>();

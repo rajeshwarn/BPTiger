@@ -145,18 +145,6 @@ namespace CompleteBackup.ViewModels
             }
         }
 
-        public void ExpandFolder(ItemCollection itemList)
-        {
-            foreach (var item in itemList)
-            {
-                var folderItem = item as FolderMenuItem;
-                if (folderItem.ChildFolderMenuItems.Count() == 0)
-                {
-                    UpdateChildItemsInMenuItem(folderItem);
-                }
-            }
-        }
-
         protected override List<string> GetAllActiveSets(FolderMenuItem item)
         {
             return new List<string>() { item.Path };
