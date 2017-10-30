@@ -145,6 +145,13 @@ namespace CompleteBackup.ViewModels
             }
         }
 
+
+        protected override void AddFilesToFolderMenuItem(FolderMenuItem item, string itemPath)
+        {
+            AddFilesToFolderMenuItemBase(item, itemPath);
+        }
+
+
         protected override List<string> GetAllActiveSets(FolderMenuItem item)
         {
             return new List<string>() { item.Path };

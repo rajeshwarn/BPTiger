@@ -196,6 +196,54 @@ namespace CompleteBackup.ViewModels
             }
         }
 
+        protected override void AddFilesToFolderMenuItem(FolderMenuItem item, string itemPath)
+        {
+            if (RestoreLatestVersion)
+            {
+                var fileList = m_IStorage.GetFiles(itemPath);
+                foreach (var file in fileList.Where(f => NoTExistsinTreeList(f, item.ChildFolderMenuItems)))
+                {
+                    //var filePath = m_IStorage.Combine(item.Path, file);
+                    var fileName = m_IStorage.GetFileName(file);
+                    FileAttributes attr = File.GetAttributes(file);
+                    if (!IsHidden(attr))
+                    {
+                        bool bSelected = false;
+                        var rp = m_IStorage.Combine(item.RelativePath, fileName);
+                        item.ChildFolderMenuItems.Add(CreateMenuItem(m_IStorage.IsFolder(file), bSelected, file, rp, fileName, item, attr));
+                    }
+                }
+            }
+            else
+            {
+                var fileList = m_IStorage.GetFiles(itemPath);
+//                foreach (var file in fileList.Where(f => NoTExistsinTreeList(f, item.ChildFolderMenuItems)))
+                foreach (var file in fileList)
+                {
+                    //var filePath = m_IStorage.Combine(item.Path, file);
+                    var fileName = m_IStorage.GetFileName(file);
+                    FileAttributes attr = File.GetAttributes(file);
+                    if (!IsHidden(attr))
+                    {
+                        bool bSelected = false;
+                        var rp = m_IStorage.Combine(item.RelativePath, fileName);
+
+                        var foundItem = item.ChildFolderMenuItems.Where(i => i.Name == fileName).FirstOrDefault();
+                        if (foundItem == null)
+                        {
+                            var newItem = CreateMenuItem(m_IStorage.IsFolder(file), bSelected, file, rp, fileName, item, attr);
+                            item.ChildFolderMenuItems.Add(newItem);
+
+                            foundItem = newItem;
+                        }
+
+
+                        foundItem.ChildFolderMenuItems.Add(CreateMenuItem(m_IStorage.IsFolder(file), bSelected, file, rp, fileName, item, attr));
+                    }
+                }
+            }
+        }
+
 
 
         protected override List<string> GetAllActiveSets(FolderMenuItem item)
