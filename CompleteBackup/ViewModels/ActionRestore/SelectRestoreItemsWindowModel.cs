@@ -160,7 +160,7 @@ namespace CompleteBackup.ViewModels
                             var rootItem = GetExistingMenuItem(true, false, restorePath, directoryName, directoryName, null, 0);
                             if (rootItem == null)
                             {
-                                rootItem = CreateMenuItem(true, false, restorePath, directoryName, directoryName, null, 0);
+                                rootItem = CreateMenuItem(m_IStorage.IsFolder(restorePath), false, restorePath, directoryName, directoryName, null, 0);
 
                                 UpdateChildItemsInMenuItem(rootItem);
 
@@ -185,7 +185,7 @@ namespace CompleteBackup.ViewModels
                         var directoryName = m_IStorage.GetFileName(item.Path);
                         var restorePath = m_IStorage.Combine(lastSetPath, directoryName);
 
-                        var rootItem = CreateMenuItem(true, false, restorePath, directoryName, directoryName, null, 0);
+                        var rootItem = CreateMenuItem(m_IStorage.IsFolder(restorePath), false, restorePath, directoryName, directoryName, null, 0);
 
                         UpdateChildItemsInMenuItem(rootItem);
 

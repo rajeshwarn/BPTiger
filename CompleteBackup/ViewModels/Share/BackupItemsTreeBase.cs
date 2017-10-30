@@ -147,7 +147,7 @@ namespace CompleteBackup.ViewModels
                             }
 
                             var rp = m_IStorage.Combine(item.RelativePath, subdirectory);
-                            item.ChildFolderMenuItems.Add(CreateMenuItem(true, bSelected, newPath, rp, subdirectory, item, attr));
+                            item.ChildFolderMenuItems.Add(CreateMenuItem(m_IStorage.IsFolder(newPath), bSelected, newPath, rp, subdirectory, item, attr));
                         }
                     }
 
@@ -173,7 +173,7 @@ namespace CompleteBackup.ViewModels
                         {
                             bool bSelected = false;
                             var rp = m_IStorage.Combine(item.RelativePath, fileName);
-                            item.ChildFolderMenuItems.Add(CreateMenuItem(false, bSelected, file, rp, fileName, item, attr));
+                            item.ChildFolderMenuItems.Add(CreateMenuItem(m_IStorage.IsFolder(file), bSelected, file, rp, fileName, item, attr));
                         }
                     }
 

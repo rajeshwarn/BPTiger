@@ -67,6 +67,13 @@ namespace CompleteBackup.Models.Backup.Storage
             return Path.GetFileName(path);
         }
 
+        public bool IsFolder(string path)
+        {
+            FileAttributes attr = GetFileAttributes(path);
+
+            return (attr & FileAttributes.Directory) == FileAttributes.Directory;
+        }
+
         private bool GetNumberOfFiles(FileSystemInfo[] FSInfo, ref long files, ref long directories)
         {
             // Check the FSInfo parameter.

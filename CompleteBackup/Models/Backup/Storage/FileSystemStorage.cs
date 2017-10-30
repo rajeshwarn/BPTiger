@@ -70,6 +70,13 @@ namespace CompleteBackup.Models.Backup.Storage
             }
         }
 
+        public bool IsFolder(string path)
+        {
+            FileAttributes attr = GetFileAttributes(path);
+
+            return (attr & FileAttributes.Directory) == FileAttributes.Directory;
+        }
+
         public bool DirectoryExists(string path)
         {
             if (path == null)

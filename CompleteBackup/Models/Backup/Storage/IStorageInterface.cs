@@ -18,6 +18,7 @@ namespace CompleteBackup.Models.Backup.Storage
         string[] GetDirectories(string path);
         bool GetNumberOfFiles(string path, ref long files, ref long directories);
         DateTime GetLastWriteTime(string path);
+        bool IsFolder(string path);
         bool IsFileSame(string file1, string file2);
         void CreateDirectory(string path, bool bCheckIfExist = false);
         bool DeleteDirectory(string path, bool bRecursive = false);

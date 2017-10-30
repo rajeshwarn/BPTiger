@@ -164,9 +164,7 @@ namespace CompleteBackup.Models.Backup.Profile
                     foreach (string subDirectory in subdirectoryList)
                     {
                         string newPath = m_IStorage.Combine(path, subDirectory);
-                        FileAttributes attr = m_IStorage.GetFileAttributes(newPath);
-
-                        if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                        if (m_IStorage.IsFolder(newPath))
                         {
                             if (subDirectory.StartsWith(GUID.ToString("D")))
                             {
@@ -231,10 +229,7 @@ namespace CompleteBackup.Models.Backup.Profile
                 foreach (string subDirectory in subdirectoryList)
                 {
                     string sourcePath = m_IStorage.Combine(path, subDirectory);
-                    FileAttributes attr = m_IStorage.GetFileAttributes(sourcePath);
-
-                    if (((attr & FileAttributes.Directory) == FileAttributes.Directory) &&
-                        (subDirectory.Length >= 36))
+                    if (m_IStorage.IsFolder(sourcePath) && (subDirectory.Length >= 36))
                     {
                         try
                         {

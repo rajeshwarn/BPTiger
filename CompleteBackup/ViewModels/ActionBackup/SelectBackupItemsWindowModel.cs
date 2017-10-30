@@ -43,6 +43,8 @@ namespace CompleteBackup.ViewModels
                 Selected = isSelected,
             };
 
+            
+
             return menuItem;
         }
 
