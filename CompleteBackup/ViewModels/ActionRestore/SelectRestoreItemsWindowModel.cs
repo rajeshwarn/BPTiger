@@ -89,6 +89,37 @@ namespace CompleteBackup.ViewModels
         }
 
 
+        public void ExpandFolder(ItemCollection itemList)
+        {
+            var profile = ProjectData.CurrentBackupProfile;
+            var backSetList = BackupManager.GetBackupSetList(profile);
+
+            //xxxxx
+            foreach (var item in itemList)
+            {
+                foreach (var setPath in backSetList)
+                {
+                    var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, setPath);
+
+                    var folderItem = item as FolderMenuItem;
+                    if (folderItem.ChildFolderMenuItems.Count() == 0)
+                    {
+                        UpdateChildItemsInMenuItem(folderItem);
+                    }
+                }
+            }
+
+
+            //foreach (var item in itemList)
+            //{
+            //    var folderItem = item as FolderMenuItem;
+            //    if (folderItem.ChildFolderMenuItems.Count() == 0)
+            //    {
+            //        UpdateChildItemsInMenuItem(folderItem);
+            //    }
+            //}
+        }
+
         List<string> m_BackupSetPathList = new List<string>();
 
         bool bLoadFromHistory = false;

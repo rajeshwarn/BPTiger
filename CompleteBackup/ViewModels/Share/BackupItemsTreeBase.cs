@@ -123,6 +123,8 @@ namespace CompleteBackup.ViewModels
             return item == null;
         }
 
+
+
         //Add and update all subitems
         protected void UpdateChildItemsInMenuItem(FolderMenuItem item)
         {
@@ -318,17 +320,7 @@ namespace CompleteBackup.ViewModels
         }
 
 
-        public void ExpandFolder(ItemCollection itemList)
-        {
-            foreach (var item in itemList)
-            {
-                var folderItem = item as FolderMenuItem;
-                if (folderItem.ChildFolderMenuItems.Count() == 0)
-                {
-                    UpdateChildItemsInMenuItem(folderItem);
-                }
-            }
-        }
+
 
 
         public void FolderTreeClick(FolderMenuItem item, bool bSelected)
