@@ -9,6 +9,9 @@ namespace CompleteBackup.Models.Backup.Profile
     public class FolderData :ObservableObject
     {
         public string Path { get; set; }
+        public string RelativePath { get; set; }
+        public string Name{ get; set; }
+
         public bool IsFolder { get; set; }
 
         private long m_NumberOfFiles { get; set; }

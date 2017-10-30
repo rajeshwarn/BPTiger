@@ -308,7 +308,7 @@ namespace CompleteBackup.ViewModels
             {
                 if (item.Selected == true)
                 {
-                    SelectedItemList.Add(new FolderData { Path = item.Path, IsFolder = item.IsFolder });
+                    SelectedItemList.Add(new FolderData { Path = item.Path, RelativePath = item.RelativePath, Name = item.Name, IsFolder = item.IsFolder });
                 }
                 else if (item.Selected == null)
                 {

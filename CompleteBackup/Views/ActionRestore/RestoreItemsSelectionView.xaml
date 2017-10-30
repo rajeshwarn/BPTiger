@@ -86,7 +86,7 @@
                             <DataTemplate>
                                 <DockPanel LastChildFill="True">
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Path}"/>
+                                        <TextBlock Text="{Binding RelativePath}"/>
                                     </StackPanel>
                                 </DockPanel>
                             </DataTemplate>
