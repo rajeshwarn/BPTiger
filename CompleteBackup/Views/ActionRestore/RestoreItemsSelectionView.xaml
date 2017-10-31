@@ -45,7 +45,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="32" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -112,7 +112,9 @@
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Grid.Column="0" Grid.Row="1">
+        <Image Grid.Row="1" Source="/Resources/Icons/FolderTreeView/Arrow-Down.ico"/>
+
+        <GroupBox Grid.Column="0" Grid.Row="2">
             <GroupBox.Header>
                 <TextBlock FontWeight="Bold" Text="Destination"/>
             </GroupBox.Header>
