@@ -33,6 +33,8 @@ namespace CompleteBackup.ViewModels
         public ObservableCollection<FolderData> SelectedItemList { get; set; } = new ObservableCollection<FolderData>();
 
 
+        protected string m_LastSetPathCache;
+
         private bool m_DirtyFlag = false;
         public bool DirtyFlag { get { return m_DirtyFlag; } set { m_DirtyFlag = value; OnPropertyChanged(); } }
 
@@ -121,6 +123,20 @@ namespace CompleteBackup.ViewModels
         protected abstract List<string> GetAllActiveSets(FolderMenuItem item);
 
 
+
+        bool IsDeletedFolder(string path)
+        {
+            string folder = m_IStorage.Combine(m_IStorage.Combine(ProjectData.CurrentBackupProfile.TargetBackupFolder, m_LastSetPathCache), path);
+
+            return !m_IStorage.DirectoryExists(folder);
+        }
+
+        protected bool NoTExistsinTreeNameList(string name, ObservableCollection<FolderMenuItem> list)
+        {
+            var item = list.Where(i => i.Name == name).FirstOrDefault();
+
+            return item == null;
+        }
         protected bool NoTExistsinTreeList(string path, ObservableCollection<FolderMenuItem> list)
         {
             var item = list.Where(i => i.Path == path).FirstOrDefault();
@@ -143,16 +159,30 @@ namespace CompleteBackup.ViewModels
                     {
                         string newPath = m_IStorage.Combine(item.Path, subdirectory);
                         FileAttributes attr = m_IStorage.GetFileAttributes(newPath);
-                        if (!IsHidden(attr) && NoTExistsinTreeList(newPath, item.ChildFolderMenuItems))
+                        if (!IsHidden(attr) && NoTExistsinTreeNameList(subdirectory, item.ChildFolderMenuItems))
                         {
-                            bool bSelected = false;
-                            if (item.Selected == true)
-                            {
-                                bSelected = true;
-                            }
 
-                            var rp = m_IStorage.Combine(item.RelativePath, subdirectory);
-                            item.ChildFolderMenuItems.Add(CreateMenuItem(m_IStorage.IsFolder(newPath), bSelected, newPath, rp, subdirectory, item, attr));
+                            bool bDeletedFolder = IsDeletedFolder(m_IStorage.Combine(item.RelativePath, subdirectory));
+
+                            if (history == null || history.SessionHistoryIndex == 1 || bDeletedFolder)
+                            {
+                                bool bSelected = false;
+                                if (item.Selected == true)
+                                {
+                                    bSelected = true;
+                                }
+
+                                var rp = m_IStorage.Combine(item.RelativePath, subdirectory);
+                                Application.Current.Dispatcher.Invoke(new Action(() =>
+                                {
+                                    var newItem = CreateMenuItem(m_IStorage.IsFolder(newPath), bSelected, newPath, rp, subdirectory, item, attr);
+                                    if (bDeletedFolder)
+                                    {
+                                        newItem.Image = "/Resources/Icons/FolderTreeView/DeleteFolder.ico";
+                                    }
+                                    item.ChildFolderMenuItems.Add(newItem);
+                                }));
+                            }
                         }
                     }
 

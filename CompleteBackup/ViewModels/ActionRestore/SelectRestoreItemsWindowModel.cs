@@ -47,7 +47,6 @@ namespace CompleteBackup.ViewModels
                 Name = name,
                 ParentItem = parentItem,
                 Selected = isSelected,
-              //  Image = GetImageSource(path),
             };
 
             return menuItem;
@@ -66,19 +65,6 @@ namespace CompleteBackup.ViewModels
                     return menuItem;
                 }
             }
-
-
-            //menuItem = new RestoreFolderMenuItem()
-            //{
-            //    IsFolder = isFolder,
-            //    Path = path,
-            //    RelativePath = relativePath,
-            //    Name = name,
-            //    ParentItem = parentItem,
-            //    Selected = isSelected,
-            //    Image = GetImageSource(path),
-            //};
-
             return menuItem;
         }
 
@@ -142,9 +128,9 @@ namespace CompleteBackup.ViewModels
             ClearItemList();
             m_BackupSetPathCacheList.Clear();
 
-            var lastSet = BackupManager.GetLastBackupSetName(profile);
+            m_LastSetPathCache = BackupManager.GetLastBackupSetName(profile);
             var backSetList = BackupManager.GetBackupSetList(profile);
-            foreach(var setPath in backSetList.Where(p => p != lastSet))
+            foreach(var setPath in backSetList.Where(p => p != m_LastSetPathCache))
             {
                 m_BackupSetPathCacheList.Add(m_IStorage.Combine(profile.TargetBackupFolder, setPath));
             }
@@ -160,7 +146,12 @@ namespace CompleteBackup.ViewModels
                 if (bIncremental)
                 {
 
-                    foreach (var item in profile.FolderList)
+                    m_RootFolderMenuItemTree.ParentItem = null;
+                    m_RootFolderMenuItemTree.IsFolder = true;
+                    m_RootFolderMenuItemTree.Path = profile.TargetBackupFolder;
+                    m_RootFolderMenuItemTree.RelativePath = string.Empty;
+                    m_RootFolderMenuItemTree.Name = "BACKUP";
+
                     {
                         int iSessionIndex = 1;
                         foreach (var setPath in backSetList)
@@ -170,32 +161,21 @@ namespace CompleteBackup.ViewModels
                             iSessionIndex++;
 
                             var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, setPath);
-                            var directoryName = m_IStorage.GetFileName(item.Path);
-                            var restorePath = m_IStorage.Combine(lastSetPath, directoryName);
 
-                            var lastSetPath2 = m_IStorage.Combine(lastSetPath, item.RelativePath);
-                            var rootItem = GetExistingMenuItem(true, false, restorePath, directoryName, directoryName, null, 0);
-                            if (rootItem == null)
+                            m_RootFolderMenuItemTree.Path = lastSetPath;
+
+                            UpdateChildItemsInMenuItem(m_RootFolderMenuItemTree, lastSetPath, sessionHistory);
+
+                            foreach (var subItem in m_RootFolderMenuItemTree.ChildFolderMenuItems)
                             {
-                                rootItem = CreateMenuItem(m_IStorage.IsFolder(restorePath), false, restorePath, directoryName, directoryName, null, 0);
-
-                                UpdateChildItemsInMenuItem(rootItem, lastSetPath2, sessionHistory);
-
-                                Application.Current.Dispatcher.Invoke(new Action(() =>
-                                {
-                                    FolderMenuItemTree.Add(rootItem);
-                                }));
-                            }
-                            else
-                            {
-                                UpdateChildItemsInMenuItem(rootItem, lastSetPath2, sessionHistory);
+                                UpdateChildItemsInMenuItem(subItem, subItem.Path, sessionHistory);
                             }
                         }
                     }
                 }
                 else
                 {
-                    var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, lastSet);
+                    var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, m_LastSetPathCache);
 
                     foreach (var item in profile.FolderList)
                     {
@@ -251,7 +231,10 @@ namespace CompleteBackup.ViewModels
                         if (foundItem == null)
                         {
                             var newItem = CreateMenuItem(m_IStorage.IsFolder(file), bSelected, file, rp, fileName, item, attr);
-                            item.ChildFolderMenuItems.Add(newItem);
+                            Application.Current.Dispatcher.Invoke(new Action(() =>
+                            {
+                                item.ChildFolderMenuItems.Add(newItem);
+                            }));
 
                             foundItem = newItem;
                             if (history.SessionHistoryIndex > 1)
@@ -272,7 +255,10 @@ namespace CompleteBackup.ViewModels
                         {
                             newMenuItem.Image = "/Resources/Icons/FolderTreeView/EditItem.ico";
                         }
-                        foundItem.ChildFolderMenuItems.Add(newMenuItem);
+                        Application.Current.Dispatcher.Invoke(new Action(() =>
+                        {
+                            foundItem.ChildFolderMenuItems.Add(newMenuItem);
+                        }));
                     }
                 }
             }
