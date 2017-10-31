@@ -119,33 +119,29 @@
                 <TextBlock FontWeight="Bold" Text="Destination"/>
             </GroupBox.Header>
             <StackPanel Orientation="Vertical">
-                <TextBlock x:Name="txTaggetFolder"                        
-                         Validation.ErrorTemplate="{StaticResource validationTargetFolderErrorTemplate}" Margin="8,0,0,0">
-                        <TextBlock.Text>
+                <TextBlock Text="{Binding validationTargetFolderErrorTemplate}"/>
+                <TextBox Validation.ErrorTemplate="{StaticResource validationTargetFolderErrorTemplate}" Margin="4,16,0,8">
+                    <TextBox.Text>
                         <Binding Path="ProjectData.CurrentBackupProfile.TargetRestoreFolder"
                                  Mode="TwoWay"
                                  TargetNullValue=''
-                                 UpdateSourceTrigger="Default">
+                                 UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
                                     <validators:BackupTargetLocationValidator/>
                                 </Binding.ValidationRules>
                             </Binding>
-                        </TextBlock.Text>
-                        <TextBlock.Style>
-                            <Style TargetType="TextBlock" >
+                        </TextBox.Text>
+                    <TextBox.Style>
+                        <Style TargetType="TextBox" >
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ElementName=txTaggetFolder, Path=Text}" Value="{x:Null}">
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                        <Setter Property="Text" Value="  XX-- Please select target folder --" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Path=ProfileData.TargetBackupFolderEmptyFolderMessage}" Value="{x:Static System:String.Empty}">
+                                <DataTrigger Binding="{Binding Path=ProjectData.CurrentBackupProfile.TargetRestoreFolder}" Value="{x:Null}">
                                         <Setter Property="FontStyle" Value="Italic"/>
                                         <Setter Property="Text" Value="  XX-- Please select target folder --" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
-                        </TextBlock.Style>
-                    </TextBlock>
+                        </TextBox.Style>
+                    </TextBox>
                 <StackPanel Orientation="Horizontal">
                     <Button Content="Change"
                         Command="{Binding SelectFolderNameCommand}"
