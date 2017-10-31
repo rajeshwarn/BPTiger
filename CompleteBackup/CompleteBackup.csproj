@@ -105,7 +105,7 @@
     <Compile Include="ViewModels\ExtendedControls\ChartGaugeViewModel.cs" />
     <Compile Include="ViewModels\ActionBackup\MainBackupViewModel.cs" />
     <Compile Include="ViewModels\ActionRestore\MainRestoreViewModel.cs" />
-    <Compile Include="ViewModels\Profile\ICommands\CloseWindowICommand.cs" />
+    <Compile Include="ViewModels\File\ICommands\CloseWindowICommand.cs" />
     <Compile Include="ViewModels\ActionBackup\ICommands\OpenChangeBackupItemsWindowICommand.cs" />
     <Compile Include="ViewModels\ActionBackup\BackupItemsSelectionViewModel.cs" />
     <Compile Include="ViewModels\ActionBackupRestoreShared\ICommands\ExpandFolderTreeICommand.cs" />
@@ -114,8 +114,8 @@
     <Compile Include="ViewModels\MainWindow\MainWindowStatusBarViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ActionBackup\Validators\BackupTargetLocationValidator.cs" />
-    <Compile Include="ViewModels\Profile\ProfileDetails\ProfileDetailsPageViewModel.cs" />
-    <Compile Include="ViewModels\Profile\ProfileList\ProfileListViewModel.cs" />
+    <Compile Include="ViewModels\File\MainProfileViewModel.cs" />
+    <Compile Include="ViewModels\File\ProfileList\ProfileListViewModel.cs" />
     <Compile Include="ViewModels\ActionRestore\SelectRestoreItemsWindowModel.cs" />
     <Compile Include="Views\ActionRestore\RestoreItemsSelectionView.xaml.cs">
       <DependentUpon>RestoreItemsSelectionView.xaml</DependentUpon>
@@ -145,10 +145,10 @@
     <Compile Include="Views\MainWindow\MainWindowStatusBarView.xaml.cs">
       <DependentUpon>MainWindowStatusBarView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Profile\ProfileDetailsPageView.xaml.cs">
-      <DependentUpon>ProfileDetailsPageView.xaml</DependentUpon>
+    <Compile Include="Views\File\MainProfileView.xaml.cs">
+      <DependentUpon>MainProfileView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Profile\ProfileListView.xaml.cs">
+    <Compile Include="Views\File\ProfileListView.xaml.cs">
       <DependentUpon>ProfileListView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
@@ -199,11 +199,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Profile\ProfileDetailsPageView.xaml">
+    <Page Include="Views\File\MainProfileView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Profile\ProfileListView.xaml">
+    <Page Include="Views\File\ProfileListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

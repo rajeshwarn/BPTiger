@@ -9,11 +9,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace CompleteBackup.ViewModels.Profile
+namespace CompleteBackup.ViewModels
 {
-    class ProfileDetailsPageViewModel : ObservableObject
+    class MainProfileViewModel : ObservableObject
     {
-        public ProfileDetailsPageViewModel()
+        public MainProfileViewModel()
         {
             ProfileGaugeList.Add(new ChartGaugeView(Brushes.Red, Brushes.Green, Brushes.Yellow) { PumpNumber = 0, GaugeValue = 0.6F });
            // ProfileGaugeList.Add(new ChartGaugeView(Brushes.Red, Brushes.Green, Brushes.Yellow) { PumpNumber = 1, GaugeValue = 0.2F });
@@ -23,7 +23,7 @@ namespace CompleteBackup.ViewModels.Profile
 
         }
 
-        ~ProfileDetailsPageViewModel()
+        ~MainProfileViewModel()
         {
             BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile.UnRegisterEvent(ProfileDataUpdate);
         }

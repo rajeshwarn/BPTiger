@@ -31,6 +31,10 @@
             <view:MainRestoreView/>
         </DataTemplate>
         <DataTemplate
+            DataType="{x:Type view_model:MainProfileViewModel}">
+            <view:MainProfileView/>
+        </DataTemplate>
+        <DataTemplate
             DataType="{x:Type extended_view_model:ProcessingSpinnerViewModel}">
             <extended_view:ProcessingSpinnerView/>
         </DataTemplate>
@@ -75,18 +79,6 @@
                     <RibbonButton SmallImageSource="/Resources/Icons/Ribbon/document-export.ico" Label="Export" KeyTip="E" 
                                                   Command="{Binding ExportSmartGraphCollectionCommand}"/>
                 </RibbonGroup>
-            </RibbonTab>
-
-
-            <RibbonTab Header="Backup" KeyTip="B" >
-                <!--<RibbonGroup Header="{Binding Project.SelectedBackupProject.Name}" ItemsSource="{Binding Project.SelectedBackupProject.BackupProfileList}"
-                                     ToolTip="{Binding Project.SelectedBackupProject.Description}">
-                    <RibbonGroup.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Name}" ToolTip="{Binding Description}"/>
-                        </DataTemplate>
-                    </RibbonGroup.ItemTemplate>
-                </RibbonGroup>-->
                 <RibbonGroup Header="{Binding Project.SelectedBackupProject.Name}"
                                      ToolTip="{Binding Project.SelectedBackupProject.Description}">
                     <RibbonComboBox>
@@ -114,7 +106,20 @@
                                               Command="{Binding ImportSmartGraphCollectionCommand}"/>
                     <RibbonButton SmallImageSource="/Resources/Icons/Menu/blue-document-export.ico" Label="Export" KeyTip="E" 
                                                   Command="{Binding ExportSmartGraphCollectionCommand}"/>-->
-                </RibbonGroup>
+                </RibbonGroup>                
+            </RibbonTab>
+
+
+            <RibbonTab Header="Backup" KeyTip="B" >
+                <!--<RibbonGroup Header="{Binding Project.SelectedBackupProject.Name}" ItemsSource="{Binding Project.SelectedBackupProject.BackupProfileList}"
+                                     ToolTip="{Binding Project.SelectedBackupProject.Description}">
+                    <RibbonGroup.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" ToolTip="{Binding Description}"/>
+                        </DataTemplate>
+                    </RibbonGroup.ItemTemplate>
+                </RibbonGroup>-->
+
                 <RibbonGroup Header="Run backup now" ToolTip="Click start to manuaaly run a backup now for this profile">
                     <!--Start-->
                     <RibbonButton LargeImageSource="/Resources/Icons/Ribbon/Start.ico"  KeyTip="S"

@@ -25,7 +25,7 @@
                 <!--DataContext="{Binding Path=RestoreItemsSelectionViewModel}"/>-->
             </StackPanel>
 
-            <!--<profile_views:ProfileDetailsPageView x:Name="profileDetailsPageView" Margin="0,20,0,0"/>-->
+            <!--<profile_views:MainProfileView x:Name="profileDetailsPageView" Margin="0,20,0,0"/>-->
         </DockPanel>
     </Grid>
 </UserControl>

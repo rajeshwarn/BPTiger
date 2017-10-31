@@ -18,18 +18,21 @@ namespace CompleteBackup.ViewModels.MainWindow
         public ICommand StopBackupCommand { get; private set; } = new StopBackupICommand<object>();
 
         public ICommand RestoreBackupCommand { get; private set; } = new RestoreBackupICommand<object>();
-        
+
+        const int m_DefaultPageIndex = 1;
 
         public MainWindowViewModel()
         {
 
+
             m_MainViewDictionary = new Dictionary<int, object>()
             {
+                { 0, new MainProfileViewModel() },
                 { 1, new MainBackupViewModel() },
                 { 2, new MainRestoreViewModel() },
             };
 
-            m_CurrentPageViewModel = m_MainViewDictionary[2];
+            m_CurrentPageViewModel = m_MainViewDictionary[m_DefaultPageIndex];
         }
 
         private Dictionary<int, object> m_MainViewDictionary;
@@ -38,7 +41,7 @@ namespace CompleteBackup.ViewModels.MainWindow
         private object m_CurrentPageViewModel;
         public object CurrentPageViewModel { get { return m_CurrentPageViewModel; } set { m_CurrentPageViewModel = value; OnPropertyChanged(); } }
 
-        private int m_SelectedRibbonIndex = 2;
+        private int m_SelectedRibbonIndex = m_DefaultPageIndex;
         public int SelectedRibbonIndex { get { return m_SelectedRibbonIndex; } set { m_SelectedRibbonIndex = value; OnPropertyChanged(); UpdateCurrentMainView(); } }
         
 

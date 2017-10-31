@@ -15,14 +15,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CompleteBackup.Views.Profile
+namespace CompleteBackup.Views
 {
     /// <summary>
-    /// Interaction logic for ProfileDetailsPageView.xaml
+    /// Interaction logic for MainProfileView.xaml
     /// </summary>
-    public partial class ProfileDetailsPageView : UserControl
+    public partial class MainProfileView : UserControl
     {
-        public ProfileDetailsPageView()
+        public MainProfileView()
         {
             InitializeComponent();
         }
