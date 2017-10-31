@@ -47,7 +47,7 @@ namespace CompleteBackup.ViewModels
                 Name = name,
                 ParentItem = parentItem,
                 Selected = isSelected,
-                Image = GetImageSource(path),
+              //  Image = GetImageSource(path),
             };
 
             return menuItem;
@@ -239,16 +239,24 @@ namespace CompleteBackup.ViewModels
                         var rp = m_IStorage.Combine(item.RelativePath, fileName);
 
                         var foundItem = item.ChildFolderMenuItems.Where(i => i.Name == fileName).FirstOrDefault();
+                        bool bFirstSet = false;
                         if (foundItem == null)
                         {
                             var newItem = CreateMenuItem(m_IStorage.IsFolder(file), bSelected, file, rp, fileName, item, attr);
                             item.ChildFolderMenuItems.Add(newItem);
 
                             foundItem = newItem;
+                            bFirstSet = true;
                         }
 
                         var timeDate = history?.TimeStamp;
-                        foundItem.ChildFolderMenuItems.Add(CreateMenuItem(m_IStorage.IsFolder(file), bSelected, file, rp, timeDate.ToString(), foundItem, attr));
+
+                        var newMenuItem = CreateMenuItem(m_IStorage.IsFolder(file), bSelected, file, rp, timeDate.ToString(), foundItem, attr);
+                        if (!bFirstSet)
+                        {
+                            newMenuItem.Image = "/Resources/Icons/FolderTreeView/EditItem.ico";
+                        }
+                        foundItem.ChildFolderMenuItems.Add(newMenuItem);
                     }
                 }
             }

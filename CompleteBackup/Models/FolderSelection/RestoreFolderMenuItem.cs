@@ -23,31 +23,6 @@ namespace CompleteBackup.Models.FolderSelection
         public HistoryTypeEnum? HistoryType { get; set; } = null;
 
 
-        public ImageSource Image
-        {
-            get
-            {
-                ImageSource imageSource = null;
-                try
-                {
-                    var icon = m_IStorage.ExtractIconFromPath(Path);
-                    imageSource = Imaging.CreateBitmapSourceFromHIcon(
-                        icon.Handle,
-                        System.Windows.Int32Rect.Empty,
-                        System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
-                }
-                catch (Exception ex)
-                {
-                    Trace.WriteLine($"Failed to get Icon {Path}\n{ex.Message}");
-                }
-
-                return imageSource;
-            }
-            set { }
-        }
-
-        static IStorageInterface m_IStorage = new FileSystemStorage();
-
 
         // public ImageSource Image { get; set; }
         //public string Image {

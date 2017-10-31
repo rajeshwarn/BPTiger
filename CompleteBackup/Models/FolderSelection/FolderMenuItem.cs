@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CompleteBackup.Models.Backup.Storage;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -29,5 +30,42 @@ namespace CompleteBackup.Models.FolderSelection
         public FolderMenuItem ParentItem { get; set; }
         public ObservableCollection<FolderMenuItem> ChildFolderMenuItems { get; set; } = new ObservableCollection<FolderMenuItem>();
 
+
+        static IStorageInterface m_IStorage = new FileSystemStorage();
+
+        object m_Image = null;
+        public object Image
+        {
+            get
+            {
+                if (m_Image == null)
+                {
+                    ImageSource imageSource = null;
+                    try
+                    {
+                        var icon = m_IStorage.ExtractIconFromPath(Path);
+                        imageSource = Imaging.CreateBitmapSourceFromHIcon(
+                            icon.Handle,
+                            System.Windows.Int32Rect.Empty,
+                            System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine($"Failed to get Icon {Path}\n{ex.Message}");
+                    }
+
+                    return imageSource;
+
+                }
+                else
+                {
+                    return m_Image;// "/Resources/Icons/FolderTreeView/EditItem.ico";
+                }
+            }
+            set
+            {
+                m_Image = value;
+            }
+        }
     }
 }
