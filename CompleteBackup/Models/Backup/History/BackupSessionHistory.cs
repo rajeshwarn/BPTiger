@@ -43,7 +43,6 @@ namespace CompleteBackup.Models.Backup.History
     public class BackupSessionHistory
     {
         IStorageInterface m_Storage;
-        string signature;
 
         BackupSessionHistory() { }
 

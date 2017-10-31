@@ -1,7 +1,6 @@
 ﻿using CompleteBackup.DataRepository;
 using CompleteBackup.Models.Backup.Project;
 using CompleteBackup.ViewModels.ICommands;
-using CompleteBackup.ViewModels.Profile;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -133,20 +133,20 @@ namespace CompleteBackup.ViewModels
             }
         }
 
-        List<string> m_BackupSetPathList = new List<string>();
+        List<string> m_BackupSetPathCacheList = new List<string>();
 
         bool bLoadFromHistory = false;
         protected override void AddRootItemsToTree()
         {
             var profile = ProjectData.CurrentBackupProfile;
             ClearItemList();
-            m_BackupSetPathList.Clear();
+            m_BackupSetPathCacheList.Clear();
 
             var lastSet = BackupManager.GetLastBackupSetName(profile);
             var backSetList = BackupManager.GetBackupSetList(profile);
             foreach(var setPath in backSetList.Where(p => p != lastSet))
             {
-                m_BackupSetPathList.Add(m_IStorage.Combine(profile.TargetBackupFolder, setPath));
+                m_BackupSetPathCacheList.Add(m_IStorage.Combine(profile.TargetBackupFolder, setPath));
             }
 
             if (bLoadFromHistory)
@@ -283,7 +283,7 @@ namespace CompleteBackup.ViewModels
         {
             var activeSetList = new List<string>() { item.Path };
 
-            foreach(var set in m_BackupSetPathList)
+            foreach(var set in m_BackupSetPathCacheList)
             {
                 activeSetList.Add(m_IStorage.Combine(set, item.Name));
             }
