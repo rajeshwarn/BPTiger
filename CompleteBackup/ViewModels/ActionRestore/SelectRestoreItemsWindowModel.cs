@@ -161,22 +161,24 @@ namespace CompleteBackup.ViewModels
                     m_RootFolderMenuItemTree.Name = "BACKUP";
 
                     {
-                        int iSessionIndex = 1;
+                        int iSessionIndex = 0;
                         foreach (var setPath in backSetList)
                         {
+                            iSessionIndex++;
                             var sessionHistory = BackupSessionHistory.LoadHistory(profile.TargetBackupFolder, setPath);
                             sessionHistory.SessionHistoryIndex = iSessionIndex;
-                            iSessionIndex++;
 
                             var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, setPath);
 
                             m_RootFolderMenuItemTree.Path = lastSetPath;
 
+                            //update add root items
                             UpdateChildItemsInMenuItem(m_RootFolderMenuItemTree, lastSetPath, sessionHistory);
 
                             foreach (var subItem in m_RootFolderMenuItemTree.ChildFolderMenuItems)
                             {
-                                UpdateChildItemsInMenuItem(subItem, subItem.Path, sessionHistory);
+                                var newPath = m_IStorage.Combine(lastSetPath, subItem.RelativePath);
+                                UpdateChildItemsInMenuItem(subItem, newPath, sessionHistory);
                             }
                         }
                     }

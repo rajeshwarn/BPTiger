@@ -45,6 +45,9 @@ namespace CompleteBackup.Models.Backup.History
     {
         IStorageInterface m_Storage;
 
+        const string HistoryDirectory = ".BackupComnpleteHistory";
+
+
         BackupSessionHistory() { }
 
         public BackupSessionHistory(IStorageInterface storage)
@@ -103,7 +106,11 @@ namespace CompleteBackup.Models.Backup.History
         {
             var fileName = m_Storage.GetFileName(path);
             var directory = m_Storage.GetDirectoryName(path);
-            var destPath = m_Storage.Combine(directory, fileName + "_history.json");
+
+            var historyDir = m_Storage.Combine(directory, HistoryDirectory);
+            m_Storage.CreateDirectory(historyDir);
+
+            var destPath = m_Storage.Combine(historyDir, fileName + "_history.json");
 
             string json = json = JsonConvert.SerializeObject(item, Formatting.Indented);
 
@@ -114,7 +121,11 @@ namespace CompleteBackup.Models.Backup.History
         {
             var m_IStorage = new FileSystemStorage();
             var fullPath = m_IStorage.Combine(path, signature);
-            string historyFile = m_IStorage.Combine(fullPath, $"{signature}_history.json");
+
+            var historyDir = m_IStorage.Combine(fullPath, HistoryDirectory);
+            m_IStorage.CreateDirectory(historyDir);
+
+            string historyFile = m_IStorage.Combine(historyDir, $"{signature}_history.json");
 
             var historyData = new object[1];
             historyData[0] = history;
@@ -123,15 +134,18 @@ namespace CompleteBackup.Models.Backup.History
             File.WriteAllText(historyFile, json);
             //System.Diagnostics.Process.Start(path);
 
-            var hhh = LoadHistory(path, signature);
-
+            //var hhh = LoadHistory(path, signature);
         }
 
         public static BackupSessionHistory LoadHistory(string path, string signature)
         {
             var m_IStorage = new FileSystemStorage();
             var fullPath = m_IStorage.Combine(path, signature);
-            string historyFile = m_IStorage.Combine(fullPath, $"{signature}_history.json");
+
+            var historyDir = m_IStorage.Combine(fullPath, HistoryDirectory);
+            m_IStorage.CreateDirectory(historyDir);
+
+            string historyFile = m_IStorage.Combine(historyDir, $"{signature}_history.json");
             BackupSessionHistory history = null;
 
             using (StreamReader fileStream = File.OpenText(historyFile))
