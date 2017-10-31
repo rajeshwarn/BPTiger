@@ -19,7 +19,7 @@ namespace CompleteBackup.ViewModels.MainWindow
 
         public ICommand RestoreBackupCommand { get; private set; } = new RestoreBackupICommand<object>();
 
-        const int m_DefaultPageIndex = 1;
+        const int m_DefaultPageIndex = 2;
 
         public MainWindowViewModel()
         {

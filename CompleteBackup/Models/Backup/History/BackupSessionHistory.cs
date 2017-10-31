@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace CompleteBackup.Models.Backup.History
 {
@@ -51,6 +52,11 @@ namespace CompleteBackup.Models.Backup.History
             m_Storage = storage;
             //signature = profile.
         }
+
+
+        [XmlIgnore]
+        public int SessionHistoryIndex { get; set; }
+
 
         public List<HistoryItem> HistoryItemList { get; set; } = new List<HistoryItem>();
 

@@ -112,10 +112,12 @@ namespace CompleteBackup.ViewModels
                     //xxxxx
                 foreach (var item in itemList)
                 {
+                    int iSessionIndex = 1;
                     foreach (var setPath in backSetList)
                     {
                         var sessionHistory = BackupSessionHistory.LoadHistory(profile.TargetBackupFolder, setPath);
-
+                        sessionHistory.SessionHistoryIndex = iSessionIndex;
+                        iSessionIndex++;
 
                         var folderItem = item as FolderMenuItem;
 
@@ -239,20 +241,28 @@ namespace CompleteBackup.ViewModels
                         var rp = m_IStorage.Combine(item.RelativePath, fileName);
 
                         var foundItem = item.ChildFolderMenuItems.Where(i => i.Name == fileName).FirstOrDefault();
-                        bool bFirstSet = false;
+                        bool bDeletedItem = false;
                         if (foundItem == null)
                         {
                             var newItem = CreateMenuItem(m_IStorage.IsFolder(file), bSelected, file, rp, fileName, item, attr);
                             item.ChildFolderMenuItems.Add(newItem);
 
                             foundItem = newItem;
-                            bFirstSet = true;
+                            if (history.SessionHistoryIndex > 1)
+                            {
+                                bDeletedItem = true;
+                                foundItem.Image = "/Resources/Icons/FolderTreeView/DeleteItem.ico";
+                            }
                         }
 
                         var timeDate = history?.TimeStamp;
 
                         var newMenuItem = CreateMenuItem(m_IStorage.IsFolder(file), bSelected, file, rp, timeDate.ToString(), foundItem, attr);
-                        if (!bFirstSet)
+                        if (bDeletedItem)
+                        {
+                            newMenuItem.Image = "/Resources/Icons/FolderTreeView/DeleteItem.ico";
+                        }
+                        else
                         {
                             newMenuItem.Image = "/Resources/Icons/FolderTreeView/EditItem.ico";
                         }
