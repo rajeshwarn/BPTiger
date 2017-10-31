@@ -31,11 +31,12 @@ namespace CompleteBackup.ViewModels
             }
         }
 
-        protected override FolderMenuItem CreateMenuItem(bool isFolder, bool isSelected, string path, string relativePath, string name, FolderMenuItem parentItem, FileAttributes attr)
+        protected override FolderMenuItem CreateMenuItem(bool isFolder, bool isSelected, string path, string relativePath, string name, FolderMenuItem parentItem, FileAttributes attr, HistoryTypeEnum? historyType = null)
         {
             var menuItem = new BackupFolderMenuItem()
             {
                 IsFolder = isFolder,
+                HistoryType = historyType,
                 Attributes = attr,
                 Path = path,
                 RelativePath = relativePath,
@@ -47,6 +48,11 @@ namespace CompleteBackup.ViewModels
             
 
             return menuItem;
+        }
+
+        protected override bool IsDeletedFolder(string path)
+        {
+            return false;
         }
 
 
@@ -63,28 +69,23 @@ namespace CompleteBackup.ViewModels
             foreach (var drive in drives)
             {
                 DirectoryInfo dInfo = drive.RootDirectory;
-                try
-                {
-                    FileAttributes attr = File.GetAttributes(drive.Name);
-                    var rootItem = new BackupFolderMenuItem()
-                    {
-                        IsFolder = true,
-                        Attributes = attr,
-                        Path = drive.Name,
-                        RelativePath = drive.Name,
-                        Name = $"{drive.VolumeLabel} ({drive.DriveType}) ({drive.Name})"
-                    };
 
-                    UpdateChildItemsInMenuItem(rootItem);
-
-                    Application.Current.Dispatcher.Invoke(new Action(() =>
-                    {
-                        FolderMenuItemTree.Add(rootItem);
-                    }));
-                }
-                catch
+                FileAttributes attr = File.GetAttributes(drive.Name);
+                var rootItem = new BackupFolderMenuItem()
                 {
-                }
+                    IsFolder = true,
+                    Attributes = attr,
+                    Path = drive.Name,
+                    RelativePath = drive.Name,
+                    Name = $"{drive.VolumeLabel} ({drive.DriveType}) ({drive.Name})"
+                };
+
+                UpdateChildItemsInMenuItem(rootItem);
+
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    m_RootFolderMenuItemTree.ChildFolderMenuItems.Add(rootItem);
+                }));
             }
 
             //Add selected folders to tree list

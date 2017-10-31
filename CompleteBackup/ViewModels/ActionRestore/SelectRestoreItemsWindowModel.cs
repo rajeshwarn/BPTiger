@@ -37,11 +37,12 @@ namespace CompleteBackup.ViewModels
         {
         }
 
-        protected override FolderMenuItem CreateMenuItem(bool isFolder, bool isSelected, string path, string relativePath, string name, FolderMenuItem parentItem, FileAttributes attr)
+        protected override FolderMenuItem CreateMenuItem(bool isFolder, bool isSelected, string path, string relativePath, string name, FolderMenuItem parentItem, FileAttributes attr, HistoryTypeEnum? historyType = null)
         {
             var menuItem = new RestoreFolderMenuItem()
             {
                 IsFolder = isFolder,
+                HistoryType = historyType,
                 Path = path,
                 RelativePath = relativePath,
                 Name = name,
@@ -81,6 +82,13 @@ namespace CompleteBackup.ViewModels
             }
 
             return null;
+        }
+
+        protected override bool IsDeletedFolder(string path)
+        {
+            string folder = m_IStorage.Combine(m_IStorage.Combine(ProjectData.CurrentBackupProfile.TargetBackupFolder, m_LastSetPathCache), path);
+
+            return !m_IStorage.DirectoryExists(folder);
         }
 
 
@@ -228,33 +236,36 @@ namespace CompleteBackup.ViewModels
 
                         var foundItem = item.ChildFolderMenuItems.Where(i => i.Name == fileName).FirstOrDefault();
                         bool bDeletedItem = false;
+                        HistoryTypeEnum historyType = HistoryTypeEnum.NoChange;
                         if (foundItem == null)
                         {
-                            var newItem = CreateMenuItem(m_IStorage.IsFolder(file), bSelected, file, rp, fileName, item, attr);
+                            if (history.SessionHistoryIndex > 1)
+                            {
+                                bDeletedItem = true;
+                                historyType = HistoryTypeEnum.Deleted;
+                            }
+
+                            var newItem = CreateMenuItem(m_IStorage.IsFolder(file), bSelected, file, rp, fileName, item, attr, historyType);
                             Application.Current.Dispatcher.Invoke(new Action(() =>
                             {
                                 item.ChildFolderMenuItems.Add(newItem);
                             }));
 
                             foundItem = newItem;
-                            if (history.SessionHistoryIndex > 1)
-                            {
-                                bDeletedItem = true;
-                                foundItem.Image = "/Resources/Icons/FolderTreeView/DeleteItem.ico";
-                            }
                         }
 
                         var timeDate = history?.TimeStamp;
-
-                        var newMenuItem = CreateMenuItem(m_IStorage.IsFolder(file), bSelected, file, rp, timeDate.ToString(), foundItem, attr);
+                        
                         if (bDeletedItem)
                         {
-                            newMenuItem.Image = "/Resources/Icons/FolderTreeView/DeleteItem.ico";
+                            historyType = HistoryTypeEnum.Deleted;
                         }
                         else
                         {
-                            newMenuItem.Image = "/Resources/Icons/FolderTreeView/EditItem.ico";
+                            historyType = HistoryTypeEnum.Changed;
                         }
+                        var newMenuItem = CreateMenuItem(m_IStorage.IsFolder(file), bSelected, file, rp, timeDate.ToString(), foundItem, attr, historyType);
+
                         Application.Current.Dispatcher.Invoke(new Action(() =>
                         {
                             foundItem.ChildFolderMenuItems.Add(newMenuItem);

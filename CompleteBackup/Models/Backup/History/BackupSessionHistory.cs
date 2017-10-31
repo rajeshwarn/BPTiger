@@ -15,6 +15,7 @@ namespace CompleteBackup.Models.Backup.History
 {
     public enum HistoryTypeEnum
     {
+//        NotSpecified,
         NoChange,
         Changed,
         Added,

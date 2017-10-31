@@ -20,47 +20,6 @@ namespace CompleteBackup.Models.FolderSelection
     {
         public DateTime TimeStamp { get; set; }
 
-        public HistoryTypeEnum? HistoryType { get; set; } = null;
-
-
-
-        // public ImageSource Image { get; set; }
-        //public string Image {
-        //    get
-        //    {
-        //        if (IsFolder)
-        //        {
-        //            switch (HistoryType)
-        //            {
-        //                case HistoryTypeEnum.Added:
-        //                    return "/Resources/Icons/FolderTreeView/NewFolder.ico";
-        //                case HistoryTypeEnum.Deleted:
-        //                    return "/Resources/Icons/FolderTreeView/DeleteFolder.ico";
-        //                case HistoryTypeEnum.Changed:
-        //                case HistoryTypeEnum.NoChange:
-        //                default:
-        //                    return "/Resources/Icons/FolderTreeView/Folder.ico";
-        //            }
-        //        }
-        //        else
-        //        {
-        //            switch (HistoryType)
-        //            {
-        //                case HistoryTypeEnum.Added:
-        //                    return "/Resources/Icons/FolderTreeView/NewItem.ico";
-        //                case HistoryTypeEnum.Changed:
-        //                    return "/Resources/Icons/FolderTreeView/EditItem.ico";
-        //                case HistoryTypeEnum.Deleted:
-        //                    return "/Resources/Icons/FolderTreeView/DeleteItem.ico";
-        //                case HistoryTypeEnum.NoChange:
-        //                    return "/Resources/Icons/FolderTreeView/Item.ico";
-        //                default:
-
-        //                    return null;
-        //            }
-        //        }
-        //    }
-        //    set { } }
     }
 
 }

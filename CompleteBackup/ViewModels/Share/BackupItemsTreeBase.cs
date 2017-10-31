@@ -88,7 +88,7 @@ namespace CompleteBackup.ViewModels
         }
 
         protected abstract void AddRootItemsToTree();
-        protected abstract FolderMenuItem CreateMenuItem(bool isFolder, bool isSelected, string path, string relativePath, string name, FolderMenuItem parentItem, FileAttributes attr);
+        protected abstract FolderMenuItem CreateMenuItem(bool isFolder, bool isSelected, string path, string relativePath, string name, FolderMenuItem parentItem, FileAttributes attr, HistoryTypeEnum? historyType = null);
 
         protected List<string> GetDirectoriesNames(string path)
         {
@@ -121,15 +121,7 @@ namespace CompleteBackup.ViewModels
         }
 
         protected abstract List<string> GetAllActiveSets(FolderMenuItem item);
-
-
-
-        bool IsDeletedFolder(string path)
-        {
-            string folder = m_IStorage.Combine(m_IStorage.Combine(ProjectData.CurrentBackupProfile.TargetBackupFolder, m_LastSetPathCache), path);
-
-            return !m_IStorage.DirectoryExists(folder);
-        }
+        protected abstract bool IsDeletedFolder(string path);
 
         protected bool NoTExistsinTreeNameList(string name, ObservableCollection<FolderMenuItem> list)
         {
@@ -161,8 +153,12 @@ namespace CompleteBackup.ViewModels
                         FileAttributes attr = m_IStorage.GetFileAttributes(newPath);
                         if (!IsHidden(attr) && NoTExistsinTreeNameList(subdirectory, item.ChildFolderMenuItems))
                         {
-
+                            HistoryTypeEnum? historyType = null;
                             bool bDeletedFolder = IsDeletedFolder(m_IStorage.Combine(item.RelativePath, subdirectory));
+                            if (bDeletedFolder)
+                            {
+                                historyType = HistoryTypeEnum.Deleted;
+                            }
 
                             if (history == null || history.SessionHistoryIndex == 1 || bDeletedFolder)
                             {
@@ -175,12 +171,7 @@ namespace CompleteBackup.ViewModels
                                 var rp = m_IStorage.Combine(item.RelativePath, subdirectory);
                                 Application.Current.Dispatcher.Invoke(new Action(() =>
                                 {
-                                    var newItem = CreateMenuItem(m_IStorage.IsFolder(newPath), bSelected, newPath, rp, subdirectory, item, attr);
-                                    if (bDeletedFolder)
-                                    {
-                                        newItem.Image = "/Resources/Icons/FolderTreeView/DeleteFolder.ico";
-                                    }
-                                    item.ChildFolderMenuItems.Add(newItem);
+                                    item.ChildFolderMenuItems.Add(CreateMenuItem(m_IStorage.IsFolder(newPath), bSelected, newPath, rp, subdirectory, item, attr, historyType));
                                 }));
                             }
                         }

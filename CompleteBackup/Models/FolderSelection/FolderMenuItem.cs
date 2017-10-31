@@ -1,4 +1,5 @@
-﻿using CompleteBackup.Models.Backup.Storage;
+﻿using CompleteBackup.Models.Backup.History;
+using CompleteBackup.Models.Backup.Storage;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,7 +15,6 @@ using System.Windows.Media;
 
 namespace CompleteBackup.Models.FolderSelection
 {
-
     public class FolderMenuItem : ObservableObject
     {
         public string Name { get; set; }
@@ -22,6 +22,8 @@ namespace CompleteBackup.Models.FolderSelection
         public string RelativePath { get; set; }
 
         public bool IsFolder { get; set; } = false;
+        public HistoryTypeEnum? HistoryType { get; set; } = null;
+
         public bool IsSelectable { get; set; } = true;
 
         public bool? _Selected = false;
@@ -33,12 +35,12 @@ namespace CompleteBackup.Models.FolderSelection
 
         static IStorageInterface m_IStorage = new FileSystemStorage();
 
-        object m_Image = null;
+        //object m_Image = null;
         public object Image
         {
             get
             {
-                if (m_Image == null)
+                if (HistoryType == null || (HistoryType == HistoryTypeEnum.NoChange))
                 {
                     ImageSource imageSource = null;
                     try
@@ -59,12 +61,29 @@ namespace CompleteBackup.Models.FolderSelection
                 }
                 else
                 {
-                    return m_Image;// "/Resources/Icons/FolderTreeView/EditItem.ico";
+                    switch (HistoryType)
+                    {
+                        case HistoryTypeEnum.Added:
+                            return IsFolder ? "/Resources/Icons/FolderTreeView/NewFolder.ico" : "/Resources/Icons/FolderTreeView/NewItem.ico";
+
+                        case HistoryTypeEnum.Changed:
+                            return "/Resources/Icons/FolderTreeView/EditItem.ico";
+
+                        case HistoryTypeEnum.Deleted:
+                            return IsFolder ? "/Resources/Icons/FolderTreeView/DeleteFolder.ico" : "/Resources/Icons/FolderTreeView/DeleteItem.ico";
+
+                        case HistoryTypeEnum.NoChange:
+                            return "/Resources/Icons/FolderTreeView/LatestItem.ico";
+
+                        default:
+                            return "/Resources/Icons/FolderTreeView/LatestItem.ico";
+                    }
+//                    return m_Image;// ;
                 }
             }
-            set
+            private set
             {
-                m_Image = value;
+                //m_Image = value;
             }
         }
     }
