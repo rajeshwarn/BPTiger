@@ -159,21 +159,27 @@ namespace CompleteBackup.ViewModels
 
                 if (bIncremental)
                 {
-                    foreach (var setPath in backSetList)
-                    {
-                        var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, setPath);
 
-                        foreach (var item in profile.FolderList)
+                    foreach (var item in profile.FolderList)
+                    {
+                        int iSessionIndex = 1;
+                        foreach (var setPath in backSetList)
                         {
+                            var sessionHistory = BackupSessionHistory.LoadHistory(profile.TargetBackupFolder, setPath);
+                            sessionHistory.SessionHistoryIndex = iSessionIndex;
+                            iSessionIndex++;
+
+                            var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, setPath);
                             var directoryName = m_IStorage.GetFileName(item.Path);
                             var restorePath = m_IStorage.Combine(lastSetPath, directoryName);
 
+                            var lastSetPath2 = m_IStorage.Combine(lastSetPath, item.RelativePath);
                             var rootItem = GetExistingMenuItem(true, false, restorePath, directoryName, directoryName, null, 0);
                             if (rootItem == null)
                             {
                                 rootItem = CreateMenuItem(m_IStorage.IsFolder(restorePath), false, restorePath, directoryName, directoryName, null, 0);
 
-                                UpdateChildItemsInMenuItem(rootItem);
+                                UpdateChildItemsInMenuItem(rootItem, lastSetPath2, sessionHistory);
 
                                 Application.Current.Dispatcher.Invoke(new Action(() =>
                                 {
@@ -182,7 +188,7 @@ namespace CompleteBackup.ViewModels
                             }
                             else
                             {
-                                UpdateChildItemsInMenuItem(rootItem);
+                                UpdateChildItemsInMenuItem(rootItem, lastSetPath2, sessionHistory);
                             }
                         }
                     }
