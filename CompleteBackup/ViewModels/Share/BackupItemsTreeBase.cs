@@ -25,7 +25,11 @@ namespace CompleteBackup.ViewModels
         public ICommand CloseWindowCommand { get; private set; } = new CloseWindowICommand<object>();
 
         public BackupProjectData ProjectData { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject;
-        public ObservableCollection<FolderMenuItem> FolderMenuItemTree { get; set; } = new ObservableCollection<FolderMenuItem>();
+
+
+        protected FolderMenuItem m_RootFolderMenuItemTree = new FolderMenuItem();
+        public ObservableCollection<FolderMenuItem> FolderMenuItemTree { get { return m_RootFolderMenuItemTree.ChildFolderMenuItems; } set { } }
+
         public ObservableCollection<FolderData> SelectedItemList { get; set; } = new ObservableCollection<FolderData>();
 
 
