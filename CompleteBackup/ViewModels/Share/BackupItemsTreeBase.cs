@@ -161,11 +161,11 @@ namespace CompleteBackup.ViewModels
 
                             if (history == null || history.SessionHistoryIndex == 1 || bDeletedFolder)
                             {
-                                bool bSelected = false;
-                                if (item.Selected == true)
-                                {
-                                    bSelected = true;
-                                }
+                                bool bSelected = item.Selected == true;// false;
+//                                if (item.Selected == true)
+                                //{
+                                    //bSelected = true;
+                                //}
 
                                 var rp = m_IStorage.Combine(item.RelativePath, subdirectory);
                                 Application.Current.Dispatcher.Invoke(new Action(() =>
@@ -208,11 +208,11 @@ namespace CompleteBackup.ViewModels
                         FileAttributes attr = m_IStorage.GetFileAttributes(newPath);
                         if (!IsHidden(attr) && NoTExistsinTreeNameList(subdirectory, item.ChildFolderMenuItems))
                         {
-                            bool bSelected = false;
-                            if (item.Selected == true)
-                            {
-                                bSelected = true;
-                            }
+                            bool bSelected = item.Selected == true;// false;
+//                            if (item.Selected == true)
+                            //{
+                                //bSelected = true;
+                            //}
 
                             var rp = m_IStorage.Combine(item.RelativePath, subdirectory);
                             Application.Current.Dispatcher.Invoke(new Action(() =>
@@ -223,7 +223,7 @@ namespace CompleteBackup.ViewModels
                     }
 
                     //Add files to Item
-                    AddFilesToFolderMenuItem(item, null, null);
+                    AddFilesToFolderMenuItem(item, item.Path, null);
                 }
             }
         }
