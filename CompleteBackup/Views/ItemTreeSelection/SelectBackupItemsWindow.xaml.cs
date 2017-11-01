@@ -24,6 +24,9 @@ namespace CompleteBackup.Views
         public SelectBackupItemsWindow()
         {
             InitializeComponent();
+
+            var vm = DataContext as BackupItemsTreeBase;
+            vm?.InitItems();
         }
         private void TreeViewItem_Expanded(object sender, RoutedEventArgs e)
         {

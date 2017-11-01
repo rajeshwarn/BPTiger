@@ -50,9 +50,9 @@ namespace CompleteBackup.ViewModels
             return menuItem;
         }
 
-        protected override bool IsDeletedFolder(string path)
+        protected override HistoryTypeEnum? GetFolderHistoryType(string path)
         {
-            return false;
+            return null;
         }
 
 
@@ -70,21 +70,32 @@ namespace CompleteBackup.ViewModels
             {
                 DirectoryInfo dInfo = drive.RootDirectory;
 
-                FileAttributes attr = File.GetAttributes(drive.Name);
+                var name = drive.Name;
+                FileAttributes attr = 0;
+                try
+                {
+                    attr = File.GetAttributes(drive.Name);
+                    name = $"{drive.VolumeLabel} ({drive.DriveType}) ({drive.Name})";
+                }
+                catch(IOException ex)
+                {
+                    name = name + " [Not Ready]";
+                }
+
                 var rootItem = new BackupFolderMenuItem()
                 {
                     IsFolder = true,
                     Attributes = attr,
                     Path = drive.Name,
                     RelativePath = drive.Name,
-                    Name = $"{drive.VolumeLabel} ({drive.DriveType}) ({drive.Name})"
+                    Name = name,
                 };
 
                 UpdateChildItemsInMenuItem(rootItem);
 
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
-                    m_RootFolderMenuItemTree.ChildFolderMenuItems.Add(rootItem);
+                    FolderMenuItemTree.Add(rootItem);
                 }));
             }
 
@@ -154,10 +165,10 @@ namespace CompleteBackup.ViewModels
         }
 
 
-        protected override List<string> GetAllActiveSets(FolderMenuItem item)
-        {
-            return new List<string>() { item.Path };
-        }
+        //protected override List<string> GetAllActiveSets(FolderMenuItem item)
+        //{
+        //    return new List<string>() { item.Path };
+        //}
 
     }
 }

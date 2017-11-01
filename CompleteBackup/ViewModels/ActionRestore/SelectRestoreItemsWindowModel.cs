@@ -33,6 +33,10 @@ namespace CompleteBackup.ViewModels
 
         public ICommand RestoreFolderSelectionCommand { get; private set; } = new RestoreFolderSelectionICommand<object>();
 
+
+        protected string m_LastSetPathCache;
+
+
         public SelectRestoreItemsWindowModel() : base()
         {
         }
@@ -84,11 +88,17 @@ namespace CompleteBackup.ViewModels
             return null;
         }
 
-        protected override bool IsDeletedFolder(string path)
+        protected override HistoryTypeEnum? GetFolderHistoryType(string path)
         {
+            HistoryTypeEnum? historyType = null;
             string folder = m_IStorage.Combine(m_IStorage.Combine(ProjectData.CurrentBackupProfile.TargetBackupFolder, m_LastSetPathCache), path);
 
-            return !m_IStorage.DirectoryExists(folder);
+            if (!m_IStorage.DirectoryExists(folder))
+            {
+                historyType = HistoryTypeEnum.Deleted;
+            }
+
+            return historyType;
         }
 
 
@@ -210,7 +220,7 @@ namespace CompleteBackup.ViewModels
             if (RestoreActionType == RestoreActionTypeEnum.LatestVersion)
             {
                 var fileList = m_IStorage.GetFiles(itemPath);
-                foreach (var file in fileList.Where(f => NoTExistsinTreeList(f, item.ChildFolderMenuItems)))
+                foreach (var file in fileList.Where(f => !IsPathExistsInPathList(f, item.ChildFolderMenuItems)))
                 {
                     //var filePath = m_IStorage.Combine(item.Path, file);
                     var fileName = m_IStorage.GetFileName(file);
@@ -278,17 +288,17 @@ namespace CompleteBackup.ViewModels
         }
 
  
-        protected override List<string> GetAllActiveSets(FolderMenuItem item)
-        {
-            var activeSetList = new List<string>() { item.Path };
+        //protected override List<string> GetAllActiveSets(FolderMenuItem item)
+        //{
+        //    var activeSetList = new List<string>() { item.Path };
 
-            foreach(var set in m_BackupSetPathCacheList)
-            {
-                activeSetList.Add(m_IStorage.Combine(set, item.Name));
-            }
+        //    foreach(var set in m_BackupSetPathCacheList)
+        //    {
+        //        activeSetList.Add(m_IStorage.Combine(set, item.Name));
+        //    }
 
-            return activeSetList;
-        }
+        //    return activeSetList;
+        //}
 
 
 

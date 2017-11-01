@@ -24,7 +24,7 @@ namespace CompleteBackup.Models.FolderSelection
     public class BackupFolderMenuItem : FolderMenuItem
     {
 
-        public FileAttributes Attributes { get; set; }
+        public FileAttributes Attributes { get; set; } = 0;
 
         public ImageSource Image
         {

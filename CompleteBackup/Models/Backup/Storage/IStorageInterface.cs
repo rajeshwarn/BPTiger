@@ -16,6 +16,7 @@ namespace CompleteBackup.Models.Backup.Storage
         bool FileExists(string path);
         bool DirectoryExists(string path);
         string[] GetDirectories(string path);
+        string[] GetDirectoriesNames(string path);
         bool GetNumberOfFiles(string path, ref long files, ref long directories);
         DateTime GetLastWriteTime(string path);
         bool IsFolder(string path);

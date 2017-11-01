@@ -184,6 +184,17 @@ namespace CompleteBackup.Models.Backup.Storage
             return setEntries;
         }
 
+        public string[] GetDirectoriesNames(string path)
+        {
+            string[] setEntries = GetDirectories(path);
+
+            for (int i = 0; i < setEntries.Length; i++)
+            {
+                setEntries[i] = GetFileName(setEntries[i]);
+            }
+
+            return setEntries;
+        }
 
         public DateTime GetLastWriteTime(string path)
         {

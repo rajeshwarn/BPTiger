@@ -57,6 +57,21 @@ namespace CompleteBackup.Models.Backup.Storage
         {
                 return Directory.GetDirectories(path, searchPattern, searchOption);
         }
+
+        public string[] GetDirectoriesNames(string path)
+        {
+            string[] setEntries = GetDirectories(path);
+
+            for (int i = 0; i < setEntries.Length; i++)
+            {
+                setEntries[i] = GetFileName(setEntries[i]);
+            }
+
+            return setEntries;
+        }
+
+
+
         public string Combine(string path1, string path2)
         {
             return Path.Combine(path1, path2);
