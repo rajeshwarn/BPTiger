@@ -12,6 +12,9 @@ namespace CompleteBackup.ViewModels.FolderSelection.Validators
 {
     public class BackupTargetLocationValidator : ValidationRule
     {
+
+        public BackupTargetLocationValidator() : base() { ValidatesOnTargetUpdated = true; }
+
         public override ValidationResult Validate (object value, System.Globalization.CultureInfo cultureInfo)
         {
             var name = value as String;

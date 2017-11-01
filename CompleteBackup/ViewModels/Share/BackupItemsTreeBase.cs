@@ -108,84 +108,19 @@ namespace CompleteBackup.ViewModels
 
 
         //Add and update all subitems
-        protected void UpdateChildItemsInMenuItem(FolderMenuItem item, string overridePath, BackupSessionHistory history)
+        protected void UpdateChildItemsInMenuItem(FolderMenuItem item, string overridePath = null, BackupSessionHistory history = null)
         {
-            var path = overridePath;
+            var path = overridePath == null ? item.Path : overridePath;
             //Add all folders under item.Path
             if (item.IsFolder && m_IStorage.DirectoryExists(path))
             {
+                //Add folders
                 AddFoldersToFolderMenuItem(item, overridePath, history);
 
-                //var subdirectoryList = m_IStorage.GetDirectoriesNames(path);
-                //foreach (string subdirectory in subdirectoryList)
-                //{
-                //    string newPath = m_IStorage.Combine(path, subdirectory);
-                //    FileAttributes attr = m_IStorage.GetFileAttributes(newPath);
-                //    if (!IsHidden(attr) && !IsNameExistsInNameList(subdirectory, item.ChildFolderMenuItems))
-                //    {
-                //        HistoryTypeEnum? historyType = GetFolderHistoryType(m_IStorage.Combine(item.RelativePath, subdirectory));
-
-                //        if (history?.SessionHistoryIndex == 1 || historyType == HistoryTypeEnum.Deleted)
-                //        {
-                //            bool bSelected = item.Selected == true;
-
-                //            var rp = m_IStorage.Combine(item.RelativePath, subdirectory);
-                //            Application.Current.Dispatcher.Invoke(new Action(() =>
-                //            {
-                //                item.ChildFolderMenuItems.Add(CreateMenuItem(m_IStorage.IsFolder(newPath), bSelected, newPath, rp, subdirectory, item, attr, historyType));
-                //            }));
-                //        }
-                //    }
-                //}
-
-                //Add all files under item.Path
-                string itemPath = path;
-                if (path != null)
-                {
-                    itemPath = path;
-                    if (!m_IStorage.DirectoryExists(itemPath))
-                    {
-                        return;
-                    }
-                }
-
-                //Add files to Item
-                AddFilesToFolderMenuItem(item, itemPath, history);
+                //Add files
+                AddFilesToFolderMenuItem(item, path, history);
             }            
         }
-
-        //Add and update all subitems
-        protected void UpdateChildItemsInMenuItem(FolderMenuItem item)
-        {
-            var path = item.Path;
-            //Add all folders under item.Path
-            if (item.IsFolder && m_IStorage.DirectoryExists(path))
-            {
-                AddFoldersToFolderMenuItem(item, null, null);
-
-                //var sourceSubdirectoryEntriesList = m_IStorage.GetDirectoriesNames(path);
-                //foreach (string subdirectory in sourceSubdirectoryEntriesList)
-                //{
-                //    string newPath = m_IStorage.Combine(path, subdirectory);
-                //    FileAttributes attr = m_IStorage.GetFileAttributes(newPath);
-                //    if (!IsHidden(attr) && !IsNameExistsInNameList(subdirectory, item.ChildFolderMenuItems))
-                //    {
-                //        bool bSelected = item.Selected == true;// false;
-
-
-                //        var rp = m_IStorage.Combine(item.RelativePath, subdirectory);
-                //        Application.Current.Dispatcher.Invoke(new Action(() =>
-                //        {
-                //            item.ChildFolderMenuItems.Add(CreateMenuItem(m_IStorage.IsFolder(newPath), bSelected, newPath, rp, subdirectory, item, attr, null));
-                //        }));
-                //    }
-                //}
-
-                //Add files to Item
-                AddFilesToFolderMenuItem(item, path, null);
-            }
-        }
-
 
 
 
@@ -217,10 +152,7 @@ namespace CompleteBackup.ViewModels
         }
 
 
-
-
         protected abstract void AddFilesToFolderMenuItem(FolderMenuItem item, string itemPath, BackupSessionHistory history);
-
 
         protected void AddFilesToFolderMenuItemBase(FolderMenuItem item, string itemPath, BackupSessionHistory history)
         {
@@ -287,9 +219,6 @@ namespace CompleteBackup.ViewModels
                 foreach (var subItem in item.ChildFolderMenuItems)
                 {
                     subItem.Selected = item.Selected;
-
-                    //FolderList.Remove(subItem.Path);
-
                     SelectItemDown(subItem);
                 }
             }

@@ -29,18 +29,8 @@ namespace CompleteBackup.Views
         {
             InitializeComponent();
 
-            //BindingExpression binding = txTaggetFolder.GetBindingExpression(TextBox.TextProperty);
-            //binding.UpdateSource();
+            //var vm = this.DataContext as RestoreItemsSelectionViewModel;
+            //vm.ProjectData.CurrentBackupProfile.TargetRestoreFolder = vm.ProjectData.CurrentBackupProfile.TargetRestoreFolder;
         }
-
-
-        //     private void hiddenNameTextBlock_TextChanged(object sender, TextChangedEventArgs e)
-        //     {
-        //         var profile = BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile;
-
-        //         var vm = this.DataContext as BackupItemsSelectionViewModel;
-        ////         vm.Init();
-        //     }
-
     }
 }

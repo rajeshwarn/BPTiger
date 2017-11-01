@@ -227,8 +227,9 @@
         <main_window_views:MainWindowStatusBarView DockPanel.Dock="Bottom"/>
 
         <DockPanel LastChildFill="True">
-            <Border DockPanel.Dock="Top" Background="LightGoldenrodYellow" BorderThickness="1" CornerRadius="4" BorderBrush="DarkGray" Margin="0,0,0,0" Padding="4">
-                <Grid >
+            <GroupBox DockPanel.Dock="Top" Header="Backup profile data" Margin="4,4,4,8">
+                <!--<Border DockPanel.Dock="Top" BorderThickness="1" CornerRadius="4" BorderBrush="DarkGray" Margin="4,4,4,8" Padding="4">-->
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
@@ -245,8 +246,7 @@
                         </StackPanel>
                     </Grid>
                 </Grid>
-            </Border>
-            
+            </GroupBox>
             <ContentControl Content="{Binding CurrentPageViewModel}"/>
         </DockPanel>
 

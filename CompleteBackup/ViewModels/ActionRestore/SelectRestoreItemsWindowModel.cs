@@ -139,7 +139,6 @@ namespace CompleteBackup.ViewModels
 
         List<string> m_BackupSetPathCacheList = new List<string>();
 
-        bool bLoadFromHistory = false;
         protected override void AddRootItemsToTree()
         {
             var profile = ProjectData.CurrentBackupProfile;
@@ -153,66 +152,59 @@ namespace CompleteBackup.ViewModels
                 m_BackupSetPathCacheList.Add(m_IStorage.Combine(profile.TargetBackupFolder, setPath));
             }
 
-            if (bLoadFromHistory)
-            {
-                AddRootItemsToTreeFromHistory();
-            }
-            else
-            {
                 bool bIncremental = true;
 
-                if (bIncremental)
+            if (bIncremental)
+            {
+
+                m_RootFolderMenuItemTree.ParentItem = null;
+                m_RootFolderMenuItemTree.IsFolder = true;
+                m_RootFolderMenuItemTree.Path = profile.TargetBackupFolder;
+                m_RootFolderMenuItemTree.RelativePath = string.Empty;
+                m_RootFolderMenuItemTree.Name = "BACKUP";
+
                 {
-
-                    m_RootFolderMenuItemTree.ParentItem = null;
-                    m_RootFolderMenuItemTree.IsFolder = true;
-                    m_RootFolderMenuItemTree.Path = profile.TargetBackupFolder;
-                    m_RootFolderMenuItemTree.RelativePath = string.Empty;
-                    m_RootFolderMenuItemTree.Name = "BACKUP";
-
+                    int iSessionIndex = 0;
+                    foreach (var setPath in backSetList)
                     {
-                        int iSessionIndex = 0;
-                        foreach (var setPath in backSetList)
+                        iSessionIndex++;
+                        var sessionHistory = BackupSessionHistory.LoadHistory(profile.TargetBackupFolder, setPath);
+                        sessionHistory.SessionHistoryIndex = iSessionIndex;
+
+                        var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, setPath);
+
+                        m_RootFolderMenuItemTree.Path = lastSetPath;
+
+                        //update add root items
+                        UpdateChildItemsInMenuItem(m_RootFolderMenuItemTree, lastSetPath, sessionHistory);
+
+                        foreach (var subItem in m_RootFolderMenuItemTree.ChildFolderMenuItems)
                         {
-                            iSessionIndex++;
-                            var sessionHistory = BackupSessionHistory.LoadHistory(profile.TargetBackupFolder, setPath);
-                            sessionHistory.SessionHistoryIndex = iSessionIndex;
-
-                            var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, setPath);
-
-                            m_RootFolderMenuItemTree.Path = lastSetPath;
-
-                            //update add root items
-                            UpdateChildItemsInMenuItem(m_RootFolderMenuItemTree, lastSetPath, sessionHistory);
-
-                            foreach (var subItem in m_RootFolderMenuItemTree.ChildFolderMenuItems)
-                            {
-                                var newPath = m_IStorage.Combine(lastSetPath, subItem.RelativePath);
-                                UpdateChildItemsInMenuItem(subItem, newPath, sessionHistory);
-                            }
+                            var newPath = m_IStorage.Combine(lastSetPath, subItem.RelativePath);
+                            UpdateChildItemsInMenuItem(subItem, newPath, sessionHistory);
                         }
                     }
                 }
-                else
-                {
-                    var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, m_LastSetPathCache);
-
-                    foreach (var item in profile.FolderList)
-                    {
-                        var directoryName = m_IStorage.GetFileName(item.Path);
-                        var restorePath = m_IStorage.Combine(lastSetPath, directoryName);
-
-                        var rootItem = CreateMenuItem(m_IStorage.IsFolder(restorePath), false, restorePath, directoryName, directoryName, null, 0);
-
-                        UpdateChildItemsInMenuItem(rootItem);
-
-                        Application.Current.Dispatcher.Invoke(new Action(() =>
-                        {
-                            FolderMenuItemTree.Add(rootItem);
-                        }));
-                    }
-                }
             }
+            else
+            {
+                var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, m_LastSetPathCache);
+
+                foreach (var item in profile.FolderList)
+                {
+                    var directoryName = m_IStorage.GetFileName(item.Path);
+                    var restorePath = m_IStorage.Combine(lastSetPath, directoryName);
+
+                    var rootItem = CreateMenuItem(m_IStorage.IsFolder(restorePath), false, restorePath, directoryName, directoryName, null, 0);
+
+                    UpdateChildItemsInMenuItem(rootItem);
+
+                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    {
+                        FolderMenuItemTree.Add(rootItem);
+                    }));
+                }
+            }            
         }
 
         protected override void AddFilesToFolderMenuItem(FolderMenuItem item, string itemPath, BackupSessionHistory history)
@@ -285,117 +277,6 @@ namespace CompleteBackup.ViewModels
                     }
                 }
             }
-        }
-
- 
-        //protected override List<string> GetAllActiveSets(FolderMenuItem item)
-        //{
-        //    var activeSetList = new List<string>() { item.Path };
-
-        //    foreach(var set in m_BackupSetPathCacheList)
-        //    {
-        //        activeSetList.Add(m_IStorage.Combine(set, item.Name));
-        //    }
-
-        //    return activeSetList;
-        //}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        /// <summary>
-        /// Load from history file
-        /// </summary>
-        void AddRootItemsToTreeFromHistory()
-        {
-            var profile = ProjectData.CurrentBackupProfile;
-
-            ClearItemList();
-
-            Application.Current.Dispatcher.Invoke(new Action(() =>
-            {
-                var setList = BackupManager.GetBackupSetList(profile);
-                foreach (var set in setList)
-                {
-                    var sessionHistory = BackupSessionHistory.LoadHistory(profile.TargetBackupFolder, set);
-
-                    if (set == setList[0])
-                    {
-                        //last set add all items
-                        foreach (var item in sessionHistory.HistoryItemList)
-                        {
-                            InsertNamesToTreeFromHistory(sessionHistory, item, item.SourcePath, 0);
-                        }
-                    }
-                    else
-                    {
-                        foreach (var item in sessionHistory.HistoryItemList.Where(i => i.HistoryType != HistoryTypeEnum.NoChange))
-                        {
-                            InsertNamesToTreeFromHistory(sessionHistory, item, item.SourcePath, 0);
-                        }
-                    }
-                }
-            }));
-        }
-
-        FolderMenuItem InsertNamesToTreeFromHistory(BackupSessionHistory history, HistoryItem item, string path, int iCount)
-        {
-            if (path != null)
-            {
-                var name = m_IStorage.GetFileName(path);
-                if ((name != null) && (name != string.Empty))
-                {
-
-                    var newPath = path.Substring(0, path.Length - name.Length - 1);
-
-                    var menuItem = InsertNamesToTreeFromHistory(history, item, newPath, iCount + 1);
-                    var newMenuItem = menuItem.ChildFolderMenuItems.Where(m => m.Name == name).FirstOrDefault();
-                    if (newMenuItem == null)
-                    {
-                        newMenuItem = new RestoreFolderMenuItem() { IsFolder = true, Path = path, Name = name };
-                        menuItem.ChildFolderMenuItems.Add(newMenuItem);
-                    }
-
-                    if (iCount == 0)
-                    {
-                        var setTimeMenuItem = new RestoreFolderMenuItem() { Name = history.TimeStamp.ToString(), IsFolder = true, HistoryType = item.HistoryType };
-                        newMenuItem.ChildFolderMenuItems.Add(setTimeMenuItem);
-                    }
-
-                    return newMenuItem;
-                }
-                else
-                {
-                    name = path;
-
-                    FolderMenuItem menuItem = FolderMenuItemTree.Where(m => m.Path == name).FirstOrDefault();
-                    if (menuItem == null)
-                    {
-                        menuItem = new RestoreFolderMenuItem() { IsFolder = true, Path = path, Name = name };
-                        FolderMenuItemTree.Add(menuItem);
-                    }
-
-                    return menuItem;
-                }
-            }
-
-            return null;
         }
     }
 }

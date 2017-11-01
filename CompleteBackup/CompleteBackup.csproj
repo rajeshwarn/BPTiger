@@ -95,6 +95,7 @@
     <Compile Include="ViewModels\ActionRestore\ICommands\SelectRestoreDestinationFolderICommand.cs" />
     <Compile Include="ViewModels\ActionRestore\RestoreItemsSelectionViewModel.cs" />
     <Compile Include="ViewModels\ActionRestore\ICommands\RestoreFolderSelectionICommand.cs" />
+    <Compile Include="ViewModels\ActionRestore\Validators\RestoreTargetLocationValidator.cs" />
     <Compile Include="ViewModels\Share\BackupItemsTreeBase.cs" />
     <Compile Include="ViewModels\ExtendedControls\ProcessingSpinnerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\RestoreBackupICommand.cs" />
