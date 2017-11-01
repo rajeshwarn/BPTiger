@@ -103,7 +103,7 @@ namespace CompleteBackup.Models.backup
             var backupProfileList = new List<string>();
             var storage = profile.GetStorageInterface();
 
-            string[] setEntries = storage.GetDirectories(profile.TargetBackupFolder);
+            string[] setEntries = storage.GetDirectories(profile.TargetBackupFolder);            
             foreach (var entry in setEntries.Where(s => storage.GetFileName(s).StartsWith(profile.BackupSignature)))
             {
                 backupProfileList.Add(storage.GetFileName(entry));

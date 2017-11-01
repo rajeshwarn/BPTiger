@@ -27,7 +27,11 @@ namespace CompleteBackup
 
             var profile = BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile;
             profile?.UpdateProfileProperties();
-
         }
+
+    private void BackupTypeRibbonGallery_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+    {
+       // MessageBox.Show(rcmbCategory.SelectionBoxItem.ToString());
     }
+}
 }

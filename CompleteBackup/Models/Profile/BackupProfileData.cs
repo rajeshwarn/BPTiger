@@ -24,7 +24,17 @@ namespace CompleteBackup.Models.Backup.Profile
     {
         Full,
         Incremental,
+        Differential,
     }
+
+    public class BackupTypeData
+    {
+        public BackupTypeEnum BackupType { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string ImageName { get; set; }
+    }
+
 
     public class BackupProfileData : ObservableObject
     {
@@ -63,7 +73,9 @@ namespace CompleteBackup.Models.Backup.Profile
         public DateTime LastBackupDateTime { get { return m_LastBackupDateTime; } set { m_LastBackupDateTime = value; OnPropertyChanged(); } }
 
 
-        public BackupTypeEnum BackupType { get; set; } = BackupTypeEnum.Full;
+        private BackupTypeEnum m_BackupType { get; set; } = BackupTypeEnum.Full;
+        public BackupTypeEnum BackupType { get { return m_BackupType; } set { m_BackupType = value; OnPropertyChanged(); } }
+
         public Guid GUID { get; set; } = Guid.NewGuid();
         public string Name { get; set; } = "My Backup Profile";
         public string Description { get { return Name; } set { } }
@@ -300,7 +312,6 @@ namespace CompleteBackup.Models.Backup.Profile
         {
             m_StorageDataUpdaterTask.DoWork += (sender, e) =>
             {
-                //var collection = e.Argument as EventCollectionDataBase;
                 try
                 {
 
@@ -361,19 +372,21 @@ namespace CompleteBackup.Models.Backup.Profile
                     }
 
 
-                    //last backup time
-                    var lastSet = BackupManager.GetLastBackupSetName(this);
-                    var sessionHistory = BackupSessionHistory.LoadHistory(TargetBackupFolder, lastSet);
-                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    if (m_TargetRestoreFolder != null)
                     {
-                        LastBackupDateTime = sessionHistory.TimeStamp;
-                    }));
+                        //last backup time
+                        var lastSet = BackupManager.GetLastBackupSetName(this);
+                        var sessionHistory = BackupSessionHistory.LoadHistory(TargetBackupFolder, lastSet);
+                        Application.Current.Dispatcher.Invoke(new Action(() =>
+                        {
+                            LastBackupDateTime = sessionHistory.TimeStamp;
+                        }));
+                    }
 
-
-                    m_BackupTargetDiskSizeNumber = 0;
-                    //Target disk size
                     if (m_TargetBackupFolder != null)
                     {
+                        m_BackupTargetDiskSizeNumber = 0;
+                        //Target disk size
                         string rootDrive = Path.GetPathRoot(m_TargetBackupFolder);
                         foreach (DriveInfo drive in DriveInfo.GetDrives().Where(d => d.ToString().Contains(rootDrive)))
                         {
@@ -388,24 +401,18 @@ namespace CompleteBackup.Models.Backup.Profile
                                 break;
                             }
                         }
-                    }
 
-                    m_BackupTargetUsedSizeNumber = 0;
-                    //Target used Space
-                    if (m_TargetBackupFolder != null)
-                    {
+                        m_BackupTargetUsedSizeNumber = 0;
+                        //Target used Space
                         m_BackupTargetUsedSizeNumber = new DirectoryInfo(m_TargetBackupFolder).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
                         Application.Current.Dispatcher.Invoke(new Action(() =>
                         {
                             BackupTargetUsedSize = FileFolderSizeHelper.GetNumberSizeString(m_BackupTargetUsedSizeNumber);
                         }));
-                    }
 
-                    //Target free space
-                    m_BackupTargetFreeSizeNumber = 0;
-                    if (m_TargetBackupFolder != null)
-                    {
-                        string rootDrive = Path.GetPathRoot(m_TargetBackupFolder);
+                        //Target free space
+                        m_BackupTargetFreeSizeNumber = 0;
+                        rootDrive = Path.GetPathRoot(m_TargetBackupFolder);
                         foreach (DriveInfo drive in DriveInfo.GetDrives().Where(d => d.ToString().Contains(rootDrive)))
                         {
                             if (drive.IsReady)

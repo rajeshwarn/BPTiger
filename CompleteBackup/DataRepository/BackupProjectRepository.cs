@@ -49,8 +49,8 @@ namespace CompleteBackup.DataRepository
                         {
                             new BackupProfileData()
                             {
-                                BackupType =  BackupTypeEnum.Incremental,
-                                Name = "My first profile",
+                                BackupType =  BackupTypeEnum.Full,
+                                Name = "Sample Backup Profile",
                                 Description = "home backup",
                                 FolderList = new ObservableCollection<FolderData>()
                                 {

@@ -282,5 +282,12 @@
     <Resource Include="Resources\Icons\FolderTreeView\Arrow-Down.ico" />
     <Resource Include="Resources\Icons\FolderTreeView\Arrow-Up.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Ribbon\FullBackup.ico" />
+    <Resource Include="Resources\Icons\Ribbon\IncrementalBackup.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Ribbon\DifferentialBackup.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
