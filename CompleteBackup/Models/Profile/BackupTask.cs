@@ -49,6 +49,7 @@ namespace CompleteBackup.Models.Profile
                     switch (profile.BackupType)
                     {
                         case BackupTypeEnum.Incremental:
+                        case BackupTypeEnum.Differential:
                             m_BackupManager = new IncrementalBackup(profile, m_ProgressBar);
 
                             break;
@@ -58,11 +59,6 @@ namespace CompleteBackup.Models.Profile
                             m_BackupManager = new OneWaySyncBackup(profile, m_ProgressBar);
                             break;
                     }
-
-                    //                    m_BackupManager = new IncrementalBackup(sourcePath, currSetPath, new NullStorage(), progressBar);
-                    //m_BackupManager = new IncrementalBackup(profile.FolderList.ToList(), profile.TargetBackupFolder, new FileSystemStorage(), m_ProgressBar);
-                    //                    m_BackupManager = new IncrementalBackup(sourcePath, currSetPath, new FileSystemStorage(), progressBar);
-                    //                    m_BackupManager = new OneWaySyncBackup("CBKP-Snap_2017-10-13_12501247655", sourcePath, currSetPath, new FileSystemStorage(), progressBar);
 
                     m_BackupManager.Init();
                     m_BackupManager.ProcessBackup();
