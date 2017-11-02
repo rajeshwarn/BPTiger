@@ -18,6 +18,9 @@ namespace CompleteBackup.ViewModels.MainWindow
         public ICommand PauseBackupCommand { get; private set; } = new PauseBackupICommand<object>();
         public ICommand StopBackupCommand { get; private set; } = new StopBackupICommand<object>();
 
+        public ICommand SelectBackupProfileCommand { get; private set; } = new SelectBackupProfileICommand<object>();
+        
+
         public ICommand RestoreBackupCommand { get; private set; } = new RestoreBackupICommand<object>();
 
         const int m_DefaultPageIndex = 2;

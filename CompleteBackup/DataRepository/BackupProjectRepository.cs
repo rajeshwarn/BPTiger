@@ -55,17 +55,28 @@ namespace CompleteBackup.DataRepository
                                 FolderList = new ObservableCollection<FolderData>()
                                 {
                                     //empty folder list
-                                }
+                                },
                             },
-                            //new BackupProfileData()
-                            //{
-                            //    Name = "My first profile2",
-                            //    Description = "home backup",
-                            //    FolderList = new ObservableCollection<FolderData>()
-                            //    {
-                            //        //empty folder list
-                            //    }
-                            //}
+                            new BackupProfileData()
+                            {
+                                BackupType =  BackupTypeEnum.Full,
+                                Name = "Sample Profile2",
+                                Description = "home backup",
+                                FolderList = new ObservableCollection<FolderData>()
+                                {
+                                    //empty folder list
+                                },
+                            },
+                            new BackupProfileData()
+                            {
+                                BackupType =  BackupTypeEnum.Full,
+                                Name = "Sample Profile3",
+                                Description = "home backup",
+                                FolderList = new ObservableCollection<FolderData>()
+                                {
+                                    //empty folder list
+                                },
+                            },
                         }
                     }
                 };

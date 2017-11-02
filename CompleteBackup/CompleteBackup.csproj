@@ -97,6 +97,7 @@
     <Compile Include="ViewModels\ActionRestore\RestoreItemsSelectionViewModel.cs" />
     <Compile Include="ViewModels\ActionRestore\ICommands\RestoreFolderSelectionICommand.cs" />
     <Compile Include="ViewModels\ActionRestore\Validators\RestoreTargetLocationValidator.cs" />
+    <Compile Include="ViewModels\MainWindow\ICommands\SelectBackupProfileICommand.cs" />
     <Compile Include="ViewModels\Share\BackupItemsTreeBase.cs" />
     <Compile Include="ViewModels\ExtendedControls\ProcessingSpinnerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\RestoreBackupICommand.cs" />
@@ -289,6 +290,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\Ribbon\DifferentialBackup.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Ribbon\Profile.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
