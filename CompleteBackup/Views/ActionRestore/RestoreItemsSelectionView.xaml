@@ -110,6 +110,7 @@
                             <DataTemplate>
                                 <DockPanel LastChildFill="True">
                                     <StackPanel Orientation="Horizontal">
+                                        <Image Width="16" Source="{Binding Image}"/>
                                         <TextBlock Text="["/>
                                         <TextBlock Text="{Binding Name}"/>
                                         <TextBlock Text="]" Margin="0,0,4,0"/>
