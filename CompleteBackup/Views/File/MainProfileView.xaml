@@ -14,6 +14,26 @@
     <Grid>
         <!--<Border BorderThickness="1" CornerRadius="4" BorderBrush="DarkGray" Margin="0,0,0,0" Padding="4">-->
         <StackPanel Orientation="Vertical">
+            <GroupBox Header="Bakup Type">
+                <RibbonComboBox Label="Backup Type:" SelectionBoxWidth="180" HorizontalAlignment="Left" Background="LightBlue">
+                    <RibbonGallery SelectedValue="{Binding ProfileBackupType}">
+                        <RibbonGalleryCategory ItemsSource="{Binding BackupTypeList}">
+                            <RibbonGalleryCategory.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image HorizontalAlignment="Stretch" Source="{Binding ImageName}" Height="16" Margin="0,0,2,0"/>
+                                            <TextBlock Text="{Binding Name}" />
+                                        </StackPanel>
+                                        <TextBlock Text="{Binding Path=Description}" TextWrapping="Wrap" HorizontalAlignment="Left" FontStyle="Italic"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </RibbonGalleryCategory.ItemTemplate>
+                        </RibbonGalleryCategory>
+                    </RibbonGallery>
+                </RibbonComboBox>
+            </GroupBox>
+            
             <Button Width="50" Content="Refresh" Click="Button_Click" HorizontalAlignment="Right"/>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Source foldes size: "></TextBlock>

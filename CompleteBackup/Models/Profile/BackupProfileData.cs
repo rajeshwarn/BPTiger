@@ -35,10 +35,18 @@ namespace CompleteBackup.Models.Backup.Profile
         public string ImageName { get; set; }
     }
 
+    class ProfileHelper
+    {
+        public static List<BackupTypeData> BackupTypeList { get; private set; } = new List<BackupTypeData>() {
+            new BackupTypeData() { BackupType = BackupTypeEnum.Full, Name = "Full Backup", ImageName = @"/Resources/Icons/Ribbon/FullBackup.ico", Description = "A full copy of your entire data set"},
+            new BackupTypeData() { BackupType = BackupTypeEnum.Incremental, Name = "Incremental Backup", ImageName = @"/Resources/Icons/Ribbon/IncrementalBackup.ico", Description = "Starts with a full backup, and subsequent backups only backup data that has changed\nFor a faster backup"},
+            new BackupTypeData() { BackupType = BackupTypeEnum.Differential, Name = "Differential Backup", ImageName = @"/Resources/Icons/Ribbon/DifferentialBackup.ico", Description = "Similar to Incremental Backup, but also contains all the data that changed since the first backup\nThis lets you restore a specific version event if the data has been deleted in the source"},
+        };
+    }
+
 
     public class BackupProfileData : ObservableObject
     {
-
         public enum ProfileTargetFolderStatusEnum
         {
             AssosiatedWithThisProfile, //no error looks good
@@ -77,7 +85,7 @@ namespace CompleteBackup.Models.Backup.Profile
         public BackupTypeEnum BackupType { get { return m_BackupType; } set { m_BackupType = value; OnPropertyChanged(); } }
 
         public Guid GUID { get; set; } = Guid.NewGuid();
-        public string Name { get; set; } = "My Backup Profile";
+        public string Name { get; set; }
         public string Description { get { return Name; } set { } }
 
         IStorageInterface m_IStorage = new FileSystemStorage();
@@ -95,8 +103,6 @@ namespace CompleteBackup.Models.Backup.Profile
         [XmlIgnore]
         public ObservableCollection<FolderData> RestoreFolderList { get; set; } = new ObservableCollection<FolderData>();
 
-        //[XmlIgnore]
-        //public ObservableCollection<FolderMenuItem> RootFolderItemList { get; set; } = new ObservableCollection<FolderMenuItem>();
 
         public delegate void ProfileDataUpdateEvent(BackupProfileData tranData);
         public event ProfileDataUpdateEvent m_ProfileDataUpdateEventCallback;
@@ -154,6 +160,15 @@ namespace CompleteBackup.Models.Backup.Profile
             if (BackupWorkerTask != null && BackupWorkerTask.IsBusy)
             {
                 IsBackupWorkerPaused = false;
+            }
+        }
+
+
+        public void SetBackupType(BackupTypeEnum backupType)
+        {
+            if (BackupType != backupType)
+            {
+
             }
         }
 
