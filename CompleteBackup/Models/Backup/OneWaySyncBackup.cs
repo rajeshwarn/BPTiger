@@ -36,13 +36,37 @@ namespace CompleteBackup.Models.backup
 
             m_BackupSessionHistory.Reset(GetTimeStamp());
 
+
             foreach (var item in SourcePath)
             {
                 var targetdirectoryName = m_IStorage.GetFileName(item.Path);
                 var targetPath = m_IStorage.Combine(newTargetPath, targetdirectoryName);
 
-                ProcessSnapBackupStep(item.Path, targetPath);
+                if (item.IsFolder)
+                {
+                    ProcessSnapBackupStep(item.Path, targetPath);
+                }
+                else
+                {
+                    UpdateProgress("Running... ", ++ProcessFileCount);
+
+                    var fileName = m_IStorage.GetFileName(item.Path);
+                    // first set, copy to new set
+                    var targetFilePath = m_IStorage.Combine(newTargetPath, fileName);
+
+                    m_IStorage.CopyFile(item.Path, targetFilePath);
+
+                    m_BackupSessionHistory.AddNewFile(item.Path, targetFilePath);
+                }
             }
+
+            //foreach (var item in SourcePath)
+            //{
+            //    var targetdirectoryName = m_IStorage.GetFileName(item.Path);
+            //    var targetPath = m_IStorage.Combine(newTargetPath, targetdirectoryName);
+
+            //    ProcessSnapBackupStep(item.Path, targetPath);
+            //}
 
             BackupSessionHistory.SaveHistory(TargetPath, m_BackupName, m_BackupSessionHistory);
         }
@@ -50,19 +74,28 @@ namespace CompleteBackup.Models.backup
 
         public void ProcessSnapBackupStep(string sourcePath, string currSetPath)
         {
+            //            var sourceFileList = m_IStorage.GetFiles(sourcePath);
+
             var sourceFileList = m_IStorage.GetFiles(sourcePath);
+
+            m_IStorage.CreateDirectory(currSetPath);
 
             foreach (var file in sourceFileList)
             {
                 UpdateProgress("Running... ", ++ProcessFileCount);
 
-                HandleFile(sourcePath, currSetPath, file);
+                var fileName = m_IStorage.GetFileName(file);
+                // first set, copy to new set
+                var sourceFilePath = m_IStorage.Combine(sourcePath, fileName);
+                var targetFilePath = m_IStorage.Combine(currSetPath, fileName);
+
+                m_IStorage.CopyFile(sourceFilePath, targetFilePath);
+
+                m_BackupSessionHistory.AddNewFile(sourceFilePath, targetFilePath);
             }
 
-            HandleDeletedFiles(sourceFileList, currSetPath);
-
+            //Process directories
             var sourceSubdirectoryEntriesList = GetDirectoriesNames(sourcePath);
-            HandleDeletedItems(sourceSubdirectoryEntriesList, currSetPath);
 
             foreach (string subdirectory in sourceSubdirectoryEntriesList)
             {
@@ -71,6 +104,27 @@ namespace CompleteBackup.Models.backup
 
                 ProcessSnapBackupStep(newSourceSetPath, newCurrSetPath);
             }
+
+
+
+            //    UpdateProgress("Running... ", ++ProcessFileCount);
+
+            //    HandleFile(sourcePath, currSetPath, file);
+            //}
+
+
+            //HandleDeletedFiles(sourceFileList, currSetPath);
+
+            //var sourceSubdirectoryEntriesList = GetDirectoriesNames(sourcePath);
+            //HandleDeletedItems(sourceSubdirectoryEntriesList, currSetPath);
+
+            //foreach (string subdirectory in sourceSubdirectoryEntriesList)
+            //{
+            //    string newSourceSetPath = m_IStorage.Combine(sourcePath, subdirectory);
+            //    string newCurrSetPath = m_IStorage.Combine(currSetPath, subdirectory);
+
+            //    ProcessSnapBackupStep(newSourceSetPath, newCurrSetPath);
+            //}
         }
     }
 }
