@@ -19,7 +19,7 @@ namespace CompleteBackup.Models.backup
         //    switch (profile.BackupType)
         //        case BackupTypeEnum.Full:
         //        {
-        //            return  IncrementalBackup(profile.FolderList.ToList(), profile.TargetBackupFolder, new FileSystemStorage(), m_ProgressBar);
+        //            return  DifferentialBackup(profile.FolderList.ToList(), profile.TargetBackupFolder, new FileSystemStorage(), m_ProgressBar);
         //        }
         //    }
 
@@ -42,10 +42,10 @@ namespace CompleteBackup.Models.backup
         //        try
         //        {
 
-        //            //                    BackupManager backup = new IncrementalBackup(sourcePath, currSetPath, new NullStorage(), progressBar);
-        //            BackupManager backup = new IncrementalBackup(profile.FolderList.ToList(), profile.TargetBackupFolder, new FileSystemStorage(), progressBar);
-        //            //                    BackupManager backup = new IncrementalBackup(sourcePath, currSetPath, new FileSystemStorage(), progressBar);
-        //            //                    BackupManager backup = new OneWaySyncBackup("CBKP-Snap_2017-10-13_12501247655", sourcePath, currSetPath, new FileSystemStorage(), progressBar);
+        //            //                    BackupManager backup = new DifferentialBackup(sourcePath, currSetPath, new NullStorage(), progressBar);
+        //            BackupManager backup = new DifferentialBackup(profile.FolderList.ToList(), profile.TargetBackupFolder, new FileSystemStorage(), progressBar);
+        //            //                    BackupManager backup = new DifferentialBackup(sourcePath, currSetPath, new FileSystemStorage(), progressBar);
+        //            //                    BackupManager backup = new FullBackup("CBKP-Snap_2017-10-13_12501247655", sourcePath, currSetPath, new FileSystemStorage(), progressBar);
 
         //            backup.Init();
         //            backup.ProcessBackup();

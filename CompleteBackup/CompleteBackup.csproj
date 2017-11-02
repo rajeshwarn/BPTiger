@@ -62,6 +62,7 @@
     </ApplicationDefinition>
     <Compile Include="DataRepository\BackupProjectRepository.cs" />
     <Compile Include="Models\Backup\BackupFactory.cs" />
+    <Compile Include="Models\Backup\IncrementalFullBackup.cs" />
     <Compile Include="Models\Backup\History\BackupSessionHistory.cs" />
     <Compile Include="Models\FolderSelection\BackupFolderMenuItem.cs" />
     <Compile Include="Models\FolderSelection\RestoreFolderMenuItem.cs" />
@@ -75,8 +76,8 @@
     <Compile Include="Models\Backup\Storage\NullStorage.cs" />
     <Compile Include="Models\Backup\Storage\FileSystemStorage.cs" />
     <Compile Include="Models\Backup\Storage\IStorageInterface.cs" />
-    <Compile Include="Models\Backup\IncrementalBackup.cs" />
-    <Compile Include="Models\Backup\OneWaySyncBackup.cs" />
+    <Compile Include="Models\Backup\DifferentialBackup.cs" />
+    <Compile Include="Models\Backup\FullBackup.cs" />
     <Compile Include="Models\Backup\BackupManager.cs" />
     <Compile Include="Models\Backup\Storage\Win32\Win32FileSystem.cs" />
     <Compile Include="Models\Backup\Storage\Win32\Win32LongPathDirectory.cs" />

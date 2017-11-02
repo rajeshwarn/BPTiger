@@ -48,16 +48,20 @@ namespace CompleteBackup.Models.Profile
                 {
                     switch (profile.BackupType)
                     {
-                        case BackupTypeEnum.Incremental:
                         case BackupTypeEnum.Differential:
-                            m_BackupManager = new IncrementalBackup(profile, m_ProgressBar);
-
+                            m_BackupManager = new DifferentialBackup(profile, m_ProgressBar);
                             break;
+
+                        case BackupTypeEnum.Incremental:
+                            m_BackupManager = new IncrementalFullBackup(profile, m_ProgressBar);
+                            break;                            
 
                         case BackupTypeEnum.Full:
-                        default:
-                            m_BackupManager = new OneWaySyncBackup(profile, m_ProgressBar);
+                            m_BackupManager = new FullBackup(profile, m_ProgressBar);
                             break;
+
+                        default:
+                            throw new ArgumentNullException("Unknown backup type in BAckupWorker");
                     }
 
                     m_BackupManager.Init();
