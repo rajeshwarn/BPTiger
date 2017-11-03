@@ -53,6 +53,7 @@ namespace CompleteBackup.ViewModels.ICommands
                 if (result == MessageBoxResult.Yes)
                 {
                     vm.Project.SelectedBackupProject.CurrentBackupProfile.BackupType = item.BackupType;
+                    BackupProjectRepository.Instance.SaveProject();
                 }
             }
             //            BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile = vm;
