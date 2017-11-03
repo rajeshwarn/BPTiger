@@ -81,8 +81,8 @@ namespace CompleteBackup.Models.Backup.Profile
         public string BackupSignature { get { return $"{GUID.ToString("D")}-BC-{BackupType}"; } }
 
 
-        private DateTime m_LastBackupDateTime { get; set; }
-        public DateTime LastBackupDateTime { get { return m_LastBackupDateTime; } set { m_LastBackupDateTime = value; OnPropertyChanged(); } }
+        private DateTime? m_LastBackupDateTime { get; set; }
+        public DateTime? LastBackupDateTime { get { return m_LastBackupDateTime; } set { m_LastBackupDateTime = value; OnPropertyChanged(); } }
 
         [XmlIgnore]
         public string BackupTypeName { get { return ProfileHelper.BackupTypeList.FirstOrDefault(i => i.BackupType == m_BackupType)?.Name; } set { } }
@@ -396,15 +396,20 @@ namespace CompleteBackup.Models.Backup.Profile
                     }
 
 
-                    if (m_TargetRestoreFolder != null)
+                    if (TargetBackupFolder != null)
                     {
                         //last backup time
+                        DateTime? lastTime = null;
                         var lastSet = BackupManager.GetLastBackupSetName(this);
-                        var sessionHistory = BackupSessionHistory.LoadHistory(TargetBackupFolder, lastSet);
-                        Application.Current.Dispatcher.Invoke(new Action(() =>
+                        if (lastSet != null)
                         {
-                            LastBackupDateTime = sessionHistory.TimeStamp;
-                        }));
+                            var sessionHistory = BackupSessionHistory.LoadHistory(TargetBackupFolder, lastSet);
+                            lastTime = sessionHistory?.TimeStamp;
+                            Application.Current.Dispatcher.Invoke(new Action(() =>
+                            {
+                                LastBackupDateTime = lastTime;
+                            }));
+                        }
                     }
 
                     if (m_TargetBackupFolder != null)

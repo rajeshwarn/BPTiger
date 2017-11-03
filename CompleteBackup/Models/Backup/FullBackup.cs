@@ -24,27 +24,38 @@ namespace CompleteBackup.Models.backup
         public override void ProcessBackup()
         {
             m_BackupSessionHistory.Reset(GetTimeStamp());
+
             string backupName = GetTargetSetName();
+            string targetSetPath = CreateNewBackupSetFolder(backupName);
 
-            var newTargetPath = m_IStorage.Combine(TargetPath, backupName);
-            m_IStorage.CreateDirectory(newTargetPath);
+            ProcessBackupRootFolders(targetSetPath);
 
-            foreach (var item in SourcePath)
+            BackupSessionHistory.SaveHistory(m_TargetBackupPath, backupName, m_BackupSessionHistory);
+        }
+
+        protected string CreateNewBackupSetFolder(string newSetName)
+        {
+            var targetSetPath = m_IStorage.Combine(m_TargetBackupPath, newSetName);
+            m_IStorage.CreateDirectory(targetSetPath);
+
+            return targetSetPath;
+        }
+
+        protected void ProcessBackupRootFolders(string targetPath)
+        {
+            foreach (var item in m_SourceBackupPathList)
             {
                 if (item.IsFolder)
                 {
-                    var targetPath = m_IStorage.Combine(newTargetPath, m_IStorage.GetFileName(item.Path));
-                    ProcessFullBackupFolderStep(item.Path, targetPath);
+                    var targetFolder = m_IStorage.Combine(targetPath, m_IStorage.GetFileName(item.Path));
+                    ProcessFullBackupFolderStep(item.Path, targetFolder);
                 }
                 else
                 {
-                    ProcessFullBackupFile(item.Path, m_IStorage.GetDirectoryName(item.Path), newTargetPath);
+                    ProcessFullBackupFile(item.Path, m_IStorage.GetDirectoryName(item.Path), targetPath);
                 }
             }
-
-            BackupSessionHistory.SaveHistory(TargetPath, backupName, m_BackupSessionHistory);
         }
-
 
         protected void ProcessFullBackupFile(string file, string sourcePath, string destPath)
         {

@@ -28,8 +28,8 @@ namespace CompleteBackup.Models.backup
         {
             m_TimeStamp = DateTime.Now;
             m_Profile = profile;
-            SourcePath = profile.FolderList.ToList();
-            TargetPath = profile.TargetBackupFolder;
+            m_SourceBackupPathList = profile.FolderList.ToList();
+            m_TargetBackupPath = profile.TargetBackupFolder;
 
             m_IStorage = profile.GetStorageInterface();
 
@@ -64,9 +64,9 @@ namespace CompleteBackup.Models.backup
         public long NumberOfFiles { get; set; } = 0;
         public long ProcessFileCount { get; set; }
 
-        public List<FolderData> SourcePath;
+        public List<FolderData> m_SourceBackupPathList;
 
-        public string TargetPath;
+        public string m_TargetBackupPath;
 
         private GenericStatusBarView m_ProgressBar;
         public GenericStatusBarView ProgressBar { get { return m_ProgressBar; } set { } }
@@ -139,7 +139,7 @@ namespace CompleteBackup.Models.backup
             long files = 0;
             long directories = 0;
 
-            foreach (var item in SourcePath)
+            foreach (var item in m_SourceBackupPathList)
             {
                 if (item.IsFolder)
                 {

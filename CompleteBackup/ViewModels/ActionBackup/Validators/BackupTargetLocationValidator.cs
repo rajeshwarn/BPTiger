@@ -32,7 +32,8 @@ namespace CompleteBackup.ViewModels.FolderSelection.Validators
             else
             {
                 var folderStatus = profile.GetProfileTargetFolderStatus(name);
-                if (folderStatus == Models.Backup.Profile.BackupProfileData.ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile)
+                if (folderStatus == Models.Backup.Profile.BackupProfileData.ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile ||
+                    folderStatus == Models.Backup.Profile.BackupProfileData.ProfileTargetFolderStatusEnum.EmptyFolderNoProfile)
                 {
                     return ValidationResult.ValidResult;
                 }

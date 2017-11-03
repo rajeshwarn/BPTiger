@@ -25,23 +25,16 @@ namespace CompleteBackup.Models.backup
             m_BackupSessionHistory.Reset(GetTimeStamp());
             string backupName = GetTargetSetName();
 
-            var newTargetPath = m_IStorage.Combine(TargetPath, backupName);
-            m_IStorage.CreateDirectory(newTargetPath);
-
-            foreach (var item in SourcePath)
+            var targetSetPath = BackupManager.GetLastBackupSetName(m_Profile);
+            if (targetSetPath == null)
             {
-                if (item.IsFolder)
-                {
-                    var targetPath = m_IStorage.Combine(newTargetPath, m_IStorage.GetFileName(item.Path));
-                    ProcessFullBackupFolderStep(item.Path, targetPath);
-                }
-                else
-                {
-                    ProcessFullBackupFile(item.Path, m_IStorage.GetDirectoryName(item.Path), newTargetPath);
-                }
+                //this is the first run
+                targetSetPath = CreateNewBackupSetFolder(backupName);
             }
 
-            BackupSessionHistory.SaveHistory(TargetPath, backupName, m_BackupSessionHistory);
+            ProcessBackupRootFolders(targetSetPath);
+
+            BackupSessionHistory.SaveHistory(m_TargetBackupPath, backupName, m_BackupSessionHistory);
         }
     }
 }
