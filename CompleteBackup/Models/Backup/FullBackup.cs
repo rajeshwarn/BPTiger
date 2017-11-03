@@ -26,8 +26,7 @@ namespace CompleteBackup.Models.backup
         {
             if (m_BackupName == null)
             {
-                //TimeStamp = DateTime.Now;
-                m_BackupName = GetTargetSetName();// $"{m_Profile.BackupSignature}_{GetTimeStampString()}";
+                m_BackupName = GetTargetSetName();
             }
 
             var newTargetPath = m_IStorage.Combine(TargetPath, m_BackupName);
@@ -44,7 +43,7 @@ namespace CompleteBackup.Models.backup
 
                 if (item.IsFolder)
                 {
-                    ProcessSnapBackupStep(item.Path, targetPath);
+                    ProcessFullBackupStep(item.Path, targetPath);
                 }
                 else
                 {
@@ -60,19 +59,12 @@ namespace CompleteBackup.Models.backup
                 }
             }
 
-            //foreach (var item in SourcePath)
-            //{
-            //    var targetdirectoryName = m_IStorage.GetFileName(item.Path);
-            //    var targetPath = m_IStorage.Combine(newTargetPath, targetdirectoryName);
-
-            //    ProcessSnapBackupStep(item.Path, targetPath);
-            //}
 
             BackupSessionHistory.SaveHistory(TargetPath, m_BackupName, m_BackupSessionHistory);
         }
 
 
-        public void ProcessSnapBackupStep(string sourcePath, string currSetPath)
+        public void ProcessFullBackupStep(string sourcePath, string currSetPath)
         {
             //            var sourceFileList = m_IStorage.GetFiles(sourcePath);
 
@@ -102,7 +94,7 @@ namespace CompleteBackup.Models.backup
                 string newSourceSetPath = m_IStorage.Combine(sourcePath, subdirectory);
                 string newCurrSetPath = m_IStorage.Combine(currSetPath, subdirectory);
 
-                ProcessSnapBackupStep(newSourceSetPath, newCurrSetPath);
+                ProcessFullBackupStep(newSourceSetPath, newCurrSetPath);
             }
 
 
