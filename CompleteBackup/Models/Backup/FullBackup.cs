@@ -46,7 +46,7 @@ namespace CompleteBackup.Models.backup
         }
 
 
-        public void ProcessFullBackupFile(string file, string sourcePath, string destPath)
+        protected void ProcessFullBackupFile(string file, string sourcePath, string destPath)
         {
             UpdateProgress("Running... ", ++ProcessFileCount);
 
@@ -60,7 +60,7 @@ namespace CompleteBackup.Models.backup
             m_BackupSessionHistory.AddNewFile(sourceFilePath, targetFilePath);
         }
 
-        public void ProcessFullBackupFolderStep(string sourcePath, string currSetPath)
+        protected void ProcessFullBackupFolderStep(string sourcePath, string currSetPath)
         {
             var sourceFileList = m_IStorage.GetFiles(sourcePath);
             m_IStorage.CreateDirectory(currSetPath);

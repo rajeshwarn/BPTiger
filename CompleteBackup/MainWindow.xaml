@@ -72,7 +72,7 @@
                 </RibbonApplicationMenu>
             </Ribbon.ApplicationMenu>
 
-            <RibbonTab Header="File" KeyTip="F" >
+            <RibbonTab Header="Profile" KeyTip="F" >
                 <RibbonGroup Header="Project">
                     <RibbonButton SmallImageSource="/Resources/Icons/Ribbon/document-import.ico" Label="Import" KeyTip="I" 
                                                   Command="{Binding ImportSmartGraphCollectionCommand}"/>
