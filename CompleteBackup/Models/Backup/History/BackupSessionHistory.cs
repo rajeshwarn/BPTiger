@@ -45,7 +45,7 @@ namespace CompleteBackup.Models.Backup.History
     {
         IStorageInterface m_Storage;
 
-        const string HistoryDirectory = ".BackupComnpleteHistory";
+        static readonly public string HistoryDirectory = ".BackupComnpleteHistory";
 
 
         BackupSessionHistory() { }
@@ -117,7 +117,7 @@ namespace CompleteBackup.Models.Backup.History
             File.WriteAllText(destPath, json);
         }
 
-        public static void SaveHistory(string path, string signature, BackupSessionHistory history)
+        public static void SaveHistory(string path, string signature, BackupSessionHistory history, string currentDate = null)
         {
             var m_IStorage = new FileSystemStorage();
             var fullPath = m_IStorage.Combine(path, signature);
@@ -125,7 +125,8 @@ namespace CompleteBackup.Models.Backup.History
             var historyDir = m_IStorage.Combine(fullPath, HistoryDirectory);
             m_IStorage.CreateDirectory(historyDir);
 
-            string historyFile = m_IStorage.Combine(historyDir, $"{signature}_history.json");
+            string date = currentDate == null ? string.Empty : $"_{currentDate}";
+            string historyFile = m_IStorage.Combine(historyDir, $"{signature}{date}_history.json");
 
             var historyData = new object[1];
             historyData[0] = history;

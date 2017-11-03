@@ -41,7 +41,7 @@ namespace CompleteBackup.Models.backup
             return targetSetPath;
         }
 
-        protected void ProcessBackupRootFolders(string targetPath)
+        protected virtual void ProcessBackupRootFolders(string targetPath)
         {
             foreach (var item in m_SourceBackupPathList)
             {
@@ -52,12 +52,12 @@ namespace CompleteBackup.Models.backup
                 }
                 else
                 {
-                    ProcessFullBackupFile(item.Path, m_IStorage.GetDirectoryName(item.Path), targetPath);
+                    ProcessFullBackupFile(m_IStorage.GetFileName(item.Path), m_IStorage.GetDirectoryName(item.Path), targetPath);
                 }
             }
         }
 
-        protected void ProcessFullBackupFile(string file, string sourcePath, string destPath)
+        protected virtual void ProcessFullBackupFile(string file, string sourcePath, string destPath)
         {
             UpdateProgress("Running... ", ++ProcessFileCount);
 
@@ -71,14 +71,14 @@ namespace CompleteBackup.Models.backup
             m_BackupSessionHistory.AddNewFile(sourceFilePath, targetFilePath);
         }
 
-        protected void ProcessFullBackupFolderStep(string sourcePath, string currSetPath)
+        protected virtual void ProcessFullBackupFolderStep(string sourcePath, string currSetPath)
         {
             var sourceFileList = m_IStorage.GetFiles(sourcePath);
             m_IStorage.CreateDirectory(currSetPath);
 
             foreach (var file in sourceFileList)
             {
-                ProcessFullBackupFile(file, sourcePath, currSetPath);
+                ProcessFullBackupFile(m_IStorage.GetFileName(file), sourcePath, currSetPath);
             }
 
             //Process directories
