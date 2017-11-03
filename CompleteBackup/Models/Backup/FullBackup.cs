@@ -19,71 +19,55 @@ namespace CompleteBackup.Models.backup
         {
             m_IStorage = new FileSystemStorage();
         }
-//        public override string BackUpProfileSignature { get { return $"{BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile?.GUID.ToString("D")}-CBKP-SNAP"; } }
-        string m_BackupName;
+        //string m_BackupName;
 
         public override void ProcessBackup()
         {
-            if (m_BackupName == null)
-            {
-                m_BackupName = GetTargetSetName();
-            }
-
-            var newTargetPath = m_IStorage.Combine(TargetPath, m_BackupName);
-    
-            m_IStorage.CreateDirectory(newTargetPath);
-
             m_BackupSessionHistory.Reset(GetTimeStamp());
+            string backupName = GetTargetSetName();
 
+            var newTargetPath = m_IStorage.Combine(TargetPath, backupName);
+            m_IStorage.CreateDirectory(newTargetPath);
 
             foreach (var item in SourcePath)
             {
-                var targetdirectoryName = m_IStorage.GetFileName(item.Path);
-                var targetPath = m_IStorage.Combine(newTargetPath, targetdirectoryName);
-
                 if (item.IsFolder)
                 {
-                    ProcessFullBackupStep(item.Path, targetPath);
+                    var targetPath = m_IStorage.Combine(newTargetPath, m_IStorage.GetFileName(item.Path));
+                    ProcessFullBackupFolderStep(item.Path, targetPath);
                 }
                 else
                 {
-                    UpdateProgress("Running... ", ++ProcessFileCount);
-
-                    var fileName = m_IStorage.GetFileName(item.Path);
-                    // first set, copy to new set
-                    var targetFilePath = m_IStorage.Combine(newTargetPath, fileName);
-
-                    m_IStorage.CopyFile(item.Path, targetFilePath);
-
-                    m_BackupSessionHistory.AddNewFile(item.Path, targetFilePath);
+                    ProcessFullBackupFile(item.Path, m_IStorage.GetDirectoryName(item.Path), newTargetPath);
                 }
             }
 
-
-            BackupSessionHistory.SaveHistory(TargetPath, m_BackupName, m_BackupSessionHistory);
+            BackupSessionHistory.SaveHistory(TargetPath, backupName, m_BackupSessionHistory);
         }
 
 
-        public void ProcessFullBackupStep(string sourcePath, string currSetPath)
+        public void ProcessFullBackupFile(string file, string sourcePath, string destPath)
         {
-            //            var sourceFileList = m_IStorage.GetFiles(sourcePath);
+            UpdateProgress("Running... ", ++ProcessFileCount);
 
+            var fileName = m_IStorage.GetFileName(file);
+            // first set, copy to new set
+            var sourceFilePath = m_IStorage.Combine(sourcePath, fileName);
+            var targetFilePath = m_IStorage.Combine(destPath, fileName);
+
+            m_IStorage.CopyFile(sourceFilePath, targetFilePath);
+
+            m_BackupSessionHistory.AddNewFile(sourceFilePath, targetFilePath);
+        }
+
+        public void ProcessFullBackupFolderStep(string sourcePath, string currSetPath)
+        {
             var sourceFileList = m_IStorage.GetFiles(sourcePath);
-
             m_IStorage.CreateDirectory(currSetPath);
 
             foreach (var file in sourceFileList)
             {
-                UpdateProgress("Running... ", ++ProcessFileCount);
-
-                var fileName = m_IStorage.GetFileName(file);
-                // first set, copy to new set
-                var sourceFilePath = m_IStorage.Combine(sourcePath, fileName);
-                var targetFilePath = m_IStorage.Combine(currSetPath, fileName);
-
-                m_IStorage.CopyFile(sourceFilePath, targetFilePath);
-
-                m_BackupSessionHistory.AddNewFile(sourceFilePath, targetFilePath);
+                ProcessFullBackupFile(file, sourcePath, currSetPath);
             }
 
             //Process directories
@@ -94,29 +78,8 @@ namespace CompleteBackup.Models.backup
                 string newSourceSetPath = m_IStorage.Combine(sourcePath, subdirectory);
                 string newCurrSetPath = m_IStorage.Combine(currSetPath, subdirectory);
 
-                ProcessFullBackupStep(newSourceSetPath, newCurrSetPath);
+                ProcessFullBackupFolderStep(newSourceSetPath, newCurrSetPath);
             }
-
-
-
-            //    UpdateProgress("Running... ", ++ProcessFileCount);
-
-            //    HandleFile(sourcePath, currSetPath, file);
-            //}
-
-
-            //HandleDeletedFiles(sourceFileList, currSetPath);
-
-            //var sourceSubdirectoryEntriesList = GetDirectoriesNames(sourcePath);
-            //HandleDeletedItems(sourceSubdirectoryEntriesList, currSetPath);
-
-            //foreach (string subdirectory in sourceSubdirectoryEntriesList)
-            //{
-            //    string newSourceSetPath = m_IStorage.Combine(sourcePath, subdirectory);
-            //    string newCurrSetPath = m_IStorage.Combine(currSetPath, subdirectory);
-
-            //    ProcessSnapBackupStep(newSourceSetPath, newCurrSetPath);
-            //}
         }
     }
 }
