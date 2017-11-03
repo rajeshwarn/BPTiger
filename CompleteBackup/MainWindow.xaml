@@ -276,6 +276,10 @@
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Column="0">
                         <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,32,0">
+                                <Image Source="{Binding ProjectData.CurrentBackupProfile.BackupTypeImage}" Height="16"/>
+                                <TextBlock Text="{Binding ProjectData.CurrentBackupProfile.BackupTypeName}"/>
+                            </StackPanel>
                             <TextBlock FontStyle="Italic" Text="{Binding ProjectData.CurrentBackupProfile.Name}"/>
                         </StackPanel>
                     </Grid>
