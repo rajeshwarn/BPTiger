@@ -32,5 +32,10 @@ namespace CompleteBackup.Views
             var profile = BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile;
             profile?.UpdateProfileProperties();
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            new SelectBackupTypeWindowView().Show();
+        }
     }
 }

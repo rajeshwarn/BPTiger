@@ -33,6 +33,7 @@ namespace CompleteBackup.Models.Backup.Profile
         public string Name { get; set; }
         public string Description { get; set; }
         public string ImageName { get; set; }
+        public bool IsChecked { get; set; } = false;
     }
 
     class ProfileHelper
@@ -83,9 +84,14 @@ namespace CompleteBackup.Models.Backup.Profile
         private DateTime m_LastBackupDateTime { get; set; }
         public DateTime LastBackupDateTime { get { return m_LastBackupDateTime; } set { m_LastBackupDateTime = value; OnPropertyChanged(); } }
 
+        [XmlIgnore]
+        public string BackupTypeName { get { return ProfileHelper.BackupTypeList.FirstOrDefault(i => i.BackupType == m_BackupType)?.Name; } set { } }
+        [XmlIgnore]
+        public string BackupTypeImage { get { return ProfileHelper.BackupTypeList.FirstOrDefault(i => i.BackupType == m_BackupType)?.ImageName; } set { } }
+
 
         private BackupTypeEnum m_BackupType { get; set; } = BackupTypeEnum.Full;
-        public BackupTypeEnum BackupType { get { return m_BackupType; } set { m_BackupType = value; OnPropertyChanged(); } }
+        public BackupTypeEnum BackupType { get { return m_BackupType; } set { m_BackupType = value; OnPropertyChanged(); OnPropertyChanged("BackupTypeName"); OnPropertyChanged("BackupTypeImage"); } }
 
         public Guid GUID { get; set; } = Guid.NewGuid();
         public string Name { get; set; }

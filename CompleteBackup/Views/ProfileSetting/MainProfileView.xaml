@@ -14,13 +14,15 @@
     <Grid>
         <!--<Border BorderThickness="1" CornerRadius="4" BorderBrush="DarkGray" Margin="0,0,0,0" Padding="4">-->
         <StackPanel Orientation="Vertical">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Backup Type: "/>
-                <Image Source="{Binding ProfileBackupType.ImageName}" Height="16"/>
-                <TextBlock Text="{Binding ProfileBackupType.Name}"/>
-            </StackPanel>
-            
-            <GroupBox Header="Bakup Type">
+            <DockPanel LastChildFill="True">
+                <Button DockPanel.Dock="Right" Content="Change Backup Type" HorizontalAlignment="Right" Click="Button_Click_1"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Backup Type: "/>
+                    <Image Source="{Binding ProfileData.BackupTypeImage}" Height="16"/>
+                    <TextBlock Text="{Binding ProfileData.BackupTypeName}"/>
+                </StackPanel>
+            </DockPanel>
+            <!--<GroupBox Header="Bakup Type">
                 <RibbonComboBox Label="Backup Type:" SelectionBoxWidth="180" HorizontalAlignment="Left" Background="LightBlue">
                     <RibbonGallery SelectedValue="{Binding ProfileBackupType}">
                         <RibbonGalleryCategory ItemsSource="{Binding BackupTypeList}">
@@ -38,8 +40,9 @@
                         </RibbonGalleryCategory>
                     </RibbonGallery>
                 </RibbonComboBox>
-            </GroupBox>
-            
+            </GroupBox>-->
+
+
             <Button Width="50" Content="Refresh" Click="Button_Click" HorizontalAlignment="Right"/>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Source foldes size: "></TextBlock>

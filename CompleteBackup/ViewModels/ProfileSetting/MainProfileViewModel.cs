@@ -16,6 +16,7 @@ namespace CompleteBackup.ViewModels
     class MainProfileViewModel : ObservableObject
     {
         public BackupProjectData ProjectData { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject;
+        public BackupProfileData ProfileData { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile;
 
         public List<BackupTypeData> BackupTypeList { get; set; } = ProfileHelper.BackupTypeList;
 

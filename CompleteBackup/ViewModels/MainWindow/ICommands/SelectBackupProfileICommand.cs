@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace CompleteBackup.ViewModels.ICommands
@@ -33,7 +34,7 @@ namespace CompleteBackup.ViewModels.ICommands
         {
             var profile = parameter as BackupProfileData;
 
-            bool bExecute = true;// (profile != null) && profile.IsBackupWorkerBusy && !profile.IsBackupWorkerPaused;
+            bool bExecute = profile != null;
 
             return bExecute;
         }
@@ -41,10 +42,7 @@ namespace CompleteBackup.ViewModels.ICommands
         public void Execute(object parameter)
         {
             var profile = parameter as BackupProfileData;
-
             BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile = profile;
-
-//            profile.StartBackup();
         }
     }
 }
