@@ -56,8 +56,8 @@
             </GroupBox.Header>
 
             <StackPanel Orientation="Vertical">
-                <Border Background="LightGoldenrodYellow" BorderThickness="2" CornerRadius="4" BorderBrush="DarkRed" Margin="16" Padding="8" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <TextBlock Text="Item list is empty, please select items to restore" HorizontalAlignment="Center"/>
+                <Border Background="LightGoldenrodYellow" BorderThickness="2" CornerRadius="4" BorderBrush="DarkRed" Margin="16" Padding="8" VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <TextBlock Text="Item list is empty, please select items to restore" HorizontalAlignment="Left"/>
                     <Border.Style>
                         <Style TargetType="Border" >
                             <Setter Property="Visibility" Value="Collapsed"/>
