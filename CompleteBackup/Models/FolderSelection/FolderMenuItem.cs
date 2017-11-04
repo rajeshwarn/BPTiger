@@ -24,10 +24,13 @@ namespace CompleteBackup.Models.FolderSelection
         public bool IsFolder { get; set; } = false;
         public HistoryTypeEnum? HistoryType { get; set; } = null;
 
+        public bool m_IsExpanded = false;
+        public bool IsExpanded { get { return m_IsExpanded; } set { m_IsExpanded = value; OnPropertyChanged(); } }
+
         public bool IsSelectable { get; set; } = true;
 
-        public bool? _Selected = false;
-        public bool? Selected { get { return _Selected; } set { _Selected = value; OnPropertyChanged(); } }
+        public bool? m_Selected = false;
+        public bool? Selected { get { return m_Selected; } set { m_Selected = value; OnPropertyChanged(); } }
 
         public FolderMenuItem ParentItem { get; set; }
         public ObservableCollection<FolderMenuItem> ChildFolderMenuItems { get; set; } = new ObservableCollection<FolderMenuItem>();

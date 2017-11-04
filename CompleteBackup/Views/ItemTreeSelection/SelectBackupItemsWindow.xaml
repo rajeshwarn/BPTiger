@@ -42,6 +42,11 @@
                                 </StackPanel>
                             </HierarchicalDataTemplate>
                         </TreeView.ItemTemplate>
+                        <TreeView.ItemContainerStyle>
+                            <Style TargetType="TreeViewItem">
+                                <Setter Property="IsExpanded" Value="{Binding IsExpanded}" />
+                            </Style>
+                        </TreeView.ItemContainerStyle>
                     </TreeView>
                 </ScrollViewer>
                 <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Bottom">

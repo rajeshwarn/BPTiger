@@ -125,17 +125,6 @@ namespace CompleteBackup.Models.backup
             return backupProfileList.OrderByDescending(set => set).ToList();
         }
 
-        //public static string GetLastBackupSetPath(BackupProfileData profile)
-        //{
-        //    var path = GetLastBackupSetName(profile);
-        //    if (path != null)
-        //    {
-        //        path = profile.GetStorageInterface().Combine(profile.TargetBackupFolder, path);
-        //    }
-
-        //    return path;
-        //}
-
         public static string GetLastBackupSetName(BackupProfileData profile)
         {
             var setList = GetBackupSetList(profile);

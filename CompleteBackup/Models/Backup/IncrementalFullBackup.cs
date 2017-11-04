@@ -66,6 +66,15 @@ namespace CompleteBackup.Models.backup
             }
             HandleDeletedItems(sourceDirList, targetPath);
 
+            sourceDirList.Clear();
+            var sourceFileEntriesList = m_SourceBackupPathList.Where(i => !i.IsFolder).ToList();
+            foreach (var item in sourceFileEntriesList)
+            {
+                sourceDirList.Add(m_IStorage.GetFileName(item.Path));
+            }
+            HandleDeletedFiles(sourceDirList, targetPath);
+
+
 
 
             //                    var sourceFileList = m_IStorage.GetFiles(item.Path);

@@ -243,6 +243,8 @@ namespace CompleteBackup.ViewModels
                     parent.Selected = bValue;
                     SelectItemUp(parent);
                 }
+
+                item.IsExpanded = item.Selected == null;
             }
         }
 
