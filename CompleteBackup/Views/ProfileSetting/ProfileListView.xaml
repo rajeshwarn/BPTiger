@@ -12,8 +12,7 @@
     </UserControl.DataContext>
     
     <Grid>
-        <TextBlock Text="TEST LIST"/>
-        <ListBox Width="120" BorderThickness="0"
+        <ListBox BorderThickness="0"
                  ItemsSource="{Binding Repository.SelectedBackupProject.BackupProfileList, Mode=OneWay}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListBox.ContextMenu>
@@ -25,14 +24,28 @@
             </ListBox.ContextMenu>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
-                        <TextBlock Text="{Binding Name}"/>
-                    </Grid>
+                    <!--<StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Image Source="/Resources/Icons/Ribbon/Stop.ico" Height="32" />
+                            <TextBlock Text="{Binding Name}" FontStyle="Italic"/>
+                        </StackPanel>
+                        <TextBlock Text="{Binding Description}" FontStyle="Italic"/>
+                    </StackPanel>-->
+                        <RibbonRadioButton LargeImageSource="/Resources/Icons/Ribbon/Stop.ico" Label="{Binding Name}"  IsChecked="{Binding IsCurrent}"
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.SelectBackupProfileCommand}"
+                                    CommandParameter="{Binding .}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="0,0,0,16">
+                        </RibbonRadioButton>
                 </DataTemplate>
             </ListBox.ItemTemplate>
+            <ListBox.Style>
+                <Style TargetType="ListBox" >
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListBox.Style>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel IsItemsHost="True" Orientation="Horizontal"  />
+                    <WrapPanel IsItemsHost="True" Orientation="Vertical"  />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>
