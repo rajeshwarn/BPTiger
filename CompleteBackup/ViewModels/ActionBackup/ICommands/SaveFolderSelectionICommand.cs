@@ -49,10 +49,10 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
 
             viewModel.UpdateSelectedFolderList();
 
-            viewModel.ProjectData?.CurrentBackupProfile.FolderList.Clear();
+            viewModel.ProjectData?.CurrentBackupProfile.ClearBackupFolderList();
             foreach (var item in viewModel.SelectedItemList)
             {
-                viewModel.ProjectData?.CurrentBackupProfile.FolderList.Add(item);
+                viewModel.ProjectData?.CurrentBackupProfile.BackupFolderList.Add(item);
             }
 
             viewModel.ProjectData?.CurrentBackupProfile.UpdateProfileProperties();

@@ -13,6 +13,7 @@ namespace CompleteBackup.Models.Backup.Profile
 {
     public class FolderData :ObservableObject
     {
+        public bool IsAvailable { get; set; } = true;
         public string Path { get; set; }
         public string RelativePath { get; set; }
         public string Name{ get; set; }

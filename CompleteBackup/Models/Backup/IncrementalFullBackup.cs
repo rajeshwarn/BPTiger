@@ -36,7 +36,7 @@ namespace CompleteBackup.Models.backup
 
             ProcessBackupRootFolders(targetSetPath);
 
-            BackupSessionHistory.SaveHistory(m_TargetBackupPath, backupName, m_BackupSessionHistory, GetTimeStampString());
+            BackupSessionHistory.SaveHistory(m_TargetBackupPath, backupName, m_BackupSessionHistory);//, GetTimeStampString());
         }
 
 

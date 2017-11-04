@@ -25,7 +25,7 @@ namespace CompleteBackup.ViewModels
 
         public SelectBackupItemsWindowModel() : base()
         {
-            foreach (var item in ProjectData?.CurrentBackupProfile.FolderList)
+            foreach (var item in ProjectData?.CurrentBackupProfile.BackupFolderList.Where(i => i.IsAvailable))
             {
                 SelectedItemList.Add(item);
             }

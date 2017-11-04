@@ -107,7 +107,22 @@ namespace CompleteBackup.Models.Backup.Profile
         private string m_TargetRestoreFolder;
         public string TargetRestoreFolder { get { return m_TargetRestoreFolder; } set { m_TargetRestoreFolder = value; OnPropertyChanged(); } }
 
-        public ObservableCollection<FolderData> FolderList { get; set; } = new ObservableCollection<FolderData>();
+        public ObservableCollection<FolderData> BackupFolderList { get; set; } = new ObservableCollection<FolderData>();
+
+        public void ClearBackupFolderList()
+        {
+            //clear only available items
+            var availableItems = BackupFolderList.Where(i => i.IsAvailable == true);
+            if (availableItems != null)
+            {
+                foreach (var item in availableItems)
+                {
+                    BackupFolderList.Remove(item);
+                }
+            }
+            //BackupFolderList.Clear();
+        }
+
 
         [XmlIgnore]
         public ObservableCollection<FolderData> RestoreFolderList { get; set; } = new ObservableCollection<FolderData>();
@@ -338,6 +353,17 @@ namespace CompleteBackup.Models.Backup.Profile
             {
                 try
                 {
+                    foreach (var item in BackupFolderList)
+                    {
+                        if (item.IsFolder)
+                        {
+                            item.IsAvailable = m_IStorage.DirectoryExists(item.Path);
+                        }
+                        else
+                        {
+                            item.IsAvailable = m_IStorage.FileExists(item.Path);
+                        }
+                    }
 
                     Application.Current.Dispatcher.Invoke(new Action(() =>
                     {
@@ -349,7 +375,7 @@ namespace CompleteBackup.Models.Backup.Profile
                     //Source folders sizes and number of files
                     BackupSourceFilesNumber = 0;
                     BackupSourceFoldersSize = 0;
-                    foreach (var item in FolderList)
+                    foreach (var item in BackupFolderList.Where(i => i.IsAvailable))
                     {
                         if (item.IsFolder)
                         {

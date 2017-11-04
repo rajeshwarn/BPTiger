@@ -28,7 +28,7 @@ namespace CompleteBackup.Models.backup
         {
             m_TimeStamp = DateTime.Now;
             m_Profile = profile;
-            m_SourceBackupPathList = profile.FolderList.ToList();
+            m_SourceBackupPathList = profile.BackupFolderList.Where(i => i.IsAvailable).ToList();
             m_TargetBackupPath = profile.TargetBackupFolder;
 
             m_IStorage = profile.GetStorageInterface();
@@ -340,7 +340,7 @@ namespace CompleteBackup.Models.backup
                 {
                     if (!entry.EndsWith(BackupSessionHistory.HistoryDirectory))
                     {
-                        m_IStorage.DeleteDirectory(entry);
+                        m_IStorage.DeleteDirectory(m_IStorage.Combine(currSetPath, entry));
 
                         m_BackupSessionHistory.AddDeletedFolder(null, entry);
                     }

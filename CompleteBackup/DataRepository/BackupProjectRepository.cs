@@ -52,7 +52,7 @@ namespace CompleteBackup.DataRepository
                                 BackupType =  BackupTypeEnum.Full,
                                 Name = "Sample Backup Profile",
                                 Description = "home backup",
-                                FolderList = new ObservableCollection<FolderData>()
+                                BackupFolderList = new ObservableCollection<FolderData>()
                                 {
                                     //empty folder list
                                 },
@@ -62,7 +62,7 @@ namespace CompleteBackup.DataRepository
                                 BackupType =  BackupTypeEnum.Full,
                                 Name = "Sample Profile2",
                                 Description = "home backup",
-                                FolderList = new ObservableCollection<FolderData>()
+                                BackupFolderList = new ObservableCollection<FolderData>()
                                 {
                                     //empty folder list
                                 },
@@ -72,7 +72,7 @@ namespace CompleteBackup.DataRepository
                                 BackupType =  BackupTypeEnum.Full,
                                 Name = "Sample Profile3",
                                 Description = "home backup",
-                                FolderList = new ObservableCollection<FolderData>()
+                                BackupFolderList = new ObservableCollection<FolderData>()
                                 {
                                     //empty folder list
                                 },

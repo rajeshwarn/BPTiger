@@ -146,65 +146,71 @@ namespace CompleteBackup.ViewModels
             m_BackupSetPathCacheList.Clear();
 
             m_LastSetPathCache = BackupManager.GetLastBackupSetName(profile);
-            var backSetList = BackupManager.GetBackupSetList(profile);
-            foreach(var setPath in backSetList.Where(p => p != m_LastSetPathCache))
+
+            switch (profile.BackupType)
             {
-                m_BackupSetPathCacheList.Add(m_IStorage.Combine(profile.TargetBackupFolder, setPath));
-            }
-
-                bool bIncremental = true;
-
-            if (bIncremental)
-            {
-
-                m_RootFolderMenuItemTree.ParentItem = null;
-                m_RootFolderMenuItemTree.IsFolder = true;
-                m_RootFolderMenuItemTree.Path = profile.TargetBackupFolder;
-                m_RootFolderMenuItemTree.RelativePath = string.Empty;
-                m_RootFolderMenuItemTree.Name = "BACKUP";
-
-                {
-                    int iSessionIndex = 0;
-                    foreach (var setPath in backSetList)
+                case BackupTypeEnum.Full:
+                case BackupTypeEnum.Incremental:
                     {
-                        iSessionIndex++;
-                        var sessionHistory = BackupSessionHistory.LoadHistory(profile.TargetBackupFolder, setPath);
-                        sessionHistory.SessionHistoryIndex = iSessionIndex;
+                        var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, m_LastSetPathCache);
 
-                        var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, setPath);
-
-                        m_RootFolderMenuItemTree.Path = lastSetPath;
-
-                        //update add root items
-                        UpdateChildItemsInMenuItem(m_RootFolderMenuItemTree, lastSetPath, sessionHistory);
-
-                        foreach (var subItem in m_RootFolderMenuItemTree.ChildFolderMenuItems)
+                        foreach (var item in profile.BackupFolderList.Where(i => i.IsAvailable))
                         {
-                            var newPath = m_IStorage.Combine(lastSetPath, subItem.RelativePath);
-                            UpdateChildItemsInMenuItem(subItem, newPath, sessionHistory);
+                            var directoryName = m_IStorage.GetFileName(item.Path);
+                            var restorePath = m_IStorage.Combine(lastSetPath, directoryName);
+
+                            var rootItem = CreateMenuItem(m_IStorage.IsFolder(restorePath), false, restorePath, directoryName, directoryName, null, 0);
+
+                            UpdateChildItemsInMenuItem(rootItem);
+
+                            Application.Current.Dispatcher.Invoke(new Action(() =>
+                            {
+                                FolderMenuItemTree.Add(rootItem);
+                            }));
                         }
                     }
-                }
-            }
-            else
-            {
-                var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, m_LastSetPathCache);
 
-                foreach (var item in profile.FolderList)
-                {
-                    var directoryName = m_IStorage.GetFileName(item.Path);
-                    var restorePath = m_IStorage.Combine(lastSetPath, directoryName);
-
-                    var rootItem = CreateMenuItem(m_IStorage.IsFolder(restorePath), false, restorePath, directoryName, directoryName, null, 0);
-
-                    UpdateChildItemsInMenuItem(rootItem);
-
-                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    break;
+                case BackupTypeEnum.Differential:
                     {
-                        FolderMenuItemTree.Add(rootItem);
-                    }));
-                }
-            }            
+                        var backSetList = BackupManager.GetBackupSetList(profile);
+                        foreach (var setPath in backSetList.Where(p => p != m_LastSetPathCache))
+                        {
+                            m_BackupSetPathCacheList.Add(m_IStorage.Combine(profile.TargetBackupFolder, setPath));
+                        }
+
+                        m_RootFolderMenuItemTree.ParentItem = null;
+                        m_RootFolderMenuItemTree.IsFolder = true;
+                        m_RootFolderMenuItemTree.Path = profile.TargetBackupFolder;
+                        m_RootFolderMenuItemTree.RelativePath = string.Empty;
+                        m_RootFolderMenuItemTree.Name = "BACKUP";
+
+                        int iSessionIndex = 0;
+                        foreach (var setPath in backSetList)
+                        {
+                            iSessionIndex++;
+                            var sessionHistory = BackupSessionHistory.LoadHistory(profile.TargetBackupFolder, setPath);
+                            sessionHistory.SessionHistoryIndex = iSessionIndex;
+
+                            var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, setPath);
+
+                            m_RootFolderMenuItemTree.Path = lastSetPath;
+
+                            //update add root items
+                            UpdateChildItemsInMenuItem(m_RootFolderMenuItemTree, lastSetPath, sessionHistory);
+
+                            foreach (var subItem in m_RootFolderMenuItemTree.ChildFolderMenuItems)
+                            {
+                                var newPath = m_IStorage.Combine(lastSetPath, subItem.RelativePath);
+                                UpdateChildItemsInMenuItem(subItem, newPath, sessionHistory);
+                            }
+                        }                        
+                    }
+                    break;
+
+                default:
+                    break;
+            }           
         }
 
         protected override void AddFilesToFolderMenuItem(FolderMenuItem item, string itemPath, BackupSessionHistory history)
@@ -243,7 +249,7 @@ namespace CompleteBackup.ViewModels
                         HistoryTypeEnum historyType = HistoryTypeEnum.NoChange;
                         if (foundItem == null)
                         {
-                            if (history.SessionHistoryIndex > 1)
+                            if (history?.SessionHistoryIndex > 1)
                             {
                                 bDeletedItem = true;
                                 historyType = HistoryTypeEnum.Deleted;
