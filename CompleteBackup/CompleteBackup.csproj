@@ -303,5 +303,8 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\Ribbon\Profile.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\FolderTreeView\Delete.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -34,12 +34,19 @@ namespace CompleteBackup.Models.Backup.Profile
                 ImageSource imageSource = null;
                 try
                 {
-                    var m_IStorage = new FileSystemStorage();
-                    var icon = m_IStorage.ExtractIconFromPath(Path);
-                    imageSource = Imaging.CreateBitmapSourceFromHIcon(
-                        icon.Handle,
-                        System.Windows.Int32Rect.Empty,
-                        System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
+                    if (IsAvailable)
+                    {
+                        var m_IStorage = new FileSystemStorage();
+                        var icon = m_IStorage.ExtractIconFromPath(Path);
+                        imageSource = Imaging.CreateBitmapSourceFromHIcon(
+                            icon.Handle,
+                            System.Windows.Int32Rect.Empty,
+                            System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
+                    }
+                    else
+                    {
+                        return "/Resources/Icons/FolderTreeView/Delete.ico";
+                    }
                 }
                 catch (Exception ex)
                 {

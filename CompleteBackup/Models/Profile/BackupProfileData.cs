@@ -112,7 +112,7 @@ namespace CompleteBackup.Models.Backup.Profile
         public void ClearBackupFolderList()
         {
             //clear only available items
-            var availableItems = BackupFolderList.Where(i => i.IsAvailable == true);
+            var availableItems = BackupFolderList.Where(i => i.IsAvailable == true).ToArray();
             if (availableItems != null)
             {
                 foreach (var item in availableItems)

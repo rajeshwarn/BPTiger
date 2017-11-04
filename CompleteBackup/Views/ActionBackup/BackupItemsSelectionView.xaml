@@ -103,8 +103,8 @@
                         </StackPanel>
                         <Separator/>
                     </StackPanel>
-                    <ListBox ItemsSource="{Binding SelectionFolderList}" BorderThickness="0" Margin="0,0,8,0">
-                        <ListBox.ItemTemplate>
+                    <ListView ItemsSource="{Binding SelectionFolderList}" BorderThickness="0" Margin="0,0,8,0" SelectionMode="Single">
+                        <ListView.ItemTemplate>
                             <DataTemplate>
                                 <DockPanel LastChildFill="True">
                                     <StackPanel Orientation="Horizontal">
@@ -115,12 +115,13 @@
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding IsAvailable}" Value="False">
                                                             <Setter Property="Foreground" Value="Red"/>
+                                                            <Setter Property="FontWeight" Value="SemiBold"/>
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
                                             </TextBlock.Style>
                                         </TextBlock>
-                                        <TextBlock Text="  [Item not found, Click to locate]">
+                                        <TextBlock Text="  -  Item not found, right click to locate" FontWeight="SemiBold" FontStyle="Italic" Foreground="Gray">
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock">
                                                     <Style.Triggers>
@@ -134,9 +135,31 @@
                                     </StackPanel>
                                 </DockPanel>
                             </DataTemplate>
-                        </ListBox.ItemTemplate>
-
-                    </ListBox>
+                        </ListView.ItemTemplate>
+                        <ListView.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Locate" Command="{Binding DeleteBackupProfileCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}">
+                                    <MenuItem.Style>
+                                        <Style TargetType="MenuItem">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems[0].IsAvailable}" Value="True">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </MenuItem.Style>
+                                </MenuItem>
+                                <MenuItem Header="Open in new window" Command="{Binding DeleteBackupProfileCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}"/>
+                                <MenuItem Header="Add" Command="{Binding DeleteBackupProfileCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}"/>
+                                <Separator/>
+                                <MenuItem Header="Delete" Command="{Binding DeleteBackupProfileCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}"/>
+                            </ContextMenu>
+                        </ListView.ContextMenu>
+                    </ListView>
                 </DockPanel>
                 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
