@@ -28,8 +28,8 @@ namespace CompleteBackup.Models.backup
         {
             m_TimeStamp = DateTime.Now;
             m_Profile = profile;
-            SourcePath = profile.FolderList.ToList();
-            TargetPath = profile.TargetBackupFolder;
+            m_SourceBackupPathList = profile.FolderList.ToList();
+            m_TargetBackupPath = profile.TargetBackupFolder;
 
             m_IStorage = profile.GetStorageInterface();
 
@@ -64,9 +64,9 @@ namespace CompleteBackup.Models.backup
         public long NumberOfFiles { get; set; } = 0;
         public long ProcessFileCount { get; set; }
 
-        public List<FolderData> SourcePath;
+        public List<FolderData> m_SourceBackupPathList;
 
-        public string TargetPath;
+        public string m_TargetBackupPath;
 
         private GenericStatusBarView m_ProgressBar;
         public GenericStatusBarView ProgressBar { get { return m_ProgressBar; } set { } }
@@ -125,6 +125,17 @@ namespace CompleteBackup.Models.backup
             return backupProfileList.OrderByDescending(set => set).ToList();
         }
 
+        //public static string GetLastBackupSetPath(BackupProfileData profile)
+        //{
+        //    var path = GetLastBackupSetName(profile);
+        //    if (path != null)
+        //    {
+        //        path = profile.GetStorageInterface().Combine(profile.TargetBackupFolder, path);
+        //    }
+
+        //    return path;
+        //}
+
         public static string GetLastBackupSetName(BackupProfileData profile)
         {
             var setList = GetBackupSetList(profile);
@@ -139,7 +150,7 @@ namespace CompleteBackup.Models.backup
             long files = 0;
             long directories = 0;
 
-            foreach (var item in SourcePath)
+            foreach (var item in m_SourceBackupPathList)
             {
                 if (item.IsFolder)
                 {
@@ -273,7 +284,7 @@ namespace CompleteBackup.Models.backup
         }
 
 
-        protected void HandleDeletedFiles(List<string> sourceFileList, string currSetPath)
+        protected virtual void HandleDeletedFiles(List<string> sourceFileList, string currSetPath)
         {
             //Delete any deleted files
             var currSetFileList = m_IStorage.GetFiles(currSetPath);
@@ -325,7 +336,7 @@ namespace CompleteBackup.Models.backup
             //lookup for deleted items
             if (m_IStorage.DirectoryExists(currSetPath))
             {
-                string[] targetSubdirectoryEntries = m_IStorage.GetDirectories(currSetPath);
+                string[] targetSubdirectoryEntries = m_IStorage.GetDirectoriesNames(currSetPath);
                 var deleteList = new List<string>();
                 foreach (var entry in targetSubdirectoryEntries)
                 {
@@ -338,9 +349,12 @@ namespace CompleteBackup.Models.backup
                 //Delete deleted items
                 foreach (var entry in deleteList)
                 {
-                    m_IStorage.DeleteDirectory(entry);
+                    if (!entry.EndsWith(BackupSessionHistory.HistoryDirectory))
+                    {
+                        m_IStorage.DeleteDirectory(entry);
 
-                    m_BackupSessionHistory.AddDeletedFolder(entry, currSetPath);
+                        m_BackupSessionHistory.AddDeletedFolder(null, entry);
+                    }
                 }
             }
         }

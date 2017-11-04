@@ -22,7 +22,7 @@ namespace CompleteBackup.Models.Backup.Storage
         bool IsFolder(string path);
         bool IsFileSame(string file1, string file2);
         void CreateDirectory(string path, bool bCheckIfExist = false);
-        bool DeleteDirectory(string path, bool bRecursive = false);
+        bool DeleteDirectory(string path, bool bRecursive = true);
         void CopyFile(string sourcePath, string targetPath, bool overwrite = false);
         void MoveFile(string sourcePath, string targetPath, bool bCreateFolder = false);
         void DeleteFile(string sourcePath);
