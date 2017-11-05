@@ -62,7 +62,7 @@
                         <Style TargetType="Border" >
                             <Setter Property="Visibility" Value="Collapsed"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=SelectionFolderList.Count}" Value="0">
+                                <DataTrigger Binding="{Binding Path=ProjectData.CurrentBackupProfile.RestoreFolderList.Count}" Value="0">
                                     <Setter Property="Visibility" Value="Visible"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -73,7 +73,7 @@
                     <DockPanel.Style>
                         <Style TargetType="DockPanel" >
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=SelectionFolderList.Count}" Value="0">
+                                <DataTrigger Binding="{Binding Path=ProjectData.CurrentBackupProfile.RestoreFolderList.Count}" Value="0">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -82,7 +82,7 @@
 
                     <StackPanel DockPanel.Dock="Right" Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
-                            <ListBox ItemsSource="{Binding SelectionFolderList}" BorderThickness="0" HorizontalContentAlignment="Right">
+                            <ListBox ItemsSource="{Binding ProjectData.CurrentBackupProfile.RestoreFolderList}" BorderThickness="0" HorizontalContentAlignment="Right">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Grid.Column="0" Orientation="Horizontal">
@@ -94,7 +94,7 @@
                             </ListBox>
 
                             <StackPanel Orientation="Horizontal">
-                                <ListBox ItemsSource="{Binding SelectionFolderList}" BorderThickness="0" HorizontalContentAlignment="Right">
+                                <ListBox ItemsSource="{Binding ProjectData.CurrentBackupProfile.RestoreFolderList}" BorderThickness="0" HorizontalContentAlignment="Right">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding TotalSize, Converter={StaticResource NumberToComputerSizeConverter}}"/>
@@ -105,7 +105,7 @@
                         </StackPanel>
                         <Separator/>
                     </StackPanel>
-                    <ListBox ItemsSource="{Binding SelectionFolderList}" BorderThickness="0" Margin="0,0,8,0">
+                    <ListBox ItemsSource="{Binding ProjectData.CurrentBackupProfile.RestoreFolderList}" BorderThickness="0" Margin="0,0,8,0">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <DockPanel LastChildFill="True">

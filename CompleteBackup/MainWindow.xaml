@@ -96,7 +96,7 @@
                         </RibbonGallery>
                     </RibbonSplitButton>
                 </RibbonGroup>
-                
+
                 <RibbonGroup Header="Profiles">
                     <ListView BorderThickness="0" ItemsSource="{Binding Project.SelectedBackupProject.BackupProfileList, Mode=OneWay}"
                              >
@@ -137,10 +137,12 @@
                                 </RibbonGalleryCategory.ItemTemplate>
                             </RibbonGalleryCategory>
                         </RibbonGallery>
-                        --><!--<RibbonButton SmallImageSource="/Resources/Ribbon/Images/options.png" Label="Manage Rules" KeyTip="M" 
+                        -->
+                    <!--<RibbonButton SmallImageSource="/Resources/Ribbon/Images/options.png" Label="Manage Rules" KeyTip="M" 
                                               Command="{Binding OpenSmartGraphExplorerWindowCommand}"/>
                         <RibbonButton SmallImageSource="/Resources/Icons/Menu/DeleteRed.ico" Label="Restore default rules" KeyTip="R" 
-                                              Command="{Binding RestoreDefaultCollectionsCommand}"/>--><!--
+                                              Command="{Binding RestoreDefaultCollectionsCommand}"/>-->
+                    <!--
                     </RibbonComboBox>-->
                     <!--<RibbonButton SmallImageSource="/Resources/Icons/document-import.ico" Label="Import" KeyTip="I" 
                                               Command="{Binding ImportSmartGraphCollectionCommand}"/>
@@ -271,7 +273,7 @@
                 <profile_view:ProfileListView/>
             </Grid>
 
-            <GroupBox DockPanel.Dock="Top" Header="Backup profile data" Margin="4,4,4,8">
+            <Border DockPanel.Dock="Top" Margin="0,0,0,16" Background="LightGray" Padding="4">
                 <!--<Border DockPanel.Dock="Top" BorderThickness="1" CornerRadius="4" BorderBrush="DarkGray" Margin="4,4,4,8" Padding="4">-->
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -294,7 +296,7 @@
                         </StackPanel>
                     </Grid>
                 </Grid>
-            </GroupBox>
+            </Border>
             <ContentControl Content="{Binding CurrentPageViewModel}"/>
         </DockPanel>
 
