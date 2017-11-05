@@ -357,7 +357,7 @@ namespace CompleteBackup.Models.backup
             foreach (var entry in sourceSubdirectoryEntries)
             {
                 string newPath = m_IStorage.Combine(path, entry);
-                FileAttributes attr = File.GetAttributes(newPath);
+                FileAttributes attr = m_IStorage.GetFileAttributes(newPath);
                 if (((attr & FileAttributes.System) != FileAttributes.System) &&
                     ((attr & FileAttributes.Hidden) != FileAttributes.Hidden))
                 {

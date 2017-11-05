@@ -423,9 +423,13 @@ namespace CompleteBackup.Models.Backup.Storage
 
                     // Cast the object to a DirectoryInfo object.
                     DirectoryInfo dInfo = (DirectoryInfo)i;
-
-                    // Iterate through all sub-directories.
-                    GetNumberOfFilesRec(dInfo.GetFileSystemInfos(), ref files, ref directories);
+                    try
+                    {
+                        // Iterate through all sub-directories.
+                        GetNumberOfFilesRec(dInfo.GetFileSystemInfos(), ref files, ref directories);
+                    }
+                    catch (PathTooLongException ex)
+                    { }
                 }
                 // Check to see if this is a FileInfo object.
                 else if (i is FileInfo)
