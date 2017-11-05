@@ -13,61 +13,27 @@ using System.Windows;
 
 namespace CompleteBackup.Models.backup
 {
-    public class DifferentialBackup : BackupManager
+    public class DifferentialBackup : FullBackup
     {
         public string LastSetPath;
 
         public DifferentialBackup(BackupProfileData profile, GenericStatusBarView progressBar = null) : base(profile, progressBar)
         {
         }
-//        public override string BackUpProfileSignature { get { return $"{BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile?.GUID.ToString("D")}-CBKP-INC"; } }
 
         public override void ProcessBackup()
         {
-            //var backupProfileList = new List<string>();
-            //string[] setEntries = m_IStorage.GetDirectories(TargetPath);
-            //foreach (var entry in setEntries.Where(s => m_IStorage.GetFileName(s).StartsWith(BackUpProfileSignature)))
-            //{
-            //    backupProfileList.Add(m_IStorage.GetFileName(entry));
-            //}
-
-            //var lastSet = backupProfileList.OrderBy(set => set).LastOrDefault();
-
             var lastSet = BackupManager.GetLastBackupSetName(m_Profile);
-
-//            TimeStamp = DateTime.Now;
-            var targetSet = GetTargetSetName();//  $"{m_Profile.BackupSignature}_{GetTimeStampString()}";
+            var targetSet = GetTargetSetName();
 
             m_BackupSessionHistory.Reset(GetTimeStamp());
 
             if (lastSet == null)
             {
-                var newTargetPath = m_IStorage.Combine(m_TargetBackupPath, targetSet);
+                string backupName = GetTargetSetName();
+                string targetSetPath = CreateNewBackupSetFolder(backupName);
 
-                m_IStorage.CreateDirectory(newTargetPath);
-
-                foreach (var item in m_SourceBackupPathList)
-                {
-                    var targetdirectoryName = m_IStorage.GetFileName(item.Path);
-                    var targetPath = m_IStorage.Combine(newTargetPath, targetdirectoryName);
-
-                    if (item.IsFolder)
-                    {
-                        ProcessNewBackupStep(item.Path, targetPath);
-                    }
-                    else
-                    {
-                        UpdateProgress("Running... ", ++ProcessFileCount);
-
-                        var fileName = m_IStorage.GetFileName(item.Path);
-                        // first set, copy to new set
-                        var targetFilePath = m_IStorage.Combine(newTargetPath, fileName);
-
-                        m_IStorage.CopyFile(item.Path, targetFilePath);
-
-                        m_BackupSessionHistory.AddNewFile(item.Path, targetFilePath);
-                    }
-                }
+                ProcessBackupRootFolders(targetSetPath);
 
                 BackupSessionHistory.SaveHistory(m_TargetBackupPath, targetSet, m_BackupSessionHistory);
             }
@@ -132,40 +98,6 @@ namespace CompleteBackup.Models.backup
                 BackupSessionHistory.SaveHistory(m_TargetBackupPath, targetSet, m_BackupSessionHistory);
             }
         }
-
-
-        public void ProcessNewBackupStep(string sourcePath, string currSetPath)
-        {
-            var sourceFileList = m_IStorage.GetFiles(sourcePath);
-
-            m_IStorage.CreateDirectory(currSetPath);
-
-            foreach (var file in sourceFileList)
-            {
-                UpdateProgress("Running... ", ++ProcessFileCount);
-
-                var fileName = m_IStorage.GetFileName(file);
-                // first set, copy to new set
-                var sourceFilePath = m_IStorage.Combine(sourcePath, fileName);
-                var targetFilePath = m_IStorage.Combine(currSetPath, fileName);
-
-                m_IStorage.CopyFile(sourceFilePath, targetFilePath);
-
-                m_BackupSessionHistory.AddNewFile(sourceFilePath, targetFilePath);
-            }
-
-            //Process directories
-            var sourceSubdirectoryEntriesList = GetDirectoriesNames(sourcePath);
-
-            foreach (string subdirectory in sourceSubdirectoryEntriesList)
-            {
-                string newSourceSetPath = m_IStorage.Combine(sourcePath, subdirectory);
-                string newCurrSetPath = m_IStorage.Combine(currSetPath, subdirectory);
-
-                ProcessNewBackupStep(newSourceSetPath, newCurrSetPath);
-            }
-        }
-
 
         public void ProcessIncrementalStep(string sourcePath, string currSetPath, string lastSetPath)
         {

@@ -137,7 +137,7 @@ namespace CompleteBackup.Models.Backup.Storage
             }
         }
 
-        public bool DeleteDirectory(string path, bool bRecursive)
+        public bool DeleteDirectory(string path, bool bRecursive = false)
         {
             if (path.Length < MAX_PATH_LENGTH)
             {
