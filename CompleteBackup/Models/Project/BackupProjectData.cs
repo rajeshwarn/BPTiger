@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace CompleteBackup.Models.Backup.Project
 {
@@ -12,14 +13,22 @@ namespace CompleteBackup.Models.Backup.Project
     {
         public BackupProjectData()
         {
-            FileSystemWatcherWorker = new CBFileSystemWatcherWorker(this);
+        }
+
+        public void Init()
+        {
+            foreach (var profile in BackupProfileList)
+            {
+                profile.Init();
+            }
         }
 
         public string Name { get; set; } = "My Project";
         public string Description { get { return Name; } set { } }
 
-        private Guid CurrentProfileGuid { get; set; } = Guid.Empty;
+        public Guid CurrentProfileGuid { get; set; } = Guid.Empty;
 
+        [XmlIgnore]
         public BackupProfileData CurrentBackupProfile { get { return BackupProfileList.FirstOrDefault(p => p.GUID == CurrentProfileGuid); }
 
             set {
@@ -33,8 +42,5 @@ namespace CompleteBackup.Models.Backup.Project
             } }
 
         public ObservableCollection<BackupProfileData> BackupProfileList { get; set; } = new ObservableCollection<BackupProfileData>();
-
-
-        public CBFileSystemWatcherWorker FileSystemWatcherWorker { get; private set; }
     }
 }

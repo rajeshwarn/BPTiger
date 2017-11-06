@@ -12,6 +12,13 @@ namespace CompleteBackup.Models.Backup.Storage
 {
     class NullStorage : IStorageInterface
     {
+        public bool? IsDriveReady(string path)
+        {
+            var drive = DriveInfo.GetDrives().Where(d => d.ToString().Contains(path)).FirstOrDefault();
+
+            return drive.IsReady;
+        }
+
         public string GetDirectoryName(string path)
         {
             if (path.Length < 260)
@@ -28,12 +35,29 @@ namespace CompleteBackup.Models.Backup.Storage
         public void CreateDirectory(string path, bool bCheckIfExist = false)
         {
         }
-        public bool GetNumberOfFiles(string path, ref long files, ref long directories)
-        {
-            DirectoryInfo dir = new DirectoryInfo(path);
-            FileSystemInfo[] fsInfo = dir.GetFileSystemInfos();
 
-            return GetNumberOfFiles(fsInfo, ref files, ref directories);
+        public long GetSizeOfFiles(string path)
+        {
+
+            return 0;
+        }
+
+        public long GetNumberOfDirectories(string path)
+        {
+            long directories = new DirectoryInfo(path).GetDirectories("*.*", SearchOption.AllDirectories).Sum(file => 1);
+
+            return directories;
+        }
+        public long GetNumberOfFiles(string path)
+        {
+            long size = new DirectoryInfo(path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
+
+            return size;
+            
+            //DirectoryInfo dir = new DirectoryInfo(path);
+            //FileSystemInfo[] fsInfo = dir.GetFileSystemInfos();
+
+            //return GetNumberOfFiles(fsInfo, ref files, ref directories);
         }
 
         public bool FileExists(string path)
@@ -89,40 +113,7 @@ namespace CompleteBackup.Models.Backup.Storage
             return (attr & FileAttributes.Directory) == FileAttributes.Directory;
         }
 
-        private bool GetNumberOfFiles(FileSystemInfo[] FSInfo, ref long files, ref long directories)
-        {
-            // Check the FSInfo parameter.
-            if (FSInfo == null)
-            {
-                throw new ArgumentNullException("FSInfo");
-            }
 
-            // Iterate through each item.
-            foreach (FileSystemInfo i in FSInfo)
-            {
-                // Check to see if this is a DirectoryInfo object.
-                if (i is DirectoryInfo)
-                {
-                    // Add one to the directory count.
-                    directories++;
-
-                    // Cast the object to a DirectoryInfo object.
-                    DirectoryInfo dInfo = (DirectoryInfo)i;
-
-                    // Iterate through all sub-directories.
-                    GetNumberOfFiles(dInfo.GetFileSystemInfos(), ref files, ref directories);
-                }
-                // Check to see if this is a FileInfo object.
-                else if (i is FileInfo)
-                {
-                    // Add one to the file count.
-                    files++;
-
-                }
-            }
-
-            return true;
-        }
         public List<string> GetFiles(string directory, string searchPattern = "*", SearchOption searchOption = SearchOption.TopDirectoryOnly)
         {
             var fileList = new List<string>();

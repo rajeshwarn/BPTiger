@@ -3,7 +3,10 @@
   <Profiles />
   <Settings>
     <Setting Name="BackupProjectList" Type="System.Collections.ObjectModel.ObservableCollection&lt;CompleteBackup.Models.Backup.Project.BackupProjectData&gt;" Scope="User">
-      <Value Project="(Default)" />
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ProjectName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ProjectName</Value>
     </Setting>
   </Settings>
 </SettingsFile>

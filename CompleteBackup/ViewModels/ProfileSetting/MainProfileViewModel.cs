@@ -62,13 +62,13 @@ namespace CompleteBackup.ViewModels
             // ProfileGaugeList.Add(new ChartGaugeView(Brushes.Red, Brushes.Green, Brushes.Yellow) { PumpNumber = 1, GaugeValue = 0.2F });
 
             //Register to get update event when backup profile changed
-            ProjectData.CurrentBackupProfile.RegisterEvent(ProfileDataUpdate);
+            ProjectData.CurrentBackupProfile.ProfileDataRefreshTask?.RegisterEvent(ProfileDataUpdate);
 
         }
 
         ~MainProfileViewModel()
         {
-            BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile.UnRegisterEvent(ProfileDataUpdate);
+            BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile.ProfileDataRefreshTask?.UnRegisterEvent(ProfileDataUpdate);
         }
 
         public BackupProjectRepository Repository { get; } = BackupProjectRepository.Instance;
@@ -77,7 +77,7 @@ namespace CompleteBackup.ViewModels
 
         private void ProfileDataUpdate(BackupProfileData profile)
         {
-            float ratio = (float)profile.m_BackupTargetUsedSizeNumber / (float)profile.m_BackupTargetDiskSizeNumber;
+            float ratio = (float)profile.BackupTargetUsedSizeNumber / (float)profile.BackupTargetDiskSizeNumber;
 
             ProfileGaugeList[0].GaugeValue = ratio;
         }

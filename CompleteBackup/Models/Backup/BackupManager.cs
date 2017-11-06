@@ -148,11 +148,8 @@ namespace CompleteBackup.Models.backup
             {
                 if (item.IsFolder)
                 {
-                    long files_ = 0;
-                    long directories_ = 0;
-                    m_IStorage.GetNumberOfFiles(item.Path, ref files_, ref directories_);
-                    directories += directories_;
-                    files += files_;
+                    files += m_IStorage.GetNumberOfFiles(item.Path);
+                    directories += m_IStorage.GetNumberOfDirectories(item.Path);
                 }
                 else
                 {

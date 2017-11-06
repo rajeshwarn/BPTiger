@@ -50,7 +50,7 @@ namespace CompleteBackup.Models.Backup.Storage
         {
             if (path.Length < MAX_PATH_LENGTH)
             {
-                return  Path.GetDirectoryName(path);
+                return Path.GetDirectoryName(path);
             }
             else
             {
@@ -308,7 +308,7 @@ namespace CompleteBackup.Models.Backup.Storage
 
         public bool MoveDirectory(string sourcePath, string targetPath, bool bCreateFolder = false)
         {
-          //  Trace.WriteLine($"Move Directory: {sourcePath} --> {targetPath}");
+            //  Trace.WriteLine($"Move Directory: {sourcePath} --> {targetPath}");
 
             bool bResult = false;
             if (bCreateFolder)
@@ -388,60 +388,86 @@ namespace CompleteBackup.Models.Backup.Storage
         public System.Drawing.Icon ExtractIconFromPath(string path)
         {
             Win32FileSystem.SHFILEINFO shinfo = new Win32FileSystem.SHFILEINFO();
-            Win32FileSystem.SHGetFileInfo(path,0, ref shinfo,
+            Win32FileSystem.SHGetFileInfo(path, 0, ref shinfo,
                                           (uint)System.Runtime.InteropServices.Marshal.SizeOf(shinfo),
                                           SHGFI_ICON | SHGFI_LARGEICON);
 
             return System.Drawing.Icon.FromHandle(shinfo.hIcon);
         }
 
-    #region misc helpers
-        public bool GetNumberOfFiles(string path, ref long files, ref long directories)
-        {
-            DirectoryInfo dir = new DirectoryInfo(path);
-            FileSystemInfo[] fsInfo = dir.GetFileSystemInfos();
 
-            return GetNumberOfFilesRec(fsInfo, ref files, ref directories);
+        public long GetSizeOfFiles(string path)
+        {
+            //item.NumberOfFiles = new DirectoryInfo(item.Path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => 1);
+            long size = new DirectoryInfo(path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
+
+            return size;
         }
 
-        private bool GetNumberOfFilesRec(FileSystemInfo[] FSInfo, ref long files, ref long directories)
+        public bool? IsDriveReady(string path)
         {
-            // Check the FSInfo parameter.
-            if (FSInfo == null)
-            {
-                throw new ArgumentNullException("FSInfo");
-            }
+            var drive = DriveInfo.GetDrives().Where(d => d.ToString().Contains(path)).FirstOrDefault();
 
-            // Iterate through each item.
-            foreach (FileSystemInfo i in FSInfo)
-            {
-                // Check to see if this is a DirectoryInfo object.
-                if (i is DirectoryInfo)
-                {
-                    // Add one to the directory count.
-                    directories++;
-
-                    // Cast the object to a DirectoryInfo object.
-                    DirectoryInfo dInfo = (DirectoryInfo)i;
-                    try
-                    {
-                        // Iterate through all sub-directories.
-                        GetNumberOfFilesRec(dInfo.GetFileSystemInfos(), ref files, ref directories);
-                    }
-                    catch (PathTooLongException ex)
-                    { }
-                }
-                // Check to see if this is a FileInfo object.
-                else if (i is FileInfo)
-                {
-                    // Add one to the file count.
-                    files++;
-
-                }
-            }
-
-            return true;
+            return drive.IsReady;
         }
+
+
+        #region misc helpers
+        public long GetNumberOfDirectories(string path)
+        {
+            long directories = new DirectoryInfo(path).GetDirectories("*.*", SearchOption.AllDirectories).Sum(file => 1);
+
+            return directories;
+        }
+        public long GetNumberOfFiles(string path)
+        {
+            long files = new DirectoryInfo(path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => 1);
+
+            return files;
+            //DirectoryInfo dir = new DirectoryInfo(path);
+            //FileSystemInfo[] fsInfo = dir.GetFileSystemInfos();
+
+            //return GetNumberOfFilesRec(fsInfo, ref files, ref directories);
+        }
+
+        //private bool GetNumberOfFilesRec(FileSystemInfo[] FSInfo, ref long files, ref long directories)
+        //{
+        //    // Check the FSInfo parameter.
+        //    if (FSInfo == null)
+        //    {
+        //        throw new ArgumentNullException("FSInfo");
+        //    }
+
+        //    // Iterate through each item.
+        //    foreach (FileSystemInfo i in FSInfo)
+        //    {
+        //        // Check to see if this is a DirectoryInfo object.
+        //        if (i is DirectoryInfo)
+        //        {
+        //            // Add one to the directory count.
+        //            directories++;
+
+        //            // Cast the object to a DirectoryInfo object.
+        //            DirectoryInfo dInfo = (DirectoryInfo)i;
+        //            try
+        //            {
+        //                // Iterate through all sub-directories.
+        //                GetNumberOfFilesRec(dInfo.GetFileSystemInfos(), ref files, ref directories);
+        //            }
+        //            catch (PathTooLongException ex)
+        //            { }
+        //        }
+        //        // Check to see if this is a FileInfo object.
+        //        else if (i is FileInfo)
+        //        {
+        //            // Add one to the file count.
+        //            files++;
+
+        //        }
+        //    }
+
+        //    return true;
+        //}
 
         #endregion
     }

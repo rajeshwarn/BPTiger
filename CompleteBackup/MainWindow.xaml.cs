@@ -26,14 +26,8 @@ namespace CompleteBackup
         {
             InitializeComponent();
 
-            var profile = BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile;
-            profile?.UpdateProfileProperties();
-
-            var fileSystemWatcher = BackupProjectRepository.Instance.SelectedBackupProject?.FileSystemWatcherWorker;
-            if (!fileSystemWatcher.IsBusy)
-            {
-                fileSystemWatcher.RunWorkerAsync();
-            }
+            var project = BackupProjectRepository.Instance.SelectedBackupProject;
+            project?.Init();
         }
 
     private void BackupTypeRibbonGallery_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)

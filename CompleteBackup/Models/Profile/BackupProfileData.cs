@@ -76,10 +76,24 @@ namespace CompleteBackup.Models.Backup.Profile
 
         public BackupProfileData()
         {
-            InitStorageDataUpdaterTask();
         }
 
-        
+        public void Init()
+        {
+            FileSystemWatcherWorker = new CBFileSystemWatcherWorker(this);
+
+            if (!FileSystemWatcherWorker.IsBusy)
+            {
+                FileSystemWatcherWorker.RunWorkerAsync();
+            }
+
+            ProfileDataRefreshTask = new ProfileDataRefreshTask(this);
+        }
+
+        [XmlIgnore]
+        public CBFileSystemWatcherWorker FileSystemWatcherWorker { get; private set; }
+
+
         private string m_CurrentBackupFile;
         [XmlIgnore]
         public string CurrentBackupFile { get { return m_CurrentBackupFile; } set { m_CurrentBackupFile = value; OnPropertyChanged(); } }
@@ -137,24 +151,11 @@ namespace CompleteBackup.Models.Backup.Profile
             //BackupFolderList.Clear();
         }
 
+        [XmlIgnore]
+        public ProfileDataRefreshTask ProfileDataRefreshTask { get; private set; }
 
         [XmlIgnore]
         public ObservableCollection<FolderData> RestoreFolderList { get; set; } = new ObservableCollection<FolderData>();
-
-
-        public delegate void ProfileDataUpdateEvent(BackupProfileData tranData);
-        public event ProfileDataUpdateEvent m_ProfileDataUpdateEventCallback;
-
-        public void RegisterEvent(ProfileDataUpdateEvent callback)
-        {
-            m_ProfileDataUpdateEventCallback += callback;
-        }
-
-        public void UnRegisterEvent(ProfileDataUpdateEvent callback)
-        {
-            m_ProfileDataUpdateEventCallback -= callback;
-        }
-
 
         [XmlIgnore]
         public bool IsValidProfileFolder { get { return GetProfileTargetFolderStatus(m_TargetBackupFolder) != ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile; } }
@@ -357,190 +358,190 @@ namespace CompleteBackup.Models.Backup.Profile
 
         //==================================
 
-        BackgroundWorker m_StorageDataUpdaterTask = new BackgroundWorker() { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
+        //BackgroundWorker m_StorageDataUpdaterTask = new BackgroundWorker() { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
 
         
 
-        void InitStorageDataUpdaterTask()
-        {
-            m_StorageDataUpdaterTask.DoWork += (sender, e) =>
-            {
-                try
-                {
-                    foreach (var item in BackupFolderList)
-                    {
-                        if (item.IsFolder)
-                        {
-                            item.IsAvailable = m_IStorage.DirectoryExists(item.Path);
-                        }
-                        else
-                        {
-                            item.IsAvailable = m_IStorage.FileExists(item.Path);
-                        }
-                    }
+        //void InitStorageDataUpdaterTask()
+        //{
+        //    m_StorageDataUpdaterTask.DoWork += (sender, e) =>
+        //    {
+        //        try
+        //        {
+        //            foreach (var item in BackupFolderList)
+        //            {
+        //                if (item.IsFolder)
+        //                {
+        //                    item.IsAvailable = m_IStorage.DirectoryExists(item.Path);
+        //                }
+        //                else
+        //                {
+        //                    item.IsAvailable = m_IStorage.FileExists(item.Path);
+        //                }
+        //            }
 
-                    Application.Current.Dispatcher.Invoke(new Action(() =>
-                    {
-                        BackupTargetDiskSize = "n/a";
-                        BackupTargetUsedSize = "n/a";
-                        BackupTargetFreeSize = "n/a";
-                    }));
+        //            Application.Current.Dispatcher.Invoke(new Action(() =>
+        //            {
+        //                BackupTargetDiskSize = "n/a";
+        //                BackupTargetUsedSize = "n/a";
+        //                BackupTargetFreeSize = "n/a";
+        //            }));
 
-                    //Source folders sizes and number of files
-                    BackupSourceFilesNumber = 0;
-                    BackupSourceFoldersSize = 0;
-                    foreach (var item in BackupFolderList.Where(i => i.IsAvailable))
-                    {
-                        if (item.IsFolder)
-                        {
-                            item.NumberOfFiles = new DirectoryInfo(item.Path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => 1);
-                            item.TotalSize = new DirectoryInfo(item.Path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
-                            Application.Current.Dispatcher.Invoke(new Action(() =>
-                            {
-                                BackupSourceFilesNumber += item.NumberOfFiles;
-                                BackupSourceFoldersSize += item.TotalSize;
-                            }));
-                        }
-                        else
-                        {
-                            Application.Current.Dispatcher.Invoke(new Action(() =>
-                            {
-                                BackupSourceFilesNumber++;
-                            }));
-                        }
-                    }
-
-
-                    //Restore folders sizes and number of files
-                    RestoreSourceFilesNumber = 0;
-                    RestoreSourceFoldersSize = 0;
-                    foreach (var item in RestoreFolderList)
-                    {
-                        if (item.IsFolder)
-                        {
-                            item.NumberOfFiles = new DirectoryInfo(item.Path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => 1);
-                            item.TotalSize = new DirectoryInfo(item.Path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
-                            Application.Current.Dispatcher.Invoke(new Action(() =>
-                            {
-                                RestoreSourceFilesNumber += item.NumberOfFiles;
-                                RestoreSourceFoldersSize += item.TotalSize;
-                            }));
-                        }
-                        else
-                        {
-                            Application.Current.Dispatcher.Invoke(new Action(() =>
-                            {
-                                RestoreSourceFilesNumber++;
-                            }));
-                        }
-                    }
+        //            //Source folders sizes and number of files
+        //            BackupSourceFilesNumber = 0;
+        //            BackupSourceFoldersSize = 0;
+        //            foreach (var item in BackupFolderList.Where(i => i.IsAvailable))
+        //            {
+        //                if (item.IsFolder)
+        //                {
+        //                    item.NumberOfFiles = new DirectoryInfo(item.Path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => 1);
+        //                    item.TotalSize = new DirectoryInfo(item.Path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
+        //                    Application.Current.Dispatcher.Invoke(new Action(() =>
+        //                    {
+        //                        BackupSourceFilesNumber += item.NumberOfFiles;
+        //                        BackupSourceFoldersSize += item.TotalSize;
+        //                    }));
+        //                }
+        //                else
+        //                {
+        //                    Application.Current.Dispatcher.Invoke(new Action(() =>
+        //                    {
+        //                        BackupSourceFilesNumber++;
+        //                    }));
+        //                }
+        //            }
 
 
-                    if (TargetBackupFolder != null)
-                    {
-                        //last backup time
-                        DateTime? lastTime = null;
-                        var lastSet = BackupManager.GetLastBackupSetName(this);
-                        if (lastSet != null)
-                        {
-                            var sessionHistory = BackupSessionHistory.LoadHistory(TargetBackupFolder, lastSet);
-                            lastTime = sessionHistory?.TimeStamp;
-                            Application.Current.Dispatcher.Invoke(new Action(() =>
-                            {
-                                LastBackupDateTime = lastTime;
-                            }));
-                        }
-                    }
+        //            //Restore folders sizes and number of files
+        //            RestoreSourceFilesNumber = 0;
+        //            RestoreSourceFoldersSize = 0;
+        //            foreach (var item in RestoreFolderList)
+        //            {
+        //                if (item.IsFolder)
+        //                {
+        //                    item.NumberOfFiles = new DirectoryInfo(item.Path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => 1);
+        //                    item.TotalSize = new DirectoryInfo(item.Path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
+        //                    Application.Current.Dispatcher.Invoke(new Action(() =>
+        //                    {
+        //                        RestoreSourceFilesNumber += item.NumberOfFiles;
+        //                        RestoreSourceFoldersSize += item.TotalSize;
+        //                    }));
+        //                }
+        //                else
+        //                {
+        //                    Application.Current.Dispatcher.Invoke(new Action(() =>
+        //                    {
+        //                        RestoreSourceFilesNumber++;
+        //                    }));
+        //                }
+        //            }
 
-                    if (m_TargetBackupFolder != null)
-                    {
-                        m_BackupTargetDiskSizeNumber = 0;
-                        //Target disk size
-                        string rootDrive = Path.GetPathRoot(m_TargetBackupFolder);
-                        foreach (DriveInfo drive in DriveInfo.GetDrives().Where(d => d.ToString().Contains(rootDrive)))
-                        {
-                            if (drive.IsReady)
-                            {
-                                m_BackupTargetDiskSizeNumber = drive.TotalSize;
-                                Application.Current.Dispatcher.Invoke(new Action(() =>
-                                {
-                                    BackupTargetDiskSize = FileFolderSizeHelper.GetNumberSizeString(m_BackupTargetDiskSizeNumber);
-                                }));
 
-                                break;
-                            }
-                        }
+        //            if (TargetBackupFolder != null)
+        //            {
+        //                //last backup time
+        //                DateTime? lastTime = null;
+        //                var lastSet = BackupManager.GetLastBackupSetName(this);
+        //                if (lastSet != null)
+        //                {
+        //                    var sessionHistory = BackupSessionHistory.LoadHistory(TargetBackupFolder, lastSet);
+        //                    lastTime = sessionHistory?.TimeStamp;
+        //                    Application.Current.Dispatcher.Invoke(new Action(() =>
+        //                    {
+        //                        LastBackupDateTime = lastTime;
+        //                    }));
+        //                }
+        //            }
 
-                        m_BackupTargetUsedSizeNumber = 0;
-                        //Target used Space
-                        m_BackupTargetUsedSizeNumber = new DirectoryInfo(m_TargetBackupFolder).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
-                        Application.Current.Dispatcher.Invoke(new Action(() =>
-                        {
-                            BackupTargetUsedSize = FileFolderSizeHelper.GetNumberSizeString(m_BackupTargetUsedSizeNumber);
-                        }));
+        //            if (m_TargetBackupFolder != null)
+        //            {
+        //                m_BackupTargetDiskSizeNumber = 0;
+        //                //Target disk size
+        //                string rootDrive = Path.GetPathRoot(m_TargetBackupFolder);
+        //                foreach (DriveInfo drive in DriveInfo.GetDrives().Where(d => d.ToString().Contains(rootDrive)))
+        //                {
+        //                    if (drive.IsReady)
+        //                    {
+        //                        m_BackupTargetDiskSizeNumber = drive.TotalSize;
+        //                        Application.Current.Dispatcher.Invoke(new Action(() =>
+        //                        {
+        //                            BackupTargetDiskSize = FileFolderSizeHelper.GetNumberSizeString(m_BackupTargetDiskSizeNumber);
+        //                        }));
 
-                        //Target free space
-                        m_BackupTargetFreeSizeNumber = 0;
-                        rootDrive = Path.GetPathRoot(m_TargetBackupFolder);
-                        foreach (DriveInfo drive in DriveInfo.GetDrives().Where(d => d.ToString().Contains(rootDrive)))
-                        {
-                            if (drive.IsReady)
-                            {
-                                m_BackupTargetFreeSizeNumber = drive.AvailableFreeSpace;
-                                //m_BackupTargetFreeSizeNumber = drive.TotalFreeSpace;
-                                Application.Current.Dispatcher.Invoke(new Action(() =>
-                                {
-                                    BackupTargetFreeSize = FileFolderSizeHelper.GetNumberSizeString(m_BackupTargetFreeSizeNumber);
-                                }));
+        //                        break;
+        //                    }
+        //                }
 
-                                break;
-                            }
-                        }
-                    }
+        //                m_BackupTargetUsedSizeNumber = 0;
+        //                //Target used Space
+        //                m_BackupTargetUsedSizeNumber = new DirectoryInfo(m_TargetBackupFolder).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
+        //                Application.Current.Dispatcher.Invoke(new Action(() =>
+        //                {
+        //                    BackupTargetUsedSize = FileFolderSizeHelper.GetNumberSizeString(m_BackupTargetUsedSizeNumber);
+        //                }));
 
-                    ////Source Foldes Size
-                    //m_BackupSourceFoldersSizeNumber = 0;
-                    //foreach (var item in FolderList)
-                    //{
-                    //    m_BackupSourceFoldersSizeNumber += new DirectoryInfo(item.Path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
-                    //    Application.Current.Dispatcher.Invoke(new Action(() =>
-                    //    {
-                    //        BackupSourceFoldersSize = FileFolderSizeHelper.GetNumberSizeString(m_BackupSourceFoldersSizeNumber);
-                    //    }));
-                    //}
+        //                //Target free space
+        //                m_BackupTargetFreeSizeNumber = 0;
+        //                rootDrive = Path.GetPathRoot(m_TargetBackupFolder);
+        //                foreach (DriveInfo drive in DriveInfo.GetDrives().Where(d => d.ToString().Contains(rootDrive)))
+        //                {
+        //                    if (drive.IsReady)
+        //                    {
+        //                        m_BackupTargetFreeSizeNumber = drive.AvailableFreeSpace;
+        //                        //m_BackupTargetFreeSizeNumber = drive.TotalFreeSpace;
+        //                        Application.Current.Dispatcher.Invoke(new Action(() =>
+        //                        {
+        //                            BackupTargetFreeSize = FileFolderSizeHelper.GetNumberSizeString(m_BackupTargetFreeSizeNumber);
+        //                        }));
 
-                    m_ProfileDataUpdateEventCallback(this);
+        //                        break;
+        //                    }
+        //                }
+        //            }
+
+        //            ////Source Foldes Size
+        //            //m_BackupSourceFoldersSizeNumber = 0;
+        //            //foreach (var item in FolderList)
+        //            //{
+        //            //    m_BackupSourceFoldersSizeNumber += new DirectoryInfo(item.Path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
+        //            //    Application.Current.Dispatcher.Invoke(new Action(() =>
+        //            //    {
+        //            //        BackupSourceFoldersSize = FileFolderSizeHelper.GetNumberSizeString(m_BackupSourceFoldersSizeNumber);
+        //            //    }));
+        //            //}
+
+        //            m_ProfileDataUpdateEventCallback(this);
                     
-                    //update data to persistent storage
-                    BackupProjectRepository.Instance.SaveProject();
-                }
-                catch (TaskCanceledException ex)
-                {
-                    Trace.WriteLine($"StorageDataUpdaterTask exception: {ex.Message}");
-                    e.Result = $"StorageDataUpdaterTaskexception: {ex.Message}";
-                    throw (ex);
-                }
-            };
-        }
+        //            //update data to persistent storage
+        //            BackupProjectRepository.Instance.SaveProject();
+        //        }
+        //        catch (TaskCanceledException ex)
+        //        {
+        //            Trace.WriteLine($"StorageDataUpdaterTask exception: {ex.Message}");
+        //            e.Result = $"StorageDataUpdaterTaskexception: {ex.Message}";
+        //            throw (ex);
+        //        }
+        //    };
+        //}
 
 
         public void UpdateProfileProperties()
         {
-            if (!m_StorageDataUpdaterTask.IsBusy)
+            if (ProfileDataRefreshTask?.IsBusy == false)
             {
-                m_StorageDataUpdaterTask.RunWorkerAsync();
+                ProfileDataRefreshTask.RunWorkerAsync();
             }                
         }
 
-        public long m_BackupTargetDiskSizeNumber { get; set; } = 0;
+        public long BackupTargetDiskSizeNumber { get; set; } = 0;
         private string m_BackupTargetDiskSize = "Data Not available";
         public string BackupTargetDiskSize { get { return m_BackupTargetDiskSize; } set { m_BackupTargetDiskSize = value; OnPropertyChanged(); } }
 
-        public long m_BackupTargetUsedSizeNumber { get; set; } = 0;
+        public long BackupTargetUsedSizeNumber { get; set; } = 0;
         private string m_BackupTargetUsedSize = "Data Not available";
         public string BackupTargetUsedSize { get { return m_BackupTargetUsedSize; } set { m_BackupTargetUsedSize = value; OnPropertyChanged(); } }
 
-        public long m_BackupTargetFreeSizeNumber { get; set; } = 0;
+        public long BackupTargetFreeSizeNumber { get; set; } = 0;
         private string m_BackupTargetFreeSize = "Data Not available";
         public string BackupTargetFreeSize { get { return m_BackupTargetFreeSize; } set { m_BackupTargetFreeSize = value; OnPropertyChanged(); } }
 

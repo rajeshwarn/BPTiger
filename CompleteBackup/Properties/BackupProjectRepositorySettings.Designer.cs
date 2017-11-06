@@ -33,5 +33,17 @@ namespace CompleteBackup.Properties {
                 this["BackupProjectList"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("ProjectName")]
+        public string ProjectName {
+            get {
+                return ((string)(this["ProjectName"]));
+            }
+            set {
+                this["ProjectName"] = value;
+            }
+        }
     }
 }

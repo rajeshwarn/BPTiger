@@ -1,4 +1,5 @@
-﻿using CompleteBackup.Models.Backup.Project;
+﻿using CompleteBackup.Models.Backup.Profile;
+using CompleteBackup.Models.Backup.Project;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,7 +25,7 @@ namespace CompleteBackup.Models.Backup
 
         List<WatcherItemData> WatcherItemDataList = new List<WatcherItemData>();
 
-        public CBFileSystemWatcherWorker(BackupProjectData project)
+        public CBFileSystemWatcherWorker(BackupProfileData profile)
         {
             WorkerReportsProgress = true;
             WorkerSupportsCancellation = true;
@@ -35,7 +36,12 @@ namespace CompleteBackup.Models.Backup
                 {
                     WatcherItemDataList.Clear();
 
-                    RunTask(@"E:\test2\source");
+                    foreach (var backupItem in profile.BackupFolderList)
+                    {
+                        RunTask(backupItem.Path);
+                    }
+
+                    //                    RunTask(@"E:\test2\source");
                 }
                 catch (TaskCanceledException ex)
                 {

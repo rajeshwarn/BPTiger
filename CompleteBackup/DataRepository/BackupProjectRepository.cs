@@ -17,10 +17,10 @@ namespace CompleteBackup.DataRepository
         static public BackupProjectRepository Instance { get; private set; } = new BackupProjectRepository();
         private BackupProjectRepository()
         {
-            LoadProjects();
+           LoadProjects();
         }
 
-        private ObservableCollection<BackupProjectData> BackupProjectList { get; set; } = new ObservableCollection<BackupProjectData>();
+        private ObservableCollection<BackupProjectData> BackupProjectList { get; set; }// = new ObservableCollection<BackupProjectData>();
 
         private BackupProjectData _SelectedBackupProject;
         public BackupProjectData SelectedBackupProject { get { return _SelectedBackupProject; } set { _SelectedBackupProject = value; OnPropertyChanged(); } }
@@ -30,7 +30,44 @@ namespace CompleteBackup.DataRepository
         {
             try
             {
+//                try
+                {
+                    Properties.BackupProjectRepositorySettings.Default.Reload();
+                }
+                //catch (ConfigurationErrorsException ex)
+                //{ //(requires System.Configuration)
+                //    string filename = ((ConfigurationErrorsException)ex.InnerException).Filename;
+
+                //    if (MessageBox.Show("<ProgramName> has detected that your" +
+                //                          " user settings file has become corrupted. " +
+                //                          "This may be due to a crash or improper exiting" +
+                //                          " of the program. <ProgramName> must reset your " +
+                //                          "user settings in order to continue.\n\nClick" +
+                //                          " Yes to reset your user settings and continue.\n\n" +
+                //                          "Click No if you wish to attempt manual repair" +
+                //                          " or to rescue information before proceeding.",
+                //                          "Corrupt user settings",
+                //                          MessageBoxButton.YesNo,
+                //                          MessageBoxImage.Error) == MessageBoxResult.Yes)
+                //    {
+                //        File.Delete(filename);
+                //        Settings.Default.Reload();
+                //        // you could optionally restart the app instead
+                //    }
+                //    else
+                //        Process.GetCurrentProcess().Kill();
+                //    // avoid the inevitable crash
+                //}
+
+
+                string pname = Properties.BackupProjectRepositorySettings.Default.ProjectName;
+
                 BackupProjectList = Properties.BackupProjectRepositorySettings.Default.BackupProjectList;
+
+                Properties.BackupProjectRepositorySettings.Default.ProjectName = "guy";
+                Properties.BackupProjectRepositorySettings.Default.BackupProjectList = new ObservableCollection<BackupProjectData>();
+                Properties.BackupProjectRepositorySettings.Default.Save();
+
             }
             catch (Exception ex)
             {
@@ -83,8 +120,8 @@ namespace CompleteBackup.DataRepository
 
                 BackupProjectList[0].CurrentBackupProfile = BackupProjectList[0].BackupProfileList[0];
 
-                Properties.BackupProjectRepositorySettings.Default.Reset();
-                Properties.BackupProjectRepositorySettings.Default.BackupProjectList = BackupProjectList;
+//                Properties.BackupProjectRepositorySettings.Default.Reset();
+                Properties.BackupProjectRepositorySettings.Default.Upgrade();
                 SaveProject();            
             }
 

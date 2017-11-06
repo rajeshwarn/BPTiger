@@ -62,13 +62,14 @@
     </ApplicationDefinition>
     <Compile Include="DataRepository\BackupProjectRepository.cs" />
     <Compile Include="Models\Backup\BackupFactory.cs" />
-    <Compile Include="Models\Backup\CBFileSystemWatcherWorker.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Models\Backup\CBFileSystemWatcherWorker.cs" />
     <Compile Include="Models\Backup\IncrementalFullBackup.cs" />
     <Compile Include="Models\Backup\History\BackupSessionHistory.cs" />
     <Compile Include="Models\FolderSelection\BackupFolderMenuItem.cs" />
     <Compile Include="Models\FolderSelection\RestoreFolderMenuItem.cs" />
+    <Compile Include="Models\Profile\ProfileDataRefreshTask.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Models\Profile\BackupTask.cs">
       <SubType>Component</SubType>
     </Compile>

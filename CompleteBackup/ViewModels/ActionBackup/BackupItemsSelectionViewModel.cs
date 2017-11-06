@@ -49,7 +49,7 @@ namespace CompleteBackup.ViewModels
         public BackupItemsSelectionViewModel()
         {
             //Register to get update event when backup profile changed
-            BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile.RegisterEvent(ProfileDataUpdate);
+            BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile.ProfileDataRefreshTask?.RegisterEvent(ProfileDataUpdate);
         }
     }
 }
