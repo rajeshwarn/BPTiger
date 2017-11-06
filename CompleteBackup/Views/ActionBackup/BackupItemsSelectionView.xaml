@@ -78,7 +78,8 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DockPanel.Style>                    <StackPanel DockPanel.Dock="Right" Orientation="Vertical">
+                    </DockPanel.Style>
+                    <StackPanel DockPanel.Dock="Right" Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
                             <ListBox ItemsSource="{Binding ProjectData.CurrentBackupProfile.BackupFolderList}" BorderThickness="0" HorizontalContentAlignment="Right">
                                 <ListBox.ItemTemplate>

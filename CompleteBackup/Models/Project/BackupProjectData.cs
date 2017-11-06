@@ -12,7 +12,7 @@ namespace CompleteBackup.Models.Backup.Project
     {
         public BackupProjectData()
         {
-
+            FileSystemWatcherWorker = new CBFileSystemWatcherWorker(this);
         }
 
         public string Name { get; set; } = "My Project";
@@ -33,5 +33,8 @@ namespace CompleteBackup.Models.Backup.Project
             } }
 
         public ObservableCollection<BackupProfileData> BackupProfileList { get; set; } = new ObservableCollection<BackupProfileData>();
+
+
+        public CBFileSystemWatcherWorker FileSystemWatcherWorker { get; private set; }
     }
 }

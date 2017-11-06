@@ -62,7 +62,9 @@
     </ApplicationDefinition>
     <Compile Include="DataRepository\BackupProjectRepository.cs" />
     <Compile Include="Models\Backup\BackupFactory.cs" />
-    <Compile Include="Models\Backup\FileSystemWatcher.cs" />
+    <Compile Include="Models\Backup\CBFileSystemWatcherWorker.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Models\Backup\IncrementalFullBackup.cs" />
     <Compile Include="Models\Backup\History\BackupSessionHistory.cs" />
     <Compile Include="Models\FolderSelection\BackupFolderMenuItem.cs" />
