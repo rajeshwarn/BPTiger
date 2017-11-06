@@ -1,7 +1,8 @@
 ﻿<UserControl x:Class="CompleteBackup.Views.MainProfileView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:System="clr-namespace:System;assembly=mscorlib"             
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:view_model="clr-namespace:CompleteBackup.ViewModels"
              xmlns:local="clr-namespace:CompleteBackup.Views.Profile"
@@ -10,7 +11,14 @@
     <UserControl.DataContext>
         <view_model:MainProfileViewModel/>
     </UserControl.DataContext>
-
+    <UserControl.Resources>
+        <ObjectDataProvider x:Key="BackupRunTypeEnum" MethodName="GetValues"
+                            ObjectType="{x:Type System:Enum}">
+            <!--<ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="StyleAlias:EffectStyle"/>
+            </ObjectDataProvider.MethodParameters>-->
+        </ObjectDataProvider>
+    </UserControl.Resources>
     <Grid>
         <!--<Border BorderThickness="1" CornerRadius="4" BorderBrush="DarkGray" Margin="0,0,0,0" Padding="4">-->
         <StackPanel Orientation="Vertical">
@@ -56,11 +64,27 @@
                 <TextBlock Text="Target free space: "></TextBlock>
                 <TextBlock Text="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.BackupTargetFreeSize}" ></TextBlock>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                 <TextBlock Text="Target drive size: "></TextBlock>
                 <TextBlock Text="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.BackupTargetDiskSize}" ></TextBlock>
             </StackPanel>
 
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                <TextBlock Text="Back up will run: "></TextBlock>
+                <!--<RadioButton GroupName="BackupRunType" IsChecked="{Binding IsChecked}">
+                    <WrapPanel>
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="{Binding ImageName}" Height="16" />
+                                <TextBlock Text="{Binding Name}" FontStyle="Italic"/>
+                            </StackPanel>
+                            <TextBlock Text="{Binding Description}" FontStyle="Italic"/>
+                        </StackPanel>
+                    </WrapPanel>
+                </RadioButton>-->
+                <ComboBox ItemsSource="{Binding BackupRunTypeList}" SelectedItem="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.BackupRunType}" >
+                </ComboBox>
+            </StackPanel>
 
             <Expander Grid.Row="0" Header="Utilization"  IsExpanded="False">
                 <ListBox ToolTip="Utilization" ItemsSource="{Binding ProfileGaugeList}"

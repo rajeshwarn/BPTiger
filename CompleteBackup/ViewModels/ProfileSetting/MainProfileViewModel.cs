@@ -18,6 +18,9 @@ namespace CompleteBackup.ViewModels
         public BackupProjectData ProjectData { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject;
         public BackupProfileData ProfileData { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile;
 
+
+        public List<BackupRunTypeEnum> BackupRunTypeList { get; set; } = new List<BackupRunTypeEnum> { BackupRunTypeEnum.Always, BackupRunTypeEnum.Manual };
+
         public List<BackupTypeData> BackupTypeList { get; set; } = ProfileHelper.BackupTypeList;
 
 

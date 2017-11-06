@@ -20,6 +20,11 @@ using System.Xml.Serialization;
 
 namespace CompleteBackup.Models.Backup.Profile
 {
+    public enum BackupRunTypeEnum
+    {
+        Always,
+        Manual,
+    }
     public enum BackupTypeEnum
     {
         Full,
@@ -94,6 +99,10 @@ namespace CompleteBackup.Models.Backup.Profile
         [XmlIgnore]
         public string BackupTypeImage { get { return ProfileHelper.BackupTypeList.FirstOrDefault(i => i.BackupType == m_BackupType)?.ImageName; } set { } }
 
+
+        
+        private BackupRunTypeEnum m_BackupRunType { get; set; } = BackupRunTypeEnum.Always;
+        public BackupRunTypeEnum BackupRunType { get { return m_BackupRunType; } set { m_BackupRunType = value; OnPropertyChanged(); } }
 
         private BackupTypeEnum m_BackupType { get; set; } = BackupTypeEnum.Full;
         public BackupTypeEnum BackupType { get { return m_BackupType; } set { m_BackupType = value; OnPropertyChanged(); OnPropertyChanged("BackupTypeName"); OnPropertyChanged("BackupTypeImage"); } }
