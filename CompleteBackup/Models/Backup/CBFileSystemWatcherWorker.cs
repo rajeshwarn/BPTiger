@@ -11,9 +11,18 @@ using System.Threading.Tasks;
 
 namespace CompleteBackup.Models.Backup
 {
+    public class WatcherItemData
+    {
+        public DateTime Time { get; set; }
+        public FileSystemEventArgs EventArgs { get; set; }
+    }
+
+
     public class CBFileSystemWatcherWorker : BackgroundWorker
     {
         private CBFileSystemWatcherWorker() { }
+
+        List<WatcherItemData> WatcherItemDataList = new List<WatcherItemData>();
 
         public CBFileSystemWatcherWorker(BackupProjectData project)
         {
@@ -24,6 +33,8 @@ namespace CompleteBackup.Models.Backup
             {
                 try
                 {
+                    WatcherItemDataList.Clear();
+
                     RunTask(@"E:\test2\source");
                 }
                 catch (TaskCanceledException ex)
@@ -64,8 +75,8 @@ namespace CompleteBackup.Models.Backup
 
             // Add event handlers.
             watcher.Changed += new FileSystemEventHandler(OnChanged);
-            watcher.Created += new FileSystemEventHandler(OnChanged);
-            watcher.Deleted += new FileSystemEventHandler(OnChanged);
+            watcher.Created += new FileSystemEventHandler(OnCreated);
+            watcher.Deleted += new FileSystemEventHandler(OnDeleted);
             watcher.Renamed += new RenamedEventHandler(OnRenamed);
 
             // Begin watching.
@@ -77,15 +88,27 @@ namespace CompleteBackup.Models.Backup
         }
 
         // Define the event handlers.
+        private void OnCreated(object source, FileSystemEventArgs e)
+        {
+            WatcherItemDataList.Add(new WatcherItemData { EventArgs = e, Time = DateTime.Now});
+            Console.WriteLine("File: " + e.FullPath + " " + e.ChangeType);
+        }
+
         private void OnChanged(object source, FileSystemEventArgs e)
         {
-            // Specify what is done when a file is changed, created, or deleted.
+            WatcherItemDataList.Add(new WatcherItemData { EventArgs = e, Time = DateTime.Now });
+            Console.WriteLine("File: " + e.FullPath + " " + e.ChangeType);
+        }
+
+        private void OnDeleted(object source, FileSystemEventArgs e)
+        {
+            WatcherItemDataList.Add(new WatcherItemData { EventArgs = e, Time = DateTime.Now });
             Console.WriteLine("File: " + e.FullPath + " " + e.ChangeType);
         }
 
         private void OnRenamed(object source, RenamedEventArgs e)
         {
-            // Specify what is done when a file is renamed.
+            WatcherItemDataList.Add(new WatcherItemData { EventArgs = e, Time = DateTime.Now });
             Console.WriteLine("File: {0} renamed to {1}", e.OldFullPath, e.FullPath);
         }
     }
