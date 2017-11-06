@@ -90,6 +90,13 @@ namespace CompleteBackup.Models.Backup.Profile
             ProfileDataRefreshTask = new ProfileDataRefreshTask(this);
         }
 
+
+        //Policy
+
+        //Time to backup new changes in seconds
+        public long BackupNewChangesTimeInterval { get; set; } = 60;
+
+
         [XmlIgnore]
         public CBFileSystemWatcherWorker FileSystemWatcherWorker { get; private set; }
 
@@ -180,7 +187,7 @@ namespace CompleteBackup.Models.Backup.Profile
         public bool IsBackupWorkerPaused { get { return BackupWorkerTask != null && BackupWorkerTask.IsPaused == true; } set { BackupWorkerTask.IsPaused = value; OnPropertyChanged(); } }
 
 
-        public void StartBackup()
+        public void StartBackup(bool bFullBackupScan)
         {
             if (BackupWorkerTask != null && BackupWorkerTask.IsBusy)
             {
@@ -188,7 +195,7 @@ namespace CompleteBackup.Models.Backup.Profile
             }
             else
             {
-                BackupWorkerTask = new BackupWorker(this);
+                BackupWorkerTask = new BackupWorker(this, bFullBackupScan);
                 BackupWorkerTask.RunWorkerAsync();
             }
         }

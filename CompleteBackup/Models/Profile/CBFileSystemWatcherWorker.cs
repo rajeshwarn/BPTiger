@@ -17,6 +17,7 @@ namespace CompleteBackup.Models.Backup
     {
         public DateTime Time { get; set; }
         public WatcherChangeTypes ChangeType { get; set; }
+        public string OldPath { get; set; }
         public string FullPath { get; set; }
         public string Name { get; set; }
 
@@ -42,7 +43,7 @@ namespace CompleteBackup.Models.Backup
 
                 try
                 {
-                    //watchList.Clear();
+                    watchList.Clear();
 
                     foreach (var backupItem in profile.BackupFolderList)
                     {
@@ -78,7 +79,7 @@ namespace CompleteBackup.Models.Backup
             //}
 
             // Create a new FileSystemWatcher and set its properties.
-            FileSystemWatcher watcher = new FileSystemWatcher();
+            var watcher = new FileSystemWatcher() { IncludeSubdirectories = true };
             watcher.Path = path;// args[1];
             /* Watch for changes in LastAccess and LastWrite times, and
                the renaming of files or directories. */
@@ -125,7 +126,7 @@ namespace CompleteBackup.Models.Backup
 
         private void OnRenamed(object source, RenamedEventArgs e)
         {
-            m_Profile.BackupWatcherItemList.Add(new WatcherItemData { Time = DateTime.Now, ChangeType = e.ChangeType, FullPath = e.FullPath, Name = e.Name });
+            m_Profile.BackupWatcherItemList.Add(new WatcherItemData { Time = DateTime.Now, ChangeType = e.ChangeType, OldPath = e.OldFullPath, FullPath = e.FullPath, Name = e.Name });
             BackupProjectRepository.Instance.SaveProject();
             Console.WriteLine("File: {0} renamed to {1}", e.OldFullPath, e.FullPath);
         }

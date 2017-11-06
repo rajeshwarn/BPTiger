@@ -32,7 +32,7 @@ namespace CompleteBackup.Models.Profile
         BackupProfileData m_Profile;
         private BackupWorker() { }
 
-        public BackupWorker(BackupProfileData profile)
+        public BackupWorker(BackupProfileData profile, bool bFullBackupScan)
         {
             m_Profile = profile;
             m_ProgressBar = GenericStatusBarView.NewInstance;
@@ -49,15 +49,15 @@ namespace CompleteBackup.Models.Profile
                     switch (profile.BackupType)
                     {
                         case BackupTypeEnum.Differential:
-                            m_BackupManager = new DifferentialBackup(profile, m_ProgressBar);
+                            m_BackupManager = new DifferentialBackup(profile, bFullBackupScan, m_ProgressBar);
                             break;
 
                         case BackupTypeEnum.Incremental:
-                            m_BackupManager = new IncrementalFullBackup(profile, m_ProgressBar);
+                            m_BackupManager = new IncrementalFullBackup(profile, bFullBackupScan, m_ProgressBar);
                             break;                            
 
                         case BackupTypeEnum.Full:
-                            m_BackupManager = new FullBackup(profile, m_ProgressBar);
+                            m_BackupManager = new FullBackup(profile, bFullBackupScan, m_ProgressBar);
                             break;
 
                         default:

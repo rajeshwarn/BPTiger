@@ -15,11 +15,10 @@ namespace CompleteBackup.Models.backup
 {
     public class FullBackup : BackupManager
     {
-        public FullBackup(BackupProfileData profile, GenericStatusBarView progressBar = null) : base(profile, progressBar)
+        public FullBackup(BackupProfileData profile, bool bFullBackupScan, GenericStatusBarView progressBar = null) : base(profile, bFullBackupScan, progressBar)
         {
             m_IStorage = new FileSystemStorage();
         }
-        //string m_BackupName;
 
         public override void ProcessBackup()
         {

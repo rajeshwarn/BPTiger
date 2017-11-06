@@ -47,7 +47,8 @@ namespace CompleteBackup.ViewModels.ICommands
             }
             else
             {
-                profile.StartBackup();
+                //profile.StartBackup(true);
+                profile.StartBackup(false);
             }
         }
     }

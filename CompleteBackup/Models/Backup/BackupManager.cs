@@ -22,12 +22,13 @@ namespace CompleteBackup.Models.backup
         protected IStorageInterface m_IStorage;
         protected BackupProfileData m_Profile;
         protected BackupSessionHistory m_BackupSessionHistory;
+        protected bool IsFullBackupScan;
 
-        public BackupManager(BackupProfileData profile, GenericStatusBarView progressBar)
-//        public BackupManager(List<FolderData> sourcePath, string currSetPath, IStorageInterface storageInterface, GenericStatusBarView progressBar)
+        public BackupManager(BackupProfileData profile, bool bFullBackupScan, GenericStatusBarView progressBar)
         {
             m_TimeStamp = DateTime.Now;
             m_Profile = profile;
+            IsFullBackupScan = bFullBackupScan;
             m_SourceBackupPathList = profile.BackupFolderList.Where(i => i.IsAvailable).ToList();
             m_TargetBackupPath = profile.TargetBackupFolder;
 
@@ -285,7 +286,7 @@ namespace CompleteBackup.Models.backup
                 if (!sourceFileList.Exists(item => m_IStorage.GetFileName(item) == fileName))
                 {
                     //if not exists in source, delete the file
-                    File.Delete(filePath);
+                    m_IStorage.DeleteFile(filePath);
 
                     m_BackupSessionHistory.AddDeletedFile(filePath, currSetPath);
                 }
