@@ -38,11 +38,15 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Pending items: "/>
+                        <TextBlock Text="{Binding Profile.BackupWatcherItemListCount}"></TextBlock>
+                    </StackPanel>
                 </Grid>
                 <Grid Grid.Column="1">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Last backup time: "/>
-                        <TextBlock Text="{Binding ProjectData.CurrentBackupProfile.LastBackupDateTime, TargetNullValue='Not available'}"/>
+                        <TextBlock Text="{Binding Profile.LastBackupDateTime, TargetNullValue='Not Available'}"/>
                     </StackPanel>
                 </Grid>
             </Grid>
