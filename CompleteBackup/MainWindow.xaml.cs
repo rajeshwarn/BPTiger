@@ -1,4 +1,5 @@
 ﻿using CompleteBackup.DataRepository;
+using CompleteBackup.Models.Backup;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,9 @@ namespace CompleteBackup
 
             var profile = BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile;
             profile?.UpdateProfileProperties();
+
+            CBFileSystemWatcher.Run(@"E:\test2\source");
+
         }
 
     private void BackupTypeRibbonGallery_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
