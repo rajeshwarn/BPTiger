@@ -58,6 +58,11 @@ namespace CompleteBackup.ViewModels.MainWindow
             try
             {
                 CurrentPageViewModel = m_MainViewDictionary[m_SelectedRibbonIndex];
+                if (CurrentPageViewModel is MainProfileViewModel)
+                {
+                    var profileView = CurrentPageViewModel as MainProfileViewModel;
+                    profileView.ProfileData.UpdateProfileProperties();
+                }
             }
             catch (KeyNotFoundException) { }
         }

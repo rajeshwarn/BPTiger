@@ -59,14 +59,7 @@ namespace CompleteBackup.DataRepository
                 //    // avoid the inevitable crash
                 //}
 
-
-                string pname = Properties.BackupProjectRepositorySettings.Default.ProjectName;
-
                 BackupProjectList = Properties.BackupProjectRepositorySettings.Default.BackupProjectList;
-
-                Properties.BackupProjectRepositorySettings.Default.ProjectName = "guy";
-                Properties.BackupProjectRepositorySettings.Default.BackupProjectList = new ObservableCollection<BackupProjectData>();
-                Properties.BackupProjectRepositorySettings.Default.Save();
 
             }
             catch (Exception ex)

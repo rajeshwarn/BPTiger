@@ -97,7 +97,7 @@
                     </RibbonSplitButton>
                 </RibbonGroup>
 
-                <RibbonGroup Header="Profiles">
+                <!--<RibbonGroup Header="Profiles">
                     <ListView BorderThickness="0" ItemsSource="{Binding Project.SelectedBackupProject.BackupProfileList, Mode=OneWay}"
                              >
                         <ListView.ContextMenu>
@@ -120,35 +120,7 @@
                             </ItemsPanelTemplate>
                         </ListView.ItemsPanel>
                     </ListView>
-
-                    <!--<RibbonComboBox IsDropDownOpen="True" >
-                        <RibbonGallery SelectedValue="{Binding Project.SelectedBackupProject.CurrentBackupProfile}">
-                            <RibbonGalleryCategory ItemsSource="{Binding Project.SelectedBackupProject.BackupProfileList}">
-                                <RibbonGalleryCategory.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel>
-                                            <StackPanel Orientation="Horizontal">
-                                                <Image HorizontalAlignment="Stretch" Source="{Binding ImageName}" Height="16" Margin="0,0,2,0"/>
-                                                <TextBlock Text="{Binding Name}" />
-                                            </StackPanel>
-                                            <TextBlock Text="{Binding Path=Name}" TextWrapping="Wrap" HorizontalAlignment="Left" FontStyle="Italic"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </RibbonGalleryCategory.ItemTemplate>
-                            </RibbonGalleryCategory>
-                        </RibbonGallery>
-                        -->
-                    <!--<RibbonButton SmallImageSource="/Resources/Ribbon/Images/options.png" Label="Manage Rules" KeyTip="M" 
-                                              Command="{Binding OpenSmartGraphExplorerWindowCommand}"/>
-                        <RibbonButton SmallImageSource="/Resources/Icons/Menu/DeleteRed.ico" Label="Restore default rules" KeyTip="R" 
-                                              Command="{Binding RestoreDefaultCollectionsCommand}"/>-->
-                    <!--
-                    </RibbonComboBox>-->
-                    <!--<RibbonButton SmallImageSource="/Resources/Icons/document-import.ico" Label="Import" KeyTip="I" 
-                                              Command="{Binding ImportSmartGraphCollectionCommand}"/>
-                    <RibbonButton SmallImageSource="/Resources/Icons/Menu/blue-document-export.ico" Label="Export" KeyTip="E" 
-                                                  Command="{Binding ExportSmartGraphCollectionCommand}"/>-->
-                </RibbonGroup>
+                </RibbonGroup>-->
             </RibbonTab>
 
 
@@ -273,7 +245,7 @@
                 <profile_view:ProfileListView/>
             </Grid>
 
-            <Border DockPanel.Dock="Top" Margin="0,0,0,16" Background="LightGray" Padding="4">
+            <Border DockPanel.Dock="Top" Margin="0,0,0,16" Background="LightGray" Padding="4" Visibility="Collapsed">
                 <!--<Border DockPanel.Dock="Top" BorderThickness="1" CornerRadius="4" BorderBrush="DarkGray" Margin="4,4,4,8" Padding="4">-->
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -297,6 +269,7 @@
                     </Grid>
                 </Grid>
             </Border>
+            
             <ContentControl Content="{Binding CurrentPageViewModel}"/>
         </DockPanel>
 

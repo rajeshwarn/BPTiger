@@ -123,20 +123,20 @@ namespace CompleteBackup.Models.Profile
                     {
                         profile.BackupTargetDiskSizeNumber = 0;
                         //Target disk size
-                        //string rootDrive = Path.GetPathRoot(profile.TargetBackupFolder);
-                        //foreach (DriveInfo drive in DriveInfo.GetDrives().Where(d => d.ToString().Contains(rootDrive)))
-                        //{
-                        //    if (drive.IsReady)
-                        //    {
-                        //        profile.BackupTargetDiskSizeNumber = drive.TotalSize;
-                        //        Application.Current.Dispatcher.Invoke(new Action(() =>
-                        //        {
-                        //            profile.BackupTargetDiskSize = FileFolderSizeHelper.GetNumberSizeString(profile.BackupTargetDiskSizeNumber);
-                        //        }));
+                        string rootDrive = System.IO.Path.GetPathRoot(profile.TargetBackupFolder);
+                        foreach (System.IO.DriveInfo drive in System.IO.DriveInfo.GetDrives().Where(d => d.ToString().Contains(rootDrive)))
+                        {
+                            if (drive.IsReady)
+                            {
+                                profile.BackupTargetDiskSizeNumber = drive.TotalSize;
+                                Application.Current.Dispatcher.Invoke(new Action(() =>
+                                {
+                                    profile.BackupTargetDiskSize = FileFolderSizeHelper.GetNumberSizeString(profile.BackupTargetDiskSizeNumber);
+                                }));
 
-                        //        break;
-                        //    }
-                        //}
+                                break;
+                            }
+                        }
 
                         profile.BackupTargetUsedSizeNumber = 0;
                         //Target used Space
