@@ -85,10 +85,10 @@ namespace CompleteBackup.Models.backup
 
         protected override void ProcessFullBackupFile(string fileName, string sourcePath, string destPath)
         {
-            UpdateProgress("Running... ", ++ProcessFileCount);
-
             var sourceFilePath = m_IStorage.Combine(sourcePath, fileName);
             var currSetFilePath = m_IStorage.Combine(destPath, fileName);
+
+            UpdateProgress("Running... ", ++ProcessFileCount, sourceFilePath);
 
             if (m_IStorage.FileExists(currSetFilePath))
             {

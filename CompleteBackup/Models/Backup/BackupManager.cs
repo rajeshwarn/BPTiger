@@ -72,7 +72,7 @@ namespace CompleteBackup.Models.backup
         public GenericStatusBarView ProgressBar { get { return m_ProgressBar; } set { } }
 
         DateTime m_LastProgressUpdate = DateTime.Now;
-        public void UpdateProgress(string text, long progress)
+        public void UpdateProgress(string text, long progress, string fileName)
         {
             if (!PauseWaitHandle.WaitOne(0))
             {
@@ -84,10 +84,15 @@ namespace CompleteBackup.Models.backup
             {
                 DateTime dateTime = DateTime.Now;
                 long milli = (dateTime.Ticks - m_LastProgressUpdate.Ticks) / TimeSpan.TicksPerMillisecond;
-                if (milli >= 1000)
+                if (milli >= 500)
                 {
-                    ProgressBar?.UpdateProgressBar($"{text} {NumberOfFiles - ProcessFileCount} items left", progress);
-                    m_LastProgressUpdate = dateTime;
+                    m_Profile.CurrentBackupFile = fileName;
+
+                    if (milli >= 1000)
+                    {
+                        ProgressBar?.UpdateProgressBar($"{text} {NumberOfFiles - ProcessFileCount} items left", progress);
+                        m_LastProgressUpdate = dateTime;
+                    }
                 }
             }
         }

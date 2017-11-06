@@ -74,6 +74,11 @@ namespace CompleteBackup.Models.Backup.Profile
             InitStorageDataUpdaterTask();
         }
 
+        
+        private string m_CurrentBackupFile;
+        [XmlIgnore]
+        public string CurrentBackupFile { get { return m_CurrentBackupFile; } set { m_CurrentBackupFile = value; OnPropertyChanged(); } }
+
 
         [XmlIgnore]
         public bool IsCurrent { get { return BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile == this; } set { OnPropertyChanged(); } }

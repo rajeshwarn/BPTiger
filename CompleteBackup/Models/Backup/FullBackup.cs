@@ -59,7 +59,7 @@ namespace CompleteBackup.Models.backup
 
         protected virtual void ProcessFullBackupFile(string file, string sourcePath, string destPath)
         {
-            UpdateProgress("Running... ", ++ProcessFileCount);
+            UpdateProgress("Running... ", ++ProcessFileCount, file);
 
             var fileName = m_IStorage.GetFileName(file);
             // first set, copy to new set

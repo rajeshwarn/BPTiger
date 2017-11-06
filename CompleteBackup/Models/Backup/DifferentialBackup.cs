@@ -90,7 +90,7 @@ namespace CompleteBackup.Models.backup
                     }
                     else
                     {
-                        UpdateProgress("Running... ", ++ProcessFileCount);
+                        UpdateProgress("Running... ", ++ProcessFileCount, item.Path);
                         HandleFile(m_IStorage.GetDirectoryName(item.Path), newTargetPath, lastTargetPath, targetdirectoryName);
                     }
                 }
@@ -107,9 +107,9 @@ namespace CompleteBackup.Models.backup
 
             foreach (var file in sourceFileList)
             {
-                UpdateProgress("Running... ", ++ProcessFileCount);
-
                 var fileName = m_IStorage.GetFileName(file);
+                UpdateProgress("Running... ", ++ProcessFileCount, file);
+
                 HandleFile(sourcePath, currSetPath, lastSetPath, fileName);
             }
 

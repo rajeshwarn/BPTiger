@@ -27,16 +27,14 @@
             <Setter Property="Margin" Value="11,11,11,11" />
         </Style>
     </UserControl.Resources>
-    <DockPanel LastChildFill="True">
+    
+    <DockPanel LastChildFill="False">
         <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
             <local:BackupItemsSelectionView/>
-            <!--DataContext="{Binding Path=BackupItemsSelectionViewModel}"/>-->
-            <!--<local:BackupItemsSelectionView x:Name="folderTree"/>-->
-            <!--<DockPanel>
-                <extended_view:ProcessingSpinnerView HorizontalAlignment="Right"/>
-            </DockPanel>-->
         </StackPanel>
 
-        <!--<profile_views:MainProfileView x:Name="profileDetailsPageView" Margin="0,20,0,0"/>-->
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Vertical">
+                <TextBlock Text="{Binding Profile.CurrentBackupFile}" TextWrapping="Wrap" FontStyle="Italic"></TextBlock>
+            </StackPanel>
     </DockPanel>
 </UserControl>
