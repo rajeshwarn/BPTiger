@@ -16,7 +16,7 @@ namespace CompleteBackup.Models.backup
 {
     public class IncrementalFullBackup : FullBackup
     {
-        public IncrementalFullBackup(BackupProfileData profile, bool bFullBackupScan, GenericStatusBarView progressBar = null) : base(profile, bFullBackupScan, progressBar)
+        public IncrementalFullBackup(BackupProfileData profile, GenericStatusBarView progressBar = null) : base(profile, progressBar)
         {
             m_IStorage = new FileSystemStorage();
         }
@@ -43,136 +43,38 @@ namespace CompleteBackup.Models.backup
 
         protected override void ProcessBackupRootFolders(string targetPath)
         {
-            if (IsFullBackupScan)
+            foreach (var item in m_SourceBackupPathList)
             {
-                foreach (var item in m_SourceBackupPathList)
+                if (item.IsFolder)
                 {
-                    if (item.IsFolder)
-                    {
-                        var targetFolder = m_IStorage.Combine(targetPath, m_IStorage.GetFileName(item.Path));
+                    var targetFolder = m_IStorage.Combine(targetPath, m_IStorage.GetFileName(item.Path));
 
-                        ProcessFullBackupFolderStep(item.Path, targetFolder);
-                    }
-                    else
-                    {
-                        ProcessFullBackupFile(m_IStorage.GetFileName(item.Path), m_IStorage.GetDirectoryName(item.Path), targetPath);
-                    }
+                    ProcessFullBackupFolderStep(item.Path, targetFolder);
                 }
-
-
-                var sourceDirList = new List<string>();
-                var sourceDirectoryEntriesList = m_SourceBackupPathList.Where(i => i.IsFolder).ToList();
-                foreach (var item in sourceDirectoryEntriesList)
+                else
                 {
-                    sourceDirList.Add(m_IStorage.GetFileName(item.Path));
-                }
-                HandleDeletedItems(sourceDirList, targetPath);
-
-                sourceDirList.Clear();
-                var sourceFileEntriesList = m_SourceBackupPathList.Where(i => !i.IsFolder).ToList();
-                foreach (var item in sourceFileEntriesList)
-                {
-                    sourceDirList.Add(m_IStorage.GetFileName(item.Path));
-                }
-                HandleDeletedFiles(sourceDirList, targetPath);
-            }
-            else
-            {
-                foreach (var item in m_Profile.BackupWatcherItemList)
-                {
-                    switch (item.ChangeType)
-                    {
-                        case WatcherChangeTypes.Changed:
-                            {
-                                ProcessFullBackupFile(item.Name, m_IStorage.GetDirectoryName(item.FullPath), targetPath);
-
-                                break;
-                            }
-
-                        case WatcherChangeTypes.Created:
-                            {
-
-                                break;
-                            }
-
-                        case WatcherChangeTypes.Deleted:
-                            {
-                                //m_IStorage.DeleteFile(filePath);
-
-                                break;
-                            }
-
-                        case WatcherChangeTypes.Renamed:
-                            {
-                                foreach (var backupPath in m_Profile.BackupFolderList)
-                                {
-                                    var cNewPath = item.FullPath;
-                                    var bFoundNewPath = false;
-                                    while (cNewPath != null)
-                                    {
-                                        if (cNewPath == backupPath.Path)
-                                        {
-                                            bFoundNewPath = true;
-                                            break;
-                                        }
-                                        else
-                                        {
-                                            cNewPath = m_IStorage.GetDirectoryName(cNewPath);
-                                        }
-                                    }
-
-
-                                    var cOldPath = item.OldPath;
-                                    var bFoundOldPath = false;
-                                    while (cOldPath != null)
-                                    {
-                                        if (cOldPath == backupPath.Path)
-                                        {
-                                            bFoundOldPath = true;
-                                            break;
-                                        }
-                                        else
-                                        {
-                                            cOldPath = m_IStorage.GetDirectoryName(cOldPath);
-                                        }
-                                    }
-
-                                    if (bFoundNewPath && bFoundOldPath)
-                                    {
-
-                                        var tNewPath = item.FullPath.Substring(m_IStorage.GetDirectoryName(cNewPath).Length + 1);
-                                        var newTargetPath = m_IStorage.Combine(targetPath, tNewPath);
-
-                                        var tOldPath = item.OldPath.Substring(m_IStorage.GetDirectoryName(cOldPath).Length + 1);
-                                        var oldTargetPath = m_IStorage.Combine(targetPath, tOldPath);
-
-                                        if (m_IStorage.FileExists(oldTargetPath))
-                                        {
-                                            if (!m_IStorage.FileExists(newTargetPath))
-                                            {
-                                                m_IStorage.MoveFile(oldTargetPath, newTargetPath);
-                                            }
-                                            else
-                                            {
-                                                LogConsoleView.Writeln($"Rename file, file not found in source folder {newTargetPath}");
-                                            }
-                                        }
-                                        else
-                                        {
-                                            LogConsoleView.Writeln($"Rename file, file not found in backup folder {oldTargetPath}");
-                                        }
-                                    }
-                                }
-
-                                break;
-                            }
-
-                        default:
-                            break;
-                    }
+                    ProcessFullBackupFile(m_IStorage.GetFileName(item.Path), m_IStorage.GetDirectoryName(item.Path), targetPath);
                 }
             }
+
+
+            var sourceDirList = new List<string>();
+            var sourceDirectoryEntriesList = m_SourceBackupPathList.Where(i => i.IsFolder).ToList();
+            foreach (var item in sourceDirectoryEntriesList)
+            {
+                sourceDirList.Add(m_IStorage.GetFileName(item.Path));
+            }
+            HandleDeletedItems(sourceDirList, targetPath);
+
+            sourceDirList.Clear();
+            var sourceFileEntriesList = m_SourceBackupPathList.Where(i => !i.IsFolder).ToList();
+            foreach (var item in sourceFileEntriesList)
+            {
+                sourceDirList.Add(m_IStorage.GetFileName(item.Path));
+            }
+            HandleDeletedFiles(sourceDirList, targetPath);
         }
+
 
         protected override void ProcessFullBackupFile(string fileName, string sourcePath, string destPath)
         {

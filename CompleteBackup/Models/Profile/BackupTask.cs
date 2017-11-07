@@ -49,15 +49,22 @@ namespace CompleteBackup.Models.Profile
                     switch (profile.BackupType)
                     {
                         case BackupTypeEnum.Differential:
-                            m_BackupManager = new DifferentialBackup(profile, bFullBackupScan, m_ProgressBar);
+                            m_BackupManager = new DifferentialBackup(profile, m_ProgressBar);
                             break;
 
                         case BackupTypeEnum.Incremental:
-                            m_BackupManager = new IncrementalFullBackup(profile, bFullBackupScan, m_ProgressBar);
+                            if (bFullBackupScan)
+                            {
+                                m_BackupManager = new IncrementalFullBackup(profile, m_ProgressBar);
+                            }
+                            else
+                            {
+                                m_BackupManager = new IncrementalFullWatcherBackup(profile, m_ProgressBar);
+                            }
                             break;                            
 
                         case BackupTypeEnum.Full:
-                            m_BackupManager = new FullBackup(profile, bFullBackupScan, m_ProgressBar);
+                            m_BackupManager = new FullBackup(profile, m_ProgressBar);
                             break;
 
                         default:

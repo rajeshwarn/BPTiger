@@ -17,7 +17,7 @@ namespace CompleteBackup.Models.backup
     {
         public string LastSetPath;
 
-        public DifferentialBackup(BackupProfileData profile, bool bFullBackupScan, GenericStatusBarView progressBar = null) : base(profile, bFullBackupScan, progressBar)
+        public DifferentialBackup(BackupProfileData profile, GenericStatusBarView progressBar = null) : base(profile, progressBar)
         {
         }
 

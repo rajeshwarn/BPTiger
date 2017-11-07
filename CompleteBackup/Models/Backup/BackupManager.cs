@@ -22,13 +22,11 @@ namespace CompleteBackup.Models.backup
         protected IStorageInterface m_IStorage;
         protected BackupProfileData m_Profile;
         protected BackupSessionHistory m_BackupSessionHistory;
-        protected bool IsFullBackupScan;
 
-        public BackupManager(BackupProfileData profile, bool bFullBackupScan, GenericStatusBarView progressBar)
+        public BackupManager(BackupProfileData profile, GenericStatusBarView progressBar)
         {
             m_TimeStamp = DateTime.Now;
             m_Profile = profile;
-            IsFullBackupScan = bFullBackupScan;
             m_SourceBackupPathList = profile.BackupFolderList.Where(i => i.IsAvailable).ToList();
             m_TargetBackupPath = profile.TargetBackupFolder;
 
