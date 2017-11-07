@@ -56,6 +56,30 @@ namespace CompleteBackup.Models.backup
 
                     case WatcherChangeTypes.Created:
                         {
+                            var sourcePath = item.FullPath;
+                            var newTargetPath = m_IStorage.Combine(m_IStorage.Combine(targetPath, m_IStorage.GetFileName(item.WatchPath)), item.Name);
+                            if (m_IStorage.IsFolder(item.FullPath))
+                            {
+                                if (!m_IStorage.DirectoryExists(newTargetPath))
+                                {
+                                    CreateDirectory(newTargetPath);
+                                }
+                                else
+                                {
+                                    m_Logger.Writeln($"**Create Directory, Can't create - directory already exists {newTargetPath}");
+                                }
+                            }
+                            else
+                            {
+                                if (!m_IStorage.FileExists(newTargetPath))
+                                {
+                                    CopyFile(sourcePath, newTargetPath);
+                                }
+                                else
+                                {
+                                    m_Logger.Writeln($"**Create File, Can't create - file already exists {newTargetPath}");
+                                }
+                            }
 
                             break;
                         }
