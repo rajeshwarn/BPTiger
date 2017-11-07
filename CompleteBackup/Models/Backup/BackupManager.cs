@@ -1,6 +1,7 @@
 ﻿using CompleteBackup.Models.Backup.History;
 using CompleteBackup.Models.Backup.Profile;
 using CompleteBackup.Models.Backup.Storage;
+using CompleteBackup.Models.Utilities;
 using CompleteBackup.Views.MainWindow;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ namespace CompleteBackup.Models.backup
         protected IStorageInterface m_IStorage;
         protected BackupProfileData m_Profile;
         protected BackupSessionHistory m_BackupSessionHistory;
+        protected BackupPerfectLogger m_Logger = BackupPerfectLogger.Instance;
 
         public BackupManager(BackupProfileData profile, GenericStatusBarView progressBar)
         {

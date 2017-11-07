@@ -88,6 +88,7 @@
     <Compile Include="Models\Backup\Storage\Win32\Win32LongPathDirectory.cs" />
     <Compile Include="Models\Backup\Storage\Win32\Win32LongPathPath.cs" />
     <Compile Include="Models\Backup\Storage\Win32\Win32LongPathFile.cs" />
+    <Compile Include="Models\Utilities\BackupPerfectLogger.cs" />
     <Compile Include="Properties\BackupProjectRepositorySettings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -102,6 +103,7 @@
     <Compile Include="ViewModels\ActionRestore\RestoreItemsSelectionViewModel.cs" />
     <Compile Include="ViewModels\ActionRestore\ICommands\RestoreFolderSelectionICommand.cs" />
     <Compile Include="ViewModels\ActionRestore\Validators\RestoreTargetLocationValidator.cs" />
+    <Compile Include="ViewModels\ExtendedControls\ICommnd\ClearLogConsoleICommand.cs" />
     <Compile Include="ViewModels\ExtendedControls\LogConsoleViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\SelectBackupTypeICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\SelectBackupProfileICommand.cs" />
@@ -318,6 +320,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\FolderTreeView\Delete.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Ribbon\Clear.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

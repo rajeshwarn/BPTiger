@@ -20,28 +20,9 @@ namespace CompleteBackup.Views
     /// </summary>
     public partial class LogConsoleView : UserControl
     {
-
-        static LogConsoleView Instance;
-
-        public static void Writeln(string text)
-        {
-            Write(text + "\n");
-        }
-        public static void Write(string text)
-        {
-            Application.Current.Dispatcher.Invoke(new Action(() =>
-            {
-                Instance?.tbOutputBlock.Inlines.Add(text);
-            }));
-        }
-
         public LogConsoleView()
         {
             InitializeComponent();
-
-            Instance = this;
-
-            tbOutputBlock.Inlines.Add("Starting Application...\n");
         }
     }
 }

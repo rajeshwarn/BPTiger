@@ -33,9 +33,7 @@ namespace CompleteBackup.ViewModels
 
         public ICommand RestoreFolderSelectionCommand { get; private set; } = new RestoreFolderSelectionICommand<object>();
 
-
         protected string m_LastSetPathCache;
-
 
         public SelectRestoreItemsWindowModel() : base()
         {

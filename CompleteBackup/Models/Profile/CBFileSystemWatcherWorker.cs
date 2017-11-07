@@ -1,6 +1,7 @@
 ﻿using CompleteBackup.DataRepository;
 using CompleteBackup.Models.Backup.Profile;
 using CompleteBackup.Models.Backup.Project;
+using CompleteBackup.Models.Utilities;
 using CompleteBackup.Views;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,7 @@ namespace CompleteBackup.Models.Backup
         private CBFileSystemWatcherWorker() { }
 
         BackupProfileData m_Profile;
+        BackupPerfectLogger m_Logger = BackupPerfectLogger.Instance;
 
         public CBFileSystemWatcherWorker(BackupProfileData profile)
         {
@@ -42,7 +44,7 @@ namespace CompleteBackup.Models.Backup
             {
                 var watchList = profile.BackupWatcherItemList;
 
-                LogConsoleView.Writeln($"Starting File System Watcher, profile: {profile.Name}");
+                m_Logger.Writeln($"Starting File System Watcher, profile: {profile.Name}");
 
                 try
                 {
@@ -111,7 +113,7 @@ namespace CompleteBackup.Models.Backup
             m_Profile.BackupWatcherItemList.Add(new WatcherItemData { Time = DateTime.Now, ChangeType = e.ChangeType, FullPath = e.FullPath, Name = e.Name });
             BackupProjectRepository.Instance.SaveProject();
             Console.WriteLine("File: " + e.FullPath + " " + e.ChangeType);
-            LogConsoleView.Writeln($"Watcher, File {e.ChangeType}: {e.FullPath }");
+            m_Logger.Writeln($"Watcher, File {e.ChangeType}: {e.FullPath }");
         }
 
         private void OnChanged(object source, FileSystemEventArgs e)
@@ -119,7 +121,7 @@ namespace CompleteBackup.Models.Backup
             m_Profile.BackupWatcherItemList.Add(new WatcherItemData { Time = DateTime.Now, ChangeType = e.ChangeType, FullPath = e.FullPath, Name = e.Name });
             BackupProjectRepository.Instance.SaveProject();
             Console.WriteLine("File: " + e.FullPath + " " + e.ChangeType);
-            LogConsoleView.Writeln($"Watcher, File {e.ChangeType}: {e.FullPath }");
+            m_Logger.Writeln($"Watcher, File {e.ChangeType}: {e.FullPath }");
         }
 
         private void OnDeleted(object source, FileSystemEventArgs e)
@@ -127,7 +129,7 @@ namespace CompleteBackup.Models.Backup
             m_Profile.BackupWatcherItemList.Add(new WatcherItemData { Time = DateTime.Now, ChangeType = e.ChangeType, FullPath = e.FullPath, Name = e.Name });
             BackupProjectRepository.Instance.SaveProject();
             Console.WriteLine("File: " + e.FullPath + " " + e.ChangeType);
-            LogConsoleView.Writeln($"Watcher, File {e.ChangeType}: {e.FullPath }");
+            m_Logger.Writeln($"Watcher, File {e.ChangeType}: {e.FullPath }");
         }
 
         private void OnRenamed(object source, RenamedEventArgs e)
@@ -135,7 +137,7 @@ namespace CompleteBackup.Models.Backup
             m_Profile.BackupWatcherItemList.Add(new WatcherItemData { Time = DateTime.Now, ChangeType = e.ChangeType, OldPath = e.OldFullPath, FullPath = e.FullPath, Name = e.Name });
             BackupProjectRepository.Instance.SaveProject();
             Console.WriteLine("File: {0} renamed to {1}", e.OldFullPath, e.FullPath);
-            LogConsoleView.Writeln($"Watcher, File renamed: {e.OldFullPath} to {e.FullPath}");
+            m_Logger.Writeln($"Watcher, File renamed: {e.OldFullPath} to {e.FullPath}");
         }
     }
 }

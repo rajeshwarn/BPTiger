@@ -212,6 +212,11 @@
             </RibbonTab>
 
             <RibbonTab Header="Log" KeyTip="L" >
+                <RibbonGroup Header="Log Console" ToolTip="Log console manager">
+                    <RibbonButton LargeImageSource="/Resources/Icons/Ribbon/Clear.ico" Label="Clear" ToolTip="Clear log console logs" KeyTip="C"
+                        Command="{Binding ClearLogConsoleCommand}">
+                    </RibbonButton>
+                </RibbonGroup>
             </RibbonTab>
             
             <!-- Ribbon Tab #1: Home -->

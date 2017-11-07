@@ -119,12 +119,12 @@ namespace CompleteBackup.Models.backup
                                         }
                                         else
                                         {
-                                            LogConsoleView.Writeln($"Rename file, file not found in source folder {newTargetPath}");
+                                            m_Logger.Writeln($"Rename file, file not found in source folder {newTargetPath}");
                                         }
                                     }
                                     else
                                     {
-                                        LogConsoleView.Writeln($"Rename file, file not found in backup folder {oldTargetPath}");
+                                        m_Logger.Writeln($"Rename file, file not found in backup folder {oldTargetPath}");
                                     }
                                 }
                             }
