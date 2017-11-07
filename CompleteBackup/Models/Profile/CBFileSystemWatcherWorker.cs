@@ -44,23 +44,20 @@ namespace CompleteBackup.Models.Backup
             DoWork += (sender, e) =>
             {
                 var watchList = profile.BackupWatcherItemList;
-
-                m_Logger.Writeln($"Starting File System Watcher, profile: {profile.Name}");
-
                 try
                 {
                     watchList.Clear();
 
                     foreach (var backupItem in profile.BackupFolderList)
                     {
+                        m_Logger.Writeln($"Starting File System Watcher: {backupItem.Path}");
                         RunTask(backupItem.Path);
                     }
-
-                    //                    RunTask(@"E:\test2\source");
                 }
                 catch (TaskCanceledException ex)
                 {
-                    Trace.WriteLine($"Full Backup exception: {ex.Message}");
+                    m_Logger.Writeln($"File System Watcher exception: {ex.Message}");
+                    Trace.WriteLine($"File System Watcher exception: {ex.Message}");
                     e.Result = $"Full Backup exception: {ex.Message}";
                     throw (ex);
                 }
@@ -74,24 +71,14 @@ namespace CompleteBackup.Models.Backup
         [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
         protected void RunTask(string path)
         {
-            //string[] args = System.Environment.GetCommandLineArgs();
-
-            //// If a directory is not specified, exit program.
-            //if (args.Length != 2)
-            //{
-            //    // Display the proper way to call the program.
-            //    Console.WriteLine("Usage: Watcher.exe (directory)");
-            //    return;
-            //}
-
-            // Create a new FileSystemWatcher and set its properties.
             var watcher = new FileSystemWatcher() { IncludeSubdirectories = true };
             watcher.Path = path;// args[1];
-            /* Watch for changes in LastAccess and LastWrite times, and
-               the renaming of files or directories. */
-            watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite
-               | NotifyFilters.FileName | NotifyFilters.DirectoryName;
-            // Only watch text files.
+            watcher.NotifyFilter =
+                NotifyFilters.LastAccess |
+                NotifyFilters.LastWrite |
+                NotifyFilters.FileName |
+                NotifyFilters.DirectoryName;
+
             watcher.Filter = "*.*";
 
             // Add event handlers.
@@ -102,10 +89,6 @@ namespace CompleteBackup.Models.Backup
 
             // Begin watching.
             watcher.EnableRaisingEvents = true;
-
-            // Wait for the user to quit the program.
-            Console.WriteLine("Press \'q\' to quit the sample.");
-          //  while (Console.Read() != 'q') ;
         }
 
         // Define the event handlers.
@@ -113,23 +96,32 @@ namespace CompleteBackup.Models.Backup
         {
             m_Profile.BackupWatcherItemList.Add(new WatcherItemData { Time = DateTime.Now, ChangeType = e.ChangeType, FullPath = e.FullPath, Name = e.Name });
             BackupProjectRepository.Instance.SaveProject();
-            Console.WriteLine("File: " + e.FullPath + " " + e.ChangeType);
             m_Logger.Writeln($"Watcher, File {e.ChangeType}: {e.FullPath }");
         }
 
+        private int onChangedFireCount = 0;
         private void OnChanged(object source, FileSystemEventArgs e)
         {
-            m_Profile.BackupWatcherItemList.Add(new WatcherItemData { Time = DateTime.Now, ChangeType = e.ChangeType, FullPath = e.FullPath, Name = e.Name });
-            BackupProjectRepository.Instance.SaveProject();
-            Console.WriteLine("File: " + e.FullPath + " " + e.ChangeType);
-            m_Logger.Writeln($"Watcher, File {e.ChangeType}: {e.FullPath }");
+            onChangedFireCount++;
+            if (onChangedFireCount == 1)
+            {
+                if (!m_Profile.GetStorageInterface().IsFolder(e.FullPath))
+                {
+                    m_Profile.BackupWatcherItemList.Add(new WatcherItemData { Time = DateTime.Now, ChangeType = e.ChangeType, FullPath = e.FullPath, Name = e.Name });
+                    BackupProjectRepository.Instance.SaveProject();
+                    m_Logger.Writeln($"Watcher, File {e.ChangeType}: {e.FullPath }");
+                }
+            }
+            else
+            {
+                onChangedFireCount = 0;
+            }
         }
 
         private void OnDeleted(object source, FileSystemEventArgs e)
         {
             m_Profile.BackupWatcherItemList.Add(new WatcherItemData { Time = DateTime.Now, ChangeType = e.ChangeType, FullPath = e.FullPath, Name = e.Name });
             BackupProjectRepository.Instance.SaveProject();
-            Console.WriteLine("File: " + e.FullPath + " " + e.ChangeType);
             m_Logger.Writeln($"Watcher, File {e.ChangeType}: {e.FullPath }");
         }
 
@@ -137,8 +129,7 @@ namespace CompleteBackup.Models.Backup
         {
             m_Profile.BackupWatcherItemList.Add(new WatcherItemData { Time = DateTime.Now, ChangeType = e.ChangeType, OldPath = e.OldFullPath, FullPath = e.FullPath, Name = e.Name });
             BackupProjectRepository.Instance.SaveProject();
-            Console.WriteLine("File: {0} renamed to {1}", e.OldFullPath, e.FullPath);
-            m_Logger.Writeln($"Watcher, File renamed: {e.OldFullPath} to {e.FullPath}");
+            m_Logger.Writeln($"Watcher, File Renamed: {e.OldFullPath} to {e.FullPath}");
         }
     }
 }

@@ -12,7 +12,9 @@
     </UserControl.DataContext>
     <Grid>
         <Expander Grid.Row="1" Header="Backup Logs"  IsExpanded="True">
-            <TextBlock Text="{Binding Project.CurrentBackupProfile.Logger.LoggerData}" Foreground="Black" FontFamily="Consolas" Padding="8" TextWrapping="Wrap" />
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
+                <TextBlock Text="{Binding Project.CurrentBackupProfile.Logger.LoggerData}" Foreground="Black" FontFamily="Consolas" Padding="8" TextWrapping="Wrap" />
+            </ScrollViewer>
         </Expander>
     </Grid>
 </UserControl>

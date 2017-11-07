@@ -13,7 +13,7 @@
         xmlns:main_viewmodels="clr-namespace:CompleteBackup.ViewModels.MainWindow"  
         xmlns:local="clr-namespace:CompleteBackup"
         mc:Ignorable="d"
-        Title="{Binding ProjectData.CurrentBackupProfile.Name}" Height="750" Width="825">
+        Title="{Binding ProjectData.CurrentBackupProfile.Name}" Height="750" Width="925">
     <Window.DataContext>
         <main_viewmodels:MainWindowViewModel/>
     </Window.DataContext>
