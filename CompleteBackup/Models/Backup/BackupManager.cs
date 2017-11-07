@@ -369,8 +369,39 @@ namespace CompleteBackup.Models.backup
             }
 
             return sourceSubdirectoryEntriesList;
-
         }
+
+
+        #region File System wrappers
+        protected void CopyFile(string sourcePath, string targetPath, bool overwrite = false)
+        {
+            m_Logger.Writeln($"{m_Profile.Name}: copy {sourcePath} to {targetPath}");
+
+            m_IStorage.CopyFile(sourcePath, targetPath, overwrite);
+        }
+
+        protected void CreateDirectory(string path, bool bCheckIfExist = false)
+        {
+            m_Logger.Writeln($"{m_Profile.Name}: Create directory {path}");
+
+            m_IStorage.CreateDirectory(path, bCheckIfExist);
+        }
+
+        protected bool MoveDirectory(string sourcePath, string targetPath, bool bCreateFolder = false)
+        {
+            m_Logger.Writeln($"{m_Profile.Name}: Move directory {sourcePath} to {targetPath}");
+
+            return m_IStorage.MoveDirectory(sourcePath, targetPath, bCreateFolder);
+        }
+
+        protected void MoveFile(string sourcePath, string targetPath, bool bCreateFolder = false)
+        {
+            m_Logger.Writeln($"{m_Profile.Name}: Move file {sourcePath} to {targetPath}");
+
+            m_IStorage.MoveFile(sourcePath, targetPath, bCreateFolder);
+        }
+
+        #endregion
 
     }
 }

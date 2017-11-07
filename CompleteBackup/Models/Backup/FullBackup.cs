@@ -15,10 +15,7 @@ namespace CompleteBackup.Models.backup
 {
     public class FullBackup : BackupManager
     {
-        public FullBackup(BackupProfileData profile, GenericStatusBarView progressBar = null) : base(profile, progressBar)
-        {
-            m_IStorage = new FileSystemStorage();
-        }
+        public FullBackup(BackupProfileData profile, GenericStatusBarView progressBar = null) : base(profile, progressBar) { }
 
         public override void ProcessBackup()
         {
@@ -35,7 +32,7 @@ namespace CompleteBackup.Models.backup
         protected string CreateNewBackupSetFolder(string newSetName)
         {
             var targetSetPath = m_IStorage.Combine(m_TargetBackupPath, newSetName);
-            m_IStorage.CreateDirectory(targetSetPath);
+            CreateDirectory(targetSetPath);
 
             return targetSetPath;
         }
@@ -65,7 +62,7 @@ namespace CompleteBackup.Models.backup
             var sourceFilePath = m_IStorage.Combine(sourcePath, fileName);
             var targetFilePath = m_IStorage.Combine(destPath, fileName);
 
-            m_IStorage.CopyFile(sourceFilePath, targetFilePath);
+            CopyFile(sourceFilePath, targetFilePath);
 
             m_BackupSessionHistory.AddNewFile(sourceFilePath, targetFilePath);
         }
@@ -73,7 +70,7 @@ namespace CompleteBackup.Models.backup
         protected virtual void ProcessFullBackupFolderStep(string sourcePath, string currSetPath)
         {
             var sourceFileList = m_IStorage.GetFiles(sourcePath);
-            m_IStorage.CreateDirectory(currSetPath);
+            CreateDirectory(currSetPath);
 
             foreach (var file in sourceFileList)
             {

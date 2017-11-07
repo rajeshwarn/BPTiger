@@ -1,6 +1,7 @@
 ﻿using CompleteBackup.Models.backup;
 using CompleteBackup.Models.Backup.Profile;
 using CompleteBackup.Models.Backup.Storage;
+using CompleteBackup.Models.Utilities;
 using CompleteBackup.Views.MainWindow;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,8 @@ namespace CompleteBackup.Models.Profile
 
         GenericStatusBarView m_ProgressBar;
         BackupProfileData m_Profile;
+        protected BackupPerfectLogger m_Logger = BackupPerfectLogger.Instance;
+
         private BackupWorker() { }
 
         public BackupWorker(BackupProfileData profile, bool bFullBackupScan)
@@ -44,26 +47,31 @@ namespace CompleteBackup.Models.Profile
             {
                 profile.IsBackupWorkerBusy = true;
                 m_ProgressBar.UpdateProgressBar("Backup starting...", 0);
+                var startTime = DateTime.Now;
                 try
                 {
                     switch (profile.BackupType)
                     {
                         case BackupTypeEnum.Differential:
+                            m_Logger.Writeln($"{profile.Name}: Starting Differential deep backup");
                             m_BackupManager = new DifferentialBackup(profile, m_ProgressBar);
                             break;
 
                         case BackupTypeEnum.Incremental:
                             if (bFullBackupScan)
                             {
+                                m_Logger.Writeln($"{profile.Name}: Starting Incremental deep backup");
                                 m_BackupManager = new IncrementalFullBackup(profile, m_ProgressBar);
                             }
                             else
                             {
+                                m_Logger.Writeln($"{profile.Name}: Starting Incremental watcher backup");
                                 m_BackupManager = new IncrementalFullWatcherBackup(profile, m_ProgressBar);
                             }
                             break;                            
 
                         case BackupTypeEnum.Full:
+                            m_Logger.Writeln($"{profile.Name}: Starting Full deep backup");
                             m_BackupManager = new FullBackup(profile, m_ProgressBar);
                             break;
 
@@ -74,9 +82,11 @@ namespace CompleteBackup.Models.Profile
                     m_BackupManager.Init();
                     m_BackupManager.ProcessBackup();
                     m_BackupManager.Done();
+
                 }
                 catch (TaskCanceledException ex)
                 {
+                    m_Logger.Writeln($"{profile.Name}: Backup exception: {ex.Message}");
                     m_ProgressBar.UpdateProgressBar("Completed with Errors");
                     m_ProgressBar.Release();
                     Trace.WriteLine($"Full Backup exception: {ex.Message}");
@@ -85,6 +95,8 @@ namespace CompleteBackup.Models.Profile
                 }
                 finally
                 {
+                    m_Logger.Writeln($"{profile.Name}: Backup completed, execution time: {DateTime.Now - startTime}");
+
                     m_BackupManager = null;
                     profile.IsBackupWorkerBusy = false;
                 }

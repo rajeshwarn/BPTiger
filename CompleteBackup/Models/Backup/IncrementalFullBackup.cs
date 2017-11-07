@@ -16,10 +16,7 @@ namespace CompleteBackup.Models.backup
 {
     public class IncrementalFullBackup : FullBackup
     {
-        public IncrementalFullBackup(BackupProfileData profile, GenericStatusBarView progressBar = null) : base(profile, progressBar)
-        {
-            m_IStorage = new FileSystemStorage();
-        }
+        public IncrementalFullBackup(BackupProfileData profile, GenericStatusBarView progressBar = null) : base(profile, progressBar) { }
 
         public override void ProcessBackup()
         {
@@ -93,7 +90,7 @@ namespace CompleteBackup.Models.backup
                 else
                 {
                     //update/overwrite file
-                    m_IStorage.CopyFile(sourceFilePath, currSetFilePath, true);
+                    CopyFile(sourceFilePath, currSetFilePath, true);
 
                     m_BackupSessionHistory.AddUpdatedFile(sourceFilePath, currSetFilePath);
                 }
@@ -102,9 +99,9 @@ namespace CompleteBackup.Models.backup
             {
                 if (!m_IStorage.DirectoryExists(destPath))
                 {
-                    m_IStorage.CreateDirectory(destPath);
+                    CreateDirectory(destPath);
                 }
-                m_IStorage.CopyFile(sourceFilePath, currSetFilePath);
+                CopyFile(sourceFilePath, currSetFilePath);
 
                 m_BackupSessionHistory.AddNewFile(sourceFilePath, currSetFilePath);
             }
@@ -116,7 +113,7 @@ namespace CompleteBackup.Models.backup
 
             if (!m_IStorage.DirectoryExists(currSetPath))
             {
-                m_IStorage.CreateDirectory(currSetPath);
+                CreateDirectory(currSetPath);
             }
 
             foreach (var file in sourceFileList)

@@ -22,7 +22,7 @@
             DataType="{x:Type view_model:BackupItemsSelectionViewModel}">
             <local:BackupItemsSelectionView/>
         </DataTemplate>
-        
+
         <Style TargetType="GroupBox">
             <Setter Property="Margin" Value="11,11,11,11" />
         </Style>
@@ -63,8 +63,9 @@
             <TextBlock Text="{Binding Profile.CurrentBackupFile}" TextWrapping="Wrap" FontStyle="Italic"></TextBlock>
         </StackPanel>
 
-        <!--<Grid Grid.Row="1">
+        <Expander Grid.Row="1" Header="Backup Logs"  IsExpanded="True">
             <local:LogConsoleView/>
-        </Grid>-->
+        </Expander>
+        
     </DockPanel>
 </UserControl>

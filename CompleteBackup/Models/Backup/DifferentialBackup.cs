@@ -17,9 +17,7 @@ namespace CompleteBackup.Models.backup
     {
         public string LastSetPath;
 
-        public DifferentialBackup(BackupProfileData profile, GenericStatusBarView progressBar = null) : base(profile, progressBar)
-        {
-        }
+        public DifferentialBackup(BackupProfileData profile, GenericStatusBarView progressBar = null) : base(profile, progressBar) { }
 
         public override void ProcessBackup()
         {
@@ -43,20 +41,20 @@ namespace CompleteBackup.Models.backup
                 var lastTargetPath_ = m_IStorage.Combine(m_TargetBackupPath, lastSet);
                 var newTargetPath = m_IStorage.Combine(m_TargetBackupPath, targetSet);
 
-                if (!m_IStorage.MoveDirectory(lastTargetPath_, newTargetPath))
+                if (!MoveDirectory(lastTargetPath_, newTargetPath))
                 {
                     MessageBox.Show($"Operation Canceled", "Incremental Backup", MessageBoxButton.OK, MessageBoxImage.Information);
 
                     return;
                 }
 
-                m_IStorage.CreateDirectory(lastTargetPath_);
+                CreateDirectory(lastTargetPath_);
 
                 var fileEntries = m_IStorage.GetFiles(newTargetPath);
                 foreach (string fileName in fileEntries.Where(f => BackupSessionHistory.IsHistoryFile(f)))
                 {
-                    m_IStorage.MoveFile(m_IStorage.Combine(newTargetPath, m_IStorage.GetFileName(fileName)),
-                                        m_IStorage.Combine(lastTargetPath_, m_IStorage.GetFileName(fileName)));
+                    MoveFile(m_IStorage.Combine(newTargetPath, m_IStorage.GetFileName(fileName)),
+                             m_IStorage.Combine(lastTargetPath_, m_IStorage.GetFileName(fileName)));
                 }
                
                 //check if set was changed and need to be deleted
@@ -71,7 +69,7 @@ namespace CompleteBackup.Models.backup
 
                         var targetPath = m_IStorage.Combine(newTargetPath, setName);
                         var lastTargetPath = m_IStorage.Combine(lastTargetPath_, setName);
-                        m_IStorage.MoveDirectory(targetPath, lastTargetPath);
+                        MoveDirectory(targetPath, lastTargetPath);
 
                         m_BackupSessionHistory.AddDeletedFolder(sourcePath, newTargetPath);
                     }
