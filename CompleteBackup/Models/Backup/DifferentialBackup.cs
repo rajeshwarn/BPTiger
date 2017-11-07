@@ -13,7 +13,7 @@ using System.Windows;
 
 namespace CompleteBackup.Models.backup
 {
-    public class DifferentialBackup : FullBackup
+    public class DifferentialBackup : SnapshotBackup
     {
         public string LastSetPath;
 

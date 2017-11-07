@@ -44,16 +44,16 @@ namespace CompleteBackup.Models.backup
                 if (item.IsFolder)
                 {
                     var targetFolder = m_IStorage.Combine(targetPath, m_IStorage.GetFileName(item.Path));
-                    ProcessFullBackupFolderStep(item.Path, targetFolder);
+                    ProcessSnapshotBackupFolderStep(item.Path, targetFolder);
                 }
                 else
                 {
-                    ProcessFullBackupFile(m_IStorage.GetFileName(item.Path), m_IStorage.GetDirectoryName(item.Path), targetPath);
+                    ProcessSnapshotBackupFile(m_IStorage.GetFileName(item.Path), m_IStorage.GetDirectoryName(item.Path), targetPath);
                 }
             }
         }
 
-        protected virtual void ProcessFullBackupFile(string file, string sourcePath, string destPath)
+        protected virtual void ProcessSnapshotBackupFile(string file, string sourcePath, string destPath)
         {
             UpdateProgress("Running... ", ++ProcessFileCount, file);
 
@@ -67,14 +67,14 @@ namespace CompleteBackup.Models.backup
             m_BackupSessionHistory.AddNewFile(sourceFilePath, targetFilePath);
         }
 
-        protected virtual void ProcessFullBackupFolderStep(string sourcePath, string currSetPath)
+        protected virtual void ProcessSnapshotBackupFolderStep(string sourcePath, string currSetPath)
         {
             var sourceFileList = m_IStorage.GetFiles(sourcePath);
             CreateDirectory(currSetPath);
 
             foreach (var file in sourceFileList)
             {
-                ProcessFullBackupFile(m_IStorage.GetFileName(file), sourcePath, currSetPath);
+                ProcessSnapshotBackupFile(m_IStorage.GetFileName(file), sourcePath, currSetPath);
             }
 
             //Process directories
@@ -85,7 +85,7 @@ namespace CompleteBackup.Models.backup
                 string newSourceSetPath = m_IStorage.Combine(sourcePath, subdirectory);
                 string newCurrSetPath = m_IStorage.Combine(currSetPath, subdirectory);
 
-                ProcessFullBackupFolderStep(newSourceSetPath, newCurrSetPath);
+                ProcessSnapshotBackupFolderStep(newSourceSetPath, newCurrSetPath);
             }
         }
     }

@@ -82,7 +82,7 @@
     <Compile Include="Models\Backup\Storage\FileSystemStorage.cs" />
     <Compile Include="Models\Backup\Storage\IStorageInterface.cs" />
     <Compile Include="Models\Backup\DifferentialBackup.cs" />
-    <Compile Include="Models\Backup\FullBackup.cs" />
+    <Compile Include="Models\Backup\SnapshotBackup.cs" />
     <Compile Include="Models\Backup\BackupManager.cs" />
     <Compile Include="Models\Backup\Storage\Win32\Win32FileSystem.cs" />
     <Compile Include="Models\Backup\Storage\Win32\Win32LongPathDirectory.cs" />
