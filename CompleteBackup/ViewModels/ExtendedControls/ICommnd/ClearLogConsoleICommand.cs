@@ -36,7 +36,8 @@ namespace CompleteBackup.ViewModels.ICommands
 
         public void Execute(object parameter)
         {
-            BackupPerfectLogger.Instance.Clear();
+            var profile = parameter as BackupProfileData;
+            profile.Logger.Clear();
         }
     }
 }

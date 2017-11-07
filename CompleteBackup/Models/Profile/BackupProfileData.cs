@@ -4,6 +4,7 @@ using CompleteBackup.Models.Backup.History;
 using CompleteBackup.Models.Backup.Storage;
 using CompleteBackup.Models.FolderSelection;
 using CompleteBackup.Models.Profile;
+using CompleteBackup.Models.Utilities;
 using CompleteBackup.Utilities;
 using System;
 using System.Collections.Generic;
@@ -90,6 +91,9 @@ namespace CompleteBackup.Models.Backup.Profile
             ProfileDataRefreshTask = new ProfileDataRefreshTask(this);
         }
 
+
+        [XmlIgnore]
+        public BackupPerfectLogger Logger { get; } = new BackupPerfectLogger();
 
         //Policy
 

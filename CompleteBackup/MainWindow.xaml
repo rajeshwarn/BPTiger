@@ -93,7 +93,7 @@
                                     <DataTemplate>
                                         <RibbonButton LargeImageSource="/Resources/Icons/Ribbon/Stop.ico" Label="{Binding Name}"
                                             Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.SelectBackupProfileCommand}"
-                                            CommandParameter="{Binding .}"/>
+                                            CommandParameter="{Binding }"/>
                                     </DataTemplate>
                                 </RibbonGalleryCategory.ItemTemplate>
                             </RibbonGalleryCategory>
@@ -223,7 +223,8 @@
             <RibbonTab Header="Log" KeyTip="L" >
                 <RibbonGroup Header="Log Console" ToolTip="Log console manager">
                     <RibbonButton LargeImageSource="/Resources/Icons/Ribbon/Clear.ico" Label="Clear" ToolTip="Clear log console logs" KeyTip="C"
-                        Command="{Binding ClearLogConsoleCommand}">
+                        Command="{Binding ClearLogConsoleCommand}"
+                        CommandParameter="{Binding ProjectData.CurrentBackupProfile}">
                     </RibbonButton>
                 </RibbonGroup>
             </RibbonTab>

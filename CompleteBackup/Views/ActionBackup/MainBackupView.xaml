@@ -63,9 +63,9 @@
             <TextBlock Text="{Binding Profile.CurrentBackupFile}" TextWrapping="Wrap" FontStyle="Italic"></TextBlock>
         </StackPanel>
 
-        <Expander Grid.Row="1" Header="Backup Logs"  IsExpanded="True">
-            <local:LogConsoleView/>
-        </Expander>
+        <Grid Grid.Row="1">
+            <local:LogProfileConsoleView/>
+        </Grid>
         
     </DockPanel>
 </UserControl>

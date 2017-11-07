@@ -31,9 +31,14 @@
 
         <TabControl>
             <TabItem Header="General">
-                <Label Content="Content goes here..." />
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
+                    <TextBlock Text="{Binding Project.Logger.LoggerData}" Foreground="Black" FontFamily="Consolas" Padding="8" TextWrapping="Wrap" />
+                </ScrollViewer>
             </TabItem>
             <TabItem Header="{Binding Project.CurrentBackupProfile.Name}">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
+                    <TextBlock Text="{Binding Project.CurrentBackupProfile.Logger.LoggerData}" Foreground="Black" FontFamily="Consolas" Padding="8" TextWrapping="Wrap" />
+                </ScrollViewer>
             </TabItem>
         </TabControl>
 

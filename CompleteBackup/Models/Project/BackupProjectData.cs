@@ -1,4 +1,5 @@
 ﻿using CompleteBackup.Models.Backup.Profile;
+using CompleteBackup.Models.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,7 +13,7 @@ namespace CompleteBackup.Models.Backup.Project
     public class BackupProjectData : ObservableObject
     {
         public BackupProjectData()
-        {
+        {            
         }
 
         public void Init()
@@ -22,6 +23,9 @@ namespace CompleteBackup.Models.Backup.Project
                 profile.Init();
             }
         }
+
+        [XmlIgnore]
+        public BackupPerfectLogger Logger { get; } = new BackupPerfectLogger();
 
         public string Name { get; set; } = "My Project";
         public string Description { get { return Name; } set { } }

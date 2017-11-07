@@ -31,11 +31,12 @@ namespace CompleteBackup.Models.Backup
         private CBFileSystemWatcherWorker() { }
 
         BackupProfileData m_Profile;
-        BackupPerfectLogger m_Logger = BackupPerfectLogger.Instance;
+        BackupPerfectLogger m_Logger;
 
         public CBFileSystemWatcherWorker(BackupProfileData profile)
         {
             m_Profile = profile;
+            m_Logger = profile.Logger;
 
             WorkerReportsProgress = true;
             WorkerSupportsCancellation = true;

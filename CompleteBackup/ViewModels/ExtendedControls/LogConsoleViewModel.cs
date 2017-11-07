@@ -14,7 +14,6 @@ namespace CompleteBackup.ViewModels
 {
     public class LogConsoleViewModel
     {
-        public BackupPerfectLogger LoggerInstance { get; } = BackupPerfectLogger.Instance;
         public BackupProjectData Project { get; } = BackupProjectRepository.Instance.SelectedBackupProject;
     }
 }

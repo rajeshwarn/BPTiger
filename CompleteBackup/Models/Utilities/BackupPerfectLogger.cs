@@ -14,17 +14,17 @@ namespace CompleteBackup.Models.Utilities
 
         public BackupPerfectLogger()
         {
-            m_Logger = "Starting Backup Perfect Logger...\n";
+            m_LoggerData = "Starting Backup Perfect Logger...\n";
         }
 
-        public string m_Logger;
-        public string Logger { get { return m_Logger; } set { m_Logger = value; OnPropertyChanged(); } }
+        public string m_LoggerData;
+        public string LoggerData { get { return m_LoggerData; } set { m_LoggerData = value; OnPropertyChanged(); } }
 
         public void Clear()
         {
             Application.Current.Dispatcher.Invoke(new Action(() =>
             {
-                Logger = string.Empty;
+                LoggerData = string.Empty;
             }));
         }
 
@@ -36,7 +36,7 @@ namespace CompleteBackup.Models.Utilities
         {
             Application.Current.Dispatcher.Invoke(new Action(() =>
             {
-                Logger += $"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()} - {text}";
+                LoggerData += $"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()} - {text}";
             }));
         }
     }
