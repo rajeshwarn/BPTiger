@@ -115,16 +115,16 @@ namespace CompleteBackup.Models.backup
                                     {
                                         if (!m_IStorage.FileExists(newTargetPath))
                                         {
-                                            m_IStorage.MoveFile(oldTargetPath, newTargetPath);
+                                            MoveFile(oldTargetPath, newTargetPath);
                                         }
                                         else
                                         {
-                                            m_Logger.Writeln($"Rename file, file not found in source folder {newTargetPath}");
+                                            m_Logger.Writeln($"**Rename file, file not found in source folder {newTargetPath}");
                                         }
                                     }
                                     else
                                     {
-                                        m_Logger.Writeln($"Rename file, file not found in backup folder {oldTargetPath}");
+                                        m_Logger.Writeln($"**Rename file, file not found in backup folder {oldTargetPath}");
                                     }
                                 }
                             }
