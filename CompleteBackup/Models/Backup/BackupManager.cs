@@ -286,7 +286,7 @@ namespace CompleteBackup.Models.backup
                 if (!sourceFileList.Exists(item => m_IStorage.GetFileName(item) == fileName))
                 {
                     //if not exists in source, delete the file
-                    m_IStorage.DeleteFile(filePath);
+                    DeleteFile(filePath);
 
                     m_BackupSessionHistory.AddDeletedFile(filePath, currSetPath);
                 }
@@ -343,7 +343,7 @@ namespace CompleteBackup.Models.backup
                 {
                     if (!entry.EndsWith(BackupSessionHistory.HistoryDirectory))
                     {
-                        m_IStorage.DeleteDirectory(m_IStorage.Combine(currSetPath, entry));
+                        DeleteDirectory(m_IStorage.Combine(currSetPath, entry));
 
                         m_BackupSessionHistory.AddDeletedFolder(null, entry);
                     }
@@ -394,11 +394,24 @@ namespace CompleteBackup.Models.backup
             return m_IStorage.MoveDirectory(sourcePath, targetPath, bCreateFolder);
         }
 
+        protected bool DeleteDirectory(string path, bool bRecursive = true)
+        {
+            m_Logger.Writeln($"Delete Directory {path}");
+
+            return m_IStorage.DeleteDirectory(path, bRecursive);
+        }
+
         protected void MoveFile(string sourcePath, string targetPath, bool bCreateFolder = false)
         {
             m_Logger.Writeln($"Move File {sourcePath} To {targetPath}");
 
             m_IStorage.MoveFile(sourcePath, targetPath, bCreateFolder);
+        }
+        protected void DeleteFile(string path)
+        {
+            m_Logger.Writeln($"Delete File {path}");
+
+            m_IStorage.DeleteFile(path);
         }
 
         #endregion

@@ -49,7 +49,22 @@ namespace CompleteBackup.Models.backup
                 {
                     case WatcherChangeTypes.Changed:
                         {
-                            ProcessFullBackupFile(item.Name, m_IStorage.GetDirectoryName(item.FullPath), targetPath);
+
+                            if (!m_IStorage.IsFolder(item.FullPath))
+                            {
+                                var newTargetPath = m_IStorage.Combine(m_IStorage.Combine(targetPath, m_IStorage.GetFileName(item.WatchPath)), item.Name);
+                                if (!m_IStorage.FileExists(newTargetPath))
+                                {
+                                    m_Logger.Writeln($"**Update File, Warning - file does not exist, will copy the updated version {newTargetPath}");
+
+                                    CopyFile(item.FullPath, newTargetPath);
+                                }
+                                else
+                                {
+                                    CopyFile(item.FullPath, newTargetPath, true);
+                                }
+
+                            }
 
                             break;
                         }
@@ -86,8 +101,30 @@ namespace CompleteBackup.Models.backup
 
                     case WatcherChangeTypes.Deleted:
                         {
-                            //m_IStorage.DeleteFile(filePath);
-
+                            var sourcePath = item.FullPath;
+                            var newTargetPath = m_IStorage.Combine(m_IStorage.Combine(targetPath, m_IStorage.GetFileName(item.WatchPath)), item.Name);
+                            if (m_IStorage.IsFolder(newTargetPath))
+                            {
+                                if (m_IStorage.DirectoryExists(newTargetPath))
+                                {
+                                    DeleteDirectory(newTargetPath);
+                                }
+                                else
+                                {
+                                    m_Logger.Writeln($"**Delete Directory, Can't delete - directory not found {newTargetPath}");
+                                }
+                            }
+                            else
+                            {
+                                if (m_IStorage.FileExists(newTargetPath))
+                                {
+                                    DeleteFile(newTargetPath);
+                                }
+                                else
+                                {
+                                    m_Logger.Writeln($"**Delete File, Can't delete - file not found {newTargetPath}");
+                                }
+                            }
                             break;
                         }
 
