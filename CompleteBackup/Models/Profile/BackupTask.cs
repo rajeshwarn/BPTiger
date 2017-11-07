@@ -49,6 +49,7 @@ namespace CompleteBackup.Models.Profile
                 profile.IsBackupWorkerBusy = true;
                 m_ProgressBar.UpdateProgressBar("Backup starting...", 0);
                 var startTime = DateTime.Now;
+                m_Logger.Writeln($"-------------------------------------------------");
                 try
                 {
                     switch (profile.BackupType)

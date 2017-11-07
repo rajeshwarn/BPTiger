@@ -69,63 +69,43 @@ namespace CompleteBackup.Models.backup
 
                     case WatcherChangeTypes.Renamed:
                         {
-                            foreach (var backupPath in m_Profile.BackupFolderList)
+                            if (m_IStorage.IsFolder(item.WatchPath))
                             {
-                                var cNewPath = item.FullPath;
-                                var bFoundNewPath = false;
-                                while (cNewPath != null)
+                                var newTargetPath = m_IStorage.Combine(m_IStorage.Combine(targetPath, m_IStorage.GetFileName(item.WatchPath)), item.Name);
+                                var oldTargetPath = m_IStorage.Combine(m_IStorage.GetDirectoryName(newTargetPath), m_IStorage.GetFileName(item.OldPath));
+
+                                if (m_IStorage.IsFolder(oldTargetPath))
                                 {
-                                    if (cNewPath == backupPath.Path)
+                                    if (m_IStorage.DirectoryExists(oldTargetPath))
                                     {
-                                        bFoundNewPath = true;
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        cNewPath = m_IStorage.GetDirectoryName(cNewPath);
-                                    }
-                                }
-
-
-                                var cOldPath = item.OldPath;
-                                var bFoundOldPath = false;
-                                while (cOldPath != null)
-                                {
-                                    if (cOldPath == backupPath.Path)
-                                    {
-                                        bFoundOldPath = true;
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        cOldPath = m_IStorage.GetDirectoryName(cOldPath);
-                                    }
-                                }
-
-                                if (bFoundNewPath && bFoundOldPath)
-                                {
-
-                                    var tNewPath = item.FullPath.Substring(m_IStorage.GetDirectoryName(cNewPath).Length + 1);
-                                    var newTargetPath = m_IStorage.Combine(targetPath, tNewPath);
-
-                                    var tOldPath = item.OldPath.Substring(m_IStorage.GetDirectoryName(cOldPath).Length + 1);
-                                    var oldTargetPath = m_IStorage.Combine(targetPath, tOldPath);
-
-                                    if (m_IStorage.FileExists(oldTargetPath))
-                                    {
-                                        if (!m_IStorage.FileExists(newTargetPath))
+                                        if (!m_IStorage.DirectoryExists(newTargetPath))
                                         {
-                                            MoveFile(oldTargetPath, newTargetPath);
+                                            MoveDirectory(oldTargetPath, newTargetPath);
                                         }
                                         else
                                         {
-                                            m_Logger.Writeln($"**Rename file, file not found in source folder {newTargetPath}");
+                                            m_Logger.Writeln($"**Rename Directory, Can't rename - directory already exists {newTargetPath}");
                                         }
                                     }
                                     else
                                     {
-                                        m_Logger.Writeln($"**Rename file, file not found in backup folder {oldTargetPath}");
+                                        m_Logger.Writeln($"**Rename Directory, Can't rename - Directory not found in backup folder {oldTargetPath}");
                                     }
+                                }
+                                else if (m_IStorage.FileExists(oldTargetPath))
+                                {
+                                    if (!m_IStorage.FileExists(newTargetPath))
+                                    {
+                                        MoveFile(oldTargetPath, newTargetPath);
+                                    }
+                                    else
+                                    {
+                                        m_Logger.Writeln($"**Rename File, Can't rename - file already exists {newTargetPath}");
+                                    }
+                                }
+                                else
+                                {
+                                    m_Logger.Writeln($"**Rename file, Can't rename - file not found in backup folder {oldTargetPath}");
                                 }
                             }
 
