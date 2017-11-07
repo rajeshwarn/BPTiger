@@ -63,8 +63,8 @@
             <TextBlock Text="{Binding Profile.CurrentBackupFile}" TextWrapping="Wrap" FontStyle="Italic"></TextBlock>
         </StackPanel>
 
-        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
+        <!--<Grid Grid.Row="1">
             <local:LogConsoleView/>
-        </ScrollViewer>
+        </Grid>-->
     </DockPanel>
 </UserControl>

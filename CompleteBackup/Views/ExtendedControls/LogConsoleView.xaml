@@ -6,5 +6,7 @@
              xmlns:local="clr-namespace:CompleteBackup.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <TextBlock Name="tbOutputBlock"  Foreground="Black" FontFamily="Consolas" Padding="8" TextWrapping="Wrap" />
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
+        <TextBlock Name="tbOutputBlock"  Foreground="Black" FontFamily="Consolas" Padding="8" TextWrapping="Wrap" />
+    </ScrollViewer>
 </UserControl>

@@ -32,6 +32,7 @@ namespace CompleteBackup.ViewModels.MainWindow
                 { 0, new MainProfileViewModel() },
                 { 1, new MainBackupViewModel() },
                 { 2, new MainRestoreViewModel() },
+                { 3, new LogConsoleViewModel() },
             };
 
             m_CurrentPageViewModel = m_MainViewDictionary[m_DefaultPageIndex];

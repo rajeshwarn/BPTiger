@@ -31,6 +31,10 @@
             <view:MainRestoreView/>
         </DataTemplate>
         <DataTemplate
+            DataType="{x:Type view_model:LogConsoleViewModel}">
+            <view:LogConsoleView/>
+        </DataTemplate>
+        <DataTemplate
             DataType="{x:Type view_model:MainProfileViewModel}">
             <view:MainProfileView/>
         </DataTemplate>
@@ -207,7 +211,9 @@
                 </RibbonGroup>
             </RibbonTab>
 
-
+            <RibbonTab Header="Log" KeyTip="L" >
+            </RibbonTab>
+            
             <!-- Ribbon Tab #1: Home -->
             <RibbonTab Header="Home" KeyTip="H" >
                 <!-- Home  group-->

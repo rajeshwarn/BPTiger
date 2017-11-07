@@ -102,6 +102,7 @@
     <Compile Include="ViewModels\ActionRestore\RestoreItemsSelectionViewModel.cs" />
     <Compile Include="ViewModels\ActionRestore\ICommands\RestoreFolderSelectionICommand.cs" />
     <Compile Include="ViewModels\ActionRestore\Validators\RestoreTargetLocationValidator.cs" />
+    <Compile Include="ViewModels\ExtendedControls\LogConsoleViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\SelectBackupTypeICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\SelectBackupProfileICommand.cs" />
     <Compile Include="ViewModels\ProfileSetting\SelectBackupTypeWindowViewModel.cs" />
