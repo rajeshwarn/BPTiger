@@ -138,10 +138,10 @@
                     </RibbonGroup.ItemTemplate>
                 </RibbonGroup>-->
 
-                <RibbonGroup Header="Run backup now" ToolTip="Click start to manuaaly run a backup now for this profile">
+                <RibbonGroup Header="Run Full Scan" ToolTip="Click start to manually run a full backup">
                     <!--Start-->
                     <RibbonButton LargeImageSource="/Resources/Icons/Ribbon/Start.ico"  KeyTip="S"
-                                  Command="{Binding StartBackupCommand}"
+                                  Command="{Binding StartFullBackupCommand}"
                                   CommandParameter="{Binding ProjectData.CurrentBackupProfile}">
                         <RibbonButton.Style>
                             <Style TargetType="RibbonButton">
@@ -186,6 +186,15 @@
                                   Command="{Binding StopBackupCommand}"
                                   CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>
                 </RibbonGroup>
+
+                <RibbonGroup Header="Sync now" ToolTip="Click to manually run backup and sync items now">
+                    <!--Start-->
+                    <RibbonButton LargeImageSource="/Resources/Icons/Ribbon/Sync.ico"  KeyTip="S"
+                                  Command="{Binding StartWatcherBackupCommand}"
+                                  CommandParameter="{Binding ProjectData.CurrentBackupProfile}">
+                    </RibbonButton>
+                </RibbonGroup>
+                
                 <RibbonGroup>
                     <RibbonGroup.Style>
                         <Style TargetType="RibbonGroup">

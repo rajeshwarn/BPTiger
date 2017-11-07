@@ -107,13 +107,14 @@
     <Compile Include="ViewModels\ExtendedControls\LogConsoleViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\SelectBackupTypeICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\SelectBackupProfileICommand.cs" />
+    <Compile Include="ViewModels\MainWindow\ICommands\StartWatcherBackupICommand.cs" />
     <Compile Include="ViewModels\ProfileSetting\SelectBackupTypeWindowViewModel.cs" />
     <Compile Include="ViewModels\Share\BackupItemsTreeBase.cs" />
     <Compile Include="ViewModels\ExtendedControls\ProcessingSpinnerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\RestoreBackupICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\StopBackupICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\PauseBackupICommand.cs" />
-    <Compile Include="ViewModels\MainWindow\ICommands\StartBackupICommand.cs" />
+    <Compile Include="ViewModels\MainWindow\ICommands\StartFullBackupICommand.cs" />
     <Compile Include="ViewModels\ActionBackup\SelectBackupItemsWindowModel.cs" />
     <Compile Include="ViewModels\ExtendedControls\ChartGaugeViewModel.cs" />
     <Compile Include="ViewModels\ActionBackup\MainBackupViewModel.cs" />
@@ -323,6 +324,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\Ribbon\Clear.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Ribbon\Sync.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -189,14 +189,17 @@ namespace CompleteBackup.Models.Backup.Profile
 
         public void StartBackup(bool bFullBackupScan)
         {
-            if (BackupWorkerTask != null && BackupWorkerTask.IsBusy)
+            lock (this)
             {
-                //busy
-            }
-            else
-            {
-                BackupWorkerTask = new BackupWorker(this, bFullBackupScan);
-                BackupWorkerTask.RunWorkerAsync();
+                if (BackupWorkerTask != null && BackupWorkerTask.IsBusy)
+                {
+                    //busy
+                }
+                else
+                {
+                    BackupWorkerTask = new BackupWorker(this, bFullBackupScan);
+                    BackupWorkerTask.RunWorkerAsync();
+                }
             }
         }
 
