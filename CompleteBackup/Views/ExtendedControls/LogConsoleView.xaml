@@ -11,8 +11,34 @@
         <view_models:LogConsoleViewModel/>
     </UserControl.DataContext>
     <Grid>
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
+        <!--<TabControl ItemsSource="{Binding Project.BackupProfileList}">
+            <TabControl.ItemTemplate>
+                --><!-- this is the header template--><!--
+                <DataTemplate>
+                    <TextBlock
+                    Text="{Binding Name}" />
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                --><!-- this is the body of the TabItem template--><!--
+                <DataTemplate>
+                    <TextBlock
+                    Text="{Binding Name}" />
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>-->
+
+
+        <TabControl>
+            <TabItem Header="General">
+                <Label Content="Content goes here..." />
+            </TabItem>
+            <TabItem Header="{Binding Project.CurrentBackupProfile.Name}">
+            </TabItem>
+        </TabControl>
+
+        <!--<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
             <TextBlock Text="{Binding LoggerInstance.Logger}" Foreground="Black" FontFamily="Consolas" Padding="8" TextWrapping="Wrap" />
-        </ScrollViewer>
+        </ScrollViewer>-->
     </Grid>
 </UserControl>

@@ -1,4 +1,6 @@
-﻿using CompleteBackup.Models.Utilities;
+﻿using CompleteBackup.DataRepository;
+using CompleteBackup.Models.Backup.Project;
+using CompleteBackup.Models.Utilities;
 using CompleteBackup.ViewModels.ICommands;
 using System;
 using System.Collections.Generic;
@@ -13,5 +15,6 @@ namespace CompleteBackup.ViewModels
     public class LogConsoleViewModel
     {
         public BackupPerfectLogger LoggerInstance { get; } = BackupPerfectLogger.Instance;
+        public BackupProjectData Project { get; } = BackupProjectRepository.Instance.SelectedBackupProject;
     }
 }
