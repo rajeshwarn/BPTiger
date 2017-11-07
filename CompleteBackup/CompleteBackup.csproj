@@ -150,6 +150,9 @@
     <Compile Include="Views\ActionBackup\BackupItemsSelectionView.xaml.cs">
       <DependentUpon>BackupItemsSelectionView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ExtendedControls\LogConsoleView.xaml.cs">
+      <DependentUpon>LogConsoleView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow\GenericStatusBarView.cs" />
     <Compile Include="Views\MainWindow\MainWindowStatusBarView.xaml.cs">
       <DependentUpon>MainWindowStatusBarView.xaml</DependentUpon>
@@ -204,6 +207,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ActionBackup\BackupItemsSelectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ExtendedControls\LogConsoleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

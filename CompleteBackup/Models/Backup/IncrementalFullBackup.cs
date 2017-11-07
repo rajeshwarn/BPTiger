@@ -2,6 +2,7 @@
 using CompleteBackup.Models.Backup.History;
 using CompleteBackup.Models.Backup.Profile;
 using CompleteBackup.Models.Backup.Storage;
+using CompleteBackup.Views;
 using CompleteBackup.Views.MainWindow;
 using System;
 using System.Collections.Generic;
@@ -151,6 +152,14 @@ namespace CompleteBackup.Models.backup
                                             {
                                                 m_IStorage.MoveFile(oldTargetPath, newTargetPath);
                                             }
+                                            else
+                                            {
+                                                LogConsoleView.Writeln($"Rename file, file not found in source folder {newTargetPath}");
+                                            }
+                                        }
+                                        else
+                                        {
+                                            LogConsoleView.Writeln($"Rename file, file not found in backup folder {oldTargetPath}");
                                         }
                                     }
                                 }

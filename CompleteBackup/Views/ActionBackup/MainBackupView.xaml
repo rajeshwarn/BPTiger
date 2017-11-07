@@ -27,27 +27,34 @@
             <Setter Property="Margin" Value="11,11,11,11" />
         </Style>
     </UserControl.Resources>
-    
+
     <DockPanel LastChildFill="True">
-
-
         <Border DockPanel.Dock="Top" Margin="0,0,0,0" Padding="4">
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Grid Grid.Column="0">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Pending items: "/>
-                        <TextBlock Text="{Binding Profile.BackupWatcherItemListCount}"></TextBlock>
-                    </StackPanel>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Pending items: "/>
+                            <TextBlock Text="{Binding Profile.BackupWatcherItemListCount}"></TextBlock>
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Last backup time: "/>
+                            <TextBlock Text="{Binding Profile.LastBackupDateTime, TargetNullValue='Not Available'}"/>
+                        </StackPanel>
+                    </Grid>
                 </Grid>
-                <Grid Grid.Column="1">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Last backup time: "/>
-                        <TextBlock Text="{Binding Profile.LastBackupDateTime, TargetNullValue='Not Available'}"/>
-                    </StackPanel>
+                <Grid Grid.Row="1">
+                    <local:BackupItemsSelectionView Grid.Row="0"/>
                 </Grid>
             </Grid>
         </Border>
@@ -55,10 +62,9 @@
         <StackPanel DockPanel.Dock="Bottom" Orientation="Vertical">
             <TextBlock Text="{Binding Profile.CurrentBackupFile}" TextWrapping="Wrap" FontStyle="Italic"></TextBlock>
         </StackPanel>
-        
-        <Grid>
-            <local:BackupItemsSelectionView/>
-        </Grid>
 
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
+            <local:LogConsoleView/>
+        </ScrollViewer>
     </DockPanel>
 </UserControl>
