@@ -139,7 +139,7 @@
                         </ListView.ItemTemplate>
                         <ListView.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="Locate" Command="{Binding DeleteBackupProfileCommand}"
+                                <MenuItem Header="Locate item" Command="{Binding LocateMissingItemCommand}"
                                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}">
                                     <MenuItem.Style>
                                         <Style TargetType="MenuItem">
@@ -151,13 +151,13 @@
                                         </Style>
                                     </MenuItem.Style>
                                 </MenuItem>
-                                <MenuItem Header="Open in new window" Command="{Binding DeleteBackupProfileCommand}"
+                                <MenuItem Header="Open item location" Command="{Binding OpenItemLocationCommand}"
                                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}"/>
-                                <MenuItem Header="Add" Command="{Binding DeleteBackupProfileCommand}"
+                                <!--<MenuItem Header="Add" Command="{Binding DeleteBackupProfileCommand}"
                                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}"/>
                                 <Separator/>
                                 <MenuItem Header="Delete" Command="{Binding DeleteBackupProfileCommand}"
-                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}"/>
+                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}"/>-->
                             </ContextMenu>
                         </ListView.ContextMenu>
                     </ListView>

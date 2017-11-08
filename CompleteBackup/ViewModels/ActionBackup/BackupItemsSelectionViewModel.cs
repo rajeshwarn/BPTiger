@@ -26,6 +26,8 @@ namespace CompleteBackup.ViewModels
     {
         public ICommand OpenSelectBackupItemsWindowCommand { get; private set; } = new OpenSelectBackupItemsWindowICommand<object>();
         public ICommand SelectFolderNameCommand { get; private set; } = new SelectFolderNameICommand<object>();
+        public ICommand LocateMissingItemCommand { get; private set; } = new LocateMissingItemICommand<object>();
+        public ICommand OpenItemLocationCommand { get; private set; } = new OpenItemLocationICommand<object>();
 
 
         public BackupProjectData ProjectData { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject;
