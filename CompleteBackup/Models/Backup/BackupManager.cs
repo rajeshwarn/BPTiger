@@ -375,41 +375,83 @@ namespace CompleteBackup.Models.backup
         #region File System wrappers
         protected void CopyFile(string sourcePath, string targetPath, bool overwrite = false)
         {
-            m_Logger.Writeln($"File Copy {sourcePath} To {targetPath}");
+            if (m_Profile.IsDetaledLog)
+            {
+                m_Logger.Writeln($"File Copy {sourcePath} To {targetPath}");
+            }
+            else
+            {
+                m_Logger.Writeln($"File Copy {sourcePath}");
+            }
 
             m_IStorage.CopyFile(sourcePath, targetPath, overwrite);
         }
 
         protected void CreateDirectory(string path, bool bCheckIfExist = false)
         {
-            m_Logger.Writeln($"Create Directory {path}");
+            if (m_Profile.IsDetaledLog)
+            {
+                m_Logger.Writeln($"Create Directory {path}");
+            }
+            else
+            {
+                m_Logger.Writeln($"Create Directory {path}");
+            }
 
             m_IStorage.CreateDirectory(path, bCheckIfExist);
         }
 
         protected bool MoveDirectory(string sourcePath, string targetPath, bool bCreateFolder = false)
         {
-            m_Logger.Writeln($"Move Directory {sourcePath} To {targetPath}");
+            if (m_Profile.IsDetaledLog)
+            {
+                m_Logger.Writeln($"Move Directory {sourcePath} To {targetPath}");
+            }
+            else
+            {
+                m_Logger.Writeln($"Move Directory {sourcePath}");
+            }
 
             return m_IStorage.MoveDirectory(sourcePath, targetPath, bCreateFolder);
         }
 
         protected bool DeleteDirectory(string path, bool bRecursive = true)
         {
-            m_Logger.Writeln($"Delete Directory {path}");
+            if (m_Profile.IsDetaledLog)
+            {
+                m_Logger.Writeln($"Delete Directory {path}");
+            }
+            else
+            {
+                m_Logger.Writeln($"Delete Directory {path}");
+            }
 
             return m_IStorage.DeleteDirectory(path, bRecursive);
         }
 
         protected void MoveFile(string sourcePath, string targetPath, bool bCreateFolder = false)
         {
-            m_Logger.Writeln($"Move File {sourcePath} To {targetPath}");
+            if (m_Profile.IsDetaledLog)
+            {
+                m_Logger.Writeln($"Move File {sourcePath} To {targetPath}");
+            }
+            else
+            {
+                m_Logger.Writeln($"Move File {sourcePath}");
+            }
 
             m_IStorage.MoveFile(sourcePath, targetPath, bCreateFolder);
         }
         protected void DeleteFile(string path)
         {
-            m_Logger.Writeln($"Delete File {path}");
+            if (m_Profile.IsDetaledLog)
+            {
+                m_Logger.Writeln($"Delete File {path}");
+            }
+            else
+            {
+                m_Logger.Writeln($"Delete File {path}");
+            }
 
             m_IStorage.DeleteFile(path);
         }
