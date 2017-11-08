@@ -13,10 +13,15 @@ namespace CompleteBackup.Models.Backup.Profile
 {
     public class FolderData :ObservableObject
     {
-        public bool IsAvailable { get; set; } = true;
-        public string Path { get; set; }
+        private bool m_IsAvailable = true;
+        public bool IsAvailable { get { return m_IsAvailable; } set { m_IsAvailable = value; OnPropertyChanged(); OnPropertyChanged("Image");} }
+
+        private string m_Path { get; set; }
+        public string Path { get { return m_Path; } set { m_Path = value; OnPropertyChanged();} }
+
         public string RelativePath { get; set; }
-        public string Name{ get; set; }
+        private string m_Name { get; set; }
+        public string Name { get { return m_Name; } set { m_Name = value; OnPropertyChanged(); } }
 
         public bool IsFolder { get; set; }
 
