@@ -110,8 +110,15 @@ namespace CompleteBackup.ViewModels
 
                     if (match != null)
                     {
-                        var item = AddPathToMenuItemTree(match, folder.Path);
-                        itemList.Add(item);
+                        try
+                        {
+                            var item = AddPathToMenuItemTree(match, folder.Path);
+                            itemList.Add(item);
+                        }
+                        catch (FileNotFoundException)
+                        {
+                            ProfileData.Logger.Writeln($"***Warning: Backup item not available: {folder.Path}");
+                        }
                     }
                 }
             }));

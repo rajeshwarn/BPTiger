@@ -29,7 +29,7 @@ namespace CompleteBackup.Models.backup
         {
             m_TimeStamp = DateTime.Now;
             m_Profile = profile;
-            m_SourceBackupPathList = profile.BackupFolderList.Where(i => i.IsAvailable).ToList();
+            m_SourceBackupPathList = profile.BackupFolderList.ToList();//.Where(i => i.IsAvailable).ToList();
             m_TargetBackupPath = profile.TargetBackupFolder;
 
             m_IStorage = profile.GetStorageInterface();
@@ -149,8 +149,12 @@ namespace CompleteBackup.Models.backup
             {
                 if (item.IsFolder)
                 {
-                    files += m_IStorage.GetNumberOfFiles(item.Path);
-                    directories += m_IStorage.GetNumberOfDirectories(item.Path);
+                    try
+                    {
+                        files += m_IStorage.GetNumberOfFiles(item.Path);
+                        directories += m_IStorage.GetNumberOfDirectories(item.Path);
+                    }
+                    catch (DirectoryNotFoundException) { }
                 }
                 else
                 {
@@ -198,14 +202,14 @@ namespace CompleteBackup.Models.backup
                     //}
 
                     //Keep current version in set
-                    m_IStorage.MoveFile(currSetFilePath, lastSetFilePath, true);
+                    MoveFile(currSetFilePath, lastSetFilePath, true);
 
                     //Update new version to new set
                     if (!m_IStorage.DirectoryExists(currSetPath))
                     {
-                        m_IStorage.CreateDirectory(currSetPath);
+                        CreateDirectory(currSetPath);
                     }
-                    m_IStorage.CopyFile(sourceFilePath, currSetFilePath);
+                    CopyFile(sourceFilePath, currSetFilePath);
 
                     m_BackupSessionHistory.AddUpdatedFile(sourceFilePath, currSetFilePath);
                 }
@@ -215,9 +219,9 @@ namespace CompleteBackup.Models.backup
                 // new file, copy to current set
                 if (!m_IStorage.DirectoryExists(currSetPath))
                 {
-                    m_IStorage.CreateDirectory(currSetPath);
+                    CreateDirectory(currSetPath);
                 }
-                m_IStorage.CopyFile(sourceFilePath, currSetFilePath);
+                CopyFile(sourceFilePath, currSetFilePath);
 
                 m_BackupSessionHistory.AddNewFile(sourceFilePath, currSetFilePath);
             }
@@ -238,7 +242,7 @@ namespace CompleteBackup.Models.backup
                 else
                 {
                     //update/overwrite file
-                    m_IStorage.CopyFile(sourceFilePath, currSetFilePath, true);
+                    CopyFile(sourceFilePath, currSetFilePath, true);
 
                     m_BackupSessionHistory.AddUpdatedFile(sourceFilePath, currSetFilePath);
                 }
@@ -247,34 +251,13 @@ namespace CompleteBackup.Models.backup
             {
                 if (!m_IStorage.DirectoryExists(currSetPath))
                 {
-                    m_IStorage.CreateDirectory(currSetPath);
+                    CreateDirectory(currSetPath);
                 }
-                m_IStorage.CopyFile(sourceFilePath, currSetFilePath);
+                CopyFile(sourceFilePath, currSetFilePath);
 
                 m_BackupSessionHistory.AddNewFile(sourceFilePath, currSetFilePath);
             }
         }
-
-        protected void HandleDeletedFiles(List<string> sourceFileList, string currSetPath, string lastSetPath)
-        {
-            //Delete any deleted files
-            var currSetFileList = m_IStorage.GetFiles(currSetPath);
-            foreach (var filePath in currSetFileList)
-            {
-                var fileName = m_IStorage.GetFileName(filePath);
-                if (!sourceFileList.Exists(item => m_IStorage.GetFileName(item) == fileName))
-                {
-                    //if not exists in source, delete the file
-                    var prevSetfilePath = m_IStorage.Combine(lastSetPath, fileName);
-
-                    //Move file to last set
-                    m_IStorage.MoveFile(filePath, prevSetfilePath, true);
-
-                    m_BackupSessionHistory.AddDeletedFile(filePath, prevSetfilePath);
-                }
-            }
-        }
-
 
         protected virtual void HandleDeletedFiles(List<string> sourceFileList, string currSetPath)
         {

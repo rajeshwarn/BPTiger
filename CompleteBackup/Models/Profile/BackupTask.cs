@@ -85,6 +85,8 @@ namespace CompleteBackup.Models.Profile
                     m_BackupManager.ProcessBackup();
                     m_BackupManager.Done();
 
+                    m_Profile.UpdateProfileProperties();
+
                 }
                 catch (TaskCanceledException ex)
                 {

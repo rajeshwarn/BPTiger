@@ -83,12 +83,13 @@ namespace CompleteBackup.Models.Backup.Profile
         {
             FileSystemWatcherWorker = new CBFileSystemWatcherWorker(this);
 
+            UpdateProfileProperties();
+
             if (!FileSystemWatcherWorker.IsBusy)
             {
                 FileSystemWatcherWorker.RunWorkerAsync();
             }
 
-            ProfileDataRefreshTask = new ProfileDataRefreshTask(this);
         }
 
 
@@ -383,10 +384,21 @@ namespace CompleteBackup.Models.Backup.Profile
 
         public void UpdateProfileProperties()
         {
-            if (ProfileDataRefreshTask?.IsBusy == false)
+            lock (this)
             {
-                ProfileDataRefreshTask.RunWorkerAsync();
-            }                
+                if (ProfileDataRefreshTask == null)
+                {
+                    ProfileDataRefreshTask = new ProfileDataRefreshTask(this);
+                    ProfileDataRefreshTask.RunWorkerAsync();
+                }
+                else
+                {
+                    if (ProfileDataRefreshTask?.IsBusy == false)
+                    {
+                        ProfileDataRefreshTask.RunWorkerAsync();
+                    }
+                }
+            }
         }
 
         public long BackupTargetDiskSizeNumber { get; set; } = 0;

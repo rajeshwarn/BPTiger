@@ -39,6 +39,7 @@ namespace CompleteBackup.Models.backup
 
         protected override void ProcessBackupRootFolders(string targetPath)
         {
+            //process all items
             foreach (var item in m_SourceBackupPathList)
             {
                 if (item.IsFolder)
@@ -53,8 +54,9 @@ namespace CompleteBackup.Models.backup
                 }
             }
 
-
             var sourceDirList = new List<string>();
+
+            //Handle deleted folders
             var sourceDirectoryEntriesList = m_SourceBackupPathList.Where(i => i.IsFolder).ToList();
             foreach (var item in sourceDirectoryEntriesList)
             {
@@ -63,6 +65,8 @@ namespace CompleteBackup.Models.backup
             HandleDeletedItems(sourceDirList, targetPath);
 
             sourceDirList.Clear();
+
+            //Handle deleted files
             var sourceFileEntriesList = m_SourceBackupPathList.Where(i => !i.IsFolder).ToList();
             foreach (var item in sourceFileEntriesList)
             {

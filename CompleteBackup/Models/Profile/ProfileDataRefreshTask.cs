@@ -176,7 +176,10 @@ namespace CompleteBackup.Models.Profile
                     //    }));
                     //}
 
-                    m_ProfileDataUpdateEventCallback(profile);
+                    if (m_ProfileDataUpdateEventCallback != null)
+                    {
+                        m_ProfileDataUpdateEventCallback(profile);
+                    }
 
                     //update data to persistent storage
                     DataRepository.BackupProjectRepository.Instance.SaveProject();
@@ -194,7 +197,7 @@ namespace CompleteBackup.Models.Profile
             };
         }
 
-        public delegate void ProfileDataUpdateEvent(BackupProfileData tranData);
+        public delegate void ProfileDataUpdateEvent(BackupProfileData profile);
         private event ProfileDataUpdateEvent m_ProfileDataUpdateEventCallback;
 
         public void RegisterEvent(ProfileDataUpdateEvent callback)

@@ -46,21 +46,40 @@ namespace CompleteBackup.Models.Backup
         {
             m_Path = path;
 
-            var watcher = new FileSystemWatcher() { IncludeSubdirectories = true };
-            watcher.Path = m_Path;
-            watcher.NotifyFilter =
-                NotifyFilters.LastAccess |
-                NotifyFilters.LastWrite |
-                NotifyFilters.FileName |
-                NotifyFilters.DirectoryName;
+            var watcher = new FileSystemWatcher();
+            if (m_Profile.GetStorageInterface().IsFolder(m_Path))
+            {
+                watcher.IncludeSubdirectories = true;
+                watcher.Path = m_Path;
+                watcher.NotifyFilter =
+                    NotifyFilters.LastAccess |
+                    NotifyFilters.LastWrite |
+                    NotifyFilters.FileName |
+                    NotifyFilters.DirectoryName;
 
-            watcher.Filter = "*.*";
+                watcher.Filter = "*.*";
 
-            // Add event handlers.
-            watcher.Changed += new FileSystemEventHandler(OnChanged);
-            watcher.Created += new FileSystemEventHandler(OnCreated);
-            watcher.Deleted += new FileSystemEventHandler(OnDeleted);
-            watcher.Renamed += new RenamedEventHandler(OnRenamed);
+                // Add event handlers.
+                watcher.Changed += new FileSystemEventHandler(OnChanged);
+                watcher.Created += new FileSystemEventHandler(OnCreated);
+                watcher.Deleted += new FileSystemEventHandler(OnDeleted);
+                watcher.Renamed += new RenamedEventHandler(OnRenamed);
+            }
+            else
+            {
+                watcher.Path = m_Profile.GetStorageInterface().GetDirectoryName(m_Path);
+                watcher.NotifyFilter =
+                    NotifyFilters.LastAccess |
+                    NotifyFilters.LastWrite |
+                    NotifyFilters.FileName;
+
+                watcher.Filter = $"{m_Profile.GetStorageInterface().GetFileName(m_Path)}";
+
+                // Add event handlers.
+                watcher.Changed += new FileSystemEventHandler(OnChanged);
+                watcher.Deleted += new FileSystemEventHandler(OnDeleted);
+                watcher.Renamed += new RenamedEventHandler(OnRenamed);
+            }
 
             // Begin watching.
             watcher.EnableRaisingEvents = true;
@@ -133,7 +152,14 @@ namespace CompleteBackup.Models.Backup
                     foreach (var backupItem in profile.BackupFolderList)
                     {
                         m_Logger.Writeln($"Starting File System Watcher: {backupItem.Path}");
-                        new FileSystemWatcerItem(m_Profile).RunWatcher(backupItem.Path);
+                        try
+                        {
+                            new FileSystemWatcerItem(m_Profile).RunWatcher(backupItem.Path);
+                        }
+                        catch (FileNotFoundException)
+                        {
+                            m_Logger.Writeln($"***Warning: Backup item not available: {backupItem.Path}");
+                        }
                     }
                 }
                 catch (TaskCanceledException ex)
