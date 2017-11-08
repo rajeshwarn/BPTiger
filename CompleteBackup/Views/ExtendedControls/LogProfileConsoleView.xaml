@@ -13,7 +13,8 @@
     <Grid>
         <Expander Grid.Row="1" Header="Backup Logs"  IsExpanded="True">
             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
-                <TextBlock Text="{Binding Project.CurrentBackupProfile.Logger.LoggerData}" Foreground="Black" FontFamily="Consolas" Padding="8" TextWrapping="Wrap" />
+                <TextBox Text="{Binding Project.CurrentBackupProfile.Logger.LoggerData}" IsReadOnly="True" BorderThickness="0" Background="Transparent"
+                           Foreground="Black" FontFamily="Consolas" Padding="8" TextWrapping="Wrap" />
             </ScrollViewer>
         </Expander>
     </Grid>
