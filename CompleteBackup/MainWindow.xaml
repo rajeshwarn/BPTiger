@@ -261,39 +261,50 @@
 
         <main_window_views:MainWindowStatusBarView DockPanel.Dock="Bottom"/>
 
-        <DockPanel LastChildFill="True">
-            <Grid DockPanel.Dock="Left">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="128" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" DockPanel.Dock="Left">
                 <profile_view:ProfileListView/>
             </Grid>
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+            <DockPanel Grid.Column="2" LastChildFill="True">
+                <!--<Grid DockPanel.Dock="Left">
+                    <profile_view:ProfileListView/>
+                </Grid>-->
 
-            <Border DockPanel.Dock="Top" Margin="0,0,0,16" Background="LightGray" Padding="4" Visibility="Collapsed">
-                <!--<Border DockPanel.Dock="Top" BorderThickness="1" CornerRadius="4" BorderBrush="DarkGray" Margin="4,4,4,8" Padding="4">-->
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="0">
-                        <StackPanel Orientation="Horizontal">
-                            <StackPanel Orientation="Horizontal" Margin="0,0,32,0">
-                                <Image Source="{Binding ProjectData.CurrentBackupProfile.BackupTypeImage}" Height="16"/>
-                                <TextBlock Text="{Binding ProjectData.CurrentBackupProfile.BackupTypeName}"/>
+                <Border DockPanel.Dock="Top" Margin="0,0,0,16" Background="LightGray" Padding="4" Visibility="Collapsed">
+                    <!--<Border DockPanel.Dock="Top" BorderThickness="1" CornerRadius="4" BorderBrush="DarkGray" Margin="4,4,4,8" Padding="4">-->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal" Margin="0,0,32,0">
+                                    <Image Source="{Binding ProjectData.CurrentBackupProfile.BackupTypeImage}" Height="16"/>
+                                    <TextBlock Text="{Binding ProjectData.CurrentBackupProfile.BackupTypeName}"/>
+                                </StackPanel>
+                                <TextBlock FontStyle="Italic" Text="{Binding ProjectData.CurrentBackupProfile.Name}"/>
                             </StackPanel>
-                            <TextBlock FontStyle="Italic" Text="{Binding ProjectData.CurrentBackupProfile.Name}"/>
-                        </StackPanel>
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Last backup time: "/>
+                                <TextBlock Text="{Binding ProjectData.CurrentBackupProfile.LastBackupDateTime, TargetNullValue='Not available'}"/>
+                            </StackPanel>
+                        </Grid>
                     </Grid>
-                    <Grid Grid.Column="1">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Last backup time: "/>
-                            <TextBlock Text="{Binding ProjectData.CurrentBackupProfile.LastBackupDateTime, TargetNullValue='Not available'}"/>
-                        </StackPanel>
-                    </Grid>
-                </Grid>
-            </Border>
-            
-            <ContentControl Content="{Binding CurrentPageViewModel}"/>
-        </DockPanel>
+                </Border>
 
+                <ContentControl Content="{Binding CurrentPageViewModel}"/>
+            </DockPanel>
+        </Grid>
     </DockPanel>
 
 </Window>

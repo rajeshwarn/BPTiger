@@ -72,8 +72,8 @@ namespace CompleteBackup.Models.Profile
                             }
                             break;                            
 
-                        case BackupTypeEnum.Full:
-                            m_Logger.Writeln($"Starting a Deep Full backup");
+                        case BackupTypeEnum.Snapshot:
+                            m_Logger.Writeln($"Starting a Snapshot backup");
                             m_BackupManager = new SnapshotBackup(profile, m_ProgressBar);
                             break;
 

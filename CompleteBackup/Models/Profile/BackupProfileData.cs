@@ -28,7 +28,7 @@ namespace CompleteBackup.Models.Backup.Profile
     }
     public enum BackupTypeEnum
     {
-        Full,
+        Snapshot,
         Incremental,
         Differential,
     }
@@ -45,7 +45,7 @@ namespace CompleteBackup.Models.Backup.Profile
     class ProfileHelper
     {
         public static List<BackupTypeData> BackupTypeList { get; private set; } = new List<BackupTypeData>() {
-            new BackupTypeData() { BackupType = BackupTypeEnum.Full, Name = "Full Backup", ImageName = @"/Resources/Icons/Ribbon/FullBackup.ico", Description = "A full copy of your entire data set"},
+            new BackupTypeData() { BackupType = BackupTypeEnum.Snapshot, Name = "Snapshot Backup", ImageName = @"/Resources/Icons/Ribbon/FullBackup.ico", Description = "A full copy of your entire data set"},
             new BackupTypeData() { BackupType = BackupTypeEnum.Incremental, Name = "Incremental Backup", ImageName = @"/Resources/Icons/Ribbon/IncrementalBackup.ico", Description = "Starts with a full backup, and subsequent backups only backup data that has changed\nFor a faster backup"},
             new BackupTypeData() { BackupType = BackupTypeEnum.Differential, Name = "Differential Backup", ImageName = @"/Resources/Icons/Ribbon/DifferentialBackup.ico", Description = "Similar to Incremental Backup, but also contains all the data that changed since the first backup\nThis lets you restore a specific version event if the data has been deleted in the source"},
         };
@@ -129,7 +129,7 @@ namespace CompleteBackup.Models.Backup.Profile
         private BackupRunTypeEnum m_BackupRunType { get; set; } = BackupRunTypeEnum.Always;
         public BackupRunTypeEnum BackupRunType { get { return m_BackupRunType; } set { m_BackupRunType = value; OnPropertyChanged(); } }
 
-        private BackupTypeEnum m_BackupType { get; set; } = BackupTypeEnum.Full;
+        private BackupTypeEnum m_BackupType { get; set; } = BackupTypeEnum.Snapshot;
         public BackupTypeEnum BackupType { get { return m_BackupType; } set { m_BackupType = value; OnPropertyChanged(); OnPropertyChanged("BackupTypeName"); OnPropertyChanged("BackupTypeImage"); } }
 
         public Guid GUID { get; set; } = Guid.NewGuid();

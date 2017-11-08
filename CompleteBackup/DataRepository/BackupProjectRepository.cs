@@ -79,8 +79,8 @@ namespace CompleteBackup.DataRepository
                         {
                             new BackupProfileData()
                             {
-                                BackupType =  BackupTypeEnum.Full,
-                                Name = "Sample Backup Profile",
+                                BackupType =  BackupTypeEnum.Snapshot,
+                                Name = "Sample Snapshot backup ",
                                 Description = "home backup",
                                 BackupFolderList = new ObservableCollection<FolderData>()
                                 {
@@ -89,8 +89,8 @@ namespace CompleteBackup.DataRepository
                             },
                             new BackupProfileData()
                             {
-                                BackupType =  BackupTypeEnum.Full,
-                                Name = "Sample Profile2",
+                                BackupType =  BackupTypeEnum.Incremental,
+                                Name = "Sample Incremental backup",
                                 Description = "home backup",
                                 BackupFolderList = new ObservableCollection<FolderData>()
                                 {
@@ -99,8 +99,8 @@ namespace CompleteBackup.DataRepository
                             },
                             new BackupProfileData()
                             {
-                                BackupType =  BackupTypeEnum.Full,
-                                Name = "Sample Profile3",
+                                BackupType =  BackupTypeEnum.Differential,
+                                Name = "Sample Differential",
                                 Description = "home backup",
                                 BackupFolderList = new ObservableCollection<FolderData>()
                                 {

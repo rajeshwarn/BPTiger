@@ -147,7 +147,7 @@ namespace CompleteBackup.ViewModels
 
             switch (profile.BackupType)
             {
-                case BackupTypeEnum.Full:
+                case BackupTypeEnum.Snapshot:
                 case BackupTypeEnum.Incremental:
                     {
                         var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, m_LastSetPathCache);

@@ -52,9 +52,9 @@
                                                     </Style>
                                                 </Border.Style>
                                                     <StackPanel Orientation="Vertical" >
-                                                        <Image Source="{Binding BackupTypeImage}" Width="32" Stretch="Fill"/>
-                                                        <TextBlock Text="{Binding Name}" HorizontalAlignment="Center"  Margin="0,4,0,0"/>
-                                                        <TextBlock Text="{Binding Description}" HorizontalAlignment="Left" FontStyle="Italic" Margin="0,4,0,0" Foreground="Gray"/>
+                                                        <Image Source="{Binding BackupTypeImage}" Width="32" />
+                                                        <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" TextWrapping="Wrap" Margin="0,4,0,0"/>
+                                                        <TextBlock Text="{Binding Description}" HorizontalAlignment="Left" FontStyle="Italic" TextWrapping="Wrap" Margin="0,4,0,0" Foreground="Gray"/>
                                                     </StackPanel>
                                                 </Border>
                                             </Grid>
