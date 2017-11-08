@@ -84,7 +84,7 @@ namespace CompleteBackup.Models.backup
 
                     if (item.IsFolder)
                     {
-                        ProcessIncrementalStep(item.Path, targetPath, lastTargetPath);
+                        ProcessIncrementalFolderStep(item.Path, targetPath, lastTargetPath);
                     }
                     else
                     {
@@ -97,7 +97,7 @@ namespace CompleteBackup.Models.backup
             }
         }
 
-        public void ProcessIncrementalStep(string sourcePath, string currSetPath, string lastSetPath)
+        public void ProcessIncrementalFolderStep(string sourcePath, string currSetPath, string lastSetPath)
         {
             var sourceFileList = m_IStorage.GetFiles(sourcePath);
 
@@ -124,7 +124,7 @@ namespace CompleteBackup.Models.backup
                 string newCurrSetPath = m_IStorage.Combine(currSetPath, subdirectory);
                 string newLastSetPath = m_IStorage.Combine(lastSetPath, subdirectory);
 
-                ProcessIncrementalStep(newSourceSetPath, newCurrSetPath, newLastSetPath);
+                ProcessIncrementalFolderStep(newSourceSetPath, newCurrSetPath, newLastSetPath);
             }
         }
     }

@@ -21,18 +21,17 @@ namespace CompleteBackup.Models.backup
         public override void ProcessBackup()
         {
             m_BackupSessionHistory.Reset(GetTimeStamp());
-            //path = profile.GetStorageInterface().Combine(profile.TargetBackupFolder, path);
             var backupName = BackupManager.GetLastBackupSetName(m_Profile);
             if (backupName == null)
             {
                 //this is the first run
                 backupName = GetTargetSetName();
-                CreateNewBackupSetFolder(backupName);
+                ProcessBackupRootFolders(CreateNewBackupSetFolder(backupName));
             }
-
-            var targetSetPath = m_IStorage.Combine(m_TargetBackupPath, backupName);
-
-            ProcessBackupRootFolders(targetSetPath);
+            else
+            {
+                ProcessBackupRootFolders(m_IStorage.Combine(m_TargetBackupPath, backupName));
+            }
 
             BackupSessionHistory.SaveHistory(m_TargetBackupPath, backupName, m_BackupSessionHistory);//, GetTimeStampString());
         }
