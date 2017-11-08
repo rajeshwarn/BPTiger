@@ -28,12 +28,9 @@ namespace CompleteBackup.Models.backup
 
             if (lastSet == null)
             {
+                //First backup
                 string backupName = GetTargetSetName();
-                string targetSetPath = CreateNewBackupSetFolder(backupName);
-
-                ProcessBackupRootFolders(targetSetPath);
-
-                BackupSessionHistory.SaveHistory(m_TargetBackupPath, targetSet, m_BackupSessionHistory);
+                ProcessBackupRootFolders(CreateNewBackupSetFolder(backupName));
             }
             else
             {
@@ -43,6 +40,7 @@ namespace CompleteBackup.Models.backup
 
                 if (!MoveDirectory(lastTargetPath_, newTargetPath))
                 {
+                    m_Logger.Writeln($"***Backup failed, failed to move {lastTargetPath_} To {newTargetPath}");
                     MessageBox.Show($"Operation Canceled", "Incremental Backup", MessageBoxButton.OK, MessageBoxImage.Information);
 
                     return;
@@ -94,6 +92,36 @@ namespace CompleteBackup.Models.backup
                 }
 
                 BackupSessionHistory.SaveHistory(m_TargetBackupPath, targetSet, m_BackupSessionHistory);
+            }
+        }
+
+
+        protected void HandleDeletedItems(List<string> sourceSubdirectoryEntriesList, string currSetPath, string lastSetPath)
+        {
+            //lookup for deleted items
+            if (m_IStorage.DirectoryExists(currSetPath))
+            {
+                string[] targetSubdirectoryEntries = m_IStorage.GetDirectories(currSetPath);
+                var deleteList = new List<string>();
+                if (targetSubdirectoryEntries != null)
+                {
+                    foreach (var entry in targetSubdirectoryEntries)
+                    {
+                        if (!sourceSubdirectoryEntriesList.Exists(e => e == m_IStorage.GetFileName(entry)))
+                        {
+                            deleteList.Add(entry);
+                        }
+                    }
+                }
+
+                //Delete deleted items
+                foreach (var entry in deleteList)
+                {
+                    var destPath = m_IStorage.Combine(lastSetPath, m_IStorage.GetFileName(entry));
+                    m_IStorage.MoveDirectory(entry, destPath, true);
+
+                    m_BackupSessionHistory.AddDeletedFolder(entry, destPath);
+                }
             }
         }
 

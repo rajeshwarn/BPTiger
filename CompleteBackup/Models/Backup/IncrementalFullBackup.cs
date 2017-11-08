@@ -24,7 +24,7 @@ namespace CompleteBackup.Models.backup
             var backupName = BackupManager.GetLastBackupSetName(m_Profile);
             if (backupName == null)
             {
-                //this is the first run
+                //First backup
                 backupName = GetTargetSetName();
                 ProcessBackupRootFolders(CreateNewBackupSetFolder(backupName));
             }

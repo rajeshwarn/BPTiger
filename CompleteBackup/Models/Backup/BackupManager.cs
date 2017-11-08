@@ -293,36 +293,6 @@ namespace CompleteBackup.Models.backup
             }
         }
 
-
-        protected void HandleDeletedItems(List<string> sourceSubdirectoryEntriesList, string currSetPath, string lastSetPath)
-        {
-            //lookup for deleted items
-            if (m_IStorage.DirectoryExists(currSetPath))
-            {
-                string[] targetSubdirectoryEntries = m_IStorage.GetDirectories(currSetPath);
-                var deleteList = new List<string>();
-                if (targetSubdirectoryEntries != null)
-                {
-                    foreach (var entry in targetSubdirectoryEntries)
-                    {
-                        if (!sourceSubdirectoryEntriesList.Exists(e => e == m_IStorage.GetFileName(entry)))
-                        {
-                            deleteList.Add(entry);
-                        }
-                    }
-                }
-
-                //Delete deleted items
-                foreach (var entry in deleteList)
-                {
-                    var destPath = m_IStorage.Combine(lastSetPath, m_IStorage.GetFileName(entry));
-                    m_IStorage.MoveDirectory(entry, destPath, true);
-
-                    m_BackupSessionHistory.AddDeletedFolder(entry, destPath);
-                }
-            }
-        }
-
         protected void HandleDeletedItems(List<string> sourceSubdirectoryEntriesList, string currSetPath)
         {
             //lookup for deleted items
