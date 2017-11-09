@@ -177,87 +177,37 @@ namespace CompleteBackup.Models.backup
             ProgressBar?.Release();
         }
 
+        //protected void HandleFile(string sourcePath, string currSetPath, string fileName)
+        //{
+        //    var sourceFilePath = m_IStorage.Combine(sourcePath, fileName);
+        //    var currSetFilePath = m_IStorage.Combine(currSetPath, fileName);
 
+        //    if (m_IStorage.FileExists(currSetFilePath))
+        //    {
+        //        if (m_IStorage.IsFileSame(sourceFilePath, currSetFilePath))
+        //        {
+        //            //Do nothing
+        //            m_BackupSessionHistory.AddNoChangeFile(sourceFilePath, currSetFilePath);
+        //        }
+        //        else
+        //        {
+        //            //update/overwrite file
+        //            CopyFile(sourceFilePath, currSetFilePath, true);
 
+        //            m_BackupSessionHistory.AddUpdatedFile(sourceFilePath, currSetFilePath);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        if (!m_IStorage.DirectoryExists(currSetPath))
+        //        {
+        //            CreateDirectory(currSetPath);
+        //        }
+        //        CopyFile(sourceFilePath, currSetFilePath);
 
-        protected void HandleFile(string sourcePath, string currSetPath, string lastSetPath, string fileName)
-        {
-            var sourceFilePath = m_IStorage.Combine(sourcePath, fileName);
-            var lastSetFilePath = (lastSetPath == null) ? null : m_IStorage.Combine(lastSetPath, fileName);
-            var currSetFilePath = m_IStorage.Combine(currSetPath, fileName);
-
-            if (m_IStorage.FileExists(currSetFilePath))
-            {
-                if (m_IStorage.IsFileSame(sourceFilePath, currSetFilePath))
-                {
-                    //File is the same, do nothing
-                    m_BackupSessionHistory.AddNoChangeFile(sourceFilePath, currSetFilePath);
-                }
-                else
-                {
-                    //Move current file to old set
-                    //if (!m_IStorage.DirectoryExists(lastSetPath))
-                    //{
-                    //    m_IStorage.CreateDirectory(lastSetPath);
-                    //}
-
-                    //Keep current version in set
-                    MoveFile(currSetFilePath, lastSetFilePath, true);
-
-                    //Update new version to new set
-                    if (!m_IStorage.DirectoryExists(currSetPath))
-                    {
-                        CreateDirectory(currSetPath);
-                    }
-                    CopyFile(sourceFilePath, currSetFilePath);
-
-                    m_BackupSessionHistory.AddUpdatedFile(sourceFilePath, currSetFilePath);
-                }
-            }
-            else
-            {
-                // new file, copy to current set
-                if (!m_IStorage.DirectoryExists(currSetPath))
-                {
-                    CreateDirectory(currSetPath);
-                }
-                CopyFile(sourceFilePath, currSetFilePath);
-
-                m_BackupSessionHistory.AddNewFile(sourceFilePath, currSetFilePath);
-            }
-        }
-
-        protected void HandleFile(string sourcePath, string currSetPath, string fileName)
-        {
-            var sourceFilePath = m_IStorage.Combine(sourcePath, fileName);
-            var currSetFilePath = m_IStorage.Combine(currSetPath, fileName);
-
-            if (m_IStorage.FileExists(currSetFilePath))
-            {
-                if (m_IStorage.IsFileSame(sourceFilePath, currSetFilePath))
-                {
-                    //Do nothing
-                    m_BackupSessionHistory.AddNoChangeFile(sourceFilePath, currSetFilePath);
-                }
-                else
-                {
-                    //update/overwrite file
-                    CopyFile(sourceFilePath, currSetFilePath, true);
-
-                    m_BackupSessionHistory.AddUpdatedFile(sourceFilePath, currSetFilePath);
-                }
-            }
-            else
-            {
-                if (!m_IStorage.DirectoryExists(currSetPath))
-                {
-                    CreateDirectory(currSetPath);
-                }
-                CopyFile(sourceFilePath, currSetFilePath);
-
-                m_BackupSessionHistory.AddNewFile(sourceFilePath, currSetFilePath);
-            }
-        }
+        //        m_BackupSessionHistory.AddNewFile(sourceFilePath, currSetFilePath);
+        //    }
+        //}
 
         protected virtual void HandleDeletedFiles(List<string> sourceFileList, string currSetPath)
         {

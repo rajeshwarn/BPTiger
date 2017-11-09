@@ -21,16 +21,14 @@ namespace CompleteBackup.Models.backup
 
         public override void ProcessBackup()
         {
-            var lastSet = BackupManager.GetLastBackupSetName(m_Profile);
-            var targetSet = GetTargetSetName();
-
             m_BackupSessionHistory.Reset(GetTimeStamp());
 
+            var targetSet = GetTargetSetName();
+            var lastSet = BackupManager.GetLastBackupSetName(m_Profile);
             if (lastSet == null)
             {
                 //First backup
-                string backupName = GetTargetSetName();
-                ProcessBackupRootFolders(CreateNewBackupSetFolder(backupName));
+                base.ProcessBackupRootFolders(CreateNewBackupSetFolder(targetSet));
             }
             else
             {
@@ -117,7 +115,7 @@ namespace CompleteBackup.Models.backup
                     if (m_IStorage.DirectoryExists(item.Path))
                     {
                         item.IsAvailable = true;
-                        ProcessIncrementalFolderStep(item.Path, targetPath, lastTargetPath);
+                        ProcessDifferentialBackupFolderStep(item.Path, targetPath, lastTargetPath);
                     }
                     else
                     {
@@ -128,7 +126,7 @@ namespace CompleteBackup.Models.backup
                 else
                 {
                     UpdateProgress("Running... ", ++ProcessFileCount, item.Path);
-                    HandleFile(m_IStorage.GetDirectoryName(item.Path), newTargetPath, lastTargetPath_, targetdirectoryName);
+                    ProcessDeferentialBackupFile(m_IStorage.GetDirectoryName(item.Path), newTargetPath, lastTargetPath_, targetdirectoryName);
                 }
             }
 
@@ -208,7 +206,54 @@ namespace CompleteBackup.Models.backup
             }
         }
 
-        public void ProcessIncrementalFolderStep(string sourcePath, string currSetPath, string lastSetPath)
+        protected void ProcessDeferentialBackupFile(string sourcePath, string currSetPath, string lastSetPath, string fileName)
+        {
+            var sourceFilePath = m_IStorage.Combine(sourcePath, fileName);
+            var lastSetFilePath = (lastSetPath == null) ? null : m_IStorage.Combine(lastSetPath, fileName);
+            var currSetFilePath = m_IStorage.Combine(currSetPath, fileName);
+
+            if (m_IStorage.FileExists(currSetFilePath))
+            {
+                if (m_IStorage.IsFileSame(sourceFilePath, currSetFilePath))
+                {
+                    //File is the same, do nothing
+                    m_BackupSessionHistory.AddNoChangeFile(sourceFilePath, currSetFilePath);
+                }
+                else
+                {
+                    //Move current file to old set
+                    //if (!m_IStorage.DirectoryExists(lastSetPath))
+                    //{
+                    //    m_IStorage.CreateDirectory(lastSetPath);
+                    //}
+
+                    //Keep current version in set
+                    MoveFile(currSetFilePath, lastSetFilePath, true);
+
+                    //Update new version to new set
+                    if (!m_IStorage.DirectoryExists(currSetPath))
+                    {
+                        CreateDirectory(currSetPath);
+                    }
+                    CopyFile(sourceFilePath, currSetFilePath);
+
+                    m_BackupSessionHistory.AddUpdatedFile(sourceFilePath, currSetFilePath);
+                }
+            }
+            else
+            {
+                // new file, copy to current set
+                if (!m_IStorage.DirectoryExists(currSetPath))
+                {
+                    CreateDirectory(currSetPath);
+                }
+                CopyFile(sourceFilePath, currSetFilePath);
+
+                m_BackupSessionHistory.AddNewFile(sourceFilePath, currSetFilePath);
+            }
+        }
+
+        public void ProcessDifferentialBackupFolderStep(string sourcePath, string currSetPath, string lastSetPath)
         {
             var sourceFileList = m_IStorage.GetFiles(sourcePath);
 
@@ -219,7 +264,7 @@ namespace CompleteBackup.Models.backup
                 var fileName = m_IStorage.GetFileName(file);
                 UpdateProgress("Running... ", ++ProcessFileCount, file);
 
-                HandleFile(sourcePath, currSetPath, lastSetPath, fileName);
+                ProcessDeferentialBackupFile(sourcePath, currSetPath, lastSetPath, fileName);
             }
 
             HandleDeletedFiles(sourceFileList, currSetPath, lastSetPath);
@@ -235,7 +280,7 @@ namespace CompleteBackup.Models.backup
                 string newCurrSetPath = m_IStorage.Combine(currSetPath, subdirectory);
                 string newLastSetPath = m_IStorage.Combine(lastSetPath, subdirectory);
 
-                ProcessIncrementalFolderStep(newSourceSetPath, newCurrSetPath, newLastSetPath);
+                ProcessDifferentialBackupFolderStep(newSourceSetPath, newCurrSetPath, newLastSetPath);
             }
         }
     }
