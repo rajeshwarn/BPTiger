@@ -37,7 +37,7 @@ namespace CompleteBackup.Models.backup
             return targetSetPath;
         }
 
-        protected virtual void ProcessBackupRootFolders(string targetPath)
+        protected virtual void ProcessBackupRootFolders(string targetPath, string lastTargetSetPath = null)
         {
             ProcessNewBackupRootFolders(targetPath);
         }

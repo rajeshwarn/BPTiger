@@ -22,7 +22,7 @@ namespace CompleteBackup.Models.backup
         }
 
 
-        protected override void ProcessBackupRootFolders(string targetPath)
+        protected override void ProcessBackupRootFolders(string targetPath, string lastTargetSetPath = null)
         {
             foreach (var item in m_Profile.BackupWatcherItemList)
             {

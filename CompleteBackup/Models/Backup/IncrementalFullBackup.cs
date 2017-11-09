@@ -34,11 +34,18 @@ namespace CompleteBackup.Models.backup
                 ProcessBackupRootFolders(m_IStorage.Combine(m_TargetBackupPath, backupName));
             }
 
+            var newFullTargetPath = m_IStorage.Combine(m_TargetBackupPath, backupName);
+
+            var sourceDirectoryEntriesList = m_SourceBackupPathList.Where(i => i.IsFolder).ToList();
+            var sourceFileEntriesList = m_SourceBackupPathList.Where(i => !i.IsFolder).ToList();
+            HandleDeletedItems(sourceDirectoryEntriesList, newFullTargetPath);
+            HandleDeletedFiles(sourceFileEntriesList, newFullTargetPath);
+
             BackupSessionHistory.SaveHistory(m_TargetBackupPath, backupName, m_BackupSessionHistory);//, GetTimeStampString());
         }
 
 
-        protected override void ProcessBackupRootFolders(string targetPath)
+        protected override void ProcessBackupRootFolders(string targetPath, string lastTargetSetPath = null)
         {
             //process all items
             foreach (var item in m_SourceBackupPathList)
@@ -50,7 +57,11 @@ namespace CompleteBackup.Models.backup
                         item.IsAvailable = true;
                         var targetFolder = m_IStorage.Combine(targetPath, m_IStorage.GetFileName(item.Path));
 
-                        ProcessIncrementalBackupFolderStep(item.Path, targetFolder);
+                        if (lastTargetSetPath != null)
+                        {
+                        }
+
+                        ProcessIncrementalBackupFolderStep(item.Path, targetFolder);                            
                     }
                     else
                     {
@@ -65,25 +76,25 @@ namespace CompleteBackup.Models.backup
                 }
             }
 
-            var sourceDirList = new List<string>();
+            //var sourceDirList = new List<string>();
 
-            //Handle deleted folders
-            var sourceDirectoryEntriesList = m_SourceBackupPathList.Where(i => i.IsFolder).ToList();
-            foreach (var item in sourceDirectoryEntriesList)
-            {
-                sourceDirList.Add(m_IStorage.GetFileName(item.Path));
-            }
-            HandleDeletedItems(sourceDirList, targetPath);
+            ////Handle deleted folders
+            //var sourceDirectoryEntriesList = m_SourceBackupPathList.Where(i => i.IsFolder).ToList();
+            //foreach (var item in sourceDirectoryEntriesList)
+            //{
+            //    sourceDirList.Add(m_IStorage.GetFileName(item.Path));
+            //}
+            //HandleDeletedItems(sourceDirList, targetPath);
 
-            sourceDirList.Clear();
+            //sourceDirList.Clear();
 
-            //Handle deleted files
-            var sourceFileEntriesList = m_SourceBackupPathList.Where(i => !i.IsFolder).ToList();
-            foreach (var item in sourceFileEntriesList)
-            {
-                sourceDirList.Add(m_IStorage.GetFileName(item.Path));
-            }
-            HandleDeletedFiles(sourceDirList, targetPath);
+            ////Handle deleted files
+            //var sourceFileEntriesList = m_SourceBackupPathList.Where(i => !i.IsFolder).ToList();
+            //foreach (var item in sourceFileEntriesList)
+            //{
+            //    sourceDirList.Add(m_IStorage.GetFileName(item.Path));
+            //}
+            //HandleDeletedFiles(sourceDirList, targetPath);
         }
 
 

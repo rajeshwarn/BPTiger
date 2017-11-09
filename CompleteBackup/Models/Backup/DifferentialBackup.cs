@@ -97,62 +97,7 @@ namespace CompleteBackup.Models.backup
             }
         }
 
-        protected void HandleDeletedItems(object sourceSubdirectoryEntriesList, string currSetPath, string lastSetPath)
-        {
-            var folderDataList = sourceSubdirectoryEntriesList as List<FolderData>;
-            var itemStringList = sourceSubdirectoryEntriesList as List<string>;
 
-            //lookup for deleted items
-            if (m_IStorage.DirectoryExists(currSetPath))
-            {
-                string[] targetSubdirectoryEntries = m_IStorage.GetDirectories(currSetPath);
-                var deleteList = new List<string>();
-                if (targetSubdirectoryEntries != null)
-                {
-                    foreach (var entry in targetSubdirectoryEntries)
-                    {
-                        if (((folderDataList != null) && !folderDataList.Exists(e => !e.IsAvailable || (m_IStorage.GetFileName(e.Path) == m_IStorage.GetFileName(entry)))) ||
-                            ((itemStringList != null) && !itemStringList.Exists(e => m_IStorage.GetFileName(e) == m_IStorage.GetFileName(entry))))
-                        {
-                            deleteList.Add(entry);
-                        }
-                    }
-                }
-
-                //Delete deleted items
-                foreach (var entry in deleteList)
-                {
-                    var destPath = m_IStorage.Combine(lastSetPath, m_IStorage.GetFileName(entry));
-                    m_IStorage.MoveDirectory(entry, destPath, true);
-
-                    m_BackupSessionHistory.AddDeletedFolder(entry, destPath);
-                }
-            }
-        }
-
-        protected void HandleDeletedFiles(object sourceFileList, string currSetPath, string lastSetPath)
-        {
-            var folderDataList = sourceFileList as List<FolderData>;
-            var itemStringList = sourceFileList as List<string>;
-
-            //Delete any deleted files
-            var currSetFileList = m_IStorage.GetFiles(currSetPath);
-            foreach (var filePath in currSetFileList)
-            {
-                var fileName = m_IStorage.GetFileName(filePath);
-                if ((folderDataList != null && !folderDataList.Exists(item => m_IStorage.GetFileName(item.Path) == fileName)) ||
-                    (itemStringList != null && !itemStringList.Exists(item => m_IStorage.GetFileName(item) == fileName)))
-                {
-                    //if not exists in source, delete the file
-                    var prevSetfilePath = m_IStorage.Combine(lastSetPath, fileName);
-
-                    //Move file to last set
-                    MoveFile(filePath, prevSetfilePath, true);
-
-                    m_BackupSessionHistory.AddDeletedFile(filePath, prevSetfilePath);
-                }
-            }
-        }
 
         protected void ProcessDeferentialBackupFile(string sourcePath, string currSetPath, string lastSetPath, string fileName)
         {
