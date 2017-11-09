@@ -28,7 +28,7 @@ namespace CompleteBackup.Models.backup
             if (lastSet == null)
             {
                 //First backup
-                base.ProcessBackupRootFolders(CreateNewBackupSetFolder(targetSet));
+                ProcessNewBackupRootFolders(CreateNewBackupSetFolder(targetSet));
             }
             else
             {
@@ -71,7 +71,6 @@ namespace CompleteBackup.Models.backup
             foreach (var item in m_SourceBackupPathList)
             {
                 var targetdirectoryName = m_IStorage.GetFileName(item.Path);
-
 
                 if (item.IsFolder)
                 {

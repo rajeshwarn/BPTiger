@@ -39,6 +39,11 @@ namespace CompleteBackup.Models.backup
 
         protected virtual void ProcessBackupRootFolders(string targetPath)
         {
+            ProcessNewBackupRootFolders(targetPath);
+        }
+
+        protected void ProcessNewBackupRootFolders(string targetPath)
+        {
             foreach (var item in m_SourceBackupPathList)
             {
                 if (item.IsFolder)
@@ -52,6 +57,7 @@ namespace CompleteBackup.Models.backup
                 }
             }
         }
+
 
         protected void ProcessSnapshotBackupFile(string file, string sourcePath, string destPath)
         {
