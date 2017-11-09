@@ -27,7 +27,7 @@ namespace CompleteBackup.Models.backup
             {
                 //First backup
                 backupName = GetTargetSetName();
-                ProcessBackupRootFolders(CreateNewBackupSetFolder(backupName));
+                base.ProcessBackupRootFolders(CreateNewBackupSetFolder(backupName));
             }
             else
             {
@@ -47,11 +47,11 @@ namespace CompleteBackup.Models.backup
                 {
                     var targetFolder = m_IStorage.Combine(targetPath, m_IStorage.GetFileName(item.Path));
 
-                    ProcessSnapshotBackupFolderStep(item.Path, targetFolder);
+                    ProcessIncrementalBackupFolderStep(item.Path, targetFolder);
                 }
                 else
                 {
-                    ProcessSnapshotBackupFile(m_IStorage.GetFileName(item.Path), m_IStorage.GetDirectoryName(item.Path), targetPath);
+                    ProcessIncrementalBackupFile(m_IStorage.GetFileName(item.Path), m_IStorage.GetDirectoryName(item.Path), targetPath);
                 }
             }
 
@@ -77,7 +77,7 @@ namespace CompleteBackup.Models.backup
         }
 
 
-        protected override void ProcessSnapshotBackupFile(string fileName, string sourcePath, string destPath)
+        protected void ProcessIncrementalBackupFile(string fileName, string sourcePath, string destPath)
         {
             var sourceFilePath = m_IStorage.Combine(sourcePath, fileName);
             var currSetFilePath = m_IStorage.Combine(destPath, fileName);
@@ -111,7 +111,7 @@ namespace CompleteBackup.Models.backup
             }
         }
 
-        protected override void ProcessSnapshotBackupFolderStep(string sourcePath, string currSetPath)
+        protected void ProcessIncrementalBackupFolderStep(string sourcePath, string currSetPath)
         {
             var sourceFileList = m_IStorage.GetFiles(sourcePath);
 
@@ -122,7 +122,7 @@ namespace CompleteBackup.Models.backup
 
             foreach (var file in sourceFileList)
             {
-                ProcessSnapshotBackupFile(m_IStorage.GetFileName(file), sourcePath, currSetPath);
+                ProcessIncrementalBackupFile(m_IStorage.GetFileName(file), sourcePath, currSetPath);
             }
 
             HandleDeletedFiles(sourceFileList, currSetPath);
@@ -135,7 +135,7 @@ namespace CompleteBackup.Models.backup
                 string newSourceSetPath = m_IStorage.Combine(sourcePath, subdirectory);
                 string newCurrSetPath = m_IStorage.Combine(currSetPath, subdirectory);
 
-                ProcessSnapshotBackupFolderStep(newSourceSetPath, newCurrSetPath);
+                ProcessIncrementalBackupFolderStep(newSourceSetPath, newCurrSetPath);
             }
 
             HandleDeletedItems(sourceSubdirectoryEntriesList, currSetPath);
