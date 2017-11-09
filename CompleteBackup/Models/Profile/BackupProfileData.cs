@@ -106,7 +106,7 @@ namespace CompleteBackup.Models.Backup.Profile
         //Policy
 
         //Time to backup new changes in seconds
-        public long BackupNewChangesTimeInterval { get; set; } = 60;
+        public long KeepVersion { get; set; } = 60;
 
 
         [XmlIgnore]
@@ -166,7 +166,12 @@ namespace CompleteBackup.Models.Backup.Profile
 
         public ObservableCollection<WatcherItemData> BackupWatcherItemList { get; set; } = new ObservableCollection<WatcherItemData>();
 
-        [XmlIgnore]
+        public void AddItemToBackupWatcherItemList(WatcherItemData item)
+        {
+            BackupWatcherItemList.Add(item);
+            OnPropertyChanged("BackupWatcherItemListCount");
+        }
+
         public long BackupWatcherItemListCount { get { return BackupWatcherItemList.Count(); } set { } }
 
 
