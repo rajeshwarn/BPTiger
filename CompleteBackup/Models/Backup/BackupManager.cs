@@ -287,7 +287,7 @@ namespace CompleteBackup.Models.backup
                             var sourcePath = item.FullPath;
                             var newTargetPath = m_IStorage.Combine(m_IStorage.Combine(targetPath, m_IStorage.GetFileName(item.WatchPath)), item.Name);
 
-                            bool? bFolder = CheckItemTypeFolderOrFile(item.FullPath, item.ChangeType);
+                            bool? bFolder = CheckItemTypeFolderOrFile(newTargetPath, item.ChangeType);
                             if (bFolder == true)
                             {
                                 if (m_IStorage.DirectoryExists(newTargetPath))
@@ -373,10 +373,12 @@ namespace CompleteBackup.Models.backup
                                         if (lastTargetPath != null)
                                         {
                                             var newLastTargetPath = m_IStorage.Combine(m_IStorage.Combine(lastTargetPath, m_IStorage.GetFileName(item.WatchPath)), m_IStorage.GetFileName(item.OldPath));
-                                            MoveFile(oldTargetPath, newLastTargetPath, true);
+                                            CopyFile(oldTargetPath, newLastTargetPath, true);
                                         }
-
-                                        CopyFile(item.FullPath, newTargetPath);
+                                        else
+                                        {
+                                            MoveFile(oldTargetPath, newTargetPath);
+                                        }
                                     }
                                     else
                                     {
