@@ -44,6 +44,7 @@ namespace CompleteBackup.ViewModels.ICommands
 
             //TODO check if backup is running
             project.BackupProfileList.Remove(profile);
+            project.CurrentBackupProfile = null;
 
             BackupProjectRepository.Instance.SaveProject();
         }

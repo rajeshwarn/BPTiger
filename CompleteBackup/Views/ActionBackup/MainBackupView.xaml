@@ -42,14 +42,16 @@
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Column="0">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Pending items: "/>
-                            <TextBlock Text="{Binding Profile.BackupWatcherItemListCount}"></TextBlock>
+                            <Image Source="{Binding Project.CurrentBackupProfile.BackupTypeImage}" Height="12" Margin="0,0,4,0"/>
+                            <TextBlock Text="{Binding Project.CurrentBackupProfile.Name}"/>
+                            <TextBlock Text=", Pending items: "/>
+                            <TextBlock Text="{Binding Project.CurrentBackupProfile.BackupWatcherItemListCount}"></TextBlock>
                         </StackPanel>
                     </Grid>
                     <Grid Grid.Column="1">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Last backup time: "/>
-                            <TextBlock Text="{Binding Profile.LastBackupDateTime, TargetNullValue='Not Available'}"/>
+                            <TextBlock Text="{Binding Project.CurrentBackupProfile.LastBackupDateTime, TargetNullValue='Not Available'}"/>
                         </StackPanel>
                     </Grid>
                 </Grid>
@@ -60,7 +62,7 @@
         </Border>
 
         <StackPanel DockPanel.Dock="Bottom" Orientation="Vertical">
-            <TextBlock Text="{Binding Profile.CurrentBackupFile}" TextWrapping="Wrap" FontStyle="Italic"></TextBlock>
+            <TextBlock Text="{Binding Project.CurrentBackupProfile.CurrentBackupFile}" TextWrapping="Wrap" FontStyle="Italic"></TextBlock>
         </StackPanel>
 
         <Grid Grid.Row="1">

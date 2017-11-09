@@ -33,17 +33,31 @@ namespace CompleteBackup.Models.Backup.Project
         public Guid CurrentProfileGuid { get; set; } = Guid.Empty;
 
         [XmlIgnore]
-        public BackupProfileData CurrentBackupProfile { get { return BackupProfileList.FirstOrDefault(p => p.GUID == CurrentProfileGuid); }
+        public BackupProfileData CurrentBackupProfile {
+            get { return BackupProfileList.FirstOrDefault(p => p.GUID == CurrentProfileGuid); }
 
             set {
-                var currentProfile = BackupProfileList.FirstOrDefault(p => p.GUID == CurrentProfileGuid);
-                CurrentProfileGuid = value.GUID;
+                var lastProfile = BackupProfileList.FirstOrDefault(p => p.GUID == CurrentProfileGuid);
 
-                if (currentProfile != null) { currentProfile.IsCurrent = false; }
-                value.IsCurrent = true;
+                if (value == null)
+                {
+                    CurrentProfileGuid = Guid.Empty;
+                }
+                else
+                {
+                    CurrentProfileGuid = value.GUID;
+                    value.IsCurrent = true; //this will trigger OnPropertyChange
+                }
+
+                //only after we changed CurrentProfileGuid, we cann set IsCurrent value
+                if (lastProfile != null)
+                {
+                    lastProfile.IsCurrent = false; //this will trigger OnPropertyChange
+                }
 
                 OnPropertyChanged();
-            } }
+            }
+        }
 
         public ObservableCollection<BackupProfileData> BackupProfileList { get; set; } = new ObservableCollection<BackupProfileData>();
     }

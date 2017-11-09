@@ -302,7 +302,33 @@
                     </Grid>
                 </Border>
 
-                <ContentControl Content="{Binding CurrentPageViewModel}"/>
+                <Grid>
+                    <ContentControl Content="{Binding CurrentPageViewModel}">
+                        <ContentControl.Style>
+                            <Style TargetType="ContentControl" >
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ProjectData.CurrentBackupProfile}" Value="{x:Null}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ContentControl.Style>
+                    </ContentControl>
+                    <Border Background="LightGoldenrodYellow" BorderThickness="2" CornerRadius="4" BorderBrush="Gray" Margin="16" Padding="18" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="No backup profile is selected" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24">
+                        </TextBlock>
+                        <Border.Style>
+                            <Style TargetType="Border" >
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ProjectData.CurrentBackupProfile}" Value="{x:Null}">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
+                </Grid>
             </DockPanel>
         </Grid>
     </DockPanel>

@@ -50,14 +50,14 @@
                                                 </Grid>
                                                 <Border x:Name="profileButton" BorderThickness="1" CornerRadius="4" BorderBrush="DarkGray" Margin="1" Padding="2">
                                                     <Border.Style>
-                                                    <Style TargetType="Border" >
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding IsCurrent}" Value="True">
-                                                                <Setter Property="Background" Value="LightSkyBlue"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Border.Style>
+                                                        <Style TargetType="Border" >
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsCurrent}" Value="True">
+                                                                    <Setter Property="Background" Value="LightSkyBlue"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Border.Style>
                                                     <StackPanel Orientation="Vertical" >
                                                         <Image Source="{Binding BackupTypeImage}" Width="32" />
                                                         <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" TextWrapping="Wrap" Margin="0,4,0,0"/>

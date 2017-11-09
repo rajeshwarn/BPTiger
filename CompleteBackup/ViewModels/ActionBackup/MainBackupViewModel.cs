@@ -1,5 +1,6 @@
 ﻿using CompleteBackup.DataRepository;
 using CompleteBackup.Models.Backup.Profile;
+using CompleteBackup.Models.Backup.Project;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace CompleteBackup.ViewModels
 {
     class MainBackupViewModel
     {
-        public BackupProfileData Profile { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile;
+        public BackupProjectData Project { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject;
 
         public BackupItemsSelectionViewModel BackupItemsSelectionViewModel { get; set; } = new BackupItemsSelectionViewModel();
     }
