@@ -32,72 +32,37 @@ namespace CompleteBackup.Models.backup
             }
             else
             {
+                var lastFullTargetPath = m_IStorage.Combine(m_TargetBackupPath, lastSet);
+                var newFullTargetPath = m_IStorage.Combine(m_TargetBackupPath, targetSet);
 
-                var lastTargetPath_ = m_IStorage.Combine(m_TargetBackupPath, lastSet);
-                var newTargetPath = m_IStorage.Combine(m_TargetBackupPath, targetSet);
-
-                if (!MoveDirectory(lastTargetPath_, newTargetPath))
+                //Rename last set to new set name
+                if (!MoveDirectory(lastFullTargetPath, newFullTargetPath))
                 {
-                    m_Logger.Writeln($"***Backup failed, failed to move {lastTargetPath_} To {newTargetPath}");
+                    m_Logger.Writeln($"***Backup failed, failed to move {lastFullTargetPath} To {newFullTargetPath}");
                     MessageBox.Show($"Operation Canceled", "Incremental Backup", MessageBoxButton.OK, MessageBoxImage.Information);
 
                     return;
                 }
 
-                CreateDirectory(lastTargetPath_);
+                //Create last set folder - initially empty, will copy changed item from newFullTargetPath
+                CreateDirectory(lastFullTargetPath);
 
-                //move old history files
-                var fileEntries = m_IStorage.GetFiles(newTargetPath);
+                //Move history file to last set
+                var fileEntries = m_IStorage.GetFiles(newFullTargetPath);
                 foreach (string fileName in fileEntries.Where(f => BackupSessionHistory.IsHistoryFile(f)))
                 {
-                    MoveFile(m_IStorage.Combine(newTargetPath, m_IStorage.GetFileName(fileName)),
-                             m_IStorage.Combine(lastTargetPath_, m_IStorage.GetFileName(fileName)));
+                    MoveFile(m_IStorage.Combine(newFullTargetPath, m_IStorage.GetFileName(fileName)),
+                             m_IStorage.Combine(lastFullTargetPath, m_IStorage.GetFileName(fileName)));
                 }
 
 
-                ProcessDifferentialBackupRootFolders(newTargetPath, lastTargetPath_);
-
-                ////check if set was changed and need to be deleted
-                //var prevSetList = m_IStorage.GetDirectories(newTargetPath);
-                //foreach (var path in prevSetList)
-                //{
-                //    var setName = m_IStorage.GetFileName(path);
-                //    var foundMatch = m_SourceBackupPathList.Where(f => m_IStorage.GetFileName(f.Path) == setName);
-                //    if (foundMatch.Count() == 0)
-                //    {
-                //        var sourcePath = m_IStorage.Combine(m_IStorage.GetDirectoryName(m_SourceBackupPathList.FirstOrDefault().Path), setName);
-
-                //        var targetPath = m_IStorage.Combine(newTargetPath, setName);
-                //        var lastTargetPath = m_IStorage.Combine(lastTargetPath_, setName);
-                //        MoveDirectory(targetPath, lastTargetPath);
-
-                //        m_BackupSessionHistory.AddDeletedFolder(sourcePath, newTargetPath);
-                //    }
-                //}
-
-                //foreach (var item in m_SourceBackupPathList)
-                //{
-                //    var targetdirectoryName = m_IStorage.GetFileName(item.Path);
-
-                //    var targetPath = m_IStorage.Combine(newTargetPath, targetdirectoryName);
-                //    var lastTargetPath = m_IStorage.Combine(lastTargetPath_, targetdirectoryName);
-
-                //    if (item.IsFolder)
-                //    {
-                //        ProcessIncrementalFolderStep(item.Path, targetPath, lastTargetPath);
-                //    }
-                //    else
-                //    {
-                //        UpdateProgress("Running... ", ++ProcessFileCount, item.Path);
-                //        HandleFile(m_IStorage.GetDirectoryName(item.Path), newTargetPath, lastTargetPath, targetdirectoryName);
-                //    }
-                //}
+                ProcessDifferentialBackupRootFolders(newFullTargetPath, lastFullTargetPath);
 
                 BackupSessionHistory.SaveHistory(m_TargetBackupPath, targetSet, m_BackupSessionHistory);
             }
         }
 
-        protected virtual void ProcessDifferentialBackupRootFolders(string newTargetPath, string lastTargetPath_)
+        protected virtual void ProcessDifferentialBackupRootFolders(string newTargetPath, string lastTargetPath)
         {
             var sourceDirectoryEntriesList = m_SourceBackupPathList.Where(i => i.IsFolder).ToList();
             var sourceFileEntriesList = m_SourceBackupPathList.Where(i => !i.IsFolder).ToList();
@@ -107,15 +72,15 @@ namespace CompleteBackup.Models.backup
             {
                 var targetdirectoryName = m_IStorage.GetFileName(item.Path);
 
-                var targetPath = m_IStorage.Combine(newTargetPath, targetdirectoryName);
-                var lastTargetPath = m_IStorage.Combine(lastTargetPath_, targetdirectoryName);
 
                 if (item.IsFolder)
                 {
                     if (m_IStorage.DirectoryExists(item.Path))
                     {
                         item.IsAvailable = true;
-                        ProcessDifferentialBackupFolderStep(item.Path, targetPath, lastTargetPath);
+                        var newTargetPathDir = m_IStorage.Combine(newTargetPath, targetdirectoryName);
+                        var lastTargetPathDir = m_IStorage.Combine(lastTargetPath, targetdirectoryName);
+                        ProcessDifferentialBackupFolderStep(item.Path, newTargetPathDir, lastTargetPathDir);
                     }
                     else
                     {
@@ -126,27 +91,12 @@ namespace CompleteBackup.Models.backup
                 else
                 {
                     UpdateProgress("Running... ", ++ProcessFileCount, item.Path);
-                    ProcessDeferentialBackupFile(m_IStorage.GetDirectoryName(item.Path), newTargetPath, lastTargetPath_, targetdirectoryName);
+                    ProcessDeferentialBackupFile(m_IStorage.GetDirectoryName(item.Path), newTargetPath, lastTargetPath, targetdirectoryName);
                 }
             }
 
-            //var sourceDirList = new List<FolderData>();
-
-            //Handle deleted folders
-            //foreach (var item in sourceDirectoryEntriesList)
-            //{
-            //    sourceDirList.Add(item);// m_IStorage.GetFileName(item.Path));
-            //}
-            HandleDeletedItems(sourceDirectoryEntriesList, newTargetPath, lastTargetPath_);
-
-            //sourceDirList.Clear();
-
-            //Handle deleted files
-            //foreach (var item in sourceFileEntriesList)
-            //{
-            //    sourceDirList.Add(item);// m_IStorage.GetFileName(item.Path));
-            //}
-            HandleDeletedFiles(sourceFileEntriesList, newTargetPath, lastTargetPath_);
+            HandleDeletedItems(sourceDirectoryEntriesList, newTargetPath, lastTargetPath);
+            HandleDeletedFiles(sourceFileEntriesList, newTargetPath, lastTargetPath);
         }
 
         protected void HandleDeletedItems(object sourceSubdirectoryEntriesList, string currSetPath, string lastSetPath)
