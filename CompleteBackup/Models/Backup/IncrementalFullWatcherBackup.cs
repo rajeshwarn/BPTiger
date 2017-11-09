@@ -21,25 +21,6 @@ namespace CompleteBackup.Models.backup
             m_IStorage = new FileSystemStorage();
         }
 
-        //public override void ProcessBackup()
-        //{
-        //    m_BackupSessionHistory.Reset(GetTimeStamp());
-        //    //path = profile.GetStorageInterface().Combine(profile.TargetBackupFolder, path);
-        //    var backupName = BackupManager.GetLastBackupSetName(m_Profile);
-        //    if (backupName == null)
-        //    {
-        //        //this is the first run
-        //        backupName = GetTargetSetName();
-        //        CreateNewBackupSetFolder(backupName);
-        //    }
-
-        //    var targetSetPath = m_IStorage.Combine(m_TargetBackupPath, backupName);
-
-        //    ProcessBackupRootFolders(targetSetPath);
-
-        //    BackupSessionHistory.SaveHistory(m_TargetBackupPath, backupName, m_BackupSessionHistory);//, GetTimeStampString());
-        //}
-
 
         protected override void ProcessBackupRootFolders(string targetPath)
         {
@@ -178,70 +159,5 @@ namespace CompleteBackup.Models.backup
                 }
             }            
         }
-
-        //protected override void ProcessFullBackupFile(string fileName, string sourcePath, string destPath)
-        //{
-        //    var sourceFilePath = m_IStorage.Combine(sourcePath, fileName);
-        //    var currSetFilePath = m_IStorage.Combine(destPath, fileName);
-
-        //    UpdateProgress("Running... ", ++ProcessFileCount, sourceFilePath);
-
-        //    if (m_IStorage.FileExists(currSetFilePath))
-        //    {
-        //        if (m_IStorage.IsFileSame(sourceFilePath, currSetFilePath))
-        //        {
-        //            //Do nothing
-        //            m_BackupSessionHistory.AddNoChangeFile(sourceFilePath, currSetFilePath);
-        //        }
-        //        else
-        //        {
-        //            //update/overwrite file
-        //            m_IStorage.CopyFile(sourceFilePath, currSetFilePath, true);
-
-        //            m_BackupSessionHistory.AddUpdatedFile(sourceFilePath, currSetFilePath);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        if (!m_IStorage.DirectoryExists(destPath))
-        //        {
-        //            m_IStorage.CreateDirectory(destPath);
-        //        }
-        //        m_IStorage.CopyFile(sourceFilePath, currSetFilePath);
-
-        //        m_BackupSessionHistory.AddNewFile(sourceFilePath, currSetFilePath);
-        //    }
-        //}
-
-        //protected override void ProcessFullBackupFolderStep(string sourcePath, string currSetPath)
-        //{
-        //    var sourceFileList = m_IStorage.GetFiles(sourcePath);
-
-        //    if (!m_IStorage.DirectoryExists(currSetPath))
-        //    {
-        //        m_IStorage.CreateDirectory(currSetPath);
-        //    }
-
-        //    foreach (var file in sourceFileList)
-        //    {
-        //        ProcessFullBackupFile(m_IStorage.GetFileName(file), sourcePath, currSetPath);
-        //    }
-
-        //    HandleDeletedFiles(sourceFileList, currSetPath);
-
-        //    //Process directories
-        //    var sourceSubdirectoryEntriesList = GetDirectoriesNames(sourcePath);
-
-        //    foreach (string subdirectory in sourceSubdirectoryEntriesList)
-        //    {
-        //        string newSourceSetPath = m_IStorage.Combine(sourcePath, subdirectory);
-        //        string newCurrSetPath = m_IStorage.Combine(currSetPath, subdirectory);
-
-        //        ProcessFullBackupFolderStep(newSourceSetPath, newCurrSetPath);
-        //    }
-
-        //    HandleDeletedItems(sourceSubdirectoryEntriesList, currSetPath);
-        //}
-
     }
 }
