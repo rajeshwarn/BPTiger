@@ -13,7 +13,7 @@ using System.Windows;
 
 namespace CompleteBackup.Models.backup
 {
-    public class DifferentialBackup : SnapshotBackup
+    public class DifferentialBackup : IncrementalFullBackup
     {
         public string LastSetPath;
 
@@ -91,7 +91,6 @@ namespace CompleteBackup.Models.backup
                 }
                 else
                 {
-                    UpdateProgress("Running... ", ++ProcessFileCount, item.Path);
                     ProcessDeferentialBackupFile(item.Path, newTargetPath, lastTargetPath, targetdirectoryName);
                 }
             }
@@ -101,6 +100,8 @@ namespace CompleteBackup.Models.backup
 
         protected void ProcessDeferentialBackupFile(string sourcePath, string currSetPath, string lastSetPath, string fileName)
         {
+            UpdateProgress("Running... ", ++ProcessFileCount, fileName);
+
             var lastSetFilePath = (lastSetPath == null) ? null : m_IStorage.Combine(lastSetPath, fileName);
             var currSetFilePath = m_IStorage.Combine(currSetPath, fileName);
 
@@ -113,12 +114,6 @@ namespace CompleteBackup.Models.backup
                 }
                 else
                 {
-                    //Move current file to old set
-                    //if (!m_IStorage.DirectoryExists(lastSetPath))
-                    //{
-                    //    m_IStorage.CreateDirectory(lastSetPath);
-                    //}
-
                     //Keep current version in set
                     MoveFile(currSetFilePath, lastSetFilePath, true);
 
@@ -154,7 +149,6 @@ namespace CompleteBackup.Models.backup
             foreach (var file in sourceFileList)
             {
                 var fileName = m_IStorage.GetFileName(file);
-                UpdateProgress("Running... ", ++ProcessFileCount, file);
 
                 ProcessDeferentialBackupFile(file, currSetPath, lastSetPath, fileName);
             }
