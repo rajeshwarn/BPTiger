@@ -58,15 +58,17 @@ namespace CompleteBackup.Models.backup
 
                 ProcessDifferentialBackupRootFolders(newFullTargetPath, lastFullTargetPath);
 
+                var sourceDirectoryEntriesList = m_SourceBackupPathList.Where(i => i.IsFolder).ToList();
+                var sourceFileEntriesList = m_SourceBackupPathList.Where(i => !i.IsFolder).ToList();
+                HandleDeletedItems(sourceDirectoryEntriesList, newFullTargetPath, lastFullTargetPath);
+                HandleDeletedFiles(sourceFileEntriesList, newFullTargetPath, lastFullTargetPath);
+
                 BackupSessionHistory.SaveHistory(m_TargetBackupPath, targetSet, m_BackupSessionHistory);
             }
         }
 
         protected virtual void ProcessDifferentialBackupRootFolders(string newTargetPath, string lastTargetPath)
         {
-            var sourceDirectoryEntriesList = m_SourceBackupPathList.Where(i => i.IsFolder).ToList();
-            var sourceFileEntriesList = m_SourceBackupPathList.Where(i => !i.IsFolder).ToList();
-
             //process all items
             foreach (var item in m_SourceBackupPathList)
             {
@@ -90,12 +92,9 @@ namespace CompleteBackup.Models.backup
                 else
                 {
                     UpdateProgress("Running... ", ++ProcessFileCount, item.Path);
-                    ProcessDeferentialBackupFile(m_IStorage.GetDirectoryName(item.Path), newTargetPath, lastTargetPath, targetdirectoryName);
+                    ProcessDeferentialBackupFile(item.Path, newTargetPath, lastTargetPath, targetdirectoryName);
                 }
             }
-
-            HandleDeletedItems(sourceDirectoryEntriesList, newTargetPath, lastTargetPath);
-            HandleDeletedFiles(sourceFileEntriesList, newTargetPath, lastTargetPath);
         }
 
         protected void HandleDeletedItems(object sourceSubdirectoryEntriesList, string currSetPath, string lastSetPath)
@@ -157,16 +156,15 @@ namespace CompleteBackup.Models.backup
 
         protected void ProcessDeferentialBackupFile(string sourcePath, string currSetPath, string lastSetPath, string fileName)
         {
-            var sourceFilePath = m_IStorage.Combine(sourcePath, fileName);
             var lastSetFilePath = (lastSetPath == null) ? null : m_IStorage.Combine(lastSetPath, fileName);
             var currSetFilePath = m_IStorage.Combine(currSetPath, fileName);
 
             if (m_IStorage.FileExists(currSetFilePath))
             {
-                if (m_IStorage.IsFileSame(sourceFilePath, currSetFilePath))
+                if (m_IStorage.IsFileSame(sourcePath, currSetFilePath))
                 {
                     //File is the same, do nothing
-                    m_BackupSessionHistory.AddNoChangeFile(sourceFilePath, currSetFilePath);
+                    m_BackupSessionHistory.AddNoChangeFile(sourcePath, currSetFilePath);
                 }
                 else
                 {
@@ -184,9 +182,9 @@ namespace CompleteBackup.Models.backup
                     {
                         CreateDirectory(currSetPath);
                     }
-                    CopyFile(sourceFilePath, currSetFilePath);
+                    CopyFile(sourcePath, currSetFilePath);
 
-                    m_BackupSessionHistory.AddUpdatedFile(sourceFilePath, currSetFilePath);
+                    m_BackupSessionHistory.AddUpdatedFile(sourcePath, currSetFilePath);
                 }
             }
             else
@@ -196,9 +194,9 @@ namespace CompleteBackup.Models.backup
                 {
                     CreateDirectory(currSetPath);
                 }
-                CopyFile(sourceFilePath, currSetFilePath);
+                CopyFile(sourcePath, currSetFilePath);
 
-                m_BackupSessionHistory.AddNewFile(sourceFilePath, currSetFilePath);
+                m_BackupSessionHistory.AddNewFile(sourcePath, currSetFilePath);
             }
         }
 
@@ -213,7 +211,7 @@ namespace CompleteBackup.Models.backup
                 var fileName = m_IStorage.GetFileName(file);
                 UpdateProgress("Running... ", ++ProcessFileCount, file);
 
-                ProcessDeferentialBackupFile(sourcePath, currSetPath, lastSetPath, fileName);
+                ProcessDeferentialBackupFile(file, currSetPath, lastSetPath, fileName);
             }
 
             HandleDeletedFiles(sourceFileList, currSetPath, lastSetPath);

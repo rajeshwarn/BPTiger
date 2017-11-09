@@ -48,12 +48,21 @@ namespace CompleteBackup.Models.backup
             {
                 if (item.IsFolder)
                 {
-                    var targetFolder = m_IStorage.Combine(targetPath, m_IStorage.GetFileName(item.Path));
-                    ProcessSnapshotBackupFolderStep(item.Path, targetFolder);
+                    if (m_IStorage.DirectoryExists(item.Path))
+                    {
+                        item.IsAvailable = true;
+                        var targetFolder = m_IStorage.Combine(targetPath, m_IStorage.GetFileName(item.Path));
+                        ProcessSnapshotBackupFolderStep(item.Path, targetFolder);
+                    }
+                    else
+                    {
+                        item.IsAvailable = false;
+                        m_Logger.Writeln($"***Warning: Skipping unavailable backup folder: {item.Path}");
+                    }                
                 }
                 else
                 {
-                    ProcessSnapshotBackupFile(m_IStorage.GetFileName(item.Path), m_IStorage.GetDirectoryName(item.Path), targetPath);
+                    ProcessSnapshotBackupFile(item.Path, m_IStorage.GetDirectoryName(item.Path), targetPath);
                 }
             }
         }
