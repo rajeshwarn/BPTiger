@@ -56,19 +56,19 @@ namespace CompleteBackup.ViewModels
 
         public MainProfileViewModel()
         {
-            ProfileBackupType = ProfileHelper.BackupTypeList.FirstOrDefault(i => i.BackupType == ProjectData.CurrentBackupProfile.BackupType);
+            ProfileBackupType = ProfileHelper.BackupTypeList.FirstOrDefault(i => i.BackupType == ProjectData.CurrentBackupProfile?.BackupType);
 
             ProfileGaugeList.Add(new ChartGaugeView(Brushes.Red, Brushes.Green, Brushes.Yellow) { PumpNumber = 0, GaugeValue = 0.6F });
             // ProfileGaugeList.Add(new ChartGaugeView(Brushes.Red, Brushes.Green, Brushes.Yellow) { PumpNumber = 1, GaugeValue = 0.2F });
 
             //Register to get update event when backup profile changed
-            ProjectData.CurrentBackupProfile.ProfileDataRefreshTask?.RegisterEvent(ProfileDataUpdate);
+            ProjectData.CurrentBackupProfile?.ProfileDataRefreshTask?.RegisterEvent(ProfileDataUpdate);
 
         }
 
         ~MainProfileViewModel()
         {
-            BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile.ProfileDataRefreshTask?.UnRegisterEvent(ProfileDataUpdate);
+         //   BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile.ProfileDataRefreshTask?.UnRegisterEvent(ProfileDataUpdate);
         }
 
         public BackupProjectRepository Repository { get; } = BackupProjectRepository.Instance;

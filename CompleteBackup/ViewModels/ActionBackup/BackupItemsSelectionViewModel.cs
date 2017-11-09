@@ -33,7 +33,7 @@ namespace CompleteBackup.ViewModels
         public BackupProjectData ProjectData { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject;
 
 
-        public ObservableCollection<FolderData> SelectionFolderList { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile.BackupFolderList;
+        public ObservableCollection<FolderData> SelectionFolderList { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile?.BackupFolderList;
 
         public void OpenSelectionWindow()
         {
@@ -51,7 +51,7 @@ namespace CompleteBackup.ViewModels
         public BackupItemsSelectionViewModel()
         {
             //Register to get update event when backup profile changed
-            BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile.ProfileDataRefreshTask?.RegisterEvent(ProfileDataUpdate);
+            BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile?.ProfileDataRefreshTask?.RegisterEvent(ProfileDataUpdate);
         }
     }
 }

@@ -44,11 +44,18 @@ namespace CompleteBackup.Models.Backup.Profile
 
     class ProfileHelper
     {
-        public static List<BackupTypeData> BackupTypeList { get; private set; } = new List<BackupTypeData>() {
-            new BackupTypeData() { BackupType = BackupTypeEnum.Snapshot, Name = "Snapshot Backup", ImageName = @"/Resources/Icons/Ribbon/FullBackup.ico", Description = "A full copy of your entire data set"},
-            new BackupTypeData() { BackupType = BackupTypeEnum.Incremental, Name = "Incremental Backup", ImageName = @"/Resources/Icons/Ribbon/IncrementalBackup.ico", Description = "Starts with a full backup, and subsequent backups only backup data that has changed\nFor a faster backup"},
-            new BackupTypeData() { BackupType = BackupTypeEnum.Differential, Name = "Differential Backup", ImageName = @"/Resources/Icons/Ribbon/DifferentialBackup.ico", Description = "Similar to Incremental Backup, but also contains all the data that changed since the first backup\nThis lets you restore a specific version event if the data has been deleted in the source"},
-        };
+        public static List<BackupTypeData> BackupTypeList
+        {
+            get
+            {
+                return new List<BackupTypeData>()
+                {
+                    new BackupTypeData() { BackupType = BackupTypeEnum.Snapshot, Name = "Snapshot Backup", ImageName = @"/Resources/Icons/Ribbon/FullBackup.ico", Description = "A full copy of your entire data set" },
+                    new BackupTypeData() { BackupType = BackupTypeEnum.Incremental, Name = "Incremental Backup", ImageName = @"/Resources/Icons/Ribbon/IncrementalBackup.ico", Description = "Starts with a full backup, and subsequent backups only backup data that has changed\nFor a faster backup" },
+                    new BackupTypeData() { BackupType = BackupTypeEnum.Differential, Name = "Differential Backup", ImageName = @"/Resources/Icons/Ribbon/DifferentialBackup.ico", Description = "Similar to Incremental Backup, but also contains all the data that changed since the first backup\nThis lets you restore a specific version event if the data has been deleted in the source", IsChecked = true},
+                };
+            }
+        }
     }
 
 
@@ -139,7 +146,7 @@ namespace CompleteBackup.Models.Backup.Profile
 
         public Guid GUID { get; set; } = Guid.NewGuid();
         public string Name { get; set; }
-        public string Description { get { return Name; } set { } }
+        public string Description { get; set; }
 
         IStorageInterface m_IStorage = new FileSystemStorage();
         public IStorageInterface GetStorageInterface() { return m_IStorage; }

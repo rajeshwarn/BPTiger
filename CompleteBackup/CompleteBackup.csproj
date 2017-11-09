@@ -105,11 +105,16 @@
     <Compile Include="ViewModels\ActionRestore\RestoreItemsSelectionViewModel.cs" />
     <Compile Include="ViewModels\ActionRestore\ICommands\RestoreFolderSelectionICommand.cs" />
     <Compile Include="ViewModels\ActionRestore\Validators\RestoreTargetLocationValidator.cs" />
+    <Compile Include="ViewModels\ProfileSetting\CreateBackupProfileWindowViewModel.cs" />
     <Compile Include="ViewModels\ExtendedControls\ICommnd\ClearLogConsoleICommand.cs" />
     <Compile Include="ViewModels\ExtendedControls\LogConsoleViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\SelectBackupTypeICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\SelectBackupProfileICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\StartWatcherBackupICommand.cs" />
+    <Compile Include="ViewModels\ProfileSetting\ICommands\DeleteBackupProfileICommand.cs" />
+    <Compile Include="ViewModels\ProfileSetting\ICommands\CreateNewProfileICommand.cs" />
+    <Compile Include="ViewModels\ProfileSetting\ICommands\OpenCreateProfileWindowICommand.cs" />
+    <Compile Include="ViewModels\ProfileSetting\ProfileDataViewModel.cs" />
     <Compile Include="ViewModels\ProfileSetting\SelectBackupTypeWindowViewModel.cs" />
     <Compile Include="ViewModels\Share\BackupItemsTreeBase.cs" />
     <Compile Include="ViewModels\ExtendedControls\ProcessingSpinnerViewModel.cs" />
@@ -167,11 +172,17 @@
     <Compile Include="Views\MainWindow\MainWindowStatusBarView.xaml.cs">
       <DependentUpon>MainWindowStatusBarView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ProfileSetting\ProfileDataView.xaml.cs">
+      <DependentUpon>ProfileDataView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ProfileSetting\MainProfileView.xaml.cs">
       <DependentUpon>MainProfileView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ProfileSetting\ProfileListView.xaml.cs">
       <DependentUpon>ProfileListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProfileSetting\CreateBackupProfileWindowView.xaml.cs">
+      <DependentUpon>CreateBackupProfileWindowView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ProfileSetting\SelectBackupTypeWindowView.xaml.cs">
       <DependentUpon>SelectBackupTypeWindowView.xaml</DependentUpon>
@@ -232,6 +243,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ProfileSetting\ProfileDataView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ProfileSetting\MainProfileView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -239,6 +254,10 @@
     <Page Include="Views\ProfileSetting\ProfileListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ProfileSetting\CreateBackupProfileWindowView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ProfileSetting\SelectBackupTypeWindowView.xaml">
       <SubType>Designer</SubType>

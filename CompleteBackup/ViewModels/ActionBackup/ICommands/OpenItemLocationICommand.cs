@@ -1,4 +1,5 @@
 ﻿using CompleteBackup.DataRepository;
+using CompleteBackup.Models.Backup.Profile;
 using CompleteBackup.Models.Backup.Project;
 using System;
 using System.Collections.Generic;
@@ -27,32 +28,28 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
 
         public bool CanExecute(object parameter)
         {
-            bool bExecute = true;
-            var viewModel = parameter as SelectBackupItemsWindowModel;
-        
-            return bExecute;
+            var paramList = parameter as IList<object>;
+
+            return (paramList != null) && (paramList.Count() > 0);
         }
 
         public void Execute(object parameter)
         {
-            var viewModel = parameter as SelectBackupItemsWindowModel;
+            var paramList = parameter as IList<object>;
+            var folderData = paramList[0] as FolderData;
+            var profile = BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile;
 
-            if (viewModel != null)
+            var path = folderData.Path;
+            if (!folderData.IsFolder)
             {
-                viewModel.DirtyFlag = false;
+                path = profile.GetStorageInterface().GetDirectoryName(folderData.Path);
             }
-
-            viewModel.UpdateSelectedFolderList();
-
-            viewModel.ProjectData?.CurrentBackupProfile.ClearBackupFolderList();
-            foreach (var item in viewModel.SelectedItemList)
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
             {
-                viewModel.ProjectData?.CurrentBackupProfile.BackupFolderList.Add(item);
-            }
-
-            viewModel.ProjectData?.CurrentBackupProfile.UpdateProfileProperties();
-
-            BackupProjectRepository.Instance.SaveProject();
+                FileName = path,
+                UseShellExecute = true,
+                Verb = "open"
+            });
         }
     }
 }
