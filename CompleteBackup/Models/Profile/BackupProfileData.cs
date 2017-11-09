@@ -88,6 +88,11 @@ namespace CompleteBackup.Models.Backup.Profile
 
         public void Init()
         {
+            if (TargetRestoreFolder == null)
+            {
+                TargetRestoreFolder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            }
+
             FileSystemWatcherWorker = new CBFileSystemWatcherWorker(this);
 
             UpdateProfileProperties();
