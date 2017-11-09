@@ -99,7 +99,7 @@ namespace CompleteBackup.Models.backup
             }
         }
 
-        protected void ProcessDifferentialBackupRootFolders(string newTargetPath, string lastTargetPath_)
+        protected virtual void ProcessDifferentialBackupRootFolders(string newTargetPath, string lastTargetPath_)
         {
             var sourceDirectoryEntriesList = m_SourceBackupPathList.Where(i => i.IsFolder).ToList();
             var sourceFileEntriesList = m_SourceBackupPathList.Where(i => !i.IsFolder).ToList();

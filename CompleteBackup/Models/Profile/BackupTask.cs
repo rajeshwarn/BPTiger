@@ -55,8 +55,16 @@ namespace CompleteBackup.Models.Profile
                     switch (profile.BackupType)
                     {
                         case BackupTypeEnum.Differential:
-                            m_Logger.Writeln($"Starting a Full Deep Differential backup");
-                            m_BackupManager = new DifferentialBackup(profile, m_ProgressBar);
+                            if (bFullBackupScan)
+                            {
+                                m_Logger.Writeln($"Starting a Full Deep Differential backup");
+                                m_BackupManager = new DifferentialBackup(profile, m_ProgressBar);
+                            }
+                            else
+                            {
+                                m_Logger.Writeln($"Starting a Differential watcher backup");
+                                m_BackupManager = new DifferentialWatcherBackup(profile, m_ProgressBar);
+                            }
                             break;
 
                         case BackupTypeEnum.Incremental:

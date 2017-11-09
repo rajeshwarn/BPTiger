@@ -62,6 +62,7 @@
     </ApplicationDefinition>
     <Compile Include="DataRepository\BackupProjectRepository.cs" />
     <Compile Include="Models\Backup\BackupFactory.cs" />
+    <Compile Include="Models\Backup\DifferentialWatcherBackup.cs" />
     <Compile Include="Models\Backup\IncrementalFullWatcherBackup.cs" />
     <Compile Include="Models\Profile\CBFileSystemWatcherWorker.cs" />
     <Compile Include="Models\Backup\IncrementalFullBackup.cs" />
