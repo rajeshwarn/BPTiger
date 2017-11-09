@@ -45,7 +45,7 @@ namespace CompleteBackup.Models.backup
         }
 
 
-        protected override void ProcessBackupRootFolders(string targetPath)
+        protected override void ProcessBackupRootFolders(string targetPath, string lastTargetPath = null)
         {
             //process all items
             foreach (var item in m_SourceBackupPathList)

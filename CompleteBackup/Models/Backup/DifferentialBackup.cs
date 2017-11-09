@@ -56,7 +56,7 @@ namespace CompleteBackup.Models.backup
                 }
 
 
-                ProcessDifferentialBackupRootFolders(newFullTargetPath, lastFullTargetPath);
+                ProcessBackupRootFolders(newFullTargetPath, lastFullTargetPath);
 
                 var sourceDirectoryEntriesList = m_SourceBackupPathList.Where(i => i.IsFolder).ToList();
                 var sourceFileEntriesList = m_SourceBackupPathList.Where(i => !i.IsFolder).ToList();
@@ -67,7 +67,7 @@ namespace CompleteBackup.Models.backup
             }
         }
 
-        protected virtual void ProcessDifferentialBackupRootFolders(string newTargetPath, string lastTargetPath)
+        protected override void ProcessBackupRootFolders(string newTargetPath, string lastTargetPath)
         {
             //process all items
             foreach (var item in m_SourceBackupPathList)
