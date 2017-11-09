@@ -45,7 +45,7 @@ namespace CompleteBackup.Models.backup
         }
 
 
-        protected override void ProcessBackupRootFolders(string targetPath, string lastTargetSetPath = null)
+        protected override void ProcessBackupRootFolders(string targetPath)
         {
             //process all items
             foreach (var item in m_SourceBackupPathList)
@@ -56,10 +56,6 @@ namespace CompleteBackup.Models.backup
                     {
                         item.IsAvailable = true;
                         var targetFolder = m_IStorage.Combine(targetPath, m_IStorage.GetFileName(item.Path));
-
-                        if (lastTargetSetPath != null)
-                        {
-                        }
 
                         ProcessIncrementalBackupFolderStep(item.Path, targetFolder);                            
                     }
