@@ -145,8 +145,12 @@ namespace CompleteBackup.Models.Backup.Profile
         public BackupTypeEnum BackupType { get { return m_BackupType; } set { m_BackupType = value; OnPropertyChanged(); OnPropertyChanged("BackupTypeName"); OnPropertyChanged("BackupTypeImage"); } }
 
         public Guid GUID { get; set; } = Guid.NewGuid();
-        public string Name { get; set; }
-        public string Description { get; set; }
+
+        private string m_Name;
+        public string Name { get { return m_Name; } set { m_Name = value; OnPropertyChanged(); } }
+
+        private string m_Description;
+        public string Description { get { return m_Description; } set { m_Description = value; OnPropertyChanged(); } }
 
         IStorageInterface m_IStorage = new FileSystemStorage();
         public IStorageInterface GetStorageInterface() { return m_IStorage; }

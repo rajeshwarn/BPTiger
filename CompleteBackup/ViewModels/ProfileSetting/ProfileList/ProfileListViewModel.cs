@@ -12,6 +12,8 @@ namespace CompleteBackup.ViewModels.Profile
     class ProfileListViewModel
     {
         public ICommand OpenCreateProfileWindowCommand { get; private set; } = new OpenCreateProfileWindowICommand<object>();
+        public ICommand OpenEditProfileWindowCommand { get; private set; } = new OpenEditProfileWindowICommand<object>();
+        
         public ICommand DeleteBackupProfileCommand { get; private set; } = new DeleteBackupProfileICommand<object>();
         
 

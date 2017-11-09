@@ -20,6 +20,9 @@
                     <MenuItem Header="Add new profile"
                         Command="{Binding OpenCreateProfileWindowCommand}"
                         CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}"/>
+                    <MenuItem Header="Edit"
+                        Command="{Binding OpenEditProfileWindowCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}"/>
                     <Separator/>
                     <MenuItem Header="Delete"
                         Command="{Binding DeleteBackupProfileCommand}"

@@ -105,14 +105,17 @@
     <Compile Include="ViewModels\ActionRestore\RestoreItemsSelectionViewModel.cs" />
     <Compile Include="ViewModels\ActionRestore\ICommands\RestoreFolderSelectionICommand.cs" />
     <Compile Include="ViewModels\ActionRestore\Validators\RestoreTargetLocationValidator.cs" />
+    <Compile Include="ViewModels\ProfileSetting\EditBackupProfileWindowViewModel.cs" />
     <Compile Include="ViewModels\ProfileSetting\CreateBackupProfileWindowViewModel.cs" />
     <Compile Include="ViewModels\ExtendedControls\ICommnd\ClearLogConsoleICommand.cs" />
     <Compile Include="ViewModels\ExtendedControls\LogConsoleViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\SelectBackupTypeICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\SelectBackupProfileICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\StartWatcherBackupICommand.cs" />
+    <Compile Include="ViewModels\ProfileSetting\ICommands\SaveBackupProfileICommand.cs" />
     <Compile Include="ViewModels\ProfileSetting\ICommands\DeleteBackupProfileICommand.cs" />
     <Compile Include="ViewModels\ProfileSetting\ICommands\CreateNewProfileICommand.cs" />
+    <Compile Include="ViewModels\ProfileSetting\ICommands\OpenEditProfileWindowICommand.cs" />
     <Compile Include="ViewModels\ProfileSetting\ICommands\OpenCreateProfileWindowICommand.cs" />
     <Compile Include="ViewModels\ProfileSetting\ProfileDataViewModel.cs" />
     <Compile Include="ViewModels\ProfileSetting\SelectBackupTypeWindowViewModel.cs" />
@@ -171,6 +174,9 @@
     <Compile Include="Views\MainWindow\GenericStatusBarView.cs" />
     <Compile Include="Views\MainWindow\MainWindowStatusBarView.xaml.cs">
       <DependentUpon>MainWindowStatusBarView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProfileSetting\EditBackupProfileWindowView.xaml.cs">
+      <DependentUpon>EditBackupProfileWindowView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ProfileSetting\ProfileDataView.xaml.cs">
       <DependentUpon>ProfileDataView.xaml</DependentUpon>
@@ -242,6 +248,10 @@
     <Page Include="Views\MainWindow\MainWindowStatusBarView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ProfileSetting\EditBackupProfileWindowView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ProfileSetting\ProfileDataView.xaml">
       <SubType>Designer</SubType>

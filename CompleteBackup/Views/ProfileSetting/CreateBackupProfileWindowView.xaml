@@ -6,7 +6,7 @@
         xmlns:view_models="clr-namespace:CompleteBackup.ViewModels"
         xmlns:local="clr-namespace:CompleteBackup.Views"
         mc:Ignorable="d"
-        Title="SelectBackupTypeWindowView" Height="400" Width="600">
+        Title="SelectBackupTypeWindowView" Height="600" Width="600">
     <Window.DataContext>
         <view_models:CreateBackupProfileWindowViewModel/>
     </Window.DataContext>
@@ -18,7 +18,7 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
-            <GroupBox Header="Profile Data">
+            <GroupBox Header="Profile Data" Margin="4">
                 <local:ProfileDataView DataContext="{Binding }"/>
             </GroupBox>
         </Grid>
@@ -69,17 +69,18 @@
             <Separator Margin="0,10,0,2" HorizontalAlignment="Stretch" Width="{Binding ActualWidth, ElementName=grid, Mode=OneWay}"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Width="80" Content="Create" Margin="20,5,0,5"
-                                    Command="{Binding CreateNewProfileCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
+                                    Command="{Binding CreateNewProfileCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
 
-                    <!--<Button.CommandParameter>
+                <!--<Button.CommandParameter>
                             <MultiBinding>
                                 <Binding ElementName="lvSmartGraphRuleCollectionListView" Path="SelectedItems" Mode="OneWay"/>
                                 <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}"/>
                             </MultiBinding>
                         </Button.CommandParameter>-->
-
-                </Button>
-                <Button Width="80" Content="Cancel" Margin="20,5,20,5"
+                    <Button Width="80" Content="Close" Margin="40,5,0,5"
+                                    Command="{Binding CloseWindowCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
+                    <Button Width="80" Content="Cancel" Margin="20,5,20,5"
                                     Command="{Binding CloseWindowCommand}"
                                     CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
             </StackPanel>
