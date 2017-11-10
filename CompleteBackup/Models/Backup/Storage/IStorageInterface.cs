@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,8 @@ namespace CompleteBackup.Models.Backup.Storage
     {
         System.Drawing.Icon ExtractIconFromPath(string path);
         System.IO.FileAttributes GetFileAttributes(string path);
+        void SetFileAttribute(string path, FileAttributes attribute);
+        void SetFileAttributeRecrusive(string folder, FileAttributes attribute);
         string Combine(string path1, string path2);
         string GetDirectoryName(string path);
         string GetFileName(string path);

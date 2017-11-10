@@ -31,6 +31,16 @@ namespace CompleteBackup.Models.Backup.Storage
                 return path.Substring(0, iIndex);
             }
         }
+        public void SetFileAttributeRecrusive(string folder, FileAttributes attribute)
+        {
+
+        }
+
+        public void SetFileAttribute(string path, FileAttributes attribute)
+        {
+
+        }
+
 
         public void CreateDirectory(string path, bool bCheckIfExist = false)
         {

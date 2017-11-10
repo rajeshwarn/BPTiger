@@ -151,7 +151,14 @@ namespace CompleteBackup.Models.backup
             {
                 var fileName = m_IStorage.GetFileName(file);
 
-                ProcessDeferentialBackupFile(file, currSetPath, lastSetPath, fileName);
+                try
+                {
+                    ProcessDeferentialBackupFile(file, currSetPath, lastSetPath, fileName);
+                }
+                catch (Exception ex)
+                {
+                    m_Logger.Writeln($"***ProcessDifferentialBackupFolderStep Exception\n{ex.Message}");
+                }
             }
 
             HandleDeletedFiles(sourceFileList, currSetPath, lastSetPath);

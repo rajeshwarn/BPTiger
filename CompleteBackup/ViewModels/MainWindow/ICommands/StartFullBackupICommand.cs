@@ -1,5 +1,6 @@
 ﻿using CompleteBackup.Models.backup;
 using CompleteBackup.Models.Backup.Profile;
+using CompleteBackup.Models.Profile;
 using CompleteBackup.Views;
 using CompleteBackup.Views.MainWindow;
 using System;
@@ -32,7 +33,7 @@ namespace CompleteBackup.ViewModels.ICommands
         {
             var profile = parameter as BackupProfileData;
 
-            bool bExecute = (profile != null) && !(profile.IsBackupWorkerBusy ^ profile.IsBackupWorkerPaused);
+            bool bExecute = (profile != null) && !((BackupTaskManager.Instance.IsBackupWorkerBusy(profile) == true) ^ (BackupTaskManager.Instance.IsBackupWorkerPaused(profile) == true));
 
             return bExecute;
         }
@@ -41,13 +42,13 @@ namespace CompleteBackup.ViewModels.ICommands
         {
             var profile = parameter as BackupProfileData;
 
-            if (profile.IsBackupWorkerBusy && profile.IsBackupWorkerPaused)
+            if ((BackupTaskManager.Instance.IsBackupWorkerBusy(profile) == true) && (BackupTaskManager.Instance.IsBackupWorkerPaused(profile) == true))
             {
-                profile.ResumeBackup();
+                BackupTaskManager.Instance.ResumeBackup(profile);
             }
             else
             {
-                profile.StartBackup(true);
+                BackupTaskManager.Instance.StartBackup(profile, true);
             }
         }
     }

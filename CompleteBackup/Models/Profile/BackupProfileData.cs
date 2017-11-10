@@ -128,8 +128,8 @@ namespace CompleteBackup.Models.Backup.Profile
             var profile = ((FileSystemProfileBackupWatcherTimer)source).Profile;
             if (profile?.BackupWatcherItemList.Count() > 0)
             {
-                profile.Logger.Writeln($"OnFileSystemWatcherBackupTimer");
-              //  profile.StartBackup(false);
+                profile.Logger.Writeln($"OnFileSystemWatcherBackupTimer - start backup");
+                BackupTaskManager.Instance.StartBackup(profile, false);
             }
         }
 
@@ -236,50 +236,10 @@ namespace CompleteBackup.Models.Backup.Profile
 
 
         [XmlIgnore]
-        public BackupWorkerTask BackupWorkerTask { get; set; }
+        public bool? IsBackupWorkerBusy { get { return BackupTaskManager.Instance.IsBackupWorkerBusy(this); } set { OnPropertyChanged(); } }
 
         [XmlIgnore]
-        public bool IsBackupWorkerBusy { get { return BackupWorkerTask != null && BackupWorkerTask.IsBusy; } set { OnPropertyChanged(); } }
-
-        [XmlIgnore]
-        public bool IsBackupWorkerPaused { get { return BackupWorkerTask != null && BackupWorkerTask.IsPaused == true; } set { BackupWorkerTask.IsPaused = value; OnPropertyChanged(); } }
-
-
-        public void StartBackup(bool bFullBackupScan)
-        {
-            lock (this)
-            {
-                if (TargetBackupFolder == null)
-                {
-                    return;
-                }
-
-                if (BackupWorkerTask != null && BackupWorkerTask.IsBusy)
-                {
-                    Logger.Writeln($"***Start failed, backup is already running");
-                }
-                else
-                {
-                    BackupWorkerTask = new BackupWorkerTask(this, bFullBackupScan);
-                    BackupWorkerTask.RunWorkerAsync();
-                }
-            }
-        }
-
-        public void PauseBackup()
-        {
-            if (BackupWorkerTask != null && BackupWorkerTask.IsBusy)
-            {
-                IsBackupWorkerPaused = true;
-            }
-        }
-        public void ResumeBackup()
-        {
-            if (BackupWorkerTask != null && BackupWorkerTask.IsBusy)
-            {
-                IsBackupWorkerPaused = false;
-            }
-        }
+        public bool? IsBackupWorkerPaused { get { return BackupTaskManager.Instance.IsBackupWorkerPaused(this); } set { OnPropertyChanged(); } }
 
 
         public void SetBackupType(BackupTypeEnum backupType)

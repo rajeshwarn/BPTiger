@@ -1,5 +1,6 @@
 ﻿using CompleteBackup.Models.backup;
 using CompleteBackup.Models.Backup.Profile;
+using CompleteBackup.Models.Profile;
 using CompleteBackup.Views;
 using CompleteBackup.Views.MainWindow;
 using System;
@@ -44,7 +45,7 @@ namespace CompleteBackup.ViewModels.ICommands
             //            new SelectRestoreItemsWindow().Show();
 
 
-            if (profile.IsBackupWorkerBusy && profile.IsBackupWorkerPaused)
+            if ((BackupTaskManager.Instance.IsBackupWorkerBusy(profile) == true) && (BackupTaskManager.Instance.IsBackupWorkerPaused(profile) == true))
             {
      //           profile.ResumeBackup();
             }

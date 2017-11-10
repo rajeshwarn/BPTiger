@@ -32,20 +32,52 @@ namespace CompleteBackup.Models.Profile
         GenericStatusBarView m_ProgressBar;
         BackupProfileData m_Profile;
         protected BackupPerfectLogger m_Logger;
+        bool m_bFullBackupScan;
+
+        public BackupProfileData GetProfile()
+        {
+            return m_Profile;
+        }
+
 
         private BackupWorkerTask() { }
 
+        private void BackupTaskRunWorkerCompletedEvent(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Cancelled == true)
+            {
+            }
+            else if (e.Error != null)
+            {
+            }
+            else
+            {
+            }
+
+            lock (this)
+            {
+
+            }
+
+            BackupTaskManager.Instance.CompleteAndStartNextBackup();
+            if (!m_bFullBackupScan)
+            {
+                m_Profile.BackupWatcherItemList.Clear();
+            }
+        }
         public BackupWorkerTask(BackupProfileData profile, bool bFullBackupScan)
         {
             m_Profile = profile;
             m_ProgressBar = GenericStatusBarView.NewInstance;
             m_Logger = profile.Logger;
+            m_bFullBackupScan = bFullBackupScan;
 
             WorkerReportsProgress = true;
             WorkerSupportsCancellation = true;
 
             DoWork += (sender, e) =>
             {
+                RunWorkerCompleted += new RunWorkerCompletedEventHandler(BackupTaskRunWorkerCompletedEvent);
                 profile.IsBackupWorkerBusy = true;
                 m_ProgressBar.UpdateProgressBar("Backup starting...", 0);
                 var startTime = DateTime.Now;

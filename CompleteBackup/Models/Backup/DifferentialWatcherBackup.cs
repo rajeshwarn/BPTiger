@@ -20,7 +20,14 @@ namespace CompleteBackup.Models.backup
 
         protected override void ProcessBackupRootFolders(string targetPath, string lastTargetPath)
         {
-            ProcessBackupWatcherRootFolders(targetPath, lastTargetPath);
+            try
+            {
+                ProcessBackupWatcherRootFolders(targetPath, lastTargetPath);
+            }
+            catch(Exception ex)
+            {
+                m_Logger.Writeln($"***DifferentialWatcherBackup Exception\n{ex.Message}");
+            }
         }
 
         protected void ProcessDifferentialBackupRootFolders_XXXX(string targetPath, string lastTargetPath)

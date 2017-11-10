@@ -131,9 +131,15 @@ namespace CompleteBackup.Models.backup
 
         public static string GetLastBackupSetName(BackupProfileData profile)
         {
-            var setList = GetBackupSetList(profile);
+            string lastSet = null;
 
-            var lastSet = setList.FirstOrDefault();
+            try
+            {
+                var setList = GetBackupSetList(profile);
+                lastSet = setList.FirstOrDefault();
+            }
+            catch (DirectoryNotFoundException)
+            { }
 
             return lastSet;
         }
@@ -217,7 +223,7 @@ namespace CompleteBackup.Models.backup
 
         protected void ProcessBackupWatcherRootFolders(string targetPath, string lastTargetPath = null)
         {
-            foreach (var item in m_Profile.BackupWatcherItemList)
+            foreach (var item in m_Profile.BackupWatcherItemList.ToList())
             {
                 switch (item.ChangeType)
                 {
@@ -239,6 +245,11 @@ namespace CompleteBackup.Models.backup
                                     {
                                         var newLastTargetPath = m_IStorage.Combine(m_IStorage.Combine(lastTargetPath, m_IStorage.GetFileName(item.WatchPath)), item.Name);
                                         MoveFile(newTargetPath, newLastTargetPath, true);
+                                    }
+                                    else
+                                    {
+                                        //delete old version if no old set exists, happens with full backup and incremental
+                                        DeleteFile(newTargetPath);
                                     }
                                     CopyFile(item.FullPath, newTargetPath, true);
                                 }
@@ -269,6 +280,11 @@ namespace CompleteBackup.Models.backup
                             {
                                 if (!m_IStorage.FileExists(newTargetPath))
                                 {
+                                    var dirName = m_IStorage.GetDirectoryName(newTargetPath);
+                                    if (!m_IStorage.DirectoryExists(dirName))
+                                    {
+                                        CreateDirectory(dirName);
+                                    }
                                     CopyFile(sourcePath, newTargetPath);
                                 }
                                 else
@@ -440,21 +456,31 @@ namespace CompleteBackup.Models.backup
                 m_Logger.Writeln($"Move Directory {sourcePath}");
             }
 
+            var parentDir = m_IStorage.GetDirectoryName(targetPath);
+            if (!m_IStorage.DirectoryExists(parentDir))
+            {
+                CreateDirectory(parentDir);
+            }
+
             return m_IStorage.MoveDirectory(sourcePath, targetPath, bCreateFolder);
         }
 
         protected bool DeleteDirectory(string path, bool bRecursive = true)
         {
-            if (m_Profile.IsDetaledLog)
+            bool bRet = false;
+            try
             {
+                bRet = m_IStorage.DeleteDirectory(path, bRecursive);
                 m_Logger.Writeln($"Delete Directory {path}");
             }
-            else
+            catch (UnauthorizedAccessException)
             {
-                m_Logger.Writeln($"Delete Directory {path}");
+                m_Logger.Writeln($"Delete Read only Directory: {path}");
+                m_IStorage.SetFileAttributeRecrusive(path, FileAttributes.Normal);
+                bRet = m_IStorage.DeleteDirectory(path, bRecursive);
             }
 
-            return m_IStorage.DeleteDirectory(path, bRecursive);
+            return bRet;
         }
 
         protected void MoveFile(string sourcePath, string targetPath, bool bCreateFolder = false)
@@ -472,16 +498,17 @@ namespace CompleteBackup.Models.backup
         }
         protected void DeleteFile(string path)
         {
-            if (m_Profile.IsDetaledLog)
+            try
             {
+                m_IStorage.DeleteFile(path);
                 m_Logger.Writeln($"Delete File {path}");
             }
-            else
+            catch (UnauthorizedAccessException)
             {
-                m_Logger.Writeln($"Delete File {path}");
+                m_Logger.Writeln($"Delete Read only file File {path}");
+                m_IStorage.SetFileAttribute(path, FileAttributes.Normal);
+                m_IStorage.DeleteFile(path);
             }
-
-            m_IStorage.DeleteFile(path);
         }
 
         #endregion

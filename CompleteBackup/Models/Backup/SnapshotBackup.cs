@@ -77,7 +77,14 @@ namespace CompleteBackup.Models.backup
             var sourceFilePath = m_IStorage.Combine(sourcePath, fileName);
             var targetFilePath = m_IStorage.Combine(destPath, fileName);
 
-            CopyFile(sourceFilePath, targetFilePath);
+            try
+            {
+                CopyFile(sourceFilePath, targetFilePath);
+            }
+            catch (FileNotFoundException)
+            {
+                m_Logger.Writeln($"***File not found in source folder: {sourcePath}");
+            }
 
             m_BackupSessionHistory.AddNewFile(sourceFilePath, targetFilePath);
         }

@@ -106,8 +106,21 @@ namespace CompleteBackup.Models.Backup.Storage
             }
         }
 
+        public void SetFileAttribute(string path, FileAttributes attribute)
+        {
+            if (path.Length < MAX_PATH_LENGTH)
+            {
+                File.SetAttributes(path, attribute);
+            }
+            else
+            {
+                Win32LongPathFile.SetAttributes(path, attribute);
+            }
+        }
+
+
         //used buy delete file/directory to delete read only files
-        private void SetFileAttributeRecrusive(string folder, FileAttributes attribute)
+        public void SetFileAttributeRecrusive(string folder, FileAttributes attribute)
         {
             if (folder.Length < MAX_PATH_LENGTH)
             {
@@ -398,8 +411,13 @@ namespace CompleteBackup.Models.Backup.Storage
 
         public long GetSizeOfFiles(string path)
         {
-            //item.NumberOfFiles = new DirectoryInfo(item.Path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => 1);
-            long size = new DirectoryInfo(path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
+            long size = 0;
+
+            try
+            {
+                size = new DirectoryInfo(path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
+            }
+            catch (DirectoryNotFoundException) { }
 
             return size;
         }
