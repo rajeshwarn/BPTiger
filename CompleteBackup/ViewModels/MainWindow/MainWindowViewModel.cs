@@ -48,7 +48,8 @@ namespace CompleteBackup.ViewModels.MainWindow
 
         private int m_SelectedRibbonIndex = m_DefaultPageIndex;
         public int SelectedRibbonIndex { get { return m_SelectedRibbonIndex; } set { m_SelectedRibbonIndex = value; OnPropertyChanged(); UpdateCurrentMainView(); } }
-        
+
+
 
         public BackupProjectRepository Project { get; set; } = BackupProjectRepository.Instance;
         public BackupProjectData ProjectData { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject;
@@ -60,14 +61,14 @@ namespace CompleteBackup.ViewModels.MainWindow
         {
             try
             {
-                //CurrentPageViewModel = m_MainViewDictionary[m_SelectedRibbonIndex];
-                //if (CurrentPageViewModel is MainProfileViewModel)
-                //{
-                //    var profileView = CurrentPageViewModel as MainProfileViewModel;
-                //    profileView.ProfileData.UpdateProfileProperties();
-                //}
+                CurrentPageViewModel = m_MainViewDictionary[m_SelectedRibbonIndex];
+                if (CurrentPageViewModel is MainProfileViewModel)
+                {
+                    var profileView = CurrentPageViewModel as MainProfileViewModel;
+                    profileView.ProfileData.UpdateProfileProperties();
+                }
 
-                ProjectData.CurrentBackupProfile?.UpdateProfileProperties();
+                //ProjectData.CurrentBackupProfile?.UpdateProfileProperties();
             }
             catch (KeyNotFoundException) { }
         }
