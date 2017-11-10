@@ -9,6 +9,7 @@ using CompleteBackup.ViewModels.FolderSelection.ICommands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -109,7 +110,7 @@ namespace CompleteBackup.ViewModels
             else
             {
                 var profile = ProjectData.CurrentBackupProfile;
-                var backSetList = BackupManager.GetBackupSetList(profile);
+                var backSetList = BackupBase.GetBackupSetList(profile);
 
                     //xxxxx
                 foreach (var item in itemList)
@@ -118,17 +119,20 @@ namespace CompleteBackup.ViewModels
                     foreach (var setPath in backSetList)
                     {
                         var sessionHistory = BackupSessionHistory.LoadHistory(profile.TargetBackupFolder, setPath);
-                        sessionHistory.SessionHistoryIndex = iSessionIndex;
-                        iSessionIndex++;
+                        if (sessionHistory != null)
+                        {
+                            sessionHistory.SessionHistoryIndex = iSessionIndex;
+                            iSessionIndex++;
 
-                        var folderItem = item as FolderMenuItem;
+                            var folderItem = item as FolderMenuItem;
 
-                        var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, setPath);
-                        var lastSetPath2 = m_IStorage.Combine(lastSetPath, folderItem.RelativePath);
+                            var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, setPath);
+                            var lastSetPath2 = m_IStorage.Combine(lastSetPath, folderItem.RelativePath);
 
-                        //if (folderItem.ChildFolderMenuItems.Count() == 0)
-                        {                            
-                            UpdateChildItemsInMenuItem(folderItem, lastSetPath2, sessionHistory);
+                            //if (folderItem.ChildFolderMenuItems.Count() == 0)
+                            {
+                                UpdateChildItemsInMenuItem(folderItem, lastSetPath2, sessionHistory);
+                            }
                         }
                     }
                 }
@@ -143,7 +147,7 @@ namespace CompleteBackup.ViewModels
             ClearItemList();
             m_BackupSetPathCacheList.Clear();
 
-            m_LastSetPathCache = BackupManager.GetLastBackupSetName(profile);
+            m_LastSetPathCache = BackupBase.GetLastBackupSetName(profile);
 
             switch (profile.BackupType)
             {
@@ -171,7 +175,7 @@ namespace CompleteBackup.ViewModels
                     break;
                 case BackupTypeEnum.Differential:
                     {
-                        var backSetList = BackupManager.GetBackupSetList(profile);
+                        var backSetList = BackupBase.GetBackupSetList(profile);
                         foreach (var setPath in backSetList.Where(p => p != m_LastSetPathCache))
                         {
                             m_BackupSetPathCacheList.Add(m_IStorage.Combine(profile.TargetBackupFolder, setPath));
@@ -188,19 +192,26 @@ namespace CompleteBackup.ViewModels
                         {
                             iSessionIndex++;
                             var sessionHistory = BackupSessionHistory.LoadHistory(profile.TargetBackupFolder, setPath);
-                            sessionHistory.SessionHistoryIndex = iSessionIndex;
-
-                            var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, setPath);
-
-                            m_RootFolderMenuItemTree.Path = lastSetPath;
-
-                            //update add root items
-                            UpdateChildItemsInMenuItem(m_RootFolderMenuItemTree, lastSetPath, sessionHistory);
-
-                            foreach (var subItem in m_RootFolderMenuItemTree.ChildFolderMenuItems)
+                            if (sessionHistory == null)
                             {
-                                var newPath = m_IStorage.Combine(lastSetPath, subItem.RelativePath);
-                                UpdateChildItemsInMenuItem(subItem, newPath, sessionHistory);
+                                Trace.WriteLine("Error, Select Restore Differential Items, History is null");
+                            }
+                            else
+                            {
+                                sessionHistory.SessionHistoryIndex = iSessionIndex;
+
+                                var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, setPath);
+
+                                m_RootFolderMenuItemTree.Path = lastSetPath;
+
+                                //update add root items
+                                UpdateChildItemsInMenuItem(m_RootFolderMenuItemTree, lastSetPath, sessionHistory);
+
+                                foreach (var subItem in m_RootFolderMenuItemTree.ChildFolderMenuItems)
+                                {
+                                    var newPath = m_IStorage.Combine(lastSetPath, subItem.RelativePath);
+                                    UpdateChildItemsInMenuItem(subItem, newPath, sessionHistory);
+                                }
                             }
                         }                        
                     }

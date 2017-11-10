@@ -13,7 +13,7 @@ using System.Windows;
 
 namespace CompleteBackup.Models.backup
 {
-    public class SnapshotBackup : BackupManager
+    public class SnapshotBackup : BackupBase
     {
         public SnapshotBackup(BackupProfileData profile, GenericStatusBarView progressBar = null) : base(profile, progressBar) { }
 

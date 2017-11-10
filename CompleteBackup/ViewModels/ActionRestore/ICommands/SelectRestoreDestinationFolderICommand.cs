@@ -85,7 +85,7 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
                                         }
                                     }
                                 }
-                                catch (System.IO.PathTooLongException ex)
+                                catch (System.IO.PathTooLongException)
                                 {
                                     MessageBox.Show($"The destination path you have selected is too long, please select a shorter", "Destination folder", MessageBoxButton.OK, MessageBoxImage.Error);
                                 }

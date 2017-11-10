@@ -129,7 +129,7 @@ namespace CompleteBackup.Models.Backup.Profile
             if (profile?.BackupWatcherItemList.Count() > 0)
             {
                 profile.Logger.Writeln($"OnFileSystemWatcherBackupTimer");
-                profile.StartBackup(false);
+              //  profile.StartBackup(false);
             }
         }
 

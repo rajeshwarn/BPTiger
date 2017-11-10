@@ -16,7 +16,7 @@ namespace CompleteBackup.Models.Profile
 {
     public class BackupWorker : BackgroundWorker
     {
-        BackupManager m_BackupManager = null;
+        BackupBase m_BackupManager = null;
 
         public bool? IsPaused { get {
                 bool? bpause = !m_BackupManager?.PauseWaitHandle.WaitOne(0);

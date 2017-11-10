@@ -18,14 +18,14 @@ using System.Xml;
 
 namespace CompleteBackup.Models.backup
 {
-    public abstract class BackupManager
+    public abstract class BackupBase
     {
         protected IStorageInterface m_IStorage;
         protected BackupProfileData m_Profile;
         protected BackupSessionHistory m_BackupSessionHistory;
         protected BackupPerfectLogger m_Logger;
 
-        public BackupManager(BackupProfileData profile, GenericStatusBarView progressBar)
+        public BackupBase(BackupProfileData profile, GenericStatusBarView progressBar)
         {
             m_TimeStamp = DateTime.Now;
             m_Profile = profile;
@@ -97,8 +97,6 @@ namespace CompleteBackup.Models.backup
                 }
             }
         }
-
-
 
 
         public abstract void ProcessBackup();

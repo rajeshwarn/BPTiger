@@ -30,6 +30,16 @@ namespace CompleteBackup.Models.FolderSelection
         {
             get
             {
+                Trace.WriteLine($"XXXXXXXXXXXXXXX- IMAGE");
+
+                return null;
+            }
+        }
+
+        public ImageSource MenuItemImage
+        {
+            get
+            {
                 ImageSource imageSource = null;
                 try
                 {

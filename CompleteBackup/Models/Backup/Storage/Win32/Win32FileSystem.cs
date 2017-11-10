@@ -78,9 +78,9 @@ namespace CompleteBackup.Models.Backup.Storage
         internal struct WIN32_FIND_DATA
         {
             public System.IO.FileAttributes dwFileAttributes;
-            public FILETIME ftCreationTime;
-            public FILETIME ftLastAccessTime;
-            public FILETIME ftLastWriteTime;
+            public System.Runtime.InteropServices.ComTypes.FILETIME ftCreationTime;
+            public System.Runtime.InteropServices.ComTypes.FILETIME ftLastAccessTime;
+            public System.Runtime.InteropServices.ComTypes.FILETIME ftLastWriteTime;
             public uint nFileSizeHigh; //changed all to uint, otherwise you run into unexpected overflow
             public uint nFileSizeLow;  //|
             public uint dwReserved0;   //|

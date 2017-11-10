@@ -77,7 +77,7 @@ namespace CompleteBackup.ViewModels
                     attr = File.GetAttributes(drive.Name);
                     name = $"{drive.VolumeLabel} ({drive.DriveType}) ({drive.Name})";
                 }
-                catch(IOException ex)
+                catch(IOException)
                 {
                     name = name + " [Not Ready]";
                 }

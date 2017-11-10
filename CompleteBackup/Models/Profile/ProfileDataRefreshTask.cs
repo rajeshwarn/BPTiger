@@ -107,7 +107,7 @@ namespace CompleteBackup.Models.Profile
                     {
                         //last backup time
                         DateTime? lastTime = null;
-                        var lastSet = BackupManager.GetLastBackupSetName(profile);
+                        var lastSet = BackupBase.GetLastBackupSetName(profile);
                         if (lastSet != null)
                         {
                             var sessionHistory = BackupSessionHistory.LoadHistory(profile.TargetBackupFolder, lastSet);

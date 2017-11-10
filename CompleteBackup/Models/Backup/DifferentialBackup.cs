@@ -24,7 +24,7 @@ namespace CompleteBackup.Models.backup
             m_BackupSessionHistory.Reset(GetTimeStamp());
 
             var targetSet = GetTargetSetName();
-            var lastSet = BackupManager.GetLastBackupSetName(m_Profile);
+            var lastSet = BackupBase.GetLastBackupSetName(m_Profile);
             if (lastSet == null)
             {
                 //First backup
@@ -63,8 +63,9 @@ namespace CompleteBackup.Models.backup
                 HandleDeletedItems(sourceDirectoryEntriesList, newFullTargetPath, lastFullTargetPath);
                 HandleDeletedFiles(sourceFileEntriesList, newFullTargetPath, lastFullTargetPath);
 
-                BackupSessionHistory.SaveHistory(m_TargetBackupPath, targetSet, m_BackupSessionHistory);
             }
+
+            BackupSessionHistory.SaveHistory(m_TargetBackupPath, targetSet, m_BackupSessionHistory);
         }
 
         protected override void ProcessBackupRootFolders(string newTargetPath, string lastTargetPath)
