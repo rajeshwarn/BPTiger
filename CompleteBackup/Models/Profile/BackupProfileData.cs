@@ -100,7 +100,7 @@ namespace CompleteBackup.Models.Backup.Profile
                 TargetRestoreFolder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             }
 
-            FileSystemWatcherWorker = new CBFileSystemWatcherWorker(this);
+            FileSystemWatcherWorker = new FileSystemWatcherWorkerTask(this);
 
             UpdateProfileProperties();
 
@@ -143,7 +143,7 @@ namespace CompleteBackup.Models.Backup.Profile
 
 
         [XmlIgnore]
-        public CBFileSystemWatcherWorker FileSystemWatcherWorker { get; private set; }
+        public FileSystemWatcherWorkerTask FileSystemWatcherWorker { get; private set; }
 
 
         private string m_CurrentBackupFile;
@@ -197,9 +197,9 @@ namespace CompleteBackup.Models.Backup.Profile
 
         public ObservableCollection<FolderData> BackupFolderList { get; set; } = new ObservableCollection<FolderData>();
 
-        public ObservableCollection<WatcherItemData> BackupWatcherItemList { get; set; } = new ObservableCollection<WatcherItemData>();
+        public ObservableCollection<FileSystemWatcherItemData> BackupWatcherItemList { get; set; } = new ObservableCollection<FileSystemWatcherItemData>();
 
-        public void AddItemToBackupWatcherItemList(WatcherItemData item)
+        public void AddItemToBackupWatcherItemList(FileSystemWatcherItemData item)
         {
             BackupWatcherItemList.Add(item);
             OnPropertyChanged("BackupWatcherItemListCount");
@@ -223,7 +223,7 @@ namespace CompleteBackup.Models.Backup.Profile
         }
 
         [XmlIgnore]
-        public ProfileDataRefreshTask ProfileDataRefreshTask { get; private set; }
+        public ProfileDataRefreshWorkerTask ProfileDataRefreshTask { get; private set; }
 
         [XmlIgnore]
         public ObservableCollection<FolderData> RestoreFolderList { get; set; } = new ObservableCollection<FolderData>();
@@ -236,7 +236,7 @@ namespace CompleteBackup.Models.Backup.Profile
 
 
         [XmlIgnore]
-        public BackupWorker BackupWorkerTask { get; set; }
+        public BackupWorkerTask BackupWorkerTask { get; set; }
 
         [XmlIgnore]
         public bool IsBackupWorkerBusy { get { return BackupWorkerTask != null && BackupWorkerTask.IsBusy; } set { OnPropertyChanged(); } }
@@ -260,7 +260,7 @@ namespace CompleteBackup.Models.Backup.Profile
                 }
                 else
                 {
-                    BackupWorkerTask = new BackupWorker(this, bFullBackupScan);
+                    BackupWorkerTask = new BackupWorkerTask(this, bFullBackupScan);
                     BackupWorkerTask.RunWorkerAsync();
                 }
             }
@@ -442,7 +442,7 @@ namespace CompleteBackup.Models.Backup.Profile
             {
                 if (ProfileDataRefreshTask == null)
                 {
-                    ProfileDataRefreshTask = new ProfileDataRefreshTask(this);
+                    ProfileDataRefreshTask = new ProfileDataRefreshWorkerTask(this);
                     ProfileDataRefreshTask.RunWorkerAsync();
                 }
                 else

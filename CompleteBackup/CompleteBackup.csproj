@@ -63,22 +63,25 @@
     <Compile Include="DataRepository\BackupProjectRepository.cs" />
     <Compile Include="Models\Backup\BackupFactory.cs" />
     <Compile Include="Models\Backup\DifferentialWatcherBackup.cs" />
-    <Compile Include="Models\Backup\Managers\FileSystemWatcherManager.cs" />
+    <Compile Include="Models\Backup\Managers\FileSystemWatcerItemManager.cs" />
     <Compile Include="Models\Backup\IncrementalFullWatcherBackup.cs" />
-    <Compile Include="Models\Profile\BackupTaskManager.cs" />
-    <Compile Include="Models\Profile\CBFileSystemWatcherWorker.cs" />
+    <Compile Include="Models\Backup\Managers\BackupTaskManager.cs" />
+    <Compile Include="Models\Backup\Managers\FileSystemWatcherItemData.cs" />
+    <Compile Include="Models\Backup\Managers\FileSystemWatcherWorkerTask.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Models\Backup\IncrementalFullBackup.cs" />
     <Compile Include="Models\Backup\History\BackupSessionHistory.cs" />
     <Compile Include="Models\FolderSelection\BackupFolderMenuItem.cs" />
     <Compile Include="Models\FolderSelection\RestoreFolderMenuItem.cs" />
-    <Compile Include="Models\Profile\ProfileDataRefreshTask.cs">
+    <Compile Include="Models\Backup\Managers\ProfileDataRefreshWorkerTask.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Models\Profile\BackupTask.cs">
+    <Compile Include="Models\Backup\Managers\BackupWorkerTask.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Models\Profile\FolderData.cs" />
-    <Compile Include="Models\Profile\ProfileManager.cs" />
+    <Compile Include="Models\Backup\Managers\ProfileManager.cs" />
     <Compile Include="Models\Project\BackupProjectData.cs" />
     <Compile Include="Models\Profile\BackupProfileData.cs" />
     <Compile Include="Models\Backup\Storage\NullStorage.cs" />
