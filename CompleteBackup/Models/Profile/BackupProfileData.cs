@@ -129,7 +129,7 @@ namespace CompleteBackup.Models.Backup.Profile
             if (profile?.BackupWatcherItemList.Count() > 0)
             {
                 profile.Logger.Writeln($"OnFileSystemWatcherBackupTimer - start backup");
-                BackupTaskManager.Instance.StartBackup(profile, false);
+        //        BackupTaskManager.Instance.StartBackup(profile, false);
             }
         }
 
@@ -202,7 +202,7 @@ namespace CompleteBackup.Models.Backup.Profile
         public void AddItemToBackupWatcherItemList(FileSystemWatcherItemData item)
         {
             BackupWatcherItemList.Add(item);
-            OnPropertyChanged("BackupWatcherItemListCount");
+            //OnPropertyChanged("BackupWatcherItemListCount");
         }
 
         public long BackupWatcherItemListCount { get { return BackupWatcherItemList.Count(); } set { } }

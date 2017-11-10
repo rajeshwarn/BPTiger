@@ -39,7 +39,8 @@ namespace CompleteBackup.Models.Backup
                     NotifyFilters.LastAccess |
                     NotifyFilters.LastWrite |
                     NotifyFilters.FileName |
-                    NotifyFilters.DirectoryName;
+                    NotifyFilters.DirectoryName |
+                    NotifyFilters.CreationTime;
 
                 watcher.Filter = "*.*";
 
@@ -73,40 +74,40 @@ namespace CompleteBackup.Models.Backup
         private void OnCreated(object source, FileSystemEventArgs e)
         {
             m_Profile.AddItemToBackupWatcherItemList(new FileSystemWatcherItemData { WatchPath = m_Path, Time = DateTime.Now, ChangeType = e.ChangeType, FullPath = e.FullPath, Name = e.Name });
-            BackupProjectRepository.Instance.SaveProject();
+//            BackupProjectRepository.Instance.SaveProject();
             m_Logger.Writeln($"Watcher, File {e.ChangeType}: {e.FullPath }");
         }
 
-        private int onChangedFireCount = 0;
+        //private int onChangedFireCount = 0;
         private void OnChanged(object source, FileSystemEventArgs e)
         {
-            onChangedFireCount++;
-            if (onChangedFireCount == 1)
+//            onChangedFireCount++;
+//            if (onChangedFireCount == 1)
             {
-                if (!m_Profile.GetStorageInterface().IsFolder(e.FullPath))
+//                if (!m_Profile.GetStorageInterface().IsFolder(e.FullPath))
                 {
                     m_Profile.AddItemToBackupWatcherItemList(new FileSystemWatcherItemData { WatchPath = m_Path, Time = DateTime.Now, ChangeType = e.ChangeType, FullPath = e.FullPath, Name = e.Name });
-                    BackupProjectRepository.Instance.SaveProject();
+//                    BackupProjectRepository.Instance.SaveProject();
                     m_Logger.Writeln($"Watcher, File {e.ChangeType}: {e.FullPath }");
                 }
             }
-            else
-            {
-                onChangedFireCount = 0;
-            }
+            //else
+            //{
+            //    onChangedFireCount = 0;
+            //}
         }
 
         private void OnDeleted(object source, FileSystemEventArgs e)
         {
             m_Profile.AddItemToBackupWatcherItemList(new FileSystemWatcherItemData { WatchPath = m_Path, Time = DateTime.Now, ChangeType = e.ChangeType, FullPath = e.FullPath, Name = e.Name });
-            BackupProjectRepository.Instance.SaveProject();
+//            BackupProjectRepository.Instance.SaveProject();
             m_Logger.Writeln($"Watcher, File {e.ChangeType}: {e.FullPath }");
         }
 
         private void OnRenamed(object source, RenamedEventArgs e)
         {
             m_Profile.AddItemToBackupWatcherItemList(new FileSystemWatcherItemData { WatchPath = m_Path, Time = DateTime.Now, ChangeType = e.ChangeType, OldPath = e.OldFullPath, FullPath = e.FullPath, Name = e.Name });
-            BackupProjectRepository.Instance.SaveProject();
+ //           BackupProjectRepository.Instance.SaveProject();
             m_Logger.Writeln($"Watcher, File Renamed: {e.OldFullPath} to {e.FullPath}");
         }
     }

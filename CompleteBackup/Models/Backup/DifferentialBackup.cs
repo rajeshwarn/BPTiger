@@ -92,8 +92,15 @@ namespace CompleteBackup.Models.backup
                 }
                 else
                 {
-                    ProcessDeferentialBackupFile(item.Path, newTargetPath, lastTargetPath, targetdirectoryName);
-                }
+                    try
+                    {
+                        ProcessDeferentialBackupFile(item.Path, newTargetPath, lastTargetPath, targetdirectoryName);
+                    }
+                    catch (Exception ex)
+                    {
+                        m_Logger.Writeln($"***ProcessBackupRootFolders:ProcessDifferentialBackupFolderStep Exception\n{ex.Message}");
+                    }
+                }            
             }
         }
 

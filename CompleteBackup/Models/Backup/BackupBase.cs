@@ -223,8 +223,13 @@ namespace CompleteBackup.Models.backup
 
         protected void ProcessBackupWatcherRootFolders(string targetPath, string lastTargetPath = null)
         {
+            var list1 = m_Profile.BackupWatcherItemList;
+            var list2 = m_Profile.BackupWatcherItemList.ToList();
+            int cccc = 0;
+
             foreach (var item in m_Profile.BackupWatcherItemList.ToList())
             {
+                cccc++;
                 switch (item.ChangeType)
                 {
                     case WatcherChangeTypes.Changed:
