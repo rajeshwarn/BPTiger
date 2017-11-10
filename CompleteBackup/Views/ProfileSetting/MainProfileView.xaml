@@ -52,6 +52,11 @@
 
 
             <Button Width="50" Content="Refresh" Click="Button_Click" HorizontalAlignment="Right"/>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                <TextBlock Text="Update watch items every: " ></TextBlock>
+                <TextBox Text="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.UpdateWatchItemsTimeSeconds}" Width="60"></TextBox>
+                <TextBlock Text="seconds" ></TextBlock>
+            </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Source foldes size: "></TextBlock>
                 <TextBlock Text="{Binding Repository.SelectedBackupProject.CurrentBackupProfile.BackupSourceFoldersSize}" ></TextBlock>

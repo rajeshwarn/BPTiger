@@ -16,6 +16,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Xml.Serialization;
 
@@ -56,6 +57,12 @@ namespace CompleteBackup.Models.Backup.Profile
                 };
             }
         }
+    }
+
+
+    public class FileSystemProfileBackupWatcherTimer : System.Timers.Timer
+    {
+        public BackupProfileData Profile;
     }
 
 
@@ -102,8 +109,29 @@ namespace CompleteBackup.Models.Backup.Profile
                 FileSystemWatcherWorker.RunWorkerAsync();
             }
 
+
+            m_FileSystemWatcherBackupTimer = new FileSystemProfileBackupWatcherTimer()
+            {
+                Interval = UpdateWatchItemsTimeSeconds * 100,
+                Profile = this,
+
+            };
+            m_FileSystemWatcherBackupTimer.Elapsed += OnFileSystemWatcherBackupTimer;
+            m_FileSystemWatcherBackupTimer.AutoReset = true;
+            m_FileSystemWatcherBackupTimer.Enabled = true;
         }
 
+        private FileSystemProfileBackupWatcherTimer m_FileSystemWatcherBackupTimer;
+
+        private static void OnFileSystemWatcherBackupTimer(Object source, ElapsedEventArgs e)
+        {
+            var profile = ((FileSystemProfileBackupWatcherTimer)source).Profile;
+            if (profile?.BackupWatcherItemList.Count() > 0)
+            {
+                profile.Logger.Writeln($"OnFileSystemWatcherBackupTimer");
+                profile.StartBackup(false);
+            }
+        }
 
         [XmlIgnore]
         public BackupPerfectLogger Logger { get; } = new BackupPerfectLogger();
@@ -111,7 +139,7 @@ namespace CompleteBackup.Models.Backup.Profile
         //Policy
 
         //Time to backup new changes in seconds
-        public long KeepVersion { get; set; } = 60;
+        public long UpdateWatchItemsTimeSeconds { get; set; } = 60;
 
 
         [XmlIgnore]
@@ -221,9 +249,14 @@ namespace CompleteBackup.Models.Backup.Profile
         {
             lock (this)
             {
+                if (TargetBackupFolder == null)
+                {
+                    return;
+                }
+
                 if (BackupWorkerTask != null && BackupWorkerTask.IsBusy)
                 {
-                    //busy
+                    Logger.Writeln($"***Start failed, backup is already running");
                 }
                 else
                 {
