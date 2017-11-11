@@ -117,7 +117,7 @@ namespace CompleteBackup.Models.Backup.Profile
 
             m_FileSystemWatcherBackupTimer = new FileSystemProfileBackupWatcherTimer()
             {
-                Interval = UpdateWatchItemsTimeSeconds * 100,
+                Interval = UpdateWatchItemsTimeSeconds * 1000,
                 Profile = this,
 
             };
@@ -134,7 +134,7 @@ namespace CompleteBackup.Models.Backup.Profile
             if (profile?.BackupWatcherItemList.Count() > 0)
             {
                 profile.Logger.Writeln($"OnFileSystemWatcherBackupTimer - start backup");
-        //        BackupTaskManager.Instance.StartBackup(profile, false);
+                BackupTaskManager.Instance.StartBackup(profile, false);
             }
         }
 
@@ -144,7 +144,7 @@ namespace CompleteBackup.Models.Backup.Profile
         //Policy
 
         //Time to backup new changes in seconds
-        public long UpdateWatchItemsTimeSeconds { get; set; } = 60;
+        public long UpdateWatchItemsTimeSeconds { get; set; } = 2;
 
 
         [XmlIgnore]
@@ -206,7 +206,10 @@ namespace CompleteBackup.Models.Backup.Profile
 
         public void AddItemToBackupWatcherItemList(FileSystemWatcherItemData item)
         {
-            BackupWatcherItemList.Add(item);
+            lock (this)
+            {
+                BackupWatcherItemList.Add(item);
+            }
             //OnPropertyChanged("BackupWatcherItemListCount");
         }
 

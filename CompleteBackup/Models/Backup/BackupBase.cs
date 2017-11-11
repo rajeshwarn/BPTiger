@@ -254,7 +254,13 @@ namespace CompleteBackup.Models.backup
 
         protected void ProcessBackupWatcherRootFolders(string targetPath, string lastTargetPath = null)
         {
-            var itemList = m_Profile.BackupWatcherItemList.ToList();
+            List<FileSystemWatcherItemData> itemList = null;
+
+            lock (m_Profile)
+            {
+                itemList = m_Profile.BackupWatcherItemList.ToList();
+                m_Profile.BackupWatcherItemList.Clear();
+            }
 
             itemList = GetFilterBackupWatcherItemList(itemList);
 

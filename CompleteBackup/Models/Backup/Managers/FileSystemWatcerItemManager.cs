@@ -83,20 +83,8 @@ namespace CompleteBackup.Models.Backup
         //private int onChangedFireCount = 0;
         private void OnChanged(object source, FileSystemEventArgs e)
         {
-//            onChangedFireCount++;
-//            if (onChangedFireCount == 1)
-            {
-//                if (!m_Profile.GetStorageInterface().IsFolder(e.FullPath))
-                {
-                    m_Profile.AddItemToBackupWatcherItemList(new FileSystemWatcherItemData { WatchPath = m_Path, Time = DateTime.Now, ChangeType = e.ChangeType, FullPath = e.FullPath, Name = e.Name });
-//                    BackupProjectRepository.Instance.SaveProject();
+            m_Profile.AddItemToBackupWatcherItemList(new FileSystemWatcherItemData { WatchPath = m_Path, Time = DateTime.Now, ChangeType = e.ChangeType, FullPath = e.FullPath, Name = e.Name });
  //                   m_Logger.Writeln($"Watcher, File {e.ChangeType}: {e.FullPath }");
-                }
-            }
-            //else
-            //{
-            //    onChangedFireCount = 0;
-            //}
         }
 
         private void OnDeleted(object source, FileSystemEventArgs e)
