@@ -16,10 +16,7 @@ namespace CompleteBackup.Models.backup
 {
     public class IncrementalFullWatcherBackup : IncrementalFullBackup
     {
-        public IncrementalFullWatcherBackup(BackupProfileData profile, GenericStatusBarView progressBar = null) : base(profile, progressBar)
-        {
-            m_IStorage = new FileSystemStorage();
-        }
+        public IncrementalFullWatcherBackup(BackupProfileData profile, GenericStatusBarView progressBar = null) : base(profile, progressBar) { }
 
         protected override void ProcessBackupRootFolders(string targetPath, string lastTargetPath = null)
         {

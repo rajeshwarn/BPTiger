@@ -35,26 +35,7 @@ namespace CompleteBackup.Models.backup
                 var lastFullTargetPath = m_IStorage.Combine(m_TargetBackupPath, lastSet);
                 var newFullTargetPath = m_IStorage.Combine(m_TargetBackupPath, targetSet);
 
-                //Rename last set to new set name
-                if (!MoveDirectory(lastFullTargetPath, newFullTargetPath))
-                {
-                    m_Logger.Writeln($"***Backup failed, failed to move {lastFullTargetPath} To {newFullTargetPath}");
-                    MessageBox.Show($"Operation Canceled", "Incremental Backup", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                    return;
-                }
-
-                //Create last set folder - initially empty, will copy changed item from newFullTargetPath
-                CreateDirectory(lastFullTargetPath);
-
-                //Move history file to last set
-                var fileEntries = m_IStorage.GetFiles(newFullTargetPath);
-                foreach (string fileName in fileEntries.Where(f => BackupSessionHistory.IsHistoryFile(f)))
-                {
-                    MoveFile(m_IStorage.Combine(newFullTargetPath, m_IStorage.GetFileName(fileName)),
-                             m_IStorage.Combine(lastFullTargetPath, m_IStorage.GetFileName(fileName)));
-                }
-
+                CreateNewBackupSetFolderAndMoveDataToOldSet(newFullTargetPath, lastFullTargetPath);
 
                 ProcessBackupRootFolders(newFullTargetPath, lastFullTargetPath);
 

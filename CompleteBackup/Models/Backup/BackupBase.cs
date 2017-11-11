@@ -175,7 +175,7 @@ namespace CompleteBackup.Models.backup
         }
         
 
-        public void Done()
+        public virtual void Done()
         {
             ProgressBar.ShowTimeEllapsed(false);
             ProgressBar?.UpdateProgressBar("Done...", NumberOfFiles);
