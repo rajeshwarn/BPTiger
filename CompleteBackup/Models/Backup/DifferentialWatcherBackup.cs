@@ -18,6 +18,23 @@ namespace CompleteBackup.Models.backup
 
         public DifferentialWatcherBackup(BackupProfileData profile, GenericStatusBarView progressBar = null) : base(profile, progressBar) { }
 
+        public override void Init()
+        {
+            lock (m_Profile)
+            {
+                m_WatcherItemList = m_Profile.BackupWatcherItemList.ToList();
+                m_Profile.BackupWatcherItemList.Clear();
+            }
+
+            m_WatcherItemList = GetFilterBackupWatcherItemList(m_WatcherItemList);
+
+            NumberOfFiles = m_WatcherItemList.LongCount();
+
+            ProgressBar?.SetRange(NumberOfFiles);
+            ProgressBar?.UpdateProgressBar("Runnin...", 0);
+            ProgressBar?.ShowTimeEllapsed(true);
+        }
+
         protected override void ProcessBackupRootFolders(string targetPath, string lastTargetPath)
         {
             ProcessBackupWatcherRootFolders(targetPath, lastTargetPath);

@@ -145,7 +145,7 @@ namespace CompleteBackup.Models.backup
             return lastSet;
         }
 
-        public void Init()
+        public virtual void Init()
         {
             long files = 0;
             long directories = 0;
@@ -223,7 +223,7 @@ namespace CompleteBackup.Models.backup
         }
 
 
-        List<FileSystemWatcherItemData> GetFilterBackupWatcherItemList(List<FileSystemWatcherItemData> itemList) 
+        protected List<FileSystemWatcherItemData> GetFilterBackupWatcherItemList(List<FileSystemWatcherItemData> itemList) 
         {
             var filterList = new List<Backup.FileSystemWatcherItemData>();
 
@@ -252,26 +252,48 @@ namespace CompleteBackup.Models.backup
             return filterList;
         }
 
-        protected void ProcessBackupWatcherRootFolders(string targetPath, string lastTargetPath = null)
+        protected List<FileSystemWatcherItemData> m_WatcherItemList = null;
+        bool IsFileinUse(string path)
         {
-            List<FileSystemWatcherItemData> itemList = null;
+            var bUse = false;
+            FileStream stream = null;
 
-            lock (m_Profile)
+            try
             {
-                itemList = m_Profile.BackupWatcherItemList.ToList();
-                m_Profile.BackupWatcherItemList.Clear();
+                var fileInfo = new System.IO.FileInfo(path);
+                stream = fileInfo.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+                stream.Close();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                bUse = true;
+            }
+            catch (IOException)
+            {
+                bUse = true;
             }
 
-            itemList = GetFilterBackupWatcherItemList(itemList);
+            return bUse;
+        }
 
-            foreach (var item in itemList)
+        protected void ProcessBackupWatcherRootFolders(string targetPath, string lastTargetPath = null)
+        {
+            long iItemCount = 0;
+            foreach (var item in m_WatcherItemList)
             {
+                UpdateProgress("Running... ", ++iItemCount, item.Name);
+
+                if (IsFileinUse(item.FullPath))
+                {
+                    continue;
+                }
+
                 var iRetry = 50;
                 do
                 {
                     try
                     {
-                        int index = itemList.IndexOf(item);
+                        int index = m_WatcherItemList.IndexOf(item);
 
                         switch (item.ChangeType)
                         {
@@ -475,13 +497,13 @@ namespace CompleteBackup.Models.backup
                     catch (IOException)
                     {
                         iRetry -= 1;
+                        UpdateProgress($"Running... Waiting on used file...({iRetry})", iItemCount, item.Name);
+
                         Thread.Sleep(100);
                     }
                 }
                 while (iRetry > 0);
             }
-
-//            m_Profile.BackupWatcherItemList.Clear();
         }
 
         #region File System wrappers

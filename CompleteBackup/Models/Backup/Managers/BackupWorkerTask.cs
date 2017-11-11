@@ -65,9 +65,10 @@ namespace CompleteBackup.Models.Profile
             BackupTaskManager.Instance.CompleteAndStartNextBackup();
             if (!m_bFullBackupScan)
             {
-                m_Profile.BackupWatcherItemList.Clear();
+            //    m_Profile.BackupWatcherItemList.Clear();
             }
         }
+
         public BackupWorkerTask(BackupProfileData profile, bool bFullBackupScan)
         {
             m_Profile = profile;

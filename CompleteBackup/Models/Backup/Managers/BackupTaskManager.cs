@@ -51,6 +51,8 @@ namespace CompleteBackup.Models.Profile
 
         Queue<BackupWorkerTask> m_BackupWorkerTaskQueue = new Queue<BackupWorkerTask>();
 
+
+        static int tastCount = 0;
         public void CompleteAndStartNextBackup()
         {
             lock (this)
@@ -62,9 +64,14 @@ namespace CompleteBackup.Models.Profile
                     BackupProjectRepository.Instance.SelectedBackupProject.Logger.Writeln($"--> Starting new backup {task.GetProfile().Name}");
                     CurrentBackupWorkerTask = task;
                     CurrentBackupWorkerTask.RunWorkerAsync();
+                    if (tastCount > 1)
+                    {
+                        int i = 0;
+                    }
                 }
                 else
                 {
+                    tastCount--;
                     CurrentBackupWorkerTask = null;
                 }
             }
@@ -81,6 +88,13 @@ namespace CompleteBackup.Models.Profile
 
                 if (CurrentBackupWorkerTask == null)
                 {
+                    tastCount++;
+
+                    if (tastCount > 1)
+                    {
+                        int i = 0;
+                    }
+
                     BackupProjectRepository.Instance.SelectedBackupProject.Logger.Writeln($"--> Starting new backup {profile.Name}");
                     CurrentBackupWorkerTask = new BackupWorkerTask(profile, bFullBackupScan);
                     CurrentBackupWorkerTask.RunWorkerAsync();
