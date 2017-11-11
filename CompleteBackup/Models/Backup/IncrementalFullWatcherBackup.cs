@@ -23,14 +23,15 @@ namespace CompleteBackup.Models.backup
 
         protected override void ProcessBackupRootFolders(string targetPath, string lastTargetPath = null)
         {
-            try
-            {
-                ProcessBackupWatcherRootFolders(targetPath);
-            }
-            catch (Exception ex)
-            {
-                m_Logger.Writeln($"***IncrementalFullWatcherBackup Exception\n{ex.Message}");
-            }
+            ProcessBackupWatcherRootFolders(targetPath);
+            //try
+            //{
+            //    ProcessBackupWatcherRootFolders(targetPath);
+            //}
+            //catch (Exception ex)
+            //{
+            //    m_Logger.Writeln($"***IncrementalFullWatcherBackup Exception\n{ex.Message}");
+            //}
         }
     }
 }

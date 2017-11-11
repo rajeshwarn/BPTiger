@@ -1,4 +1,5 @@
-﻿using CompleteBackup.Models.Backup.History;
+﻿using CompleteBackup.Models.Backup;
+using CompleteBackup.Models.Backup.History;
 using CompleteBackup.Models.Backup.Profile;
 using CompleteBackup.Models.Backup.Storage;
 using CompleteBackup.Models.Utilities;
@@ -221,15 +222,44 @@ namespace CompleteBackup.Models.backup
             return bFolder;
         }
 
+
+        List<FileSystemWatcherItemData> GetFilterBackupWatcherItemList(List<FileSystemWatcherItemData> itemList) 
+        {
+            var filterList = new List<Backup.FileSystemWatcherItemData>();
+
+            FileSystemWatcherItemData lastItem = null;
+            foreach (var item in itemList)
+            {
+                if ((lastItem?.ChangeType == WatcherChangeTypes.Created) &&
+                    (item.ChangeType == WatcherChangeTypes.Changed) &&
+                    (lastItem?.FullPath == item.FullPath))
+                {
+                    //do nothing
+                }
+                else if ((lastItem?.ChangeType == WatcherChangeTypes.Changed) &&
+                    (item.ChangeType == WatcherChangeTypes.Changed) &&
+                    (lastItem?.FullPath == item.FullPath))
+                {
+                    //do nothing
+                }
+                else
+                {
+                    filterList.Add(item);
+                    lastItem = item;
+                }
+            }
+
+            return filterList;
+        }
+
         protected void ProcessBackupWatcherRootFolders(string targetPath, string lastTargetPath = null)
         {
-            var list1 = m_Profile.BackupWatcherItemList;
-            var list2 = m_Profile.BackupWatcherItemList.ToList();
-            int cccc = 0;
+            var itemList = m_Profile.BackupWatcherItemList.ToList();
 
-            foreach (var item in m_Profile.BackupWatcherItemList.ToList())
+            itemList = GetFilterBackupWatcherItemList(itemList);
+
+            foreach (var item in itemList)
             {
-                cccc++;
                 switch (item.ChangeType)
                 {
                     case WatcherChangeTypes.Changed:

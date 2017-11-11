@@ -46,12 +46,15 @@ namespace CompleteBackup.Models.Profile
         {
             if (e.Cancelled == true)
             {
+                m_Logger.Writeln($"Backup task canceled");
             }
             else if (e.Error != null)
             {
+                m_Logger.Writeln($"***Backup task ended with error:\n{e.Error.Message}");
             }
             else
             {
+                m_Logger.Writeln($"Backup task ended normally");
             }
 
             lock (this)
@@ -62,7 +65,7 @@ namespace CompleteBackup.Models.Profile
             BackupTaskManager.Instance.CompleteAndStartNextBackup();
             if (!m_bFullBackupScan)
             {
-  //              m_Profile.BackupWatcherItemList.Clear();
+                m_Profile.BackupWatcherItemList.Clear();
             }
         }
         public BackupWorkerTask(BackupProfileData profile, bool bFullBackupScan)

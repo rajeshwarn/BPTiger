@@ -66,6 +66,8 @@ namespace CompleteBackup.Models.Backup
                 watcher.Renamed += new RenamedEventHandler(OnRenamed);
             }
 
+            watcher.InternalBufferSize = 6400000;
+
             // Begin watching.
             watcher.EnableRaisingEvents = true;
         }
@@ -75,7 +77,7 @@ namespace CompleteBackup.Models.Backup
         {
             m_Profile.AddItemToBackupWatcherItemList(new FileSystemWatcherItemData { WatchPath = m_Path, Time = DateTime.Now, ChangeType = e.ChangeType, FullPath = e.FullPath, Name = e.Name });
 //            BackupProjectRepository.Instance.SaveProject();
-            m_Logger.Writeln($"Watcher, File {e.ChangeType}: {e.FullPath }");
+//            m_Logger.Writeln($"Watcher, File {e.ChangeType}: {e.FullPath }");
         }
 
         //private int onChangedFireCount = 0;
@@ -88,7 +90,7 @@ namespace CompleteBackup.Models.Backup
                 {
                     m_Profile.AddItemToBackupWatcherItemList(new FileSystemWatcherItemData { WatchPath = m_Path, Time = DateTime.Now, ChangeType = e.ChangeType, FullPath = e.FullPath, Name = e.Name });
 //                    BackupProjectRepository.Instance.SaveProject();
-                    m_Logger.Writeln($"Watcher, File {e.ChangeType}: {e.FullPath }");
+ //                   m_Logger.Writeln($"Watcher, File {e.ChangeType}: {e.FullPath }");
                 }
             }
             //else
@@ -101,14 +103,14 @@ namespace CompleteBackup.Models.Backup
         {
             m_Profile.AddItemToBackupWatcherItemList(new FileSystemWatcherItemData { WatchPath = m_Path, Time = DateTime.Now, ChangeType = e.ChangeType, FullPath = e.FullPath, Name = e.Name });
 //            BackupProjectRepository.Instance.SaveProject();
-            m_Logger.Writeln($"Watcher, File {e.ChangeType}: {e.FullPath }");
+//            m_Logger.Writeln($"Watcher, File {e.ChangeType}: {e.FullPath }");
         }
 
         private void OnRenamed(object source, RenamedEventArgs e)
         {
             m_Profile.AddItemToBackupWatcherItemList(new FileSystemWatcherItemData { WatchPath = m_Path, Time = DateTime.Now, ChangeType = e.ChangeType, OldPath = e.OldFullPath, FullPath = e.FullPath, Name = e.Name });
  //           BackupProjectRepository.Instance.SaveProject();
-            m_Logger.Writeln($"Watcher, File Renamed: {e.OldFullPath} to {e.FullPath}");
+//            m_Logger.Writeln($"Watcher, File Renamed: {e.OldFullPath} to {e.FullPath}");
         }
     }
 

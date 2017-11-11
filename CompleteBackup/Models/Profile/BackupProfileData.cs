@@ -93,6 +93,8 @@ namespace CompleteBackup.Models.Backup.Profile
         {
         }
 
+        FileSystemWatcerItemManager m_FileSystemWatcerItemManager;
+
         public void Init()
         {
             if (TargetRestoreFolder == null)
@@ -101,6 +103,9 @@ namespace CompleteBackup.Models.Backup.Profile
             }
 
             FileSystemWatcherWorker = new FileSystemWatcherWorkerTask(this);
+            //m_FileSystemWatcerItemManager = new FileSystemWatcerItemManager(this);
+            //RunWatcher()
+
 
             UpdateProfileProperties();
 
