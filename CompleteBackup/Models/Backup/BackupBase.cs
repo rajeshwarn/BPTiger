@@ -179,7 +179,6 @@ namespace CompleteBackup.Models.backup
         {
             ProgressBar.ShowTimeEllapsed(false);
             ProgressBar?.UpdateProgressBar("Done...", NumberOfFiles);
-            ProgressBar?.Release();
         }
 
         protected List<string> GetDirectoriesNames(string path)

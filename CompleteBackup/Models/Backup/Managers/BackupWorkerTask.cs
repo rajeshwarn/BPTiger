@@ -136,7 +136,6 @@ namespace CompleteBackup.Models.Profile
                 {
                     m_Logger.Writeln($"Backup exception: {ex.Message}");
                     m_ProgressBar.UpdateProgressBar("Completed with Errors");
-                    m_ProgressBar.Release();
                     Trace.WriteLine($"Full Backup exception: {ex.Message}");
                     e.Result = $"Full Backup exception: {ex.Message}";
                     throw (ex);
@@ -144,7 +143,8 @@ namespace CompleteBackup.Models.Profile
                 finally
                 {
                     m_Logger.Writeln($"Backup completed, execution time: {DateTime.Now - startTime}");
-
+                    m_ProgressBar.Release();
+                    m_ProgressBar = null;
                     m_BackupManager = null;
                     profile.IsBackupWorkerBusy = false;
                 }
