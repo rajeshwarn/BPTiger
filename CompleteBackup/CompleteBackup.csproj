@@ -63,6 +63,7 @@
     <Compile Include="DataRepository\BackupProjectRepository.cs" />
     <Compile Include="Models\Backup\BackupFactory.cs" />
     <Compile Include="Models\Backup\DifferentialWatcherBackup.cs" />
+    <Compile Include="Models\Backup\FileSystemWatcherBackup.cs" />
     <Compile Include="Models\Backup\Managers\FileSystemWatcerItemManager.cs" />
     <Compile Include="Models\Backup\IncrementalFullWatcherBackup.cs" />
     <Compile Include="Models\Backup\Managers\BackupTaskManager.cs" />

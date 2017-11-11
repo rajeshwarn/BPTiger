@@ -1,4 +1,5 @@
 ﻿using CompleteBackup.DataRepository;
+using CompleteBackup.Models.Backup;
 using CompleteBackup.Models.Backup.History;
 using CompleteBackup.Models.Backup.Profile;
 using CompleteBackup.Models.Backup.Storage;
@@ -14,21 +15,27 @@ using System.Windows;
 
 namespace CompleteBackup.Models.backup
 {
-    public class IncrementalFullWatcherBackup : IncrementalFullBackup
+    public class IncrementalFullWatcherBackup : FileSystemWatcherBackup
     {
         public IncrementalFullWatcherBackup(BackupProfileData profile, GenericStatusBarView progressBar = null) : base(profile, progressBar) { }
 
-        protected override void ProcessBackupRootFolders(string targetPath, string lastTargetPath = null)
+        public override void ProcessBackup()
         {
-            ProcessBackupWatcherRootFolders(targetPath);
-            //try
-            //{
-            //    ProcessBackupWatcherRootFolders(targetPath);
-            //}
-            //catch (Exception ex)
-            //{
-            //    m_Logger.Writeln($"***IncrementalFullWatcherBackup Exception\n{ex.Message}");
-            //}
+            m_BackupSessionHistory.Reset(GetTimeStamp());
+
+            var backupName = BackupBase.GetLastBackupSetName(m_Profile);
+            if (backupName == null)
+            {
+                //First backup
+                backupName = GetTargetSetName();
+                ProcessNewBackupRootFolders(CreateNewBackupSetFolder(backupName));
+            }
+            else
+            {
+                ProcessBackupRootFolders(m_IStorage.Combine(m_TargetBackupPath, backupName));
+            }
+
+            BackupSessionHistory.SaveHistory(m_TargetBackupPath, backupName, m_BackupSessionHistory);
         }
     }
 }

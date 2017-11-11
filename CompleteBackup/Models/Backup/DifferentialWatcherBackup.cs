@@ -1,4 +1,5 @@
 ﻿using CompleteBackup.DataRepository;
+using CompleteBackup.Models.Backup;
 using CompleteBackup.Models.Backup.History;
 using CompleteBackup.Models.Backup.Profile;
 using CompleteBackup.Models.Backup.Storage;
@@ -13,26 +14,10 @@ using System.Windows;
 
 namespace CompleteBackup.Models.backup
 {
-    public class DifferentialWatcherBackup: IncrementalFullBackup
+    public class DifferentialWatcherBackup : FileSystemWatcherBackup
     {
         public DifferentialWatcherBackup(BackupProfileData profile, GenericStatusBarView progressBar = null) : base(profile, progressBar) { }
 
-        public override void Init()
-        {
-            lock (m_Profile)
-            {
-                m_WatcherItemList = m_Profile.BackupWatcherItemList.ToList();
-                m_Profile.BackupWatcherItemList.Clear();
-            }
-
-            m_WatcherItemList = GetFilterBackupWatcherItemList(m_WatcherItemList);
-
-            NumberOfFiles = m_WatcherItemList.LongCount();
-
-            ProgressBar?.SetRange(NumberOfFiles);
-            ProgressBar?.UpdateProgressBar("Runnin...", 0);
-            ProgressBar?.ShowTimeEllapsed(true);
-        }
 
         public override void ProcessBackup()
         {
@@ -56,19 +41,6 @@ namespace CompleteBackup.Models.backup
             }
 
             BackupSessionHistory.SaveHistory(m_TargetBackupPath, targetSet, m_BackupSessionHistory);
-        }
-
-        protected override void ProcessBackupRootFolders(string targetPath, string lastTargetPath)
-        {
-            ProcessBackupWatcherRootFolders(targetPath, lastTargetPath);
-            //try
-            //{
-            //    ProcessBackupWatcherRootFolders(targetPath, lastTargetPath);
-            //}
-            //catch(Exception ex)
-            //{
-            //    m_Logger.Writeln($"***DifferentialWatcherBackup Exception\n{ex.Message}");
-            //}
         }
     }
 }
