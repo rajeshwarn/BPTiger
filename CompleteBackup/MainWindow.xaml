@@ -311,8 +311,8 @@
                             </Style>
                         </ContentControl.Style>
                     </ContentControl>
-                    <Border Background="LightGoldenrodYellow" BorderThickness="2" CornerRadius="4" BorderBrush="Gray" Margin="16" Padding="18" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <TextBlock Text="No backup profile is selected" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24">
+                    <Border BorderThickness="1" CornerRadius="4" Background="LightGray" BorderBrush="Gray" Margin="16" Padding="18" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="Please select or add a profile" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24">
                         </TextBlock>
                         <Border.Style>
                             <Style TargetType="Border" >
