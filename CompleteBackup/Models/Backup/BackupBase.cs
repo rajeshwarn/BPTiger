@@ -2,6 +2,7 @@
 using CompleteBackup.Models.Backup.History;
 using CompleteBackup.Models.Backup.Profile;
 using CompleteBackup.Models.Backup.Storage;
+using CompleteBackup.Models.Profile;
 using CompleteBackup.Models.Utilities;
 using CompleteBackup.Views.MainWindow;
 using System;
@@ -48,10 +49,11 @@ namespace CompleteBackup.Models.backup
         {
             bool bCancle = false;
 
-            //if(Profile.BackupTaskManager.Instance.CurrentBackupWorkerTask.CancellationPending)
-            //{
-            //    bCancle = true;
-            //}
+            BackupWorkerTask task = BackupTaskManager.Instance.GetRunningBackupWorkerTask(m_Profile);
+            if ((task != null) && task.CancellationPending)
+            {
+                bCancle = true;
+            }
 
             return bCancle;
         }

@@ -18,7 +18,7 @@ namespace CompleteBackup.Models.Profile
         //public BackupWorkerTask CurrentBackupWorkerTask { get; set; }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
-        BackupWorkerTask GetRunningBackupWorkerTask(BackupProfileData profile)
+        public BackupWorkerTask GetRunningBackupWorkerTask(BackupProfileData profile)
         {
             BackupWorkerTask task = null;
 

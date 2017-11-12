@@ -139,7 +139,7 @@ namespace CompleteBackup.Models.Backup.Profile
         [XmlIgnore]
         public bool IsDetaledLog { get; set; } = false;
 
-       [XmlIgnore]
+        [XmlIgnore]
         public bool IsCurrent { get { return BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile == this; } set { OnPropertyChanged(); } }
 
         public string BackupSignature { get { return $"{GUID.ToString("D")}-BC-{BackupType}"; } }
@@ -154,7 +154,7 @@ namespace CompleteBackup.Models.Backup.Profile
         public string BackupTypeImage { get { return ProfileHelper.BackupTypeList.FirstOrDefault(i => i.BackupType == m_BackupType)?.ImageName; } set { } }
 
 
-        
+
         private BackupRunTypeEnum m_BackupRunType { get; set; } = BackupRunTypeEnum.Always;
         public BackupRunTypeEnum BackupRunType { get { return m_BackupRunType; } set { m_BackupRunType = value; OnPropertyChanged(); } }
 
