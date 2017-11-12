@@ -45,12 +45,17 @@ namespace CompleteBackup.Models.backup
 
         public ManualResetEvent PauseWaitHandle { get; set; } = new ManualResetEvent(true);
 
+        BackupWorkerTask m_Task;
         public bool CheckCancellationPending()
         {
             bool bCancle = false;
 
-            BackupWorkerTask task = BackupTaskManager.Instance.GetRunningBackupWorkerTask(m_Profile);
-            if ((task != null) && task.CancellationPending)
+            if (m_Task == null)
+            {
+                m_Task = BackupTaskManager.Instance.GetRunningBackupWorkerTask(m_Profile);
+            }
+
+            if ((m_Task != null) && m_Task.CancellationPending)
             {
                 bCancle = true;
             }
