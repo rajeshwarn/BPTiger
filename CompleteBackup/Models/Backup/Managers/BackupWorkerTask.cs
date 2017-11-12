@@ -142,12 +142,12 @@ namespace CompleteBackup.Models.Profile
                     {
                         e.Cancel = true;
                     }
-                    profile.IsBackupWorkerBusy = false;
 
                     m_Logger.Writeln($"Backup completed, execution time: {DateTime.Now - startTime}");
                     m_ProgressBar.Release();
                     m_ProgressBar = null;
                     m_BackupManager = null;
+                    profile.IsBackupWorkerBusy = false; //trigger onproperty change
                 }
             };
         }
