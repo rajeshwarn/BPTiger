@@ -144,17 +144,33 @@ namespace CompleteBackup.Models.Profile
             {
                 m_BackupWorkerTaskQueue.Remove(completedTask);
             }
-            StartNextBackupTask();
+            StartNextBackupTask(completedTask.GetProfile());
         }
 
+        public int MaxConcurrentTasks = 2;
 
-        void StartNextBackupTask()
+        void StartNextBackupTask(BackupProfileData profile)
         {
             BackupWorkerTask task = null;
             lock (this)
             {
-                task = m_BackupWorkerTaskQueue.Where(t => t.IsBusy == false).FirstOrDefault();
+                int iBusyTasks = m_BackupWorkerTaskQueue.Where(t => (t.IsBusy == true)).Count();
+                if (iBusyTasks < MaxConcurrentTasks)
+                {
+                    if (IsBackupWorkerBusy(profile) == true)
+                    {
+                        //Allow only one task to run for each profile at the same time
+                        task = m_BackupWorkerTaskQueue.Where(t => (t.IsBusy == false) && t.GetProfile() != profile).FirstOrDefault();
+                    }
+                    else
+                    {
+                        task = m_BackupWorkerTaskQueue.Where(t => t.IsBusy == false).FirstOrDefault();
+                    }
+                }
+
                 task?.RunWorkerAsync();
+
+                profile.IsBackupWorkerPending = true; //just sent onproperty change
             }
 
             if (task != null)
@@ -174,7 +190,6 @@ namespace CompleteBackup.Models.Profile
             }
         }
 
-        public int MaxConcurrentTasks = 3;
 
         public void StartBackup(BackupProfileData profile, bool bFullBackupScan)
         {
@@ -187,7 +202,7 @@ namespace CompleteBackup.Models.Profile
             {
                 m_BackupWorkerTaskQueue.Add(new BackupWorkerTask(profile, bFullBackupScan));
 
-                StartNextBackupTask();
+                StartNextBackupTask(profile);
 
                 //if (CurrentBackupWorkerTask == null)
                 //{

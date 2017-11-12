@@ -68,7 +68,6 @@ namespace CompleteBackup.Models.Profile
         public BackupWorkerTask(BackupProfileData profile, bool bFullBackupScan)
         {
             m_Profile = profile;
-            m_ProgressBar = GenericStatusBarView.NewInstance;
             m_Logger = profile.Logger;
             m_bFullBackupScan = bFullBackupScan;
 
@@ -77,6 +76,7 @@ namespace CompleteBackup.Models.Profile
 
             DoWork += (sender, e) =>
             {
+                m_ProgressBar = GenericStatusBarView.NewInstance;
                 RunWorkerCompleted += new RunWorkerCompletedEventHandler(BackupTaskRunWorkerCompletedEvent);
                 profile.IsBackupWorkerBusy = true;
                 m_ProgressBar.UpdateProgressBar("Backup starting...", 0);
@@ -118,7 +118,7 @@ namespace CompleteBackup.Models.Profile
                             break;
 
                         default:
-                            throw new ArgumentNullException("Unknown backup type in BAckupWorker");
+                            throw new ArgumentNullException("Unknown backup type in BackupWorker");
                     }
 
                     m_BackupManager.Init();
