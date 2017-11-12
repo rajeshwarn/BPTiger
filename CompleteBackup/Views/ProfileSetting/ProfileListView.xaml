@@ -18,16 +18,20 @@
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListBox.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Cancel Pending backup task"
-                        Command="{Binding CancelPendingBackupTaskCommand}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}"/>
-                    
                     <MenuItem Header="Add new profile"
                         Command="{Binding OpenCreateProfileWindowCommand}"
                         CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}"/>
                     <MenuItem Header="Edit"
                         Command="{Binding OpenEditProfileWindowCommand}"
                         CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}"/>
+                    <Separator/>
+                    <MenuItem Header="Cancel Pending backup task"
+                        Command="{Binding CancelPendingBackupTaskCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}">
+                        <MenuItem.Icon>
+                            <Image Source="/Resources/Icons/Ribbon/Timer_Simple.ico"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <Separator/>
                     <MenuItem Header="Delete"
                         Command="{Binding DeleteBackupProfileCommand}"
@@ -122,7 +126,7 @@
                                                                     </Style.Triggers>
                                                                 </Style>
                                                             </Grid.Style>
-                                                            <Image Source="/Resources/Icons/Ribbon/Timer_Simple.ico" HorizontalAlignment="Right" VerticalAlignment="Top" Width="24" Opacity=".8" />
+                                                            <Image Source="/Resources/Icons/Ribbon/Timer_Simple.ico" HorizontalAlignment="Right" VerticalAlignment="Top" Width="24"/>
                                                         </Grid>
                                                         
                                                         <!--Content-->
