@@ -48,10 +48,10 @@ namespace CompleteBackup.Models.backup
         {
             bool bCancle = false;
 
-            if(Profile.BackupTaskManager.Instance.CurrentBackupWorkerTask.CancellationPending)
-            {
-                bCancle = true;
-            }
+            //if(Profile.BackupTaskManager.Instance.CurrentBackupWorkerTask.CancellationPending)
+            //{
+            //    bCancle = true;
+            //}
 
             return bCancle;
         }
