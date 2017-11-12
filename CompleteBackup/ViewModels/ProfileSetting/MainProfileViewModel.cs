@@ -25,57 +25,29 @@ namespace CompleteBackup.ViewModels
 
 
         private BackupTypeData m_BackupTypeData;
-        public BackupTypeData ProfileBackupType
-        {
-            get
-            {
-                //return BackupTypeList.FirstOrDefault(i => i.BackupType == ProjectData.CurrentBackupProfile.BackupType);
-                return m_BackupTypeData;
-            }
-            set
-            {
-                if (m_BackupTypeData != value)
-                {
-                    if (m_BackupTypeData != null)
-                    {
-                        var result = MessageBox.Show($"Are you sure you want to change the profile backup type?", "Backup Type", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
-
-                        if (result != MessageBoxResult.Yes)
-                        {
-                            return;
-                        }
-                    }
-
-                    ProjectData.CurrentBackupProfile.SetBackupType(value.BackupType);
-
-                    m_BackupTypeData = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        public BackupTypeData ProfileBackupType { get { return m_BackupTypeData; } set { m_BackupTypeData = value; OnPropertyChanged(); } }
 
         public MainProfileViewModel()
         {
             ProfileBackupType = ProfileHelper.BackupTypeList.FirstOrDefault(i => i.BackupType == ProjectData.CurrentBackupProfile?.BackupType);
 
             ProfileGaugeList.Add(new ChartGaugeView(Brushes.Red, Brushes.Green, Brushes.Yellow) { PumpNumber = 0, GaugeValue = 0.6F });
-            // ProfileGaugeList.Add(new ChartGaugeView(Brushes.Red, Brushes.Green, Brushes.Yellow) { PumpNumber = 1, GaugeValue = 0.2F });
 
             //Register to get update event when backup profile changed
-            ProjectData.CurrentBackupProfile?.ProfileDataRefreshTask?.RegisterEvent(ProfileDataUpdate);
-
+            ProjectData.CurrentBackupProfile?.ProfileDataRefreshTask?.RegisterEvent(ProfileDataUpdateEvent);
         }
 
         ~MainProfileViewModel()
         {
-         //   BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile.ProfileDataRefreshTask?.UnRegisterEvent(ProfileDataUpdate);
+            ProjectData.CurrentBackupProfile?.ProfileDataRefreshTask?.UnRegisterEvent(ProfileDataUpdateEvent);
+            //   BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile.ProfileDataRefreshTask?.UnRegisterEvent(ProfileDataUpdate);
         }
 
         public BackupProjectRepository Repository { get; } = BackupProjectRepository.Instance;
         public ObservableCollection<ChartGaugeView> ProfileGaugeList { get; set; } = new ObservableCollection<ChartGaugeView>();
 
 
-        private void ProfileDataUpdate(BackupProfileData profile)
+        private void ProfileDataUpdateEvent(BackupProfileData profile)
         {
             float ratio = (float)profile.BackupTargetUsedSizeNumber / (float)profile.BackupTargetDiskSizeNumber;
 

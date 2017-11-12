@@ -189,7 +189,6 @@ namespace CompleteBackup.Models.Backup.Profile
             {
                 BackupWatcherItemList.Add(item);
             }
-            //OnPropertyChanged("BackupWatcherItemListCount");
         }
 
         public long BackupWatcherItemListCount { get { return BackupWatcherItemList.Count(); } set { } }
@@ -206,7 +205,6 @@ namespace CompleteBackup.Models.Backup.Profile
                     BackupFolderList.Remove(item);
                 }
             }
-            //BackupFolderList.Clear();
         }
 
         [XmlIgnore]
@@ -228,14 +226,6 @@ namespace CompleteBackup.Models.Backup.Profile
         [XmlIgnore]
         public bool? IsBackupWorkerPaused { get { return BackupTaskManager.Instance.IsBackupWorkerPaused(this); } set { OnPropertyChanged(); } }
 
-
-        public void SetBackupType(BackupTypeEnum backupType)
-        {
-            if (BackupType != backupType)
-            {
-
-            }
-        }
 
         //private ProfileTargetFolderStatusEnum m_ProfileTargetFolderStatus = ProfileTargetFolderStatusEnum.InvalidTargetPath;
         public ProfileTargetFolderStatusEnum GetProfileTargetFolderStatus(string path)
