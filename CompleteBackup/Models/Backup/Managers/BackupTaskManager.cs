@@ -123,12 +123,12 @@ namespace CompleteBackup.Models.Profile
                 }
                 else
                 {
-                    profile.IsBackupWorkerPending = true;
                     //check if there is a task pending...
                     var pendingTask = m_BackupWorkerTaskQueue.FirstOrDefault(t => t.GetProfile() == profile);
                     if (pendingTask == null)
                     {
                         m_BackupWorkerTaskQueue.Enqueue(new BackupWorkerTask(profile, bFullBackupScan));
+                        profile.IsBackupWorkerPending = true;
                     }
                 }
 

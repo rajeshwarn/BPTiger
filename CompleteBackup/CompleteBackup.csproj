@@ -373,5 +373,9 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\Ribbon\Sync.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Ribbon\History.ico" />
+    <Resource Include="Resources\Icons\Ribbon\Timer_Simple.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
