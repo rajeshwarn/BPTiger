@@ -11,9 +11,13 @@
     <UserControl.DataContext>
         <view_model:ProfileListViewModel/>
     </UserControl.DataContext>
-    
+
     <Grid>
-        <ListBox BorderThickness="0"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="36" />
+        </Grid.RowDefinitions>
+        <ListBox Grid.Row="0" BorderThickness="0"
                  ItemsSource="{Binding Repository.SelectedBackupProject.BackupProfileList, Mode=OneWay}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListBox.ContextMenu>
@@ -52,13 +56,6 @@
             </ListBox.ContextMenu>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <!--<StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Image Source="/Resources/Icons/Ribbon/Stop.ico" Height="32" />
-                            <TextBlock Text="{Binding Name}" FontStyle="Italic"/>
-                        </StackPanel>
-                        <TextBlock Text="{Binding Description}" FontStyle="Italic"/>
-                    </StackPanel>-->
                     <Button Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.SelectBackupProfileCommand}"
                                     CommandParameter="{Binding }">
                         <Button.Style>
@@ -80,7 +77,7 @@
                                                         </Style>
                                                     </Border.Style>
                                                     <Grid>
-                                                        
+
                                                         <!--Task running-->
                                                         <Grid Margin="0,2,7,0">
                                                             <Grid.Style>
@@ -98,7 +95,7 @@
                                                             </Grid.Style>
                                                             <extended_view:ProcessingSpinnerView HorizontalAlignment="Right" VerticalAlignment="Top"/>
                                                         </Grid>
-                                                        
+
                                                         <!--Pause Icon-->
                                                         <Grid Margin="0,0,0,0">
                                                             <Grid.Style>
@@ -125,8 +122,8 @@
                                                             </Grid.Style>
                                                             <Image Source="/Resources/Icons/Ribbon/Pause.ico" HorizontalAlignment="Right" VerticalAlignment="Top" Width="24"/>
                                                         </Grid>
-                                                        
-                                                        <!--pending task--> 
+
+                                                        <!--pending task-->
                                                         <Grid Margin="0,0,0,0">
                                                             <Grid.Style>
                                                                 <Style TargetType="Grid">
@@ -140,7 +137,7 @@
                                                             </Grid.Style>
                                                             <Image Source="/Resources/Icons/Ribbon/Timer_Simple.ico" HorizontalAlignment="Right" VerticalAlignment="Top" Width="24"/>
                                                         </Grid>
-                                                        
+
                                                         <!--Content-->
                                                         <StackPanel Orientation="Vertical" >
                                                             <Image Source="{Binding BackupTypeImage}" Width="32" />
@@ -156,14 +153,6 @@
                             </Style>
                         </Button.Style>
                     </Button>
-                    <!--<StackPanel Orientation="Vertical">
-                        <Image Source="{Binding BackupTypeImage}" Width="32"/>
-                        <TextBlock Text="{Binding Name}"/>
-                        <RibbonRadioButton LargeImageSource="/Resources/Icons/Ribbon/Stop.ico" Label="{Binding Name}"  IsChecked="{Binding IsCurrent}"
-                                    Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.SelectBackupProfileCommand}"
-                                    CommandParameter="{Binding .}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="0,0,0,16">
-                        </RibbonRadioButton>
-                    </StackPanel>-->
                 </DataTemplate>
             </ListBox.ItemTemplate>
             <ListBox.Style>
@@ -178,5 +167,15 @@
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>
+        <Border Grid.Row="1" BorderThickness="1" CornerRadius="0" BorderBrush="DarkGray" Padding="0" Margin="4">
+            <Button Margin="0" Background="AliceBlue" BorderThickness="0"
+                Command="{Binding OpenCreateProfileWindowCommand}"
+                CommandParameter="{Binding Repository.SelectedBackupProject}" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Resources/Icons/FolderTreeView/NewFolder.ico" VerticalAlignment="Center"/>
+                    <TextBlock Text="Add new profile" VerticalAlignment="Center" TextWrapping="Wrap" Margin="4,0,0,0"/>
+                </StackPanel>
+            </Button>
+        </Border>
     </Grid>
 </UserControl>
