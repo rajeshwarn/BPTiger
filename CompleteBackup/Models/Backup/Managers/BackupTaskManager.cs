@@ -40,15 +40,25 @@ namespace CompleteBackup.Models.Profile
             return bBusy;
         }
 
-        public void PauseBackupTask(BackupProfileData profile, bool bPause)
+        public void PauseBackup(BackupProfileData profile)
         {
-            CurrentBackupWorkerTask.IsPaused = bPause;
+            if (CurrentBackupWorkerTask != null && CurrentBackupWorkerTask.IsBusy)
+            {
+                CurrentBackupWorkerTask.IsPaused = true;
+            }
         }
 
-        public void StopBackupTask()
+        public void ResumeBackup(BackupProfileData profile)
+        {
+            if (CurrentBackupWorkerTask != null && CurrentBackupWorkerTask.IsBusy)
+            {
+                CurrentBackupWorkerTask.IsPaused = false;
+            }
+        }
+
+        public void StopBackupTask(BackupProfileData profile)
         {
             CurrentBackupWorkerTask.CancelAsync();
-            //CurrentBackupWorkerTask.IsPaused = bPause;
         }
 
         public bool? IsBackupWorkerPaused(BackupProfileData profile)
@@ -147,21 +157,6 @@ namespace CompleteBackup.Models.Profile
                 //    CurrentBackupWorkerTask = new BackupWorkerTask(profile, bFullBackupScan);
                 //    CurrentBackupWorkerTask.RunWorkerAsync();
                 //}
-            }
-        }
-
-        public void PauseBackup(BackupProfileData profile)
-        {
-            if (CurrentBackupWorkerTask != null && CurrentBackupWorkerTask.IsBusy)
-            {
-                CurrentBackupWorkerTask.IsPaused = true;
-            }
-        }
-        public void ResumeBackup(BackupProfileData profile)
-        {
-            if (CurrentBackupWorkerTask != null && CurrentBackupWorkerTask.IsBusy)
-            {
-                CurrentBackupWorkerTask.IsPaused = false;
             }
         }
     }

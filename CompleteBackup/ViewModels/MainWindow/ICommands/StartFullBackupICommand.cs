@@ -50,6 +50,7 @@ namespace CompleteBackup.ViewModels.ICommands
             {
                 BackupTaskManager.Instance.StartBackup(profile, true);
             }
+            profile.IsBackupWorkerPaused = false; //value does not matter, this will trigger property change
         }
     }
 }

@@ -42,7 +42,8 @@ namespace CompleteBackup.ViewModels.ICommands
         {
             var profile = parameter as BackupProfileData;
 
-            BackupTaskManager.Instance.StopBackupTask();
+            BackupTaskManager.Instance.StopBackupTask(profile);
+            profile.IsBackupWorkerPaused = false; //value does not matter, this will trigger property change
         }
     }
 }
