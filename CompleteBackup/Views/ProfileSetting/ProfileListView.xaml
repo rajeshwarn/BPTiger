@@ -73,7 +73,19 @@
                                                             </Grid.Style>
                                                             <extended_view:ProcessingSpinnerView Width="16" HorizontalAlignment="Right" VerticalAlignment="Top"/>
                                                         </Grid>
-                                                        <StackPanel Orientation="Vertical" >
+                                                        <Grid Margin="0,0,4,0">
+                                                            <Grid.Style>
+                                                                <Style TargetType="Grid">
+                                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsBackupWorkerPending}" Value="True">
+                                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Grid.Style>
+                                                            <TextBlock Text="Pending" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                                                        </Grid>                                                        <StackPanel Orientation="Vertical" >
                                                             <Image Source="{Binding BackupTypeImage}" Width="32" />
                                                             <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" TextWrapping="Wrap" Margin="0,4,0,0"/>
                                                             <TextBlock Text="{Binding Description}" HorizontalAlignment="Left" FontStyle="Italic" TextWrapping="Wrap" Margin="0,4,0,0" Foreground="Gray"/>

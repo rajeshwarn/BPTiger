@@ -221,7 +221,9 @@ namespace CompleteBackup.Models.Backup.Profile
 
 
         [XmlIgnore]
-        public bool? IsBackupWorkerBusy { get { return BackupTaskManager.Instance.IsBackupWorkerBusy(this); } set { OnPropertyChanged(); } }
+        public bool? IsBackupWorkerBusy { get { return BackupTaskManager.Instance.IsBackupWorkerBusy(this); } set { OnPropertyChanged(); OnPropertyChanged("IsBackupWorkerPending"); } }
+        [XmlIgnore]
+        public bool? IsBackupWorkerPending { get { return BackupTaskManager.Instance.IsBackupWorkerPending(this); } set { OnPropertyChanged(); } }
 
         [XmlIgnore]
         public bool? IsBackupWorkerPaused { get { return BackupTaskManager.Instance.IsBackupWorkerPaused(this); } set { OnPropertyChanged(); } }

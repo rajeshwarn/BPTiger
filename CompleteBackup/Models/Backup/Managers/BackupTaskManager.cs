@@ -24,6 +24,21 @@ namespace CompleteBackup.Models.Profile
             return bBusy;
         }
 
+        public bool? IsBackupWorkerPending(BackupProfileData profile)
+        {
+            bool? bBusy = null;
+
+            lock (this)
+            {
+                var found = m_BackupWorkerTaskQueue.FirstOrDefault(w => w.GetProfile() == profile);
+                if (found != null)
+                {
+                    bBusy = true;
+                }
+            }
+
+            return bBusy;
+        }
 
         public void PauseBackupTask(BackupProfileData profile, bool bPause)
         {
@@ -108,6 +123,7 @@ namespace CompleteBackup.Models.Profile
                 }
                 else
                 {
+                    profile.IsBackupWorkerPending = true;
                     //check if there is a task pending...
                     var pendingTask = m_BackupWorkerTaskQueue.FirstOrDefault(t => t.GetProfile() == profile);
                     if (pendingTask == null)
