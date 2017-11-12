@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace CompleteBackup.Models.Profile
 {
@@ -74,6 +75,17 @@ namespace CompleteBackup.Models.Profile
                     tastCount--;
                     CurrentBackupWorkerTask = null;
                 }
+            }
+        }
+
+
+        public static void OnFileSystemWatcherBackupTimerStartBackup(Object source, ElapsedEventArgs e)
+        {
+            var profile = ((FileSystemProfileBackupWatcherTimer)source).Profile;
+            if (profile?.BackupWatcherItemList.Count() > 0)
+            {
+                profile.Logger.Writeln($"OnFileSystemWatcherBackupTimer - start backup");
+                BackupTaskManager.Instance.StartBackup(profile, false);
             }
         }
 

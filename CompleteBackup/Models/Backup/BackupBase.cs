@@ -88,7 +88,7 @@ namespace CompleteBackup.Models.backup
                 long milli = (dateTime.Ticks - m_LastProgressUpdate.Ticks) / TimeSpan.TicksPerMillisecond;
                 if (milli >= 500)
                 {
-                    m_Profile.CurrentBackupFile = fileName;
+                    //m_Profile.CurrentBackupFile = fileName;
 
                     if (milli >= 1000)
                     {

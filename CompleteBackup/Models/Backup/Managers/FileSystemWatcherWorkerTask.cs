@@ -22,6 +22,9 @@ namespace CompleteBackup.Models.Backup
         BackupProfileData m_Profile;
         BackupPerfectLogger m_Logger;
 
+
+
+
         public FileSystemWatcherWorkerTask(BackupProfileData profile)
         {
             m_Profile = profile;

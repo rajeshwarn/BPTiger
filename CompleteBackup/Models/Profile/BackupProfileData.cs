@@ -93,8 +93,6 @@ namespace CompleteBackup.Models.Backup.Profile
         {
         }
 
-        FileSystemWatcerItemManager m_FileSystemWatcerItemManager;
-
         public void Init()
         {
             if (TargetRestoreFolder == null)
@@ -102,41 +100,26 @@ namespace CompleteBackup.Models.Backup.Profile
                 TargetRestoreFolder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             }
 
-            FileSystemWatcherWorker = new FileSystemWatcherWorkerTask(this);
-            //m_FileSystemWatcerItemManager = new FileSystemWatcerItemManager(this);
-            //RunWatcher()
-
-
             UpdateProfileProperties();
 
-            if (!FileSystemWatcherWorker.IsBusy)
-            {
-                FileSystemWatcherWorker.RunWorkerAsync();
-            }
-
+            FileSystemWatcherWorker = new FileSystemWatcherWorkerTask(this);
+            FileSystemWatcherWorker.RunWorkerAsync();
 
             m_FileSystemWatcherBackupTimer = new FileSystemProfileBackupWatcherTimer()
             {
-                Interval = UpdateWatchItemsTimeSeconds * 1000,
                 Profile = this,
-
+                Interval = m_UpdateWatchItemsTimeSeconds * 1000,
+                AutoReset = true,
+                Enabled = true,
             };
-            m_FileSystemWatcherBackupTimer.Elapsed += OnFileSystemWatcherBackupTimer;
-            m_FileSystemWatcherBackupTimer.AutoReset = true;
-            m_FileSystemWatcherBackupTimer.Enabled = true;
+
+            m_FileSystemWatcherBackupTimer.Elapsed += BackupTaskManager.OnFileSystemWatcherBackupTimerStartBackup;
         }
 
         private FileSystemProfileBackupWatcherTimer m_FileSystemWatcherBackupTimer;
 
-        private static void OnFileSystemWatcherBackupTimer(Object source, ElapsedEventArgs e)
-        {
-            var profile = ((FileSystemProfileBackupWatcherTimer)source).Profile;
-            if (profile?.BackupWatcherItemList.Count() > 0)
-            {
-                profile.Logger.Writeln($"OnFileSystemWatcherBackupTimer - start backup");
-                BackupTaskManager.Instance.StartBackup(profile, false);
-            }
-        }
+        [XmlIgnore]
+        public FileSystemWatcherWorkerTask FileSystemWatcherWorker { get; private set; }
 
         [XmlIgnore]
         public BackupPerfectLogger Logger { get; } = new BackupPerfectLogger();
@@ -144,17 +127,13 @@ namespace CompleteBackup.Models.Backup.Profile
         //Policy
 
         //Time to backup new changes in seconds
-        public long UpdateWatchItemsTimeSeconds { get; set; } = 2;
+        private long m_UpdateWatchItemsTimeSeconds = 6;
+        public long UpdateWatchItemsTimeSeconds { get { return m_UpdateWatchItemsTimeSeconds; } set { m_UpdateWatchItemsTimeSeconds = value; if (m_FileSystemWatcherBackupTimer != null) { m_FileSystemWatcherBackupTimer.Interval = value * 1000; } OnPropertyChanged(); } }
 
 
-        [XmlIgnore]
-        public FileSystemWatcherWorkerTask FileSystemWatcherWorker { get; private set; }
-
-
-        private string m_CurrentBackupFile;
-        [XmlIgnore]
-        public string CurrentBackupFile { get { return m_CurrentBackupFile; } set { m_CurrentBackupFile = value; OnPropertyChanged(); } }
-
+        //private string m_CurrentBackupFile;
+        //[XmlIgnore]
+        //public string CurrentBackupFile { get { return m_CurrentBackupFile; } set { m_CurrentBackupFile = value; OnPropertyChanged(); } }
 
 
         [XmlIgnore]
