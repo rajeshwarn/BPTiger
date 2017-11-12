@@ -82,6 +82,8 @@ namespace CompleteBackup.Models.backup
 
         protected void ProcessDeferentialBackupFile(string sourcePath, string currSetPath, string lastSetPath, string fileName)
         {
+            if (CheckCancellationPending()) { return; }
+
             UpdateProgress("Running... ", ++ProcessFileCount, fileName);
 
             var lastSetFilePath = (lastSetPath == null) ? null : m_IStorage.Combine(lastSetPath, fileName);

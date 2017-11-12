@@ -119,6 +119,7 @@
     <Compile Include="ViewModels\MainWindow\ICommands\SelectBackupTypeICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\SelectBackupProfileICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\StartWatcherBackupICommand.cs" />
+    <Compile Include="ViewModels\ProfileSetting\ICommands\CancelPendingBackupTaskICommand.cs" />
     <Compile Include="ViewModels\ProfileSetting\ICommands\SaveBackupProfileICommand.cs" />
     <Compile Include="ViewModels\ProfileSetting\ICommands\DeleteBackupProfileICommand.cs" />
     <Compile Include="ViewModels\ProfileSetting\ICommands\CreateNewProfileICommand.cs" />

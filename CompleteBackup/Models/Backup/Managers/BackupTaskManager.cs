@@ -81,29 +81,37 @@ namespace CompleteBackup.Models.Profile
         }
 
 
-        Queue<BackupWorkerTask> m_BackupWorkerTaskQueue = new Queue<BackupWorkerTask>();
+        List<BackupWorkerTask> m_BackupWorkerTaskQueue = new List<BackupWorkerTask>();
+
+        public void CancelPendingBackupTask(BackupProfileData profile)
+        {
+            lock (this)
+            {
+                var task = m_BackupWorkerTaskQueue.FirstOrDefault(w => w.GetProfile() == profile);
+                //Since this is an uncommon opertation and the queue is very small we will rebuild the queue
+                if (task != null)
+                {
+                    m_BackupWorkerTaskQueue.Remove(task);
+                    profile.IsBackupWorkerPending = true;
+                }
+            }
+        }
 
 
-        static int tastCount = 0;
         public void CompleteAndStartNextBackup()
         {
             lock (this)
             {
                 BackupProjectRepository.Instance.SelectedBackupProject.Logger.Writeln($"<-- Backup completed {CurrentBackupWorkerTask?.GetProfile()?.Name}");
-                if (m_BackupWorkerTaskQueue.Count > 0)
+                var task = m_BackupWorkerTaskQueue.FirstOrDefault();
+                if (task != null)
                 {
-                    var task = m_BackupWorkerTaskQueue.Dequeue();
                     BackupProjectRepository.Instance.SelectedBackupProject.Logger.Writeln($"--> Starting new backup {task.GetProfile().Name}");
                     CurrentBackupWorkerTask = task;
                     CurrentBackupWorkerTask.RunWorkerAsync();
-                    if (tastCount > 1)
-                    {
-                        int i = 0;
-                    }
                 }
                 else
                 {
-                    tastCount--;
                     CurrentBackupWorkerTask = null;
                 }
             }
@@ -131,13 +139,6 @@ namespace CompleteBackup.Models.Profile
 
                 if (CurrentBackupWorkerTask == null)
                 {
-                    tastCount++;
-
-                    if (tastCount > 1)
-                    {
-                        int i = 0;
-                    }
-
                     BackupProjectRepository.Instance.SelectedBackupProject.Logger.Writeln($"--> Starting new backup {profile.Name}");
                     CurrentBackupWorkerTask = new BackupWorkerTask(profile, bFullBackupScan);
                     CurrentBackupWorkerTask.RunWorkerAsync();
@@ -148,7 +149,7 @@ namespace CompleteBackup.Models.Profile
                     var pendingTask = m_BackupWorkerTaskQueue.FirstOrDefault(t => t.GetProfile() == profile);
                     if (pendingTask == null)
                     {
-                        m_BackupWorkerTaskQueue.Enqueue(new BackupWorkerTask(profile, bFullBackupScan));
+                        m_BackupWorkerTaskQueue.Add(new BackupWorkerTask(profile, bFullBackupScan));
                         profile.IsBackupWorkerPending = true;
                     }
                 }
