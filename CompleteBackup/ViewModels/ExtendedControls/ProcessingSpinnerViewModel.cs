@@ -13,6 +13,8 @@ namespace CompleteBackup.ViewModels.ExtendedControls
         {
         }
 
+        public double SpinnerSize { get; set; } = 8 * 2; 
+
         public BackupProjectRepository Repository { get; set; } = BackupProjectRepository.Instance;
 
         static double iIntervals = Math.PI / 8;

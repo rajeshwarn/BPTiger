@@ -178,7 +178,7 @@
 
                         <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
                             <Grid>
-                                <Canvas Height="60" Width="60">
+                                <Canvas Height="{Binding SpinnerSize}" Width="{Binding SpinnerSize}">
                                     <Canvas.Resources>
                                         <Style TargetType="Ellipse">
                                             <Setter Property="Width" Value="5"/>

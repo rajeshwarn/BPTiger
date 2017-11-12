@@ -58,6 +58,11 @@ namespace CompleteBackup.Models.Profile
 
         public void StopBackupTask(BackupProfileData profile)
         {
+            if (CurrentBackupWorkerTask.IsPaused == true)
+            {
+                CurrentBackupWorkerTask.IsPaused = false;
+            }
+
             CurrentBackupWorkerTask.CancelAsync();
         }
 

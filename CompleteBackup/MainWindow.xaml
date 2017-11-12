@@ -154,7 +154,7 @@
                                         <DataTrigger.EnterActions>
                                             <BeginStoryboard x:Name="blinking">
                                                 <Storyboard RepeatBehavior="Forever">
-                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" AutoReverse="True" To="0.0" Duration="0:0:0.6">
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" AutoReverse="True" To="0.2" Duration="0:0:0.7">
                                                     </DoubleAnimation>
                                                 </Storyboard>
                                             </BeginStoryboard>
@@ -263,9 +263,9 @@
 
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="128" />
+                <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="5" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="10*" />
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0" DockPanel.Dock="Left">
@@ -273,9 +273,6 @@
             </Grid>
             <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
             <DockPanel Grid.Column="2" LastChildFill="True">
-                <!--<Grid DockPanel.Dock="Left">
-                    <profile_view:ProfileListView/>
-                </Grid>-->
 
                 <Border DockPanel.Dock="Top" Margin="0,0,0,16" Background="LightGray" Padding="4" Visibility="Collapsed">
                     <!--<Border DockPanel.Dock="Top" BorderThickness="1" CornerRadius="4" BorderBrush="DarkGray" Margin="4,4,4,8" Padding="4">-->
