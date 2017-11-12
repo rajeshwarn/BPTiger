@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:view_model="clr-namespace:CompleteBackup.ViewModels.Profile"
+             xmlns:extended_view="clr-namespace:CompleteBackup.Views.ExtendedControls"  
              xmlns:local="clr-namespace:CompleteBackup.Views.Profile"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -58,11 +59,26 @@
                                                             </Style.Triggers>
                                                         </Style>
                                                     </Border.Style>
-                                                    <StackPanel Orientation="Vertical" >
-                                                        <Image Source="{Binding BackupTypeImage}" Width="32" />
-                                                        <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" TextWrapping="Wrap" Margin="0,4,0,0"/>
-                                                        <TextBlock Text="{Binding Description}" HorizontalAlignment="Left" FontStyle="Italic" TextWrapping="Wrap" Margin="0,4,0,0" Foreground="Gray"/>
-                                                    </StackPanel>
+                                                    <Grid>
+                                                        <Grid Margin="0,0,4,0">
+                                                            <Grid.Style>
+                                                                <Style TargetType="Grid">
+                                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsBackupWorkerBusy}" Value="True">
+                                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Grid.Style>
+                                                            <extended_view:ProcessingSpinnerView Width="16" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                                                        </Grid>
+                                                        <StackPanel Orientation="Vertical" >
+                                                            <Image Source="{Binding BackupTypeImage}" Width="32" />
+                                                            <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" TextWrapping="Wrap" Margin="0,4,0,0"/>
+                                                            <TextBlock Text="{Binding Description}" HorizontalAlignment="Left" FontStyle="Italic" TextWrapping="Wrap" Margin="0,4,0,0" Foreground="Gray"/>
+                                                        </StackPanel>
+                                                    </Grid>
                                                 </Border>
                                             </Grid>
                                         </ControlTemplate>

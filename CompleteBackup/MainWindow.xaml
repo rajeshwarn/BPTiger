@@ -195,7 +195,7 @@
                     </RibbonButton>
                 </RibbonGroup>
                 
-                <RibbonGroup>
+                <RibbonGroup Visibility="Collapsed">
                     <RibbonGroup.Style>
                         <Style TargetType="RibbonGroup">
                             <Setter Property="Visibility" Value="Collapsed"/>

@@ -19,12 +19,7 @@ namespace CompleteBackup.Models.Profile
         {
             bool? bBusy = null;
 
-            var profileList = BackupProjectRepository.Instance.SelectedBackupProject.BackupProfileList;
-
-            if (profileList.Contains(profile))
-            {
-                bBusy = CurrentBackupWorkerTask != null && CurrentBackupWorkerTask.IsBusy;
-            }
+            bBusy = CurrentBackupWorkerTask?.GetProfile() == profile;
 
             return bBusy;
         }
