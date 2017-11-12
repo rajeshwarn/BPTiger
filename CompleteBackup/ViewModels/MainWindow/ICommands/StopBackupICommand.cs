@@ -42,7 +42,7 @@ namespace CompleteBackup.ViewModels.ICommands
         {
             var profile = parameter as BackupProfileData;
 
-//            profile.StartBackup();
+            BackupTaskManager.Instance.StopBackupTask();
         }
     }
 }

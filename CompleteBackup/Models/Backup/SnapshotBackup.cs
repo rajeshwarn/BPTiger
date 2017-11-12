@@ -70,6 +70,7 @@ namespace CompleteBackup.Models.backup
 
         protected void ProcessSnapshotBackupFile(string file, string sourcePath, string destPath)
         {
+            if (CheckCancellationPending()) { return; }
             UpdateProgress("Running... ", ++ProcessFileCount, file);
 
             try
@@ -91,6 +92,8 @@ namespace CompleteBackup.Models.backup
 
         protected void ProcessSnapshotBackupFolderStep(string sourcePath, string currSetPath)
         {
+            if (CheckCancellationPending()) { return; }
+
             var sourceFileList = m_IStorage.GetFiles(sourcePath);
             CreateDirectory(currSetPath);
 

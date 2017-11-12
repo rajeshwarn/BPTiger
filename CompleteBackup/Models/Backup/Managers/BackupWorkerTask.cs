@@ -142,11 +142,16 @@ namespace CompleteBackup.Models.Profile
                 }
                 finally
                 {
+                    if (CancellationPending)
+                    {
+                        e.Cancel = true;
+                    }
+                    profile.IsBackupWorkerBusy = false;
+
                     m_Logger.Writeln($"Backup completed, execution time: {DateTime.Now - startTime}");
                     m_ProgressBar.Release();
                     m_ProgressBar = null;
                     m_BackupManager = null;
-                    profile.IsBackupWorkerBusy = false;
                 }
             };
         }

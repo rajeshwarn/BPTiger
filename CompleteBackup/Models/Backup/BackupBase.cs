@@ -40,10 +40,21 @@ namespace CompleteBackup.Models.backup
             m_ProgressBar = progressBar;
         }
 
+        public abstract void ProcessBackup();
 
         public ManualResetEvent PauseWaitHandle { get; set; } = new ManualResetEvent(true);
 
-        //        public abstract string BackUpProfileSignature { get; }
+        public bool CheckCancellationPending()
+        {
+            bool bCancle = false;
+
+            if(Profile.BackupTaskManager.Instance.CurrentBackupWorkerTask.CancellationPending)
+            {
+                bCancle = true;
+            }
+
+            return bCancle;
+        }
 
         private DateTime m_TimeStamp;
         protected DateTime GetTimeStamp()
@@ -98,10 +109,6 @@ namespace CompleteBackup.Models.backup
                 }
             }
         }
-
-
-        public abstract void ProcessBackup();
-
 
         public static List<string> GetBackupSetList(BackupProfileData profile)
         {

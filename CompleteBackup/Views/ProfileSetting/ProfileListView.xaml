@@ -84,7 +84,7 @@
                                                                     </Style.Triggers>
                                                                 </Style>
                                                             </Grid.Style>
-                                                            <Image Source="/Resources/Icons/Ribbon/History.ico" HorizontalAlignment="Right" VerticalAlignment="Top" Width="24" Opacity=".8" />
+                                                            <Image Source="/Resources/Icons/Ribbon/Timer_Simple.ico" HorizontalAlignment="Right" VerticalAlignment="Top" Width="24" Opacity=".8" />
                                                         </Grid>
                                                         <StackPanel Orientation="Vertical" >
                                                             <Image Source="{Binding BackupTypeImage}" Width="32" />
