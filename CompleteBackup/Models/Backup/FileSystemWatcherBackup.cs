@@ -61,35 +61,35 @@ namespace CompleteBackup.Models.Backup
         }
 
         protected List<FileSystemWatcherItemData> m_WatcherItemList = null;
-        bool? IsFileinUse(FileSystemWatcherItemData item)
-        {
-            bool? bUse = false;
-            FileStream stream = null;
+        //bool? IsFileinUse(FileSystemWatcherItemData item)
+        //{
+        //    bool? bUse = false;
+        //    FileStream stream = null;
 
-            if (item.ChangeType == WatcherChangeTypes.Deleted)
-            {
-                bUse = null;
-            }
-            else
-            {
-                try
-                {
-                    var fileInfo = new System.IO.FileInfo(item.FullPath);
-                    stream = fileInfo.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.None);
-                    stream.Close();
-                }
-                catch (UnauthorizedAccessException)
-                {
-                    bUse = true;
-                }
-                catch (IOException)
-                {
-                    bUse = true;
-                }
-            }
+        //    if (item.ChangeType == WatcherChangeTypes.Deleted)
+        //    {
+        //        bUse = null;
+        //    }
+        //    else
+        //    {
+        //        try
+        //        {
+        //            var fileInfo = new System.IO.FileInfo(item.FullPath);
+        //            stream = fileInfo.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+        //            stream.Close();
+        //        }
+        //        catch (UnauthorizedAccessException)
+        //        {
+        //            bUse = true;
+        //        }
+        //        catch (IOException)
+        //        {
+        //            bUse = true;
+        //        }
+        //    }
 
-            return bUse;
-        }
+        //    return bUse;
+        //}
 
         private bool? CheckItemTypeFolderOrFile(string path, WatcherChangeTypes changeType)
         {
@@ -109,7 +109,7 @@ namespace CompleteBackup.Models.Backup
 
             return bFolder;
         }
-         
+
         protected override void ProcessBackupRootFolders(string targetPath, string lastTargetPath = null)
         {
             long iItemCount = 0;
@@ -117,226 +117,216 @@ namespace CompleteBackup.Models.Backup
             {
                 UpdateProgress("Running... ", ++iItemCount, item.Name);
 
-                if (IsFileinUse(item) == true)
+                //if (IsFileinUse(item) != true)
+                try
                 {
-                    continue;
+                    ProcessFileSystemWatchItem(item, targetPath, lastTargetPath);
                 }
-
-                //var iRetry = 50;
-                //do
-                //{
-                //    try
-                //    {
-                int index = m_WatcherItemList.IndexOf(item);
-
-                switch (item.ChangeType)
+                catch (Exception ex)
                 {
-                    case WatcherChangeTypes.Changed:
+                    m_Logger.Writeln($"**Exception while processing watch item {item.ChangeType}, path: {item.FullPath} [old path: {item.OldPath}]\n{ex.Message}");
+                }
+            }
+        }
+
+        protected void ProcessFileSystemWatchItem(FileSystemWatcherItemData item, string targetPath, string lastTargetPath = null)
+        {
+            switch (item.ChangeType)
+            {
+                case WatcherChangeTypes.Changed:
+                    {
+                        bool? bFolder = CheckItemTypeFolderOrFile(item.FullPath, item.ChangeType);
+                        if (bFolder == false)
                         {
-                            bool? bFolder = CheckItemTypeFolderOrFile(item.FullPath, item.ChangeType);
-                            if (bFolder == false)
+                            var newTargetPath = m_IStorage.Combine(m_IStorage.Combine(targetPath, m_IStorage.GetFileName(item.WatchPath)), item.Name);
+                            if (!m_IStorage.FileExists(newTargetPath))
                             {
-                                var newTargetPath = m_IStorage.Combine(m_IStorage.Combine(targetPath, m_IStorage.GetFileName(item.WatchPath)), item.Name);
-                                if (!m_IStorage.FileExists(newTargetPath))
+                                m_Logger.Writeln($"**Update File, Warning - file does not exist, will copy the updated version {newTargetPath}");
+
+                                var targetDir = m_IStorage.GetDirectoryName(newTargetPath);
+                                if (!m_IStorage.DirectoryExists(targetDir))
                                 {
-                                    m_Logger.Writeln($"**Update File, Warning - file does not exist, will copy the updated version {newTargetPath}");
+                                    CreateDirectory(targetDir);
+                                }
 
-                                    var targetDir = m_IStorage.GetDirectoryName(newTargetPath);
-                                    if (!m_IStorage.DirectoryExists(targetDir))
+                                CopyFile(item.FullPath, newTargetPath);
+                            }
+                            else
+                            {
+                                if (lastTargetPath != null)
+                                {
+                                    var newLastTargetPath = m_IStorage.Combine(m_IStorage.Combine(lastTargetPath, m_IStorage.GetFileName(item.WatchPath)), item.Name);
+                                    if (m_IStorage.FileExists(newLastTargetPath))
                                     {
-                                        CreateDirectory(targetDir);
+                                        m_IStorage.DeleteFile(newLastTargetPath);
                                     }
-
-                                    CopyFile(item.FullPath, newTargetPath);
+                                    MoveFile(newTargetPath, newLastTargetPath, true);
                                 }
                                 else
+                                {
+                                    //delete old version if no old set exists, happens with full backup and incremental
+                                    DeleteFile(newTargetPath);
+                                }
+                                CopyFile(item.FullPath, newTargetPath, true);
+                            }
+
+                        }
+
+                        break;
+                    }
+
+                case WatcherChangeTypes.Created:
+                    {
+                        var sourcePath = item.FullPath;
+                        var newTargetPath = m_IStorage.Combine(m_IStorage.Combine(targetPath, m_IStorage.GetFileName(item.WatchPath)), item.Name);
+
+                        bool? bFolder = CheckItemTypeFolderOrFile(item.FullPath, item.ChangeType);
+                        if (bFolder == true)
+                        {
+                            if (!m_IStorage.DirectoryExists(newTargetPath))
+                            {
+                                CreateDirectory(newTargetPath);
+                            }
+                            else
+                            {
+                                m_Logger.Writeln($"**Create Directory, Can't create - directory already exists {newTargetPath}");
+                            }
+                        }
+                        else if (bFolder == false)
+                        {
+                            if (!m_IStorage.FileExists(newTargetPath))
+                            {
+                                var dirName = m_IStorage.GetDirectoryName(newTargetPath);
+                                if (!m_IStorage.DirectoryExists(dirName))
+                                {
+                                    CreateDirectory(dirName);
+                                }
+                                CopyFile(sourcePath, newTargetPath);
+                            }
+                            else
+                            {
+                                m_Logger.Writeln($"**Create File, Can't create - file already exists {newTargetPath}");
+                            }
+                        }
+
+                        break;
+                    }
+
+                case WatcherChangeTypes.Deleted:
+                    {
+                        var sourcePath = item.FullPath;
+                        var newTargetPath = m_IStorage.Combine(m_IStorage.Combine(targetPath, m_IStorage.GetFileName(item.WatchPath)), item.Name);
+
+                        bool? bFolder = CheckItemTypeFolderOrFile(newTargetPath, item.ChangeType);
+                        if (bFolder == true)
+                        {
+                            if (m_IStorage.DirectoryExists(newTargetPath))
+                            {
+                                if (lastTargetPath == null)
+                                {
+                                    DeleteDirectory(newTargetPath);
+                                }
+                                else
+                                {
+                                    var newLastTargetPath = m_IStorage.Combine(m_IStorage.Combine(lastTargetPath, m_IStorage.GetFileName(item.WatchPath)), item.Name);
+                                    MoveDirectory(newTargetPath, newLastTargetPath);
+                                }
+                            }
+                            else
+                            {
+                                m_Logger.Writeln($"**Delete Directory, Can't delete - directory not found {newTargetPath}");
+                            }
+                        }
+                        else if (bFolder == false)
+                        {
+                            if (m_IStorage.FileExists(newTargetPath))
+                            {
+                                if (lastTargetPath == null)
+                                {
+                                    DeleteFile(newTargetPath);
+                                }
+                                else
+                                {
+                                    var newLastTargetPath = m_IStorage.Combine(m_IStorage.Combine(lastTargetPath, m_IStorage.GetFileName(item.WatchPath)), item.Name);
+                                    MoveFile(newTargetPath, newLastTargetPath, true);
+                                }
+                            }
+                            else
+                            {
+                                m_Logger.Writeln($"**Delete File, Can't delete - file not found {newTargetPath}");
+                            }
+                        }
+                        break;
+                    }
+
+                case WatcherChangeTypes.Renamed:
+                    {
+                        bool? bFolder = CheckItemTypeFolderOrFile(item.FullPath, item.ChangeType);
+                        if (bFolder != null)
+                        {
+                            var newTargetPath = m_IStorage.Combine(m_IStorage.Combine(targetPath, m_IStorage.GetFileName(item.WatchPath)), item.Name);
+                            var oldTargetPath = m_IStorage.Combine(m_IStorage.GetDirectoryName(newTargetPath), m_IStorage.GetFileName(item.OldPath));
+
+                            if (bFolder == true)
+                            {
+                                if (m_IStorage.DirectoryExists(oldTargetPath))
+                                {
+                                    if (!m_IStorage.DirectoryExists(newTargetPath))
+                                    {
+                                        if (lastTargetPath == null)
+                                        {
+                                            MoveDirectory(oldTargetPath, newTargetPath);
+                                        }
+                                        else
+                                        { //TODO!!!!!!!
+                                            //CopyDirectory(oldTargetPath, newLastTargetPath);
+                                            var newLastTargetPath = m_IStorage.Combine(m_IStorage.Combine(lastTargetPath, m_IStorage.GetFileName(item.WatchPath)), m_IStorage.GetFileName(item.Name));
+                                            //CopyDirectory(oldTargetPath, newLastTargetPath);
+
+                                            MoveDirectory(oldTargetPath, newTargetPath);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        m_Logger.Writeln($"**Rename Directory, Can't rename - directory already exists {newTargetPath}");
+                                    }
+                                }
+                                else
+                                {
+                                    m_Logger.Writeln($"**Rename Directory, Can't rename - Directory not found in backup folder {oldTargetPath}");
+                                }
+                            }
+                            else if (m_IStorage.FileExists(oldTargetPath))
+                            {
+                                if (!m_IStorage.FileExists(newTargetPath))
                                 {
                                     if (lastTargetPath != null)
                                     {
-                                        var newLastTargetPath = m_IStorage.Combine(m_IStorage.Combine(lastTargetPath, m_IStorage.GetFileName(item.WatchPath)), item.Name);
-                                        if (m_IStorage.FileExists(newLastTargetPath))
-                                        {
-                                            m_IStorage.DeleteFile(newLastTargetPath);
-                                        }
-                                        MoveFile(newTargetPath, newLastTargetPath, true);
+                                        var newLastTargetPath = m_IStorage.Combine(m_IStorage.Combine(lastTargetPath, m_IStorage.GetFileName(item.WatchPath)), m_IStorage.GetFileName(item.OldPath));
+                                        CopyFile(oldTargetPath, newLastTargetPath, true);
                                     }
                                     else
                                     {
-                                        //delete old version if no old set exists, happens with full backup and incremental
-                                        DeleteFile(newTargetPath);
+                                        MoveFile(oldTargetPath, newTargetPath);
                                     }
-                                    CopyFile(item.FullPath, newTargetPath, true);
                                 }
-
+                                else
+                                {
+                                    m_Logger.Writeln($"**Rename File, Can't rename - file already exists {newTargetPath}");
+                                }
                             }
-
-                            break;
+                            else
+                            {
+                                m_Logger.Writeln($"**Rename file, Can't rename - file not found in backup folder {oldTargetPath}");
+                            }
                         }
 
-                    case WatcherChangeTypes.Created:
-                        {
-                            var sourcePath = item.FullPath;
-                            var newTargetPath = m_IStorage.Combine(m_IStorage.Combine(targetPath, m_IStorage.GetFileName(item.WatchPath)), item.Name);
-
-                            bool? bFolder = CheckItemTypeFolderOrFile(item.FullPath, item.ChangeType);
-                            if (bFolder == true)
-                            {
-                                if (!m_IStorage.DirectoryExists(newTargetPath))
-                                {
-                                    CreateDirectory(newTargetPath);
-                                }
-                                else
-                                {
-                                    m_Logger.Writeln($"**Create Directory, Can't create - directory already exists {newTargetPath}");
-                                }
-                            }
-                            else if (bFolder == false)
-                            {
-                                if (!m_IStorage.FileExists(newTargetPath))
-                                {
-                                    var dirName = m_IStorage.GetDirectoryName(newTargetPath);
-                                    if (!m_IStorage.DirectoryExists(dirName))
-                                    {
-                                        CreateDirectory(dirName);
-                                    }
-                                    CopyFile(sourcePath, newTargetPath);
-                                }
-                                else
-                                {
-                                    m_Logger.Writeln($"**Create File, Can't create - file already exists {newTargetPath}");
-                                }
-                            }
-
-                            break;
-                        }
-
-                    case WatcherChangeTypes.Deleted:
-                        {
-                            var sourcePath = item.FullPath;
-                            var newTargetPath = m_IStorage.Combine(m_IStorage.Combine(targetPath, m_IStorage.GetFileName(item.WatchPath)), item.Name);
-
-                            bool? bFolder = CheckItemTypeFolderOrFile(newTargetPath, item.ChangeType);
-                            if (bFolder == true)
-                            {
-                                if (m_IStorage.DirectoryExists(newTargetPath))
-                                {
-                                    if (lastTargetPath == null)
-                                    {
-                                        DeleteDirectory(newTargetPath);
-                                    }
-                                    else
-                                    {
-                                        var newLastTargetPath = m_IStorage.Combine(m_IStorage.Combine(lastTargetPath, m_IStorage.GetFileName(item.WatchPath)), item.Name);
-                                        MoveDirectory(newTargetPath, newLastTargetPath);
-                                    }
-                                }
-                                else
-                                {
-                                    m_Logger.Writeln($"**Delete Directory, Can't delete - directory not found {newTargetPath}");
-                                }
-                            }
-                            else if (bFolder == false)
-                            {
-                                if (m_IStorage.FileExists(newTargetPath))
-                                {
-                                    if (lastTargetPath == null)
-                                    {
-                                        DeleteFile(newTargetPath);
-                                    }
-                                    else
-                                    {
-                                        var newLastTargetPath = m_IStorage.Combine(m_IStorage.Combine(lastTargetPath, m_IStorage.GetFileName(item.WatchPath)), item.Name);
-                                        MoveFile(newTargetPath, newLastTargetPath, true);
-                                    }
-                                }
-                                else
-                                {
-                                    m_Logger.Writeln($"**Delete File, Can't delete - file not found {newTargetPath}");
-                                }
-                            }
-                            break;
-                        }
-
-                    case WatcherChangeTypes.Renamed:
-                        {
-                            bool? bFolder = CheckItemTypeFolderOrFile(item.FullPath, item.ChangeType);
-                            if (bFolder != null)
-                            {
-                                var newTargetPath = m_IStorage.Combine(m_IStorage.Combine(targetPath, m_IStorage.GetFileName(item.WatchPath)), item.Name);
-                                var oldTargetPath = m_IStorage.Combine(m_IStorage.GetDirectoryName(newTargetPath), m_IStorage.GetFileName(item.OldPath));
-
-                                if (bFolder == true)
-                                {
-                                    if (m_IStorage.DirectoryExists(oldTargetPath))
-                                    {
-                                        if (!m_IStorage.DirectoryExists(newTargetPath))
-                                        {
-                                            if (lastTargetPath == null)
-                                            {
-                                                MoveDirectory(oldTargetPath, newTargetPath);
-                                            }
-                                            else
-                                            { //TODO!!!!!!!
-                                              //CopyDirectory(oldTargetPath, newLastTargetPath);
-                                                var newLastTargetPath = m_IStorage.Combine(m_IStorage.Combine(lastTargetPath, m_IStorage.GetFileName(item.WatchPath)), m_IStorage.GetFileName(item.Name));
-                                                //CopyDirectory(oldTargetPath, newLastTargetPath);
-
-                                                MoveDirectory(oldTargetPath, newTargetPath);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            m_Logger.Writeln($"**Rename Directory, Can't rename - directory already exists {newTargetPath}");
-                                        }
-                                    }
-                                    else
-                                    {
-                                        m_Logger.Writeln($"**Rename Directory, Can't rename - Directory not found in backup folder {oldTargetPath}");
-                                    }
-                                }
-                                else if (m_IStorage.FileExists(oldTargetPath))
-                                {
-                                    if (!m_IStorage.FileExists(newTargetPath))
-                                    {
-                                        if (lastTargetPath != null)
-                                        {
-                                            var newLastTargetPath = m_IStorage.Combine(m_IStorage.Combine(lastTargetPath, m_IStorage.GetFileName(item.WatchPath)), m_IStorage.GetFileName(item.OldPath));
-                                            CopyFile(oldTargetPath, newLastTargetPath, true);
-                                        }
-                                        else
-                                        {
-                                            MoveFile(oldTargetPath, newTargetPath);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        m_Logger.Writeln($"**Rename File, Can't rename - file already exists {newTargetPath}");
-                                    }
-                                }
-                                else
-                                {
-                                    m_Logger.Writeln($"**Rename file, Can't rename - file not found in backup folder {oldTargetPath}");
-                                }
-                            }
-
-                            break;
-                        }
-
-                    default:
                         break;
-                }
+                    }
 
-                //        iRetry = 0;
-                //    }
-                //    catch (IOException)
-                //    {
-                //        iRetry -= 1;
-                //        UpdateProgress($"Running... Waiting on used file...({iRetry})", iItemCount, item.Name);
+                default:
+                    break;
 
-                //        Thread.Sleep(100);
-                //    }
-                //}
-                //while (iRetry > 0);
             }
         }
     }

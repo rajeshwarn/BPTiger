@@ -73,14 +73,7 @@ namespace CompleteBackup.Models.backup
                 }
                 else
                 {
-                    try
-                    {
-                        ProcessDeferentialBackupFile(item.Path, newTargetPath, lastTargetPath, targetdirectoryName);
-                    }
-                    catch (Exception ex)
-                    {
-                        m_Logger.Writeln($"***ProcessBackupRootFolders:ProcessDifferentialBackupFolderStep Exception\n{ex.Message}");
-                    }
+                    ProcessDeferentialBackupFile(item.Path, newTargetPath, lastTargetPath, targetdirectoryName);
                 }            
             }
         }
@@ -94,38 +87,45 @@ namespace CompleteBackup.Models.backup
             var lastSetFilePath = (lastSetPath == null) ? null : m_IStorage.Combine(lastSetPath, fileName);
             var currSetFilePath = m_IStorage.Combine(currSetPath, fileName);
 
-            if (m_IStorage.FileExists(currSetFilePath))
+            try
             {
-                if (m_IStorage.IsFileSame(sourcePath, currSetFilePath))
+                if (m_IStorage.FileExists(currSetFilePath))
                 {
-                    //File is the same, do nothing
-                    m_BackupSessionHistory.AddNoChangeFile(sourcePath, currSetFilePath);
+                    if (m_IStorage.IsFileSame(sourcePath, currSetFilePath))
+                    {
+                        //File is the same, do nothing
+                        m_BackupSessionHistory.AddNoChangeFile(sourcePath, currSetFilePath);
+                    }
+                    else
+                    {
+                        //Keep current version in set
+                        MoveFile(currSetFilePath, lastSetFilePath, true);
+
+                        //Update new version to new set
+                        if (!m_IStorage.DirectoryExists(currSetPath))
+                        {
+                            CreateDirectory(currSetPath);
+                        }
+                        CopyFile(sourcePath, currSetFilePath);
+
+                        m_BackupSessionHistory.AddUpdatedFile(sourcePath, currSetFilePath);
+                    }
                 }
                 else
                 {
-                    //Keep current version in set
-                    MoveFile(currSetFilePath, lastSetFilePath, true);
-
-                    //Update new version to new set
+                    // new file, copy to current set
                     if (!m_IStorage.DirectoryExists(currSetPath))
                     {
                         CreateDirectory(currSetPath);
                     }
                     CopyFile(sourcePath, currSetFilePath);
 
-                    m_BackupSessionHistory.AddUpdatedFile(sourcePath, currSetFilePath);
+                    m_BackupSessionHistory.AddNewFile(sourcePath, currSetFilePath);
                 }
             }
-            else
+            catch (Exception ex)
             {
-                // new file, copy to current set
-                if (!m_IStorage.DirectoryExists(currSetPath))
-                {
-                    CreateDirectory(currSetPath);
-                }
-                CopyFile(sourcePath, currSetFilePath);
-
-                m_BackupSessionHistory.AddNewFile(sourcePath, currSetFilePath);
+                m_Logger.Writeln($"**Exception while procesing file set\nSource: {sourcePath}\nTarget: {currSetFilePath}\nLast: {lastSetFilePath}\n{ex.Message}");
             }
         }
 
@@ -138,15 +138,7 @@ namespace CompleteBackup.Models.backup
             foreach (var file in sourceFileList)
             {
                 var fileName = m_IStorage.GetFileName(file);
-
-                try
-                {
-                    ProcessDeferentialBackupFile(file, currSetPath, lastSetPath, fileName);
-                }
-                catch (Exception ex)
-                {
-                    m_Logger.Writeln($"***ProcessDifferentialBackupFolderStep Exception\n{ex.Message}");
-                }
+                ProcessDeferentialBackupFile(file, currSetPath, lastSetPath, fileName);
             }
 
             HandleDeletedFiles(sourceFileList, currSetPath, lastSetPath);
@@ -162,7 +154,14 @@ namespace CompleteBackup.Models.backup
                 string newCurrSetPath = m_IStorage.Combine(currSetPath, subdirectory);
                 string newLastSetPath = m_IStorage.Combine(lastSetPath, subdirectory);
 
-                ProcessDifferentialBackupFolderStep(newSourceSetPath, newCurrSetPath, newLastSetPath);
+                try
+                {
+                    ProcessDifferentialBackupFolderStep(newSourceSetPath, newCurrSetPath, newLastSetPath);
+                }
+                catch (Exception ex)
+                {
+                    m_Logger.Writeln($"**Exception while procesing folder set\nSource: {newSourceSetPath}\nTarget: {newCurrSetPath}\nLast: {newLastSetPath}\n{ex.Message}");
+                }
             }
         }
     }

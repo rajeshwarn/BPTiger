@@ -82,30 +82,37 @@ namespace CompleteBackup.Models.backup
 
             UpdateProgress("Running... ", ++ProcessFileCount, fileName);
 
-            if (m_IStorage.FileExists(currSetFilePath))
+            try
             {
-                if (m_IStorage.IsFileSame(sourceFilePath, currSetFilePath))
+                if (m_IStorage.FileExists(currSetFilePath))
                 {
-                    //Do nothing
-                    m_BackupSessionHistory.AddNoChangeFile(sourceFilePath, currSetFilePath);
+                    if (m_IStorage.IsFileSame(sourceFilePath, currSetFilePath))
+                    {
+                        //Do nothing
+                        m_BackupSessionHistory.AddNoChangeFile(sourceFilePath, currSetFilePath);
+                    }
+                    else
+                    {
+                        //update/overwrite file
+                        CopyFile(sourceFilePath, currSetFilePath, true);
+
+                        m_BackupSessionHistory.AddUpdatedFile(sourceFilePath, currSetFilePath);
+                    }
                 }
                 else
                 {
-                    //update/overwrite file
-                    CopyFile(sourceFilePath, currSetFilePath, true);
+                    if (!m_IStorage.DirectoryExists(destPath))
+                    {
+                        CreateDirectory(destPath);
+                    }
+                    CopyFile(sourceFilePath, currSetFilePath);
 
-                    m_BackupSessionHistory.AddUpdatedFile(sourceFilePath, currSetFilePath);
+                    m_BackupSessionHistory.AddNewFile(sourceFilePath, currSetFilePath);
                 }
             }
-            else
+            catch (Exception ex)
             {
-                if (!m_IStorage.DirectoryExists(destPath))
-                {
-                    CreateDirectory(destPath);
-                }
-                CopyFile(sourceFilePath, currSetFilePath);
-
-                m_BackupSessionHistory.AddNewFile(sourceFilePath, currSetFilePath);
+                m_Logger.Writeln($"**Exception while procesing file: {sourcePath}, target: {destPath}\n{ex.Message}");
             }
         }
 
@@ -133,7 +140,14 @@ namespace CompleteBackup.Models.backup
                 string newSourceSetPath = m_IStorage.Combine(sourcePath, subdirectory);
                 string newCurrSetPath = m_IStorage.Combine(currSetPath, subdirectory);
 
-                ProcessIncrementalBackupFolderStep(newSourceSetPath, newCurrSetPath);
+                try
+                {
+                    ProcessIncrementalBackupFolderStep(newSourceSetPath, newCurrSetPath);
+                }
+                catch (Exception ex)
+                {
+                    m_Logger.Writeln($"**Exception while procesing directory: {newSourceSetPath}, target: {newCurrSetPath}\n{ex.Message}");
+                }
             }
 
             HandleDeletedItems(sourceSubdirectoryEntriesList, currSetPath);
@@ -165,14 +179,21 @@ namespace CompleteBackup.Models.backup
                 //Delete deleted items
                 foreach (var entry in deleteList)
                 {
-                    if (lastSetPath != null)
+                    try
                     {
-                        var destPath = m_IStorage.Combine(lastSetPath, m_IStorage.GetFileName(entry));
-                        MoveDirectory(entry, destPath, true);
+                        if (lastSetPath != null)
+                        {
+                            var destPath = m_IStorage.Combine(lastSetPath, m_IStorage.GetFileName(entry));
+                            MoveDirectory(entry, destPath, true);
+                        }
+                        else
+                        {
+                            DeleteDirectory(m_IStorage.Combine(currSetPath, entry));
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        DeleteDirectory(m_IStorage.Combine(currSetPath, entry));
+                        m_Logger.Writeln($"**Exception while deleting directory: {entry}\n{ex.Message}");
                     }
 
                     m_BackupSessionHistory.AddDeletedFolder(entry, currSetPath);
@@ -189,23 +210,31 @@ namespace CompleteBackup.Models.backup
             var currSetFileList = m_IStorage.GetFiles(currSetPath);
             foreach (var filePath in currSetFileList)
             {
-                var fileName = m_IStorage.GetFileName(filePath);
-                if ((folderDataList != null && !folderDataList.Exists(item => m_IStorage.GetFileName(item.Path) == fileName)) ||
-                    (itemStringList != null && !itemStringList.Exists(item => m_IStorage.GetFileName(item) == fileName)))
+                try
                 {
-                    //if not exists in source, delete the file
-                    if (lastSetPath != null)
+                    var fileName = m_IStorage.GetFileName(filePath);
+                    if ((folderDataList != null && !folderDataList.Exists(item => m_IStorage.GetFileName(item.Path) == fileName)) ||
+                        (itemStringList != null && !itemStringList.Exists(item => m_IStorage.GetFileName(item) == fileName)))
                     {
-                        var prevSetfilePath = m_IStorage.Combine(lastSetPath, fileName);
+                        //if not exists in source, delete the file
+                        if (lastSetPath != null)
+                        {
+                            var prevSetfilePath = m_IStorage.Combine(lastSetPath, fileName);
 
-                        //Move file to last set
-                        MoveFile(filePath, prevSetfilePath, true);
+                            //Move file to last set
+                            MoveFile(filePath, prevSetfilePath, true);
+                        }
+                        else
+                        {
+                            DeleteFile(filePath);
+                        }
+
+                        m_BackupSessionHistory.AddDeletedFile(filePath, currSetPath);
                     }
-                    else
-                    {
-                        DeleteFile(filePath);
-                    }
-                    m_BackupSessionHistory.AddDeletedFile(filePath, currSetPath);
+                }
+                catch (Exception ex)
+                {
+                    m_Logger.Writeln($"**Exception while deleting file: {filePath}\n{ex.Message}");
                 }
             }
         }

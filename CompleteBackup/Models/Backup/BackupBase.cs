@@ -229,7 +229,14 @@ namespace CompleteBackup.Models.backup
                 m_Logger.Writeln($"Create Directory {path}");
             }
 
-            m_IStorage.CreateDirectory(path, bCheckIfExist);
+            try
+            {
+                m_IStorage.CreateDirectory(path, bCheckIfExist);
+            }
+            catch (Exception ex)
+            {
+                m_Logger.Writeln($"**Exception while creating directory: {path}\n{ex.Message}");
+            }
         }
 
         protected bool MoveDirectory(string sourcePath, string targetPath, bool bCreateFolder = false)
@@ -266,6 +273,10 @@ namespace CompleteBackup.Models.backup
                 m_IStorage.SetFileAttributeRecrusive(path, FileAttributes.Normal);
                 bRet = m_IStorage.DeleteDirectory(path, bRecursive);
             }
+            catch (Exception ex)
+            {
+                m_Logger.Writeln($"**Exception while deleteing directory: {path}\n{ex.Message}");
+            }
 
             return bRet;
         }
@@ -295,6 +306,10 @@ namespace CompleteBackup.Models.backup
                 m_Logger.Writeln($"Delete Read only file File {path}");
                 m_IStorage.SetFileAttribute(path, FileAttributes.Normal);
                 m_IStorage.DeleteFile(path);
+            }
+            catch (Exception ex)
+            {
+                m_Logger.Writeln($"**Exception while deleteing file: {path}\n{ex.Message}");
             }
         }
 

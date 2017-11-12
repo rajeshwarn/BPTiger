@@ -72,21 +72,21 @@ namespace CompleteBackup.Models.backup
         {
             UpdateProgress("Running... ", ++ProcessFileCount, file);
 
-            var fileName = m_IStorage.GetFileName(file);
-            // first set, copy to new set
-            var sourceFilePath = m_IStorage.Combine(sourcePath, fileName);
-            var targetFilePath = m_IStorage.Combine(destPath, fileName);
-
             try
             {
-                CopyFile(sourceFilePath, targetFilePath);
-            }
-            catch (FileNotFoundException)
-            {
-                m_Logger.Writeln($"***File not found in source folder: {sourcePath}");
-            }
+                var fileName = m_IStorage.GetFileName(file);
+                // first set, copy to new set
+                var sourceFilePath = m_IStorage.Combine(sourcePath, fileName);
+                var targetFilePath = m_IStorage.Combine(destPath, fileName);
 
-            m_BackupSessionHistory.AddNewFile(sourceFilePath, targetFilePath);
+                CopyFile(sourceFilePath, targetFilePath);
+
+                m_BackupSessionHistory.AddNewFile(sourceFilePath, targetFilePath);
+            }
+            catch (Exception ex)
+            {
+                m_Logger.Writeln($"**Exception while processing file: {sourcePath}, dest path: {destPath}\n{ex.Message}");
+            }
         }
 
         protected void ProcessSnapshotBackupFolderStep(string sourcePath, string currSetPath)
@@ -107,7 +107,14 @@ namespace CompleteBackup.Models.backup
                 string newSourceSetPath = m_IStorage.Combine(sourcePath, subdirectory);
                 string newCurrSetPath = m_IStorage.Combine(currSetPath, subdirectory);
 
-                ProcessSnapshotBackupFolderStep(newSourceSetPath, newCurrSetPath);
+                try
+                {
+                    ProcessSnapshotBackupFolderStep(newSourceSetPath, newCurrSetPath);
+                }
+                catch (Exception ex)
+                {
+                    m_Logger.Writeln($"**Exception while processing folder: {sourcePath}, dest path: {currSetPath}\n{ex.Message}");
+                }
             }
         }
     }
