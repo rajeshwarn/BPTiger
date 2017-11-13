@@ -70,7 +70,7 @@
                                                     <Border.Style>
                                                         <Style TargetType="Border" >
                                                             <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding IsCurrent}" Value="True">
+                                                                <DataTrigger Binding="{Binding IsCurrentProfileSelected}" Value="True">
                                                                     <Setter Property="Background" Value="LightSkyBlue"/>
                                                                 </DataTrigger>
                                                             </Style.Triggers>
@@ -167,7 +167,7 @@
             </ListBox.Style>
             <ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
-                    <Setter Property="IsSelected" Value="{Binding IsCurrent}"/>
+                    <Setter Property="IsSelected" Value="{Binding IsCurrentProfileSelected}"/>
                 </Style>
             </ListBox.ItemContainerStyle>
             <ListBox.ItemsPanel>

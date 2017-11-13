@@ -14,27 +14,10 @@ using System.Windows.Media;
 
 namespace CompleteBackup.Models.FolderSelection
 {
-
-    //public class BackupFolderMenuItem : FolderMenuItem
-    //{
-    //    public FileAttributes Attributes { get; set; }
-    //}
-
-
     public class BackupFolderMenuItem : FolderMenuItem
     {
 
         public FileAttributes Attributes { get; set; } = 0;
-
-        public ImageSource Image
-        {
-            get
-            {
-                Trace.WriteLine($"XXXXXXXXXXXXXXX- IMAGE");
-
-                return null;
-            }
-        }
 
         public ImageSource MenuItemImage
         {

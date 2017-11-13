@@ -112,7 +112,7 @@
                         </ListView.ContextMenu>
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <RibbonRadioButton LargeImageSource="/Resources/Icons/Ribbon/Stop.ico" Label="{Binding Name}"  IsChecked="{Binding IsCurrent}"
+                                <RibbonRadioButton LargeImageSource="/Resources/Icons/Ribbon/Stop.ico" Label="{Binding Name}"  IsChecked="{Binding IsCurrentProfileSelected}"
                                     Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.SelectBackupProfileCommand}"
                                     CommandParameter="{Binding .}"                                                   
                                 />

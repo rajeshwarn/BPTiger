@@ -46,13 +46,13 @@ namespace CompleteBackup.Models.Backup.Project
                 else
                 {
                     CurrentProfileGuid = value.GUID;
-                    value.IsCurrent = true; //this will trigger OnPropertyChange
+                    value.IsCurrentProfileSelected = true; //this will trigger OnPropertyChange
                 }
 
                 //only after we changed CurrentProfileGuid, we cann set IsCurrent value
                 if (lastProfile != null)
                 {
-                    lastProfile.IsCurrent = false; //this will trigger OnPropertyChange
+                    lastProfile.IsCurrentProfileSelected = false; //this will trigger OnPropertyChange
                 }
 
                 OnPropertyChanged();

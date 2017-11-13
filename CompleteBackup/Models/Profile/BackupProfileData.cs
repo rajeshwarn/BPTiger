@@ -140,7 +140,7 @@ namespace CompleteBackup.Models.Backup.Profile
         public bool IsDetaledLog { get; set; } = false;
 
         [XmlIgnore]
-        public bool IsCurrent { get { return BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile == this; } set { OnPropertyChanged(); } }
+        public bool IsCurrentProfileSelected { get { return BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile == this; } set { OnPropertyChanged(); } }
 
         public string BackupSignature { get { return $"{ GUID.ToString("D")}-BC-{BackupType}"; } }
 
