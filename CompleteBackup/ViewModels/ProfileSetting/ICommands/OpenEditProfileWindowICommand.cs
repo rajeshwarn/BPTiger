@@ -1,4 +1,5 @@
-﻿using CompleteBackup.Views;
+﻿using CompleteBackup.Models.Backup.Profile;
+using CompleteBackup.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,18 @@ namespace CompleteBackup.ViewModels.ICommands
 
         public bool CanExecute(object parameter)
         {
-            bool bExecute = true;
+            bool bExecute = false;
+
+            var paramList = parameter as IList<object>;
+            if (paramList != null)
+            {
+                var profile = paramList[0] as BackupProfileData;
+                if (profile != null)
+                {
+                    bExecute = true;
+                }
+            }
+
             return bExecute;
         }
 

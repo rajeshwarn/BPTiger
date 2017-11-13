@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CompleteBackup.DataRepository;
+using CompleteBackup.Models.Backup.Profile;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,14 @@ namespace CompleteBackup.Views.Profile
         public ProfileListView()
         {
             InitializeComponent();
+        }
+
+        private void ListBox_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            var listBox = sender as ListBox;
+            //var item2 = listBox.SelectedItem;
+            var item = listBox.SelectedItem as BackupProfileData;
+            BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile = item;
         }
     }
 }
