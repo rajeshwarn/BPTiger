@@ -32,7 +32,7 @@ namespace CompleteBackup.ViewModels.ICommands
             bool bExecute = false;
 
             var paramList = parameter as IList<object>;
-            if (paramList != null)
+            if (paramList != null && paramList.Count() > 0)
             {
                 var profile = paramList[0] as BackupProfileData;
                 if (profile != null)
