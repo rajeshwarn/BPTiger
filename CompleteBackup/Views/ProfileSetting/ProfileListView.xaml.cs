@@ -29,10 +29,10 @@ namespace CompleteBackup.Views.Profile
 
         private void ListBox_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
-            var listBox = sender as ListBox;
-            //var item2 = listBox.SelectedItem;
-            var item = listBox.SelectedItem as BackupProfileData;
-            BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile = item;
+            //var listBox = sender as ListBox;
+            //var item = e.Source as BackupProfileData;
+            //var item2 = listBox.SelectedItem as BackupProfileData;
+            //BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile = item;
         }
     }
 }
