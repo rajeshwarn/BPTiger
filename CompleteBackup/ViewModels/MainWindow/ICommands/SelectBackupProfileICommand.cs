@@ -36,11 +36,6 @@ namespace CompleteBackup.ViewModels.ICommands
 
             bool bExecute = profile != null;
 
-            if (!bExecute)
-            {
-
-            }
-
             return bExecute;
         }
 

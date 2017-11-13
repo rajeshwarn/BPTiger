@@ -32,28 +32,26 @@ namespace CompleteBackup.Models.Backup.Project
 
         public Guid CurrentProfileGuid { get; set; } = Guid.Empty;
 
+        private BackupProfileData m_CurrentBackupProfile;
         [XmlIgnore]
-        public BackupProfileData CurrentBackupProfile {
-            get { return BackupProfileList.FirstOrDefault(p => p.GUID == CurrentProfileGuid); }
+        public BackupProfileData CurrentBackupProfile
+        {
+            get
+            {
+                if (m_CurrentBackupProfile == null) { m_CurrentBackupProfile = BackupProfileList.FirstOrDefault(p => p.GUID == CurrentProfileGuid); }
+
+                return m_CurrentBackupProfile;
+            }
 
             set {
-                var lastProfile = BackupProfileList.FirstOrDefault(p => p.GUID == CurrentProfileGuid);
+                var prevProfile = m_CurrentBackupProfile;
 
-                if (value == null)
-                {
-                    CurrentProfileGuid = Guid.Empty;
-                }
-                else
-                {
-                    CurrentProfileGuid = value.GUID;
-                    value.IsCurrentProfileSelected = true; //this will trigger OnPropertyChange
-                }
+                m_CurrentBackupProfile = value;
+                CurrentProfileGuid = value.GUID;
 
-                //only after we changed CurrentProfileGuid, we cann set IsCurrent value
-                if (lastProfile != null)
-                {
-                    lastProfile.IsCurrentProfileSelected = false; //this will trigger OnPropertyChange
-                }
+                //This will trigger the UI to draw selected item/color
+                if (prevProfile != null) { prevProfile.IsCurrentProfileSelected = false; }
+                value.IsCurrentProfileSelected = true;
 
                 OnPropertyChanged();
             }

@@ -18,8 +18,9 @@
             <RowDefinition Height="36" />
         </Grid.RowDefinitions>
         <ListBox Grid.Row="0" BorderThickness="0"
+                 SelectedValue="{Binding Repository.SelectedBackupProject.CurrentBackupProfile}"
                  ItemsSource="{Binding Repository.SelectedBackupProject.BackupProfileList, Mode=OneWay}"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" ContextMenuOpening="ListBox_ContextMenuOpening">
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListBox.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Add new profile"
@@ -165,11 +166,11 @@
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                 </Style>
             </ListBox.Style>
-            <ListBox.ItemContainerStyle>
+            <!--<ListBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ListBoxItem}">
                     <Setter Property="IsSelected" Value="{Binding IsCurrentProfileSelected}"/>
                 </Style>
-            </ListBox.ItemContainerStyle>
+            </ListBox.ItemContainerStyle>-->
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel IsItemsHost="True" Orientation="Vertical"  />
