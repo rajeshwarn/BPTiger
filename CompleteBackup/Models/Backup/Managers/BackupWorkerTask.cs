@@ -77,10 +77,12 @@ namespace CompleteBackup.Models.Profile
             DoWork += (sender, e) =>
             {
                 m_ProgressBar = GenericStatusBarView.NewInstance;
-                RunWorkerCompleted += new RunWorkerCompletedEventHandler(BackupTaskRunWorkerCompletedEvent);
                 profile.IsBackupWorkerBusy = true;
+                RunWorkerCompleted += new RunWorkerCompletedEventHandler(BackupTaskRunWorkerCompletedEvent);
+                //profile.IsBackupWorkerBusy = true;
                 m_ProgressBar.UpdateProgressBar("Backup starting...", 0);
                 var startTime = DateTime.Now;
+
                 m_Logger.Writeln($"-------------------------------------------------");
                 try
                 {
@@ -147,7 +149,6 @@ namespace CompleteBackup.Models.Profile
                     m_ProgressBar.Release();
                     m_ProgressBar = null;
                     m_BackupManager = null;
-                    profile.IsBackupWorkerBusy = false; //trigger onproperty change
                 }
             };
         }

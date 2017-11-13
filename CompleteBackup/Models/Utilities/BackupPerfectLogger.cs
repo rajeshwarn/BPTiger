@@ -10,8 +10,6 @@ namespace CompleteBackup.Models.Utilities
 {
     public class BackupPerfectLogger : ObservableObject
     {
-        //public static BackupPerfectLogger Instance { get; } = new BackupPerfectLogger();
-
         public BackupPerfectLogger()
         {
             m_LoggerData = "Starting Backup Perfect Logger...\n";

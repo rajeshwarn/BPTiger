@@ -124,18 +124,22 @@
                                                         </Grid>
 
                                                         <!--pending task-->
-                                                        <Grid Margin="0,0,0,0">
+                                                        <Grid>
                                                             <Grid.Style>
                                                                 <Style TargetType="Grid">
                                                                     <Setter Property="Visibility" Value="Collapsed"/>
+                                                                    <Setter Property="Margin" Value="0,0,0,0"/>
                                                                     <Style.Triggers>
                                                                         <DataTrigger Binding="{Binding IsBackupWorkerPending}" Value="True">
                                                                             <Setter Property="Visibility" Value="Visible"/>
                                                                         </DataTrigger>
+                                                                        <DataTrigger Binding="{Binding IsBackupWorkerBusy}" Value="True">
+                                                                            <Setter Property="Margin" Value="0,28,3,0"/>
+                                                                        </DataTrigger>
                                                                     </Style.Triggers>
                                                                 </Style>
                                                             </Grid.Style>
-                                                            <Image Source="/Resources/Icons/Ribbon/Timer_Simple.ico" HorizontalAlignment="Right" VerticalAlignment="Top" Width="24"/>
+                                                            <Image Source="/Resources/Icons/Ribbon/Timer_Simple.ico" HorizontalAlignment="Right" VerticalAlignment="Top" Width="18"/>
                                                         </Grid>
 
                                                         <!--Content-->

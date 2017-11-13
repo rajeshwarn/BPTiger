@@ -142,7 +142,7 @@ namespace CompleteBackup.Models.Backup.Profile
         [XmlIgnore]
         public bool IsCurrent { get { return BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile == this; } set { OnPropertyChanged(); } }
 
-        public string BackupSignature { get { return $"{GUID.ToString("D")}-BC-{BackupType}"; } }
+        public string BackupSignature { get { return $"{ GUID.ToString("D")}-BC-{BackupType}"; } }
 
 
         private DateTime? m_LastBackupDateTime { get; set; }

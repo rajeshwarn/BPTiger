@@ -192,7 +192,6 @@ namespace CompleteBackup.Models.Profile
                 }
                 finally
                 {
-                    profile.IsBackupWorkerBusy = false;
                 }
             };
         }

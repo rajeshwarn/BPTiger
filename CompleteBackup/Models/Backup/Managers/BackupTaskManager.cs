@@ -140,6 +140,8 @@ namespace CompleteBackup.Models.Profile
         {
             BackupProjectRepository.Instance.SelectedBackupProject.Logger.Writeln($"<-- Backup completed {completedTask.GetProfile().Name}");
 
+            completedTask.GetProfile().IsBackupWorkerBusy = false; //trigger onproperty change
+
             lock (this)
             {
                 m_BackupWorkerTaskQueue.Remove(completedTask);
@@ -147,7 +149,7 @@ namespace CompleteBackup.Models.Profile
             StartNextBackupTask(completedTask.GetProfile());
         }
 
-        public int MaxConcurrentTasks = 2;
+        public int MaxConcurrentTasks = 1;
 
         void StartNextBackupTask(BackupProfileData profile)
         {
@@ -201,7 +203,7 @@ namespace CompleteBackup.Models.Profile
             lock (this)
             {
                 m_BackupWorkerTaskQueue.Add(new BackupWorkerTask(profile, bFullBackupScan));
-
+            }
                 StartNextBackupTask(profile);
 
                 //if (CurrentBackupWorkerTask == null)
@@ -220,7 +222,7 @@ namespace CompleteBackup.Models.Profile
                 //        profile.IsBackupWorkerPending = true;
                 //    }
                 //}
-            }
+            
         }
     }
 }
