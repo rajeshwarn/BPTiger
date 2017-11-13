@@ -204,25 +204,8 @@ namespace CompleteBackup.Models.Profile
             {
                 m_BackupWorkerTaskQueue.Add(new BackupWorkerTask(profile, bFullBackupScan));
             }
-                StartNextBackupTask(profile);
 
-                //if (CurrentBackupWorkerTask == null)
-                //{
-                //    BackupProjectRepository.Instance.SelectedBackupProject.Logger.Writeln($"--> Starting new backup {profile.Name}");
-                //    CurrentBackupWorkerTask = new BackupWorkerTask(profile, bFullBackupScan);
-                //    CurrentBackupWorkerTask.RunWorkerAsync();
-                //}
-                //else
-                //{
-                //    //check if there is a task pending...
-                //    var pendingTask = m_BackupWorkerTaskQueue.FirstOrDefault(t => t.GetProfile() == profile);
-                //    if (pendingTask == null)
-                //    {
-                //        m_BackupWorkerTaskQueue.Add(new BackupWorkerTask(profile, bFullBackupScan));
-                //        profile.IsBackupWorkerPending = true;
-                //    }
-                //}
-            
+            StartNextBackupTask(profile);            
         }
     }
 }
