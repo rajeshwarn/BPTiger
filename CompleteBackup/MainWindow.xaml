@@ -145,10 +145,8 @@
                                   CommandParameter="{Binding ProjectData.CurrentBackupProfile}">
                         <RibbonButton.Style>
                             <Style TargetType="RibbonButton">
+                                <Setter Property="Label" Value="Start"/>
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ProjectData.CurrentBackupProfile.IsBackupWorkerPaused}" Value="False">
-                                        <Setter Property="Label" Value="Start"/>
-                                    </DataTrigger>
                                     <DataTrigger Binding="{Binding ProjectData.CurrentBackupProfile.IsBackupWorkerPaused}" Value="True">
                                         <Setter Property="Label" Value="Resume"/>
                                         <DataTrigger.EnterActions>

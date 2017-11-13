@@ -31,9 +31,25 @@ namespace CompleteBackup.ViewModels.ICommands
 
         public bool CanExecute(object parameter)
         {
+            bool bExecute = false;
             var profile = parameter as BackupProfileData;
 
-            bool bExecute = (profile != null) && (BackupTaskManager.Instance.IsBackupWorkerBusy(profile) == true) && (BackupTaskManager.Instance.IsBackupWorkerPaused(profile) == false);
+            if (profile == null)
+            {
+                var paramList = parameter as IList<object>;
+                if (paramList != null && paramList.Count() > 0)
+                {
+                    profile = paramList[0] as BackupProfileData;
+                }
+            }
+
+            if (profile != null)
+            {
+                var aaa = BackupTaskManager.Instance.IsBackupWorkerBusy(profile);
+                var bbb = BackupTaskManager.Instance.IsBackupWorkerPaused(profile);
+
+                bExecute = (BackupTaskManager.Instance.IsBackupWorkerBusy(profile) == true) && (BackupTaskManager.Instance.IsBackupWorkerPaused(profile) == false);
+            }
 
             return bExecute;
         }
@@ -41,6 +57,15 @@ namespace CompleteBackup.ViewModels.ICommands
         public void Execute(object parameter)
         {
             var profile = parameter as BackupProfileData;
+
+            if (profile == null)
+            {
+                var paramList = parameter as IList<object>;
+                if (paramList != null && paramList.Count() > 0)
+                {
+                    profile = paramList[0] as BackupProfileData;
+                }
+            }            
 
             BackupTaskManager.Instance.PauseBackup(profile);
             profile.IsBackupWorkerPaused = false; //value does not matter, this will trigger property change

@@ -31,9 +31,23 @@ namespace CompleteBackup.ViewModels.ICommands
 
         public bool CanExecute(object parameter)
         {
+            bool bExecute = false;
             var profile = parameter as BackupProfileData;
 
-            bool bExecute = (profile != null) && !((BackupTaskManager.Instance.IsBackupWorkerBusy(profile) == true) ^ (BackupTaskManager.Instance.IsBackupWorkerPaused(profile) == true));
+            if (profile == null)
+            {
+                var paramList = parameter as IList<object>;
+                if (paramList != null && paramList.Count() > 0)
+                {
+                    profile = paramList[0] as BackupProfileData;
+                }
+            }
+
+            if (profile != null)
+            {
+                bExecute = ((BackupTaskManager.Instance.IsBackupWorkerBusy(profile) == true) && (BackupTaskManager.Instance.IsBackupWorkerPaused(profile) == true)) ||
+                            ((BackupTaskManager.Instance.IsBackupWorkerBusy(profile) == false) && (BackupTaskManager.Instance.IsBackupWorkerPaused(profile) == false));
+            }
 
             return bExecute;
         }
@@ -42,14 +56,24 @@ namespace CompleteBackup.ViewModels.ICommands
         {
             var profile = parameter as BackupProfileData;
 
-            if ((BackupTaskManager.Instance.IsBackupWorkerBusy(profile) == true) && (BackupTaskManager.Instance.IsBackupWorkerPaused(profile) == true))
+            if (profile == null)
             {
-                BackupTaskManager.Instance.ResumeBackup(profile);
+                var paramList = parameter as IList<object>;
+                if (paramList != null && paramList.Count() > 0)
+                {
+                    profile = paramList[0] as BackupProfileData;
+                }
             }
-            else
+
+            if ((BackupTaskManager.Instance.IsBackupWorkerBusy(profile) == false) && (BackupTaskManager.Instance.IsBackupWorkerPaused(profile) == false))
             {
                 BackupTaskManager.Instance.StartBackup(profile, true);
             }
+            else if ((BackupTaskManager.Instance.IsBackupWorkerBusy(profile) == true) && (BackupTaskManager.Instance.IsBackupWorkerPaused(profile) == true))
+            {
+                BackupTaskManager.Instance.ResumeBackup(profile);
+            }
+
             profile.IsBackupWorkerPaused = false; //value does not matter, this will trigger property change
         }
     }

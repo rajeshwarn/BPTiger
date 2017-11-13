@@ -30,7 +30,7 @@
                             <Image Source="/Resources/Icons/FolderTreeView/NewFolder.ico"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Edit"
+                    <MenuItem Header="Edit profile"
                         Command="{Binding OpenEditProfileWindowCommand}"
                         CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}">
                         <MenuItem.Icon>
@@ -38,7 +38,47 @@
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator/>
-                    <MenuItem Header="Cancel Pending backup task"
+                    <MenuItem
+                        Command="{Binding StartFullBackupCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}">
+                        <MenuItem.Icon>
+                            <Image Source="/Resources/Icons/Ribbon/Start.ico"/>
+                        </MenuItem.Icon>
+                        <MenuItem.Style>
+                            <Style TargetType="MenuItem">
+                                <Setter Property="Header" Value="Start full backup"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem.IsBackupWorkerPaused}" Value="True">
+                                        <Setter Property="Header" Value="Resume full backup"/>
+                                        <DataTrigger.EnterActions>
+                                            <BeginStoryboard x:Name="blinking">
+                                                <Storyboard RepeatBehavior="Forever">
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" AutoReverse="True" To="0.2" Duration="0:0:0.7">
+                                                    </DoubleAnimation>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.EnterActions>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </MenuItem.Style>
+                    </MenuItem>
+                    <MenuItem Header="Pause full backup"
+                        Command="{Binding PauseBackupCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}">
+                        <MenuItem.Icon>
+                            <Image Source="/Resources/Icons/Ribbon/Pause.ico"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Stop full backup"
+                        Command="{Binding StopBackupCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}">
+                        <MenuItem.Icon>
+                            <Image Source="/Resources/Icons/Ribbon/Stop.ico"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem Header="Cancel pending backup task"
                         Command="{Binding CancelPendingBackupTaskCommand}"
                         CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}">
                         <MenuItem.Icon>

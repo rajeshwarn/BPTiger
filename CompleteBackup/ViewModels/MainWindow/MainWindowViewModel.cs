@@ -15,8 +15,8 @@ namespace CompleteBackup.ViewModels.MainWindow
     class MainWindowViewModel : ObservableObject
     {
         public ICommand ClearLogConsoleCommand { get; private set; } = new ClearLogConsoleICommand<object>();
-        public ICommand StartFullBackupCommand { get; private set; } = new StartFullBackupICommand<object>();
         public ICommand StartWatcherBackupCommand { get; private set; } = new StartWatcherBackupICommand<object>();
+        public ICommand StartFullBackupCommand { get; private set; } = new StartFullBackupICommand<object>();
         public ICommand PauseBackupCommand { get; private set; } = new PauseBackupICommand<object>();
         public ICommand StopBackupCommand { get; private set; } = new StopBackupICommand<object>();
 
