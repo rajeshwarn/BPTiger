@@ -35,10 +35,10 @@ namespace CompleteBackup.ViewModels
 
         public ObservableCollection<FolderData> SelectionFolderList { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile?.BackupFolderList;
 
-        public void OpenSelectionWindow()
-        {
-            new SelectBackupItemsWindow().ShowDialog();
-        }
+        //public void OpenSelectionWindow()
+        //{
+        //    new SelectBackupItemsWindow().ShowDialog();
+        //}
 
 
         public string SourceFileListGroupTitle { get; set; } = "Source Items";

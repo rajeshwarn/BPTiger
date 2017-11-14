@@ -32,10 +32,10 @@ namespace CompleteBackup.ViewModels
 
         public ObservableCollection<FolderData> SelectionFolderList { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile?.RestoreFolderList;//= new ObservableCollection<FolderData>();
 
-        public void OpenSelectionWindow()
-        {
-            new SelectRestoreItemsWindow().Show();
-        }
+        //public void OpenSelectionWindow()
+        //{
+        //    new SelectRestoreItemsWindow().Show();
+        //}
 
 
         public string SourceFileListGroupTitle { get; set; } = "Items To Restore";

@@ -172,7 +172,7 @@
             
                 <StackPanel Orientation="Horizontal">
                     <Button Content="{Binding SourceFileActionTitle}"
-                        Command="{Binding OpenSelectBackupItemsWindowCommand}" CommandParameter="{Binding Path=.}">
+                        Command="{Binding OpenSelectBackupItemsWindowCommand}" CommandParameter="{Binding Path=ProjectData.CurrentBackupProfile}">
                     </Button>
                 </StackPanel>
             </StackPanel>

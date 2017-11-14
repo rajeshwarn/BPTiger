@@ -1,6 +1,7 @@
 ﻿using CompleteBackup.DataRepository;
 using CompleteBackup.Models.Backup.Profile;
 using CompleteBackup.Models.Backup.Project;
+using CompleteBackup.ViewModels.FolderSelection.ICommands;
 using CompleteBackup.ViewModels.ICommands;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,9 @@ namespace CompleteBackup.ViewModels.MainWindow
 {
     class MainWindowViewModel : ObservableObject
     {
+        public ICommand OpenSelectBackupItemsWindowCommand { get; private set; } = new OpenSelectBackupItemsWindowICommand<object>();
+        public ICommand SelectFolderNameCommand { get; private set; } = new SelectFolderNameICommand<object>();
+        
         public ICommand ClearLogConsoleCommand { get; private set; } = new ClearLogConsoleICommand<object>();
         public ICommand StartWatcherBackupCommand { get; private set; } = new StartWatcherBackupICommand<object>();
         public ICommand StartFullBackupCommand { get; private set; } = new StartFullBackupICommand<object>();

@@ -129,16 +129,19 @@
 
 
             <RibbonTab Header="Backup" KeyTip="B" >
-                <!--<RibbonGroup Header="{Binding Project.SelectedBackupProject.Name}" ItemsSource="{Binding Project.SelectedBackupProject.BackupProfileList}"
-                                     ToolTip="{Binding Project.SelectedBackupProject.Description}">
-                    <RibbonGroup.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Name}" ToolTip="{Binding Description}"/>
-                        </DataTemplate>
-                    </RibbonGroup.ItemTemplate>
-                </RibbonGroup>-->
+                <RibbonGroup Header="Backup items and destination">
+                    <RibbonMenuButton LargeImageSource="/Resources/Icons/BackupFolderSetting.ico" Label="Settings" KeyTip="S">
+                        <RibbonMenuItem ImageSource="/Resources/Icons/BackupItems.ico" Header="Items to backup" KeyTip="B"
+                                        Command="{Binding OpenSelectBackupItemsWindowCommand}"
+                                        CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>
+                        <RibbonMenuItem ImageSource="/Resources/Icons/DestinationDrive.ico" Header="Destination" KeyTip="R"
+                                        Command="{Binding SelectFolderNameCommand}"
+                                        CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>
+                    </RibbonMenuButton>
+                    <RibbonButton SmallImageSource="/Resources/Icons/BackupFolderSetting.ico" Label="Policy" KeyTip="P" />
+                </RibbonGroup>
 
-                <RibbonGroup Header="Run Full Scan" ToolTip="Click start to manually run a full backup">
+                <RibbonGroup Header="Run backup now" ToolTip="Click start to manually run a full backup">
                     <!--Start-->
                     <RibbonButton LargeImageSource="/Resources/Icons/Ribbon/Start.ico"  KeyTip="S"
                                   Command="{Binding StartFullBackupCommand}"
