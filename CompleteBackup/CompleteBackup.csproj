@@ -108,6 +108,7 @@
     <Compile Include="Models\FolderSelection\FolderMenuItem.cs" />
     <Compile Include="ViewModels\ActionBackup\ICommands\OpenItemLocationICommand.cs" />
     <Compile Include="ViewModels\ActionBackup\ICommands\LocateMissingItemICommand.cs" />
+    <Compile Include="ViewModels\ActionRestore\ICommands\OpenSelectRestoreItemsWindowICommand.cs" />
     <Compile Include="ViewModels\ActionRestore\ICommands\SelectRestoreDestinationFolderICommand.cs" />
     <Compile Include="ViewModels\ActionRestore\RestoreItemsSelectionViewModel.cs" />
     <Compile Include="ViewModels\ActionRestore\ICommands\RestoreFolderSelectionICommand.cs" />
@@ -138,7 +139,7 @@
     <Compile Include="ViewModels\ActionBackup\MainBackupViewModel.cs" />
     <Compile Include="ViewModels\ActionRestore\MainRestoreViewModel.cs" />
     <Compile Include="ViewModels\ProfileSetting\ICommands\CloseWindowICommand.cs" />
-    <Compile Include="ViewModels\ActionBackup\ICommands\OpenChangeBackupItemsWindowICommand.cs" />
+    <Compile Include="ViewModels\ActionBackup\ICommands\OpenSelectBackupItemsWindowICommand.cs" />
     <Compile Include="ViewModels\ActionBackup\BackupItemsSelectionViewModel.cs" />
     <Compile Include="ViewModels\ActionBackupRestoreShared\ICommands\ExpandFolderTreeICommand.cs" />
     <Compile Include="ViewModels\ActionBackupRestoreShared\ICommands\SelectFolderNameICommand.cs" />

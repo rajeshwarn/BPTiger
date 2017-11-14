@@ -25,18 +25,13 @@ namespace CompleteBackup.ViewModels
     public class RestoreItemsSelectionViewModel : ObservableObject
     {
         public ICommand OpenSelectBackupItemsWindowCommand { get; private set; } = new OpenSelectBackupItemsWindowICommand<object>();
+        public ICommand OpenSelectRestoreItemsWindowCommand { get; private set; } = new OpenSelectRestoreItemsWindowICommand<object>();
         public ICommand SelectFolderNameCommand { get; private set; } = new SelectRestoreDestinationFolderICommand<object>();
 
 
         public BackupProjectData ProjectData { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject;
 
-        public ObservableCollection<FolderData> SelectionFolderList { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile?.RestoreFolderList;//= new ObservableCollection<FolderData>();
-
-        //public void OpenSelectionWindow()
-        //{
-        //    new SelectRestoreItemsWindow().Show();
-        //}
-
+//        public ObservableCollection<FolderData> SelectionFolderList { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile?.RestoreFolderList;//= new ObservableCollection<FolderData>();
 
         public string SourceFileListGroupTitle { get; set; } = "Items To Restore";
         public string SourceFileActionTitle { get; set; } = "Select Items";

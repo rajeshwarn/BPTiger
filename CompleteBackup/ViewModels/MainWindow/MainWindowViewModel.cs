@@ -17,7 +17,10 @@ namespace CompleteBackup.ViewModels.MainWindow
     {
         public ICommand OpenSelectBackupItemsWindowCommand { get; private set; } = new OpenSelectBackupItemsWindowICommand<object>();
         public ICommand SelectFolderNameCommand { get; private set; } = new SelectFolderNameICommand<object>();
+
+        public ICommand OpenSelectRestoreItemsWindowCommand { get; private set; } = new OpenSelectRestoreItemsWindowICommand<object>();
         
+
         public ICommand ClearLogConsoleCommand { get; private set; } = new ClearLogConsoleICommand<object>();
         public ICommand StartWatcherBackupCommand { get; private set; } = new StartWatcherBackupICommand<object>();
         public ICommand StartFullBackupCommand { get; private set; } = new StartFullBackupICommand<object>();

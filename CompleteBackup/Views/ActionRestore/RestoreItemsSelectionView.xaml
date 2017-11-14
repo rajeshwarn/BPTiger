@@ -129,8 +129,8 @@
                     <TextBlock Text="{Binding ProjectData.CurrentBackupProfile.RestoreSourceFoldersSize, Converter={StaticResource NumberToComputerSizeConverter}}" FontWeight="Bold"></TextBlock>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="{Binding SourceFileActionTitle}"
-                        Command="{Binding OpenSelectBackupItemsWindowCommand}" CommandParameter="{Binding Path=.}">
+                    <Button Content="select"
+                        Command="{Binding OpenSelectRestoreItemsWindowCommand}" CommandParameter="{Binding ProjectData.CurrentBackupProfile}">
                     </Button>
                 </StackPanel>
             </StackPanel>
