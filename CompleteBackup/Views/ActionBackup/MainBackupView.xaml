@@ -35,26 +35,40 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="0">
+
+                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock Text="Last backup time: " VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding Project.CurrentBackupProfile.LastBackupDateTime, TargetNullValue='Not Available'}" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <Expander Grid.Row="0" IsExpanded="False">
+                    <Expander.Header>
                         <StackPanel Orientation="Horizontal">
                             <Image Source="{Binding Project.CurrentBackupProfile.BackupTypeImage}" Height="12" Margin="0,0,4,0"/>
                             <TextBlock Text="{Binding Project.CurrentBackupProfile.Name}"/>
-                            <TextBlock Text=", Pending items: "/>
-                            <TextBlock Text="{Binding Project.CurrentBackupProfile.BackupWatcherItemListCount}"></TextBlock>
                         </StackPanel>
+                    </Expander.Header>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="{Binding Project.CurrentBackupProfile.BackupTypeImage}" Height="12" Margin="0,0,4,0"/>
+                                <TextBlock Text="{Binding Project.CurrentBackupProfile.Name}"/>
+                                <TextBlock Text=", Pending items: "/>
+                                <TextBlock Text="{Binding Project.CurrentBackupProfile.BackupWatcherItemListCount}"></TextBlock>
+                            </StackPanel>
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Last backup time: "/>
+                                <TextBlock Text="{Binding Project.CurrentBackupProfile.LastBackupDateTime, TargetNullValue='Not Available'}"/>
+                            </StackPanel>
+                        </Grid>
                     </Grid>
-                    <Grid Grid.Column="1">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Last backup time: "/>
-                            <TextBlock Text="{Binding Project.CurrentBackupProfile.LastBackupDateTime, TargetNullValue='Not Available'}"/>
-                        </StackPanel>
-                    </Grid>
-                </Grid>
+                </Expander>
                 <Grid Grid.Row="1">
                     <local:BackupItemsSelectionView Grid.Row="0"/>
                 </Grid>

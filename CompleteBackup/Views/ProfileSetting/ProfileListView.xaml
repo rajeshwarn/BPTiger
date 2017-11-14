@@ -42,7 +42,8 @@
                         Command="{Binding StartFullBackupCommand}"
                         CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}">
                         <MenuItem.Icon>
-                            <Image Source="/Resources/Icons/Ribbon/Start.ico"/>
+                            <Image Source="/Resources/Icons/Ribbon/Start.ico">
+                            </Image>
                         </MenuItem.Icon>
                         <MenuItem.Style>
                             <Style TargetType="MenuItem">
@@ -58,6 +59,9 @@
                                                 </Storyboard>
                                             </BeginStoryboard>
                                         </DataTrigger.EnterActions>
+                                        <DataTrigger.ExitActions>
+                                            <StopStoryboard BeginStoryboardName="blinking"/>
+                                        </DataTrigger.ExitActions>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>

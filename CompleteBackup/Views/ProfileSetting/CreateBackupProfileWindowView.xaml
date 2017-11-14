@@ -26,7 +26,8 @@
         <Grid Grid.Row="1" Margin="0,16,0,0">
             <GroupBox Header="Backup Type">
                 <StackPanel Orientation="Vertical">
-                    <ListBox BorderThickness="0" ItemsSource="{Binding BackupTypeList, Mode=OneWay}">
+                    <ListBox BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             ItemsSource="{Binding BackupTypeList, Mode=OneWay}">
                         <ListBox.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Delete" Command="{Binding DeleteBackupProfileCommand}"
@@ -41,9 +42,9 @@
                                             <StackPanel Orientation="Vertical">
                                                 <StackPanel Orientation="Horizontal">
                                                     <Image Source="{Binding ImageName}" Height="16" />
-                                                    <TextBlock Text="{Binding Name}" FontStyle="Italic"/>
+                                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Margin="4,0,0,0"/>
                                                 </StackPanel>
-                                                <TextBlock Text="{Binding Description}" FontStyle="Italic"/>
+                                                <TextBlock Text="{Binding Description}" FontStyle="Italic" Margin="0,4,0,0" TextWrapping="Wrap"/>
                                             </StackPanel>
                                         </WrapPanel>
                                     </RadioButton>

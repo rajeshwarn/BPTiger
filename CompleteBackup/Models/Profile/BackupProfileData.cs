@@ -51,9 +51,18 @@ namespace CompleteBackup.Models.Backup.Profile
             {
                 return new List<BackupTypeData>()
                 {
-                    new BackupTypeData() { BackupType = BackupTypeEnum.Snapshot, Name = "Snapshot Backup", ImageName = @"/Resources/Icons/Ribbon/FullBackup.ico", Description = "A full copy of your entire data set" },
-                    new BackupTypeData() { BackupType = BackupTypeEnum.Incremental, Name = "Incremental Backup", ImageName = @"/Resources/Icons/Ribbon/IncrementalBackup.ico", Description = "Starts with a full backup, and subsequent backups only backup data that has changed\nFor a faster backup" },
-                    new BackupTypeData() { BackupType = BackupTypeEnum.Differential, Name = "Differential Backup", ImageName = @"/Resources/Icons/Ribbon/DifferentialBackup.ico", Description = "Similar to Incremental Backup, but also contains all the data that changed since the first backup\nThis lets you restore a specific version event if the data has been deleted in the source", IsChecked = true},
+                    new BackupTypeData() { BackupType = BackupTypeEnum.Snapshot, Name = "Snapshot Backup", ImageName = @"/Resources/Icons/Ribbon/FullBackup.ico",
+                        Description = "Creates a full copy of your source items and any subsequent backups will copy all source items again into a separate backup folder." +
+                        "\nThis is recomended if you want to create an identical copy of your source items and keep it somewhere safe." },
+
+                    new BackupTypeData() { BackupType = BackupTypeEnum.Incremental, Name = "Incremental Backup", ImageName = @"/Resources/Icons/Ribbon/IncrementalBackup.ico",
+                        Description = "Starts with a full copy of your items, Subsequent copies will copy only items that have been changes.\nThis method is usually faster than Snapshot, however you will not be able to restore older item versions" +
+                        ", since this method does not keep any history, Because of that this should be called mirror or copy and not a backup" },
+
+                    new BackupTypeData() { BackupType = BackupTypeEnum.Differential, Name = "Differential Backup", ImageName = @"/Resources/Icons/Ribbon/DifferentialBackup.ico",
+                        Description = "Similar to Incremental Backup, but also keeps all the items that have changed or deleted" +
+                        "\nThis is the preffered backup method, This method works the best it lets you to restore an old items have been changed or deleted in the past" +
+                        ", however keeping old veriosns over time might consume an extra storage space, when using this methiod it is recomended to check the storage usage and delete old history if no longer needed", IsChecked = true},
                 };
             }
         }
