@@ -53,13 +53,12 @@
         <GroupBox Grid.Column="0" Grid.Row="0">
             <GroupBox.Header>
                 <TextBlock FontWeight="Bold" Text="Backup items"></TextBlock>
-                <!--<TextBlock FontWeight="Bold" Text="{Binding Path=ProjectData.CurrentBackupProfile.BackupFolderList.Count}"></TextBlock>-->
             </GroupBox.Header>
             <StackPanel Orientation="Vertical">
-                <Border Background="LightGoldenrodYellow" BorderThickness="1" CornerRadius="4" BorderBrush="Gray" Margin="16" Padding="8" VerticalAlignment="Center" HorizontalAlignment="Left">
+                <Border Background="Ivory" BorderThickness="2" CornerRadius="4" BorderBrush="Maroon" Margin="16" Padding="8" VerticalAlignment="Center" HorizontalAlignment="Left">
                     <StackPanel Orientation="Vertical" Margin="8">
                         <TextBlock Text="Backup item list is empty, please select items to backup" HorizontalAlignment="Left"/>
-                        <Button Content=" Select items to backup "
+                        <Button Content="  Select items to backup  "
                                 Command="{Binding OpenSelectBackupItemsWindowCommand}" CommandParameter="{Binding Path=ProjectData.CurrentBackupProfile}" HorizontalAlignment="Center" Margin="0,16,0,0"/>
                     </StackPanel>
                     <Border.Style>
