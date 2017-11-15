@@ -100,11 +100,11 @@ namespace CompleteBackup.Models.Backup
             }
             catch (FileNotFoundException)
             {
-                m_Logger.Writeln($"**Error {changeType} File, File not found {path}");
+                m_Logger.Writeln($"***Exception {changeType} File, File not found {path}");
             }
             catch (DirectoryNotFoundException)
             {
-                m_Logger.Writeln($"**Error {changeType} Directory, Directory not found {path}");
+                m_Logger.Writeln($"***Exception {changeType} Directory, Directory not found {path}");
             }
 
             return bFolder;

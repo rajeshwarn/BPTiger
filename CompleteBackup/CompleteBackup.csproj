@@ -113,7 +113,6 @@
     <Compile Include="ViewModels\ActionRestore\ICommands\SelectRestoreDestinationFolderICommand.cs" />
     <Compile Include="ViewModels\ActionRestore\RestoreItemsSelectionViewModel.cs" />
     <Compile Include="ViewModels\ActionRestore\ICommands\RestoreFolderSelectionICommand.cs" />
-    <Compile Include="ViewModels\ActionRestore\Validators\RestoreTargetLocationValidator.cs" />
     <Compile Include="ViewModels\ProfileSetting\EditBackupProfileWindowViewModel.cs" />
     <Compile Include="ViewModels\ProfileSetting\CreateBackupProfileWindowViewModel.cs" />
     <Compile Include="ViewModels\ExtendedControls\ICommnd\ClearLogConsoleICommand.cs" />
@@ -147,35 +146,32 @@
     <Compile Include="ViewModels\ActionBackup\ICommands\SaveFolderSelectionICommand.cs" />
     <Compile Include="ViewModels\MainWindow\MainWindowStatusBarViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\MainWindowViewModel.cs" />
-    <Compile Include="ViewModels\ActionBackup\Validators\BackupTargetLocationValidator.cs" />
+    <Compile Include="ViewModels\ActionBackupRestoreShared\Validators\BackupTargetLocationValidator.cs" />
     <Compile Include="ViewModels\ProfileSetting\MainProfileViewModel.cs" />
     <Compile Include="ViewModels\ProfileSetting\ProfileList\ProfileListViewModel.cs" />
     <Compile Include="ViewModels\ActionRestore\SelectRestoreItemsWindowModel.cs" />
-    <Compile Include="Views\ActionRestore\RestoreItemsSelectionView.xaml.cs">
-      <DependentUpon>RestoreItemsSelectionView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ExtendedControls\LogProfileConsoleView.xaml.cs">
       <DependentUpon>LogProfileConsoleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ExtendedControls\ProcessingSpinnerView.xaml.cs">
       <DependentUpon>ProcessingSpinnerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ItemTreeSelection\SelectRestoreItemsWindow.xaml.cs">
+    <Compile Include="Views\BackupRestoreItemSelectionWindow\SelectRestoreItemsWindow.xaml.cs">
       <DependentUpon>SelectRestoreItemsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ItemTreeSelection\SelectBackupItemsWindow.xaml.cs">
+    <Compile Include="Views\BackupRestoreItemSelectionWindow\SelectBackupItemsWindow.xaml.cs">
       <DependentUpon>SelectBackupItemsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ExtendedControls\ChartGaugeView.xaml.cs">
       <DependentUpon>ChartGaugeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ActionBackup\MainBackupView.xaml.cs">
+    <Compile Include="Views\BackupRestoreView\MainBackupView.xaml.cs">
       <DependentUpon>MainBackupView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ActionRestore\MainRestoreView.xaml.cs">
+    <Compile Include="Views\BackupRestoreView\MainRestoreView.xaml.cs">
       <DependentUpon>MainRestoreView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ActionCommon\CommonItemsSelectionView.xaml.cs">
+    <Compile Include="Views\BackupRestoreView\CommonItemsSelectionView.xaml.cs">
       <DependentUpon>CommonItemsSelectionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ExtendedControls\LogConsoleView.xaml.cs">
@@ -215,10 +211,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\ActionRestore\RestoreItemsSelectionView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\ExtendedControls\LogProfileConsoleView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -227,11 +219,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ItemTreeSelection\SelectRestoreItemsWindow.xaml">
+    <Page Include="Views\BackupRestoreItemSelectionWindow\SelectRestoreItemsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ItemTreeSelection\SelectBackupItemsWindow.xaml">
+    <Page Include="Views\BackupRestoreItemSelectionWindow\SelectBackupItemsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -239,15 +231,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ActionBackup\MainBackupView.xaml">
+    <Page Include="Views\BackupRestoreView\MainBackupView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ActionRestore\MainRestoreView.xaml">
+    <Page Include="Views\BackupRestoreView\MainRestoreView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ActionCommon\CommonItemsSelectionView.xaml">
+    <Page Include="Views\BackupRestoreView\CommonItemsSelectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

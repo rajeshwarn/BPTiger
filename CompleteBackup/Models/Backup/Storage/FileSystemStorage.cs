@@ -419,15 +419,15 @@ namespace CompleteBackup.Models.Backup.Storage
             }
             catch (DirectoryNotFoundException ex)
             {
-                DataRepository.BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile?.Logger.Writeln(ex.Message);
+                DataRepository.BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile?.Logger.Writeln("***Exception: " + ex.Message);
             }
             catch (FileNotFoundException ex)
             {
-                DataRepository.BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile?.Logger.Writeln(ex.Message);
+                DataRepository.BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile?.Logger.Writeln("***Exception: " + ex.Message);
             }
             catch (UnauthorizedAccessException ex )
             {
-                DataRepository.BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile.Logger?.Writeln(ex.Message);
+                DataRepository.BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile.Logger?.Writeln("***Exception: " + ex.Message);
             }
 
             return size;

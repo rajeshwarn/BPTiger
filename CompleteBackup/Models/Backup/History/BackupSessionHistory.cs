@@ -179,11 +179,11 @@ namespace CompleteBackup.Models.Backup.History
             }
             catch (FileNotFoundException ex)
             {
-                Trace.WriteLine("LoadHistory exception:\n" + ex.Message);
+                Trace.WriteLine("**Exception LoadHistory:\n" + ex.Message);
             }
             catch (DirectoryNotFoundException ex)
             {
-                Trace.WriteLine("LoadHistory exception:\n" + ex.Message);
+                Trace.WriteLine("**Exception LoadHistory:\n" + ex.Message);
             }
 
             return history;

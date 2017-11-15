@@ -6,14 +6,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace CompleteBackup.ViewModels.FolderSelection.Validators
 {
+    public class GenericBackupItemsSelectionViewModelContext : DependencyObject
+    {
+
+        public static readonly DependencyProperty ViewModelProperty = DependencyProperty.Register(@"ViewModel",
+            typeof(GenericBackupItemsSelectionViewModel), typeof(GenericBackupItemsSelectionViewModelContext),
+            new PropertyMetadata
+            {
+                DefaultValue = null,
+                PropertyChangedCallback = new PropertyChangedCallback(GenericBackupItemsSelectionViewModelContext.ViewModelPropertyChanged)
+            });
+
+        public GenericBackupItemsSelectionViewModel ViewModel
+        {
+            get { return (GenericBackupItemsSelectionViewModel)this.GetValue(GenericBackupItemsSelectionViewModelContext.ViewModelProperty); }
+            set { this.SetValue(GenericBackupItemsSelectionViewModelContext.ViewModelProperty, value); }
+        }
+
+        private static void ViewModelPropertyChanged(DependencyObject element, DependencyPropertyChangedEventArgs args)
+        {
+        }
+
+    }
+
     public class BackupTargetLocationValidator : ValidationRule
     {
 
         public BackupTargetLocationValidator() : base() { ValidatesOnTargetUpdated = true; }
+
+        public GenericBackupItemsSelectionViewModelContext Context { get; set; }
 
         public override ValidationResult Validate (object value, System.Globalization.CultureInfo cultureInfo)
         {
@@ -24,12 +50,11 @@ namespace CompleteBackup.ViewModels.FolderSelection.Validators
             {
                 return new ValidationResult(false, "Please create or select a Backup Profile");
             }
-            else
-            if ((name == null) || (name == String.Empty))
+            else if ((name == null) || (name == String.Empty))
             {
                 return new ValidationResult(false, "Please Enter or select a destenition backup folder");
             }
-            else
+            else if (Context.ViewModel is BackupItemsSelectionViewModel)
             {
                 var folderStatus = profile.GetProfileTargetFolderStatus(name);
                 if (folderStatus == Models.Backup.Profile.BackupProfileData.ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile ||
@@ -42,6 +67,16 @@ namespace CompleteBackup.ViewModels.FolderSelection.Validators
                     var num = (int)folderStatus;
                     var res = BackupProfileData.ProfileTargetFolderStatusDictionary[folderStatus];
                     return new ValidationResult(false, BackupProfileData.ProfileTargetFolderStatusDictionary[folderStatus]);
+                }
+            }
+            {
+                if (profile.GetStorageInterface().IsFolder(name) && (profile.GetStorageInterface().DirectoryExists(name)))
+                {
+                    return ValidationResult.ValidResult;
+                }
+                else
+                {
+                    return new ValidationResult(false, "Restore directory not valid or not available");
                 }
             }
         }

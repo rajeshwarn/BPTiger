@@ -4,6 +4,7 @@ using CompleteBackup.Models.Backup.Project;
 using CompleteBackup.Models.Backup.Storage;
 using CompleteBackup.Models.FolderSelection;
 using CompleteBackup.ViewModels.FolderSelection.ICommands;
+using CompleteBackup.ViewModels.FolderSelection.Validators;
 using CompleteBackup.Views;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,7 @@ namespace CompleteBackup.ViewModels
         public override string DestinationFolderName { get { return BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile?.TargetBackupFolder; } set { if (BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile != null) { BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile.TargetBackupFolder = value; OnPropertyChanged(); } } }
         public override long? SelectionFolderListNumberOfFiles { get { return ProjectData.CurrentBackupProfile?.BackupSourceFilesNumber; } }
         public override long? SelectionTotalFolderListSize { get { return ProjectData.CurrentBackupProfile?.BackupSourceFoldersSize; } }
+
 
         public override string SourceFileListGroupTitle { get; } = "Items to Backup";
         public override string SourceFileActionTitle { get; } = "Change";

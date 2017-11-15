@@ -59,8 +59,7 @@ namespace CompleteBackup.ViewModels
         public abstract string DestinationFolderName { get; set; }
 
         public abstract long? SelectionFolderListNumberOfFiles { get; }
-        public abstract long? SelectionTotalFolderListSize { get; }
-
+        public abstract long? SelectionTotalFolderListSize { get; }        
 
         public abstract string SourceFileListGroupTitle { get; }
         public abstract string SourceFileActionTitle { get; }
