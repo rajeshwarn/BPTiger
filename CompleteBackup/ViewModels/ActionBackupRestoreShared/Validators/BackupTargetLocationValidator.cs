@@ -69,8 +69,9 @@ namespace CompleteBackup.ViewModels.FolderSelection.Validators
                     return new ValidationResult(false, BackupProfileData.ProfileTargetFolderStatusDictionary[folderStatus]);
                 }
             }
+            else
             {
-                if (profile.GetStorageInterface().IsFolder(name) && (profile.GetStorageInterface().DirectoryExists(name)))
+                if (profile.GetStorageInterface().DirectoryExists(name) && profile.GetStorageInterface().IsFolder(name))
                 {
                     return ValidationResult.ValidResult;
                 }

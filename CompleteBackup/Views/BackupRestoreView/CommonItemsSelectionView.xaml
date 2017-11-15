@@ -196,17 +196,14 @@
                 <TextBlock FontWeight="Bold" Text="Destination"/>
             </GroupBox.Header>
             <StackPanel Orientation="Vertical">
-                <TextBlock x:Name="txTaggetFolder"                        
+                <TextBox x:Name="txTaggetFolder"                        
                          Validation.ErrorTemplate="{StaticResource validationTargetFolderErrorTemplate}" Margin="4,16,0,8">
-                    <TextBlock.Text>
+                    <TextBox.Text>
                         <Binding Path="DestinationFolderName"
                                 Mode="TwoWay"
                                 TargetNullValue=''
                                 UpdateSourceTrigger="PropertyChanged" Delay="600">
                             <Binding.ValidationRules>
-                                <!--<local:FolderValidationRule>-->
-                                <!--<validators:BackupTargetLocationValidator/>-->
-                                <!--<validators:BackupTargetLocationValidator/>-->
                                 <validators:BackupTargetLocationValidator>
                                     <validators:BackupTargetLocationValidator.Context>
                                         <validators:GenericBackupItemsSelectionViewModelContext ViewModel="{Binding}"/>
@@ -214,9 +211,9 @@
                                 </validators:BackupTargetLocationValidator>
                             </Binding.ValidationRules>
                         </Binding>
-                    </TextBlock.Text>
-                    <TextBlock.Style>
-                        <Style TargetType="TextBlock" >
+                    </TextBox.Text>
+                    <TextBox.Style>
+                        <Style TargetType="TextBox" >
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding ElementName=txTaggetFolder, Path=Text}" Value="{x:Null}">
                                     <Setter Property="FontStyle" Value="Italic"/>
@@ -226,8 +223,8 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </TextBlock.Style>
-                </TextBlock>
+                    </TextBox.Style>
+                </TextBox>
                 <!--<StackPanel Orientation="Horizontal">
                     <Button Content="Change"
                         Command="{Binding SelectFolderNameCommand}"
