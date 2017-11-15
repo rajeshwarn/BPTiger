@@ -28,8 +28,8 @@ namespace CompleteBackup.ViewModels
 
         public override ObservableCollection<FolderData> SelectionFolderList { get { return BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile?.RestoreFolderList; } }
         public override string DestinationFolderName { get { return BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile?.TargetRestoreFolder; } set { if (BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile != null) { BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile.TargetRestoreFolder = value; OnPropertyChanged(); } } }
-        public override long SelectionFolderListNumberOfFiles { get { return ProjectData.CurrentBackupProfile.RestoreSourceFilesNumber; } }
-        public override long SelectionTotalFolderListSize { get { return ProjectData.CurrentBackupProfile.RestoreSourceFoldersSize; } }
+        public override long? SelectionFolderListNumberOfFiles { get { return ProjectData.CurrentBackupProfile?.RestoreSourceFilesNumber; } }
+        public override long? SelectionTotalFolderListSize { get { return ProjectData.CurrentBackupProfile?.RestoreSourceFoldersSize; } }
 
         public override string SourceFileListGroupTitle { get; } = "Items To Restore";
         public override string SourceFileActionTitle { get; } = "Select Items";

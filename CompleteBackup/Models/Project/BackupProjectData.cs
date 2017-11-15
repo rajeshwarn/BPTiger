@@ -45,13 +45,21 @@ namespace CompleteBackup.Models.Backup.Project
 
             set {
                 var prevProfile = m_CurrentBackupProfile;
-
                 m_CurrentBackupProfile = value;
-                CurrentProfileGuid = value.GUID;
 
-                //This will trigger the UI to draw selected item/color
-                if (prevProfile != null) { prevProfile.IsCurrentProfileSelected = false; }
-                value.IsCurrentProfileSelected = true;
+                if (value == null)
+                {
+                    CurrentProfileGuid = Guid.Empty;
+                    if (prevProfile != null) { prevProfile.IsCurrentProfileSelected = false; }
+                }
+                else
+                {
+                    CurrentProfileGuid = value.GUID;
+
+                    //This will trigger the UI to draw selected item/color
+                    if (prevProfile != null) { prevProfile.IsCurrentProfileSelected = false; }
+                    value.IsCurrentProfileSelected = true;
+                }
 
                 OnPropertyChanged();
             }

@@ -13,6 +13,11 @@ namespace CompleteBackup.Utilities.Convertors
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value == null)
+            {
+                return null;
+            }
+
             float lSize = (long)value;
 
             if ((lSize) > 1000000000000)
