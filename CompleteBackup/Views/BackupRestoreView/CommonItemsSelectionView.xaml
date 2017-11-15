@@ -195,9 +195,13 @@
             <GroupBox.Header>
                 <TextBlock FontWeight="Bold" Text="Destination"/>
             </GroupBox.Header>
-            <StackPanel Orientation="Vertical">
-                <TextBox x:Name="txTaggetFolder"                        
-                         Validation.ErrorTemplate="{StaticResource validationTargetFolderErrorTemplate}" Margin="4,16,0,8">
+            <DockPanel LastChildFill="True">
+                <Button DockPanel.Dock="Right" Content=" ... " 
+                        Command="{Binding SelectFolderNameCommand}"
+                        CommandParameter="{Binding ProjectData.CurrentBackupProfile}" Margin="0,12,4,4" VerticalAlignment="Center">
+                </Button>
+                <TextBox x:Name="txDestinationFolder"
+                         Validation.ErrorTemplate="{StaticResource validationTargetFolderErrorTemplate}" Margin="4,16,4,8">
                     <TextBox.Text>
                         <Binding Path="DestinationFolderName"
                                 Mode="TwoWay"
@@ -215,24 +219,17 @@
                     <TextBox.Style>
                         <Style TargetType="TextBox" >
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ElementName=txTaggetFolder, Path=Text}" Value="{x:Null}">
+                                <DataTrigger Binding="{Binding ElementName=txDestinationFolder, Path=Text}" Value="{x:Null}">
                                     <Setter Property="FontStyle" Value="Italic"/>
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding ElementName=txTaggetFolder, Path=Text}" Value="">
+                                <DataTrigger Binding="{Binding ElementName=txDestinationFolder, Path=Text}" Value="">
                                     <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.GradientInactiveCaptionBrushKey}}"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </TextBox.Style>
                 </TextBox>
-                <!--<StackPanel Orientation="Horizontal">
-                    <Button Content="Change"
-                        Command="{Binding SelectFolderNameCommand}"
-                        CommandParameter="{Binding ProjectData.CurrentBackupProfile}" Margin="0,0">
-                    </Button>
-                </StackPanel>-->
-
-            </StackPanel>
+            </DockPanel>
         </GroupBox>
         <!--This text box is to trigger collection change event to view model-->
         <TextBox Text="{Binding ProjectData.CurrentBackupProfile.Name}" Visibility="Collapsed" TextChanged="TextBox_TextChanged"/>
