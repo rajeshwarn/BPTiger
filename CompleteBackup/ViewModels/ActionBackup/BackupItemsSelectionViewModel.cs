@@ -22,37 +22,19 @@ using System.Windows.Media.Imaging;
 
 namespace CompleteBackup.ViewModels
 {
-    public class BackupItemsSelectionViewModel : ObservableObject
+    public class BackupItemsSelectionViewModel : GenericBackupItemsSelectionViewModel
     {
-        public ICommand OpenSelectBackupItemsWindowCommand { get; private set; } = new OpenSelectBackupItemsWindowICommand<object>();
-        public ICommand SelectFolderNameCommand { get; private set; } = new SelectFolderNameICommand<object>();
-        public ICommand LocateMissingItemCommand { get; private set; } = new LocateMissingItemICommand<object>();
-        public ICommand OpenItemLocationCommand { get; private set; } = new OpenItemLocationICommand<object>();
+        public override ICommand OpenItemSelectWindowCommand { get; } = new OpenSelectBackupItemsWindowICommand<object>();
 
+        public override ObservableCollection<FolderData> SelectionFolderList { get { return BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile?.BackupFolderList; } }
 
-        public BackupProjectData ProjectData { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject;
+        public override string DestinationFolderName { get { return BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile?.TargetBackupFolder; } set { if (BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile != null) { BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile.TargetBackupFolder = value; OnPropertyChanged(); } } }
+        public override long SelectionFolderListNumberOfFiles { get { return ProjectData.CurrentBackupProfile.BackupSourceFilesNumber; } }
+        public override long SelectionTotalFolderListSize { get { return ProjectData.CurrentBackupProfile.BackupSourceFoldersSize; } }
 
-
-        public ObservableCollection<FolderData> SelectionFolderList { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile?.BackupFolderList;
-
-        //public void OpenSelectionWindow()
-        //{
-        //    new SelectBackupItemsWindow().ShowDialog();
-        //}
-
-
-        public string SourceFileListGroupTitle { get; set; } = "Source Items";
-        public string SourceFileActionTitle { get; set; } = "Change";
-        public string DestinationGroupTitle { get; set; } = "Destination";
-
-        private void ProfileDataUpdate(BackupProfileData profile)
-        {
-        }
-        public BackupItemsSelectionViewModel()
-        {
-            //Register to get update event when backup profile changed
-            BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile?.ProfileDataRefreshTask?.RegisterEvent(ProfileDataUpdate);
-        }
+        public override string SourceFileListGroupTitle { get; } = "Items to Backup";
+        public override string SourceFileActionTitle { get; } = "Change";
+        public override string DestinationGroupTitle { get; } = "Destination";
     }
 }
 

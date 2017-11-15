@@ -69,7 +69,10 @@
                         </Grid>
                     </Grid>
                 </Expander>
-                <Grid Grid.Row="1">
+                <Grid Grid.Row="1" >
+                    <Grid.DataContext>
+                        <view_model:BackupItemsSelectionViewModel/>
+                    </Grid.DataContext>
                     <local:BackupItemsSelectionView Grid.Row="0"/>
                 </Grid>
             </Grid>

@@ -19,13 +19,14 @@
 
     </UserControl.Resources>
     <Grid>
+        <Grid.DataContext>
+            <view_model:RestoreItemsSelectionViewModel/>
+        </Grid.DataContext>
+
         <DockPanel LastChildFill="True">
             <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
-                <local:RestoreItemsSelectionView />
-                <!--DataContext="{Binding Path=RestoreItemsSelectionViewModel}"/>-->
+                <local:BackupItemsSelectionView />
             </StackPanel>
-
-            <!--<profile_views:MainProfileView x:Name="profileDetailsPageView" Margin="0,20,0,0"/>-->
         </DockPanel>
     </Grid>
 </UserControl>

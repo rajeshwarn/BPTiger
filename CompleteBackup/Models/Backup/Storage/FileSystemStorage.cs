@@ -417,7 +417,18 @@ namespace CompleteBackup.Models.Backup.Storage
             {
                 size = new DirectoryInfo(path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => file.Length);
             }
-            catch (DirectoryNotFoundException) { }
+            catch (DirectoryNotFoundException ex)
+            {
+                DataRepository.BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile?.Logger.Writeln(ex.Message);
+            }
+            catch (FileNotFoundException ex)
+            {
+                DataRepository.BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile?.Logger.Writeln(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex )
+            {
+                DataRepository.BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile.Logger?.Writeln(ex.Message);
+            }
 
             return size;
         }
@@ -439,13 +450,18 @@ namespace CompleteBackup.Models.Backup.Storage
         }
         public long GetNumberOfFiles(string path)
         {
-            long files = new DirectoryInfo(path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => 1);
+            long files = 0;
+
+            try
+            {
+                files = new DirectoryInfo(path).GetFiles("*.*", SearchOption.AllDirectories).Sum(file => 1);
+            }
+            catch(UnauthorizedAccessException)
+            {
+
+            }
 
             return files;
-            //DirectoryInfo dir = new DirectoryInfo(path);
-            //FileSystemInfo[] fsInfo = dir.GetFileSystemInfos();
-
-            //return GetNumberOfFilesRec(fsInfo, ref files, ref directories);
         }
 
         //private bool GetNumberOfFilesRec(FileSystemInfo[] FSInfo, ref long files, ref long directories)

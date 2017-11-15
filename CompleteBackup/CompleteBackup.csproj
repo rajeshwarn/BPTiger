@@ -106,6 +106,7 @@
     <Compile Include="Utilities\FileFolderSizeHelper.cs" />
     <Compile Include="Utilities\ObservableObject.cs" />
     <Compile Include="Models\FolderSelection\FolderMenuItem.cs" />
+    <Compile Include="ViewModels\ActionBackupRestoreShared\GenericBackupItemsSelectionViewModel.cs" />
     <Compile Include="ViewModels\ActionBackup\ICommands\OpenItemLocationICommand.cs" />
     <Compile Include="ViewModels\ActionBackup\ICommands\LocateMissingItemICommand.cs" />
     <Compile Include="ViewModels\ActionRestore\ICommands\OpenSelectRestoreItemsWindowICommand.cs" />
@@ -128,7 +129,7 @@
     <Compile Include="ViewModels\ProfileSetting\ICommands\OpenCreateProfileWindowICommand.cs" />
     <Compile Include="ViewModels\ProfileSetting\ProfileDataViewModel.cs" />
     <Compile Include="ViewModels\ProfileSetting\SelectBackupTypeWindowViewModel.cs" />
-    <Compile Include="ViewModels\Share\BackupItemsTreeBase.cs" />
+    <Compile Include="ViewModels\ActionBackupRestoreShared\BackupItemsTreeBase.cs" />
     <Compile Include="ViewModels\ExtendedControls\ProcessingSpinnerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\RestoreBackupICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\StopBackupICommand.cs" />
@@ -385,6 +386,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\BackupFolderSetting.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ViewModels\Share\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

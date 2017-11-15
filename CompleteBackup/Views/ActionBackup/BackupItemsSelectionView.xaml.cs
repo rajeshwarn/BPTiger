@@ -28,19 +28,12 @@ namespace CompleteBackup.Views
         public BackupItemsSelectionView()
         {
             InitializeComponent();
-
-            //BindingExpression binding = txTaggetFolder.GetBindingExpression(TextBox.TextProperty);
-            //binding.UpdateSource();
         }
 
-
-        //     private void hiddenNameTextBlock_TextChanged(object sender, TextChangedEventArgs e)
-        //     {
-        //         var profile = BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile;
-
-        //         var vm = this.DataContext as BackupItemsSelectionViewModel;
-        ////         vm.Init();
-        //     }
-
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var vm = DataContext as GenericBackupItemsSelectionViewModel;
+            vm.UpdateCurrentProfileChange();
+        }
     }
 }

@@ -58,7 +58,7 @@
                 <Border Background="Ivory" BorderThickness="1" CornerRadius="4" BorderBrush="Maroon" Margin="16" Padding="8" VerticalAlignment="Center" HorizontalAlignment="Left">
                     <StackPanel Orientation="Vertical" Margin="8">
                         <TextBlock Text="Backup item list is empty, please select items to backup" HorizontalAlignment="Left"/>
-                        <Button HorizontalAlignment="Center" Margin="0,16,0,0" Content="  Select items to restore  " Command="{Binding OpenSelectRestoreItemsWindowCommand}" CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>
+                        <Button HorizontalAlignment="Center" Margin="0,16,0,0" Content="  Select items to restore  " Command="{Binding OpenItemSelectWindowCommand}" CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>
                     </StackPanel>
                     <Border.Style>
                         <Style TargetType="Border" >
@@ -107,7 +107,7 @@
                         </StackPanel>
                         <Separator/>
                     </StackPanel>
-                    <ListBox ItemsSource="{Binding ProjectData.CurrentBackupProfile.RestoreFolderList}" BorderThickness="0" Margin="0,0,8,0">
+                    <ListBox ItemsSource="{Binding SelectionFolderList}" BorderThickness="0" Margin="0,0,8,0">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <DockPanel LastChildFill="True">
@@ -143,7 +143,7 @@
                 <TextBlock Text="{Binding validationTargetFolderErrorTemplate}"/>
                 <TextBox Validation.ErrorTemplate="{StaticResource validationTargetFolderErrorTemplate}" Margin="4,16,0,8">
                     <TextBox.Text>
-                        <Binding Path="ProjectData.CurrentBackupProfile.TargetRestoreFolder"
+                        <Binding Path="DestinationFolderName"
                                  Mode="TwoWay"
                                  TargetNullValue=''
                                  UpdateSourceTrigger="PropertyChanged" Delay="600"
@@ -175,6 +175,6 @@
 
             </StackPanel>
         </GroupBox>
-
+        <TextBox Text="{Binding ProjectData.CurrentBackupProfile.Name}" Visibility="Collapsed" TextChanged="TextBox_TextChanged" />
     </Grid>
 </UserControl>

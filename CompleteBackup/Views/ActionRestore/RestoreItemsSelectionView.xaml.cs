@@ -28,9 +28,11 @@ namespace CompleteBackup.Views
         public RestoreItemsSelectionView()
         {
             InitializeComponent();
-
-            //var vm = this.DataContext as RestoreItemsSelectionViewModel;
-            //vm.ProjectData.CurrentBackupProfile.TargetRestoreFolder = vm.ProjectData.CurrentBackupProfile.TargetRestoreFolder;
+        }
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var vm = DataContext as GenericBackupItemsSelectionViewModel;
+            vm.UpdateCurrentProfileChange();
         }
     }
 }

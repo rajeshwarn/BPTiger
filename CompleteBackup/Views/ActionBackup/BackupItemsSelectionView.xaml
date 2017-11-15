@@ -12,9 +12,9 @@
              xmlns:local="clr-namespace:CompleteBackup.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <UserControl.DataContext>
+    <!--<UserControl.DataContext>
         <view_models:BackupItemsSelectionViewModel/>
-    </UserControl.DataContext>
+    </UserControl.DataContext>-->
     <UserControl.Resources>
         <convertors:NullVisibilityConverter x:Key="NullToVisibilityConverter"/>
         <convertors:NumberToComputerSizeConverter x:Key="NumberToComputerSizeConverter"/>
@@ -52,20 +52,20 @@
 
         <GroupBox Grid.Column="0" Grid.Row="0">
             <GroupBox.Header>
-                <TextBlock FontWeight="Bold" Text="Backup items"></TextBlock>
+                <TextBlock FontWeight="Bold" Text="{Binding SourceFileListGroupTitle}"></TextBlock>
             </GroupBox.Header>
             <StackPanel Orientation="Vertical">
                 <Border Background="Ivory" BorderThickness="2" CornerRadius="4" BorderBrush="Maroon" Margin="16" Padding="8" VerticalAlignment="Center" HorizontalAlignment="Left">
                     <StackPanel Orientation="Vertical" Margin="8">
                         <TextBlock Text="Backup item list is empty, please select items to backup" HorizontalAlignment="Left"/>
                         <Button Content="  Select items to backup  "
-                                Command="{Binding OpenSelectBackupItemsWindowCommand}" CommandParameter="{Binding Path=ProjectData.CurrentBackupProfile}" HorizontalAlignment="Center" Margin="0,16,0,0"/>
+                                Command="{Binding OpenItemSelectWindowCommand}" CommandParameter="{Binding Path=ProjectData.CurrentBackupProfile}" HorizontalAlignment="Center" Margin="0,16,0,0"/>
                     </StackPanel>
                     <Border.Style>
                         <Style TargetType="Border" >
                             <Setter Property="Visibility" Value="Collapsed"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=ProjectData.CurrentBackupProfile.BackupFolderList.Count}" Value="0">
+                                <DataTrigger Binding="{Binding Path=SelectionFolderList.Count}" Value="0">
                                     <Setter Property="Visibility" Value="Visible"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -77,7 +77,7 @@
                     <DockPanel.Style>
                         <Style TargetType="DockPanel" >
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=ProjectData.CurrentBackupProfile.BackupFolderList.Count}" Value="0">
+                                <DataTrigger Binding="{Binding Path=SelectionFolderList.Count}" Value="0">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -85,7 +85,7 @@
                     </DockPanel.Style>
                     <StackPanel DockPanel.Dock="Right" Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
-                            <ListBox ItemsSource="{Binding ProjectData.CurrentBackupProfile.BackupFolderList}" BorderThickness="0" HorizontalContentAlignment="Right">
+                            <ListBox ItemsSource="{Binding SelectionFolderList}" BorderThickness="0" HorizontalContentAlignment="Right">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Grid.Column="0" Orientation="Horizontal">
@@ -97,7 +97,7 @@
                             </ListBox>
 
                             <StackPanel Orientation="Horizontal">
-                                <ListBox ItemsSource="{Binding ProjectData.CurrentBackupProfile.BackupFolderList}" BorderThickness="0" HorizontalContentAlignment="Right">
+                                <ListBox ItemsSource="{Binding SelectionFolderList}" BorderThickness="0" HorizontalContentAlignment="Right">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding TotalSize, Converter={StaticResource NumberToComputerSizeConverter}}"/>
@@ -108,7 +108,7 @@
                         </StackPanel>
                         <Separator/>
                     </StackPanel>
-                    <ListView ItemsSource="{Binding ProjectData.CurrentBackupProfile.BackupFolderList}" BorderThickness="0" Margin="0,0,8,0" SelectionMode="Single">
+                    <ListView ItemsSource="{Binding SelectionFolderList}" BorderThickness="0" Margin="0,0,8,0" SelectionMode="Single">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <DockPanel LastChildFill="True">
@@ -169,14 +169,14 @@
                 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <TextBlock Text="Total of "/>
-                    <TextBlock Text="{Binding ProjectData.CurrentBackupProfile.BackupSourceFilesNumber, StringFormat={}{0:#,#,#,#,##0}}" FontWeight="Bold"></TextBlock>
+                    <TextBlock Text="{Binding SelectionFolderListNumberOfFiles, StringFormat={}{0:#,#,#,#,##0}}" FontWeight="Bold"></TextBlock>
                     <TextBlock Text=" files, "/>
-                    <TextBlock Text="{Binding ProjectData.CurrentBackupProfile.BackupSourceFoldersSize, Converter={StaticResource NumberToComputerSizeConverter}}" FontWeight="Bold"></TextBlock>
+                    <TextBlock Text="{Binding SelectionTotalFolderListSize, Converter={StaticResource NumberToComputerSizeConverter}}" FontWeight="Bold"></TextBlock>
                 </StackPanel>
             
                 <!--<StackPanel Orientation="Horizontal">
                     <Button Content="{Binding SourceFileActionTitle}"
-                        Command="{Binding OpenSelectBackupItemsWindowCommand}" CommandParameter="{Binding Path=ProjectData.CurrentBackupProfile}">
+                        Command="{Binding OpenItemSelectWindowCommand}" CommandParameter="{Binding Path=ProjectData.CurrentBackupProfile}">
                     </Button>
                 </StackPanel>-->
             </StackPanel>
@@ -187,10 +187,10 @@
                 <TextBlock FontWeight="Bold" Text="Destination"/>
             </GroupBox.Header>
             <StackPanel Orientation="Vertical">
-                <TextBox x:Name="txTaggetFolder"                        
+                <TextBlock x:Name="txTaggetFolder"                        
                          Validation.ErrorTemplate="{StaticResource validationTargetFolderErrorTemplate}" Margin="4,16,0,8">
-                    <TextBox.Text>
-                        <Binding Path="ProjectData.CurrentBackupProfile.TargetBackupFolder"
+                    <TextBlock.Text>
+                        <Binding Path="DestinationFolderName"
                                 Mode="TwoWay"
                                 TargetNullValue=''
                                 UpdateSourceTrigger="PropertyChanged" Delay="600">
@@ -198,9 +198,9 @@
                                     <validators:BackupTargetLocationValidator/>
                                 </Binding.ValidationRules>
                             </Binding>
-                    </TextBox.Text>
-                    <TextBox.Style>
-                        <Style TargetType="TextBox" >
+                    </TextBlock.Text>
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock" >
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding ElementName=txTaggetFolder, Path=Text}" Value="{x:Null}">
                                         <Setter Property="FontStyle" Value="Italic"/>
@@ -212,8 +212,8 @@
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
-                        </TextBox.Style>
-                    </TextBox>
+                        </TextBlock.Style>
+                    </TextBlock>
                 <!--<StackPanel Orientation="Horizontal">
                     <Button Content="Change"
                         Command="{Binding SelectFolderNameCommand}"
@@ -223,6 +223,7 @@
 
             </StackPanel>
         </GroupBox>
-
+        <!--This text box is to trigger collection change event to view model-->
+        <TextBox Text="{Binding ProjectData.CurrentBackupProfile.Name}" Visibility="Collapsed" TextChanged="TextBox_TextChanged" />
     </Grid>
 </UserControl>
