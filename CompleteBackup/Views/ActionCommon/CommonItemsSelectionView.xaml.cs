@@ -21,11 +21,11 @@ using System.Windows.Shapes;
 namespace CompleteBackup.Views
 {
     /// <summary>
-    /// Interaction logic for BackupItemsSelectionView.xaml
+    /// Interaction logic for CommonItemsSelectionView.xaml
     /// </summary>
-    public partial class BackupItemsSelectionView : UserControl
+    public partial class CommonItemsSelectionView : UserControl
     {
-        public BackupItemsSelectionView()
+        public CommonItemsSelectionView()
         {
             InitializeComponent();
         }

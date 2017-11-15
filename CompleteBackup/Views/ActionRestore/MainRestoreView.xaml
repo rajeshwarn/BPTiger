@@ -12,11 +12,6 @@
         <view_model:MainRestoreViewModel/>
     </UserControl.DataContext>
     <UserControl.Resources>
-        <DataTemplate x:Key="RestoreTreeFileTemplate"
-            DataType="{x:Type view_model:RestoreItemsSelectionViewModel}">
-            <local:RestoreItemsSelectionView/>
-        </DataTemplate>
-
     </UserControl.Resources>
     <Grid>
         <Grid.DataContext>
@@ -25,7 +20,7 @@
 
         <DockPanel LastChildFill="True">
             <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
-                <local:BackupItemsSelectionView />
+                <local:CommonItemsSelectionView />
             </StackPanel>
         </DockPanel>
     </Grid>
