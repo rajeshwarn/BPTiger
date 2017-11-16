@@ -135,7 +135,7 @@
                                                 </Style>
                                             </TextBlock.Style>
                                         </TextBlock>
-                                        <TextBlock Text="  -  Item not found, right click to locate" FontWeight="SemiBold" FontStyle="Italic" Foreground="Gray">
+                                        <TextBlock Text="  -  Item not available" FontWeight="SemiBold" FontStyle="Italic" Foreground="Gray">
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock">
                                                     <Style.Triggers>
@@ -152,7 +152,7 @@
                         </ListBox.ItemTemplate>
                         <ListBox.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="Locate item" Command="{Binding LocateMissingItemCommand}"
+                                <!--<MenuItem Header="Locate item" Command="{Binding LocateMissingItemCommand}"
                                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}">
                                     <MenuItem.Style>
                                         <Style TargetType="MenuItem">
@@ -163,7 +163,7 @@
                                             </Style.Triggers>
                                         </Style>
                                     </MenuItem.Style>
-                                </MenuItem>
+                                </MenuItem>-->
                                 <MenuItem Header="Open location" Command="{Binding OpenItemLocationCommand}"
                                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}"/>
                                 <MenuItem Header="Edit" Command="{Binding OpenItemSelectWindowCommand}"
