@@ -22,6 +22,66 @@ namespace CompleteBackup.Models.Profile
 
         private ProfileDataRefreshWorkerTask() { }
 
+        private void UpdateAlerts(BackupProfileData profile)
+        {
+            var storage = profile.GetStorageInterface();
+
+            profile.BackupAlertList.Clear();
+            profile.RestoreAlertList.Clear();
+
+            foreach (var item in profile.BackupFolderList)
+            {
+                if (item.IsFolder)
+                {
+                    if (storage.DirectoryExists(item.Path))
+                    {
+                        item.IsAvailable = true;
+                    }
+                    else
+                    {
+                        profile.BackupAlertList.Add(new BackupPerfectAlertData() { Name = $"Backup directory is not available: {item.Path}" });
+                    }
+                }
+                else
+                {
+                    if (storage.FileExists(item.Path))
+                    {
+                        item.IsAvailable = true;
+                    }
+                    else
+                    {
+                        profile.BackupAlertList.Add(new BackupPerfectAlertData() { Name = $"Backup file is not available: {item.Path}" });
+                    }
+                }
+            }
+
+            if (profile.TargetBackupFolder != null && profile.TargetBackupFolder != string.Empty)
+            {
+                if (!storage.DirectoryExists(profile.TargetBackupFolder))
+                { 
+                    profile.BackupAlertList.Add(new BackupPerfectAlertData() { Name = $"Target backup directory is not available: {profile.TargetBackupFolder}" });
+                }
+            }
+            else
+            {
+                profile.BackupAlertList.Add(new BackupPerfectAlertData() { Name = $"Target backup directory is not set" });
+            }
+
+            if (profile.TargetRestoreFolder != null && profile.TargetRestoreFolder != string.Empty)
+            {
+                if (!storage.DirectoryExists(profile.TargetRestoreFolder))
+                {
+                    profile.RestoreAlertList.Add(new BackupPerfectAlertData() { Name = $"Restore directory is not available {profile.TargetRestoreFolder}" });
+                }
+            }
+            else
+            {
+                profile.RestoreAlertList.Add(new BackupPerfectAlertData() { Name = $"Restore directory is not set" });
+            }
+
+        }
+
+
         public ProfileDataRefreshWorkerTask(BackupProfileData profile)
         {
             //m_Profile = profile;
@@ -34,17 +94,8 @@ namespace CompleteBackup.Models.Profile
                 var storage = profile.GetStorageInterface();
                 try
                 {
-                    foreach (var item in profile.BackupFolderList)
-                    {
-                        if (item.IsFolder)
-                        {
-                            item.IsAvailable = storage.DirectoryExists(item.Path);
-                        }
-                        else
-                        {
-                            item.IsAvailable = storage.FileExists(item.Path);
-                        }
-                    }
+                    UpdateAlerts(profile);
+
 
                     Application.Current.Dispatcher.Invoke(new Action(() =>
                     {

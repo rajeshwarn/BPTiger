@@ -147,8 +147,8 @@ namespace CompleteBackup.Models.Backup.Profile
 
             m_FileSystemWatcherBackupTimer.Elapsed += BackupTaskManager.OnFileSystemWatcherBackupTimerStartBackup;
 
-            BackupAlertList.Add(new BackupPerfectAlertData { Name = "Invalid backup file alert" });
-            RestoreAlertList.Add(new BackupPerfectAlertData { Name = "Invalid restore file alert" });
+            //BackupAlertList.Add(new BackupPerfectAlertData { Name = "Invalid backup file alert" });
+            //RestoreAlertList.Add(new BackupPerfectAlertData { Name = "Invalid restore file alert" });
         }
 
         [XmlIgnore]

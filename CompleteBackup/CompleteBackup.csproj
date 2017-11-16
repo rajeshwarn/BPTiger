@@ -382,5 +382,9 @@
   <ItemGroup>
     <Folder Include="ViewModels\Share\" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Alert.ico" />
+    <Resource Include="Resources\Icons\Error.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

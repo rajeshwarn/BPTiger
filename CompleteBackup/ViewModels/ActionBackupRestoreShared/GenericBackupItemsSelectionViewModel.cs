@@ -60,6 +60,8 @@ namespace CompleteBackup.ViewModels
             OnPropertyChanged("SelectionFolderList");
             OnPropertyChanged("SelectionFolderListNumberOfFiles");
             OnPropertyChanged("SelectionTotalFolderListSize");
+
+            OnPropertyChanged("BackupAlertList");
         }
 
         //public BackupProfileData m_CurrentBackupProfile;
