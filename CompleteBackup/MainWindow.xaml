@@ -135,7 +135,7 @@
                                         Command="{Binding OpenSelectBackupItemsWindowCommand}"
                                         CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>
                         <RibbonMenuItem ImageSource="/Resources/Icons/DestinationDrive.ico" Header="Destination" KeyTip="R"
-                                        Command="{Binding SelectFolderNameCommand}"
+                                        Command="{Binding SelectTargetBackupFolderNameCommand}"
                                         CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>
                     </RibbonMenuButton>
                     <RibbonButton SmallImageSource="/Resources/Icons/BackupFolderSetting.ico" Label="Policy" KeyTip="P" />
@@ -218,7 +218,7 @@
                                         Command="{Binding OpenSelectRestoreItemsWindowCommand}"
                                         CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>
                         <RibbonMenuItem ImageSource="/Resources/Icons/DestinationDrive.ico" Header="Destination" KeyTip="R"
-                                        Command="{Binding SelectFolderNameCommand}"
+                                        Command="{Binding SelectTargetRestoreFolderNameCommand}"
                                         CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>
                     </RibbonMenuButton>
                     <RibbonButton SmallImageSource="/Resources/Icons/BackupFolderSetting.ico" Label="Policy" KeyTip="P" />

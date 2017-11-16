@@ -11,9 +11,9 @@ using System.Windows.Input;
 
 namespace CompleteBackup.ViewModels.FolderSelection.ICommands
 {
-    internal class SelectFolderNameICommand<T> : ICommand
+    internal class SelectTargetRestoreFolderNameICommand<T> : ICommand
     {
-        public SelectFolderNameICommand() { }
+        public SelectTargetRestoreFolderNameICommand() { }
 
         public event EventHandler CanExecuteChanged
         {
@@ -32,9 +32,9 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
             return true;
         }
 
-        void SaveTargetFolder(BackupProfileData profile, string path)
+        void SaveRestoreFolder(BackupProfileData profile, string path)
         {
-            profile.TargetBackupFolder = path;
+            profile.TargetRestoreFolder = path;
 
             BackupProjectRepository.Instance.SaveProject();
         }
@@ -59,7 +59,7 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
 
                                     if ((path == null) || (path == String.Empty))
                                     {
-                                        MessageBox.Show($"The destination folder you have selected does not contain a valid backup set", "Destination folder", MessageBoxButton.OK, MessageBoxImage.Error);
+                                        MessageBox.Show($"The destination folder you have selected is not a valid directory", "Restore destination", MessageBoxButton.OK, MessageBoxImage.Error);
                                     }
                                     else
                                     {
@@ -67,48 +67,29 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
                                         switch (folderStatus)
                                         {
                                             case BackupProfileData.ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile:
-
-                                                SaveTargetFolder(profile, fileDialog.SelectedPath);
-                                                bRetry = false;
-
-                                                break;
-
                                             case BackupProfileData.ProfileTargetFolderStatusEnum.AssosiatedWithADifferentProfile:
                                             case BackupProfileData.ProfileTargetFolderStatusEnum.CoccuptedOrNotRecognizedProfile:
-
-                                                MessageBoxResult result = MessageBox.Show($"The backup folder is assosiated with a different Backup Profile or corrupted\n\nWould you like to try to convert and associate this target folder to this Backup Profile?\nPress Yes to try to convert or No if you are not sure", "Backup folder", MessageBoxButton.YesNoCancel, MessageBoxImage.Error);
-
+                                                MessageBoxResult result = MessageBox.Show($"The restore directory you have selected contains backup item, Are you sure you want to use this directory to store your restore backup items?", "Restore destination", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
                                                 if (result == MessageBoxResult.Yes)
                                                 {
-                                                    if (profile.ConverBackupProfileFolderToNewPath(path) > 0)
-                                                    {
-                                                        MessageBox.Show($"Backup profile Succesfully converted!", "Destination folder", MessageBoxButton.OK, MessageBoxImage.Information);
-                                                        SaveTargetFolder(profile, fileDialog.SelectedPath);
-
-                                                        bRetry = false;
-                                                    }
-                                                    else
-                                                    {
-                                                        MessageBoxResult resultFail = MessageBox.Show($"Failed to convert Backup Folder\nDo you want to keep using the selected folder?", "Destination folder", MessageBoxButton.YesNoCancel, MessageBoxImage.Error);
-                                                        if (resultFail == MessageBoxResult.Yes)
-                                                        {
-                                                            SaveTargetFolder(profile, fileDialog.SelectedPath);
-                                                            bRetry = false;
-                                                        }
-                                                    }
+                                                    SaveRestoreFolder(profile, fileDialog.SelectedPath);
+                                                    bRetry = false;
                                                 }
-                                                else
+                                                break;
+
+                                            case BackupProfileData.ProfileTargetFolderStatusEnum.EmptyFolderNoProfile:
+                                                result = MessageBox.Show($"The restore directory you have selected is not empty, Are you sure you want to use this directory to store your restore backup items?", "Restore destination", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+                                                if (result == MessageBoxResult.Yes)
                                                 {
+                                                    SaveRestoreFolder(profile, fileDialog.SelectedPath);
                                                     bRetry = false;
                                                 }
 
                                                 break;
                                             default:
-                                                {
-                                                    MessageBox.Show($"folder error {folderStatus.ToString()}", "Destination folder", MessageBoxButton.OK, MessageBoxImage.Error);
-                                                    SaveTargetFolder(profile, fileDialog.SelectedPath);
-                                                    bRetry = false;
-                                                }
+                                                SaveRestoreFolder(profile, fileDialog.SelectedPath);
+                                                bRetry = false;
+
                                                 break;
                                         }
                                     }
@@ -122,13 +103,13 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
 
                             case System.Windows.Forms.DialogResult.Cancel:
                                 bRetry = false;
-
                                 break;
 
                             default:
+                                bRetry = false;
 
                                 break;
-                        }                        
+                        }
                     }
                 }
             }

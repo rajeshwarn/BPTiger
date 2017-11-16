@@ -29,14 +29,22 @@ namespace CompleteBackup.ViewModels
             m_CurrentBackupProfile = BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile;
 
             //Register to get update event when backup profile changed
-            BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile?.ProfileDataRefreshTask?.RegisterEvent(ProfileDataUpdate);
+            BackupProjectRepository.Instance.SelectedBackupProject.RegisterProfileChangeEvent(OnCurrentProfileChange);
         }
-        private void ProfileDataUpdate(BackupProfileData profile)
+
+        ~GenericBackupItemsSelectionViewModel()
         {
+            BackupProjectRepository.Instance.SelectedBackupProject.UnRegisterProfileChangeEvent(OnCurrentProfileChange);
+        }
+
+
+        private void OnCurrentProfileChange(BackupProfileData profile)
+        {
+            UpdateCurrentProfileChange();
         }
                 
         public abstract ICommand OpenItemSelectWindowCommand { get; }
-        public ICommand SelectFolderNameCommand { get; private set; } = new SelectFolderNameICommand<object>();
+        public abstract ICommand SelectTargetFolderNameCommand { get; }
 
         public ICommand LocateMissingItemCommand { get; private set; } = new LocateMissingItemICommand<object>();
 

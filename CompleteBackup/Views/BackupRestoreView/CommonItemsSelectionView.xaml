@@ -197,7 +197,7 @@
             </GroupBox.Header>
             <DockPanel LastChildFill="True">
                 <Button DockPanel.Dock="Right" Content=" ... " 
-                        Command="{Binding SelectFolderNameCommand}"
+                        Command="{Binding SelectTargetFolderNameCommand}"
                         CommandParameter="{Binding ProjectData.CurrentBackupProfile}" Margin="0,12,4,4" VerticalAlignment="Center">
                 </Button>
                 <TextBox x:Name="txDestinationFolder"

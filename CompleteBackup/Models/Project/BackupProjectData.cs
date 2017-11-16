@@ -62,9 +62,25 @@ namespace CompleteBackup.Models.Backup.Project
                 }
 
                 OnPropertyChanged();
+                m_CurrentProfileChangeEventCallback(value);
             }
         }
 
         public ObservableCollection<BackupProfileData> BackupProfileList { get; set; } = new ObservableCollection<BackupProfileData>();
+
+
+
+        public delegate void CurrentProfileChangeEvent(BackupProfileData profile);
+        private event CurrentProfileChangeEvent m_CurrentProfileChangeEventCallback;
+
+        public void RegisterProfileChangeEvent(CurrentProfileChangeEvent callback)
+        {
+            m_CurrentProfileChangeEventCallback += callback;
+        }
+
+        public void UnRegisterProfileChangeEvent(CurrentProfileChangeEvent callback)
+        {
+            m_CurrentProfileChangeEventCallback -= callback;
+        }
     }
 }

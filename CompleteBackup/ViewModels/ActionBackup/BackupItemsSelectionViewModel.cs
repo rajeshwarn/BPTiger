@@ -26,10 +26,12 @@ namespace CompleteBackup.ViewModels
     public class BackupItemsSelectionViewModel : GenericBackupItemsSelectionViewModel
     {
         public override ICommand OpenItemSelectWindowCommand { get; } = new OpenSelectBackupItemsWindowICommand<object>();
+        public override ICommand SelectTargetFolderNameCommand { get; } = new SelectTargetBackupFolderNameICommand<object>();
 
         public override ObservableCollection<FolderData> SelectionFolderList { get { return BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile?.BackupFolderList; } }
 
-        public override string DestinationFolderName { get { return BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile?.TargetBackupFolder; } set { if (BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile != null) { BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile.TargetBackupFolder = value; OnPropertyChanged(); } } }
+        public override string DestinationFolderName { get { return BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile?.TargetBackupFolder; }
+            set { if (BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile != null) { BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile.TargetBackupFolder = value; OnPropertyChanged(); } } }
         public override long? SelectionFolderListNumberOfFiles { get { return ProjectData.CurrentBackupProfile?.BackupSourceFilesNumber; } }
         public override long? SelectionTotalFolderListSize { get { return ProjectData.CurrentBackupProfile?.BackupSourceFoldersSize; } }
 
