@@ -46,6 +46,7 @@ namespace CompleteBackup.Models.backup
         public ManualResetEvent PauseWaitHandle { get; set; } = new ManualResetEvent(true);
 
         BackupWorkerTask m_Task;
+
         public bool CheckCancellationPending()
         {
             bool bCancle = false;
@@ -114,6 +115,11 @@ namespace CompleteBackup.Models.backup
                         m_LastProgressUpdate = dateTime;
                     }
                 }
+            }
+
+            if (m_Task != null)
+            {
+                m_Task.ReportProgress((int)progress);
             }
         }
 

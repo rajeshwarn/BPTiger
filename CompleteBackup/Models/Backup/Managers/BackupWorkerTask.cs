@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace CompleteBackup.Models.Profile
 {
@@ -41,6 +42,11 @@ namespace CompleteBackup.Models.Profile
 
 
         private BackupWorkerTask() { }
+
+        private void BackupTaskRunWorkerProgressChangedEvent(object sender, ProgressChangedEventArgs e)
+        {
+
+        }
 
         private void BackupTaskRunWorkerCompletedEvent(object sender, RunWorkerCompletedEventArgs e)
         {
@@ -78,7 +84,10 @@ namespace CompleteBackup.Models.Profile
             {
                 m_ProgressBar = GenericStatusBarView.NewInstance;
                 profile.IsBackupWorkerBusy = true;
-                RunWorkerCompleted += new RunWorkerCompletedEventHandler(BackupTaskRunWorkerCompletedEvent);
+                //                RunWorkerCompleted += new RunWorkerCompletedEventHandler(BackupTaskRunWorkerCompletedEvent);
+                ProgressChanged += BackupTaskRunWorkerProgressChangedEvent;
+                RunWorkerCompleted += BackupTaskRunWorkerCompletedEvent;
+
                 //profile.IsBackupWorkerBusy = true;
                 m_ProgressBar.UpdateProgressBar("Backup starting...", 0);
                 var startTime = DateTime.Now;
