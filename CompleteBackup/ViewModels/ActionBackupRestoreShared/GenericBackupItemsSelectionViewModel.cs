@@ -26,7 +26,7 @@ namespace CompleteBackup.ViewModels
     {
         public GenericBackupItemsSelectionViewModel()
         {
-            m_CurrentBackupProfile = BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile;
+            //m_CurrentBackupProfile = BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile;
 
             //Register to get update event when backup profile changed
             BackupProjectRepository.Instance.SelectedBackupProject.RegisterProfileChangeEvent(OnCurrentProfileChange);
@@ -60,8 +60,8 @@ namespace CompleteBackup.ViewModels
             OnPropertyChanged("SelectionTotalFolderListSize");
         }
 
-        public BackupProfileData m_CurrentBackupProfile;
-        public BackupProfileData CurrentBackupProfile { get { return m_CurrentBackupProfile; } set { m_CurrentBackupProfile = value; OnPropertyChanged(); } }
+        //public BackupProfileData m_CurrentBackupProfile;
+        //public BackupProfileData CurrentBackupProfile { get { return m_CurrentBackupProfile; } set { m_CurrentBackupProfile = value; OnPropertyChanged(); } }
 
         public abstract ObservableCollection<FolderData> SelectionFolderList { get; }
         public abstract string DestinationFolderName { get; set; }
