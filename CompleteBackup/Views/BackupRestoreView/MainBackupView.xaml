@@ -37,7 +37,7 @@
                     <TextBlock Text="{Binding Project.CurrentBackupProfile.LastBackupDateTime, TargetNullValue='Not Available'}" VerticalAlignment="Center"/>
                 </StackPanel>
 
-                <Expander Grid.Row="0" IsExpanded="False">
+                <Expander Grid.Row="0" IsExpanded="False" Visibility="Collapsed">
                     <Expander.Header>
                         <StackPanel Orientation="Horizontal">
                             <Image Source="{Binding Project.CurrentBackupProfile.BackupTypeImage}" Height="12" Margin="0,0,4,0"/>

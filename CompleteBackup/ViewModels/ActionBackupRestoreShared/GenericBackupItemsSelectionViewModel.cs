@@ -65,6 +65,7 @@ namespace CompleteBackup.ViewModels
         //public BackupProfileData m_CurrentBackupProfile;
         //public BackupProfileData CurrentBackupProfile { get { return m_CurrentBackupProfile; } set { m_CurrentBackupProfile = value; OnPropertyChanged(); } }
 
+        public abstract ObservableCollection<BackupPerfectAlertData> BackupAlertList { get; }
         public abstract ObservableCollection<FolderData> SelectionFolderList { get; }
         public abstract string DestinationFolderName { get; set; }
 

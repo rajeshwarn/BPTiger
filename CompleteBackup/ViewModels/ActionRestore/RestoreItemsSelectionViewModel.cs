@@ -28,6 +28,7 @@ namespace CompleteBackup.ViewModels
         public override ICommand OpenItemSelectWindowCommand { get; } = new OpenSelectRestoreItemsWindowICommand<object>();
         public override ICommand SelectTargetFolderNameCommand { get; } = new SelectTargetRestoreFolderNameICommand<object>();
 
+        public override ObservableCollection<BackupPerfectAlertData> BackupAlertList { get { return BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile?.RestoreAlertList; } }
         public override ObservableCollection<FolderData> SelectionFolderList { get { return BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile?.RestoreFolderList; } }
         public override string DestinationFolderName { get { return BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile?.TargetRestoreFolder; }
             set { if (BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile != null) { BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile.TargetRestoreFolder = value; OnPropertyChanged(); } } }

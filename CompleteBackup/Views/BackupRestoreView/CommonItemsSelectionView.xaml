@@ -43,16 +43,28 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="0" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="8" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <GroupBox Grid.Column="0" Grid.Row="0">
+        <ListBox Grid.Column="0" Grid.Row="0"
+                 ItemsSource="{Binding BackupAlertList}" BorderThickness="1" Background="LightYellow">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                        <TextBlock Text="Name"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+
+        <GroupBox Grid.Column="0" Grid.Row="1">
             <GroupBox.Header>
                 <TextBlock FontWeight="Bold" Text="{Binding SourceFileListGroupTitle}"></TextBlock>
             </GroupBox.Header>
