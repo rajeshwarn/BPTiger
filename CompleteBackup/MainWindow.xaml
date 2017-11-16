@@ -18,28 +18,22 @@
         <main_viewmodels:MainWindowViewModel/>
     </Window.DataContext>
     <Window.Resources>
-        <DataTemplate
-            DataType="{x:Type profile_viewmodel:ProfileListViewModel}">
+        <DataTemplate DataType="{x:Type profile_viewmodel:ProfileListViewModel}">
             <profile_view:ProfileListView/>
         </DataTemplate>
-        <DataTemplate
-            DataType="{x:Type view_model:MainBackupViewModel}">
+        <DataTemplate DataType="{x:Type view_model:MainBackupViewModel}">
             <view:MainBackupView/>
         </DataTemplate>
-        <DataTemplate
-            DataType="{x:Type view_model:MainRestoreViewModel}">
+        <DataTemplate DataType="{x:Type view_model:MainRestoreViewModel}">
             <view:MainRestoreView/>
         </DataTemplate>
-        <DataTemplate
-            DataType="{x:Type view_model:LogConsoleViewModel}">
+        <DataTemplate DataType="{x:Type view_model:LogConsoleViewModel}">
             <view:LogConsoleView/>
         </DataTemplate>
-        <DataTemplate
-            DataType="{x:Type view_model:MainProfileViewModel}">
+        <DataTemplate DataType="{x:Type view_model:MainProfileViewModel}">
             <view:MainProfileView/>
         </DataTemplate>
-        <DataTemplate
-            DataType="{x:Type extended_view_model:ProcessingSpinnerViewModel}">
+        <DataTemplate DataType="{x:Type extended_view_model:ProcessingSpinnerViewModel}">
             <extended_view:ProcessingSpinnerView/>
         </DataTemplate>
     </Window.Resources>
