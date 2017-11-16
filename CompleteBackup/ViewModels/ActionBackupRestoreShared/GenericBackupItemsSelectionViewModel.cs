@@ -30,6 +30,8 @@ namespace CompleteBackup.ViewModels
 
             //Register to get update event when backup profile changed
             BackupProjectRepository.Instance.SelectedBackupProject.RegisterProfileChangeEvent(OnCurrentProfileChange);
+
+            //System.GC.Collect();
         }
 
         ~GenericBackupItemsSelectionViewModel()

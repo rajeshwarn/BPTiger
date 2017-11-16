@@ -10,9 +10,9 @@
              xmlns:extended_view_model="clr-namespace:CompleteBackup.ViewModels.ExtendedControls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <UserControl.DataContext>
+    <!--<UserControl.DataContext>
         <view_model:MainBackupViewModel/>
-    </UserControl.DataContext>
+    </UserControl.DataContext>-->
     <UserControl.Resources>
         <DataTemplate
             DataType="{x:Type extended_view_model:ProcessingSpinnerViewModel}">

@@ -8,9 +8,9 @@
              xmlns:view_model="clr-namespace:CompleteBackup.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <UserControl.DataContext>
+    <!--<UserControl.DataContext>
         <view_model:MainRestoreViewModel/>
-    </UserControl.DataContext>
+    </UserControl.DataContext>-->
     <UserControl.Resources>
     </UserControl.Resources>
     <Grid>
