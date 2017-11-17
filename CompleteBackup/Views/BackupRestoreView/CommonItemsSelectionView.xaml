@@ -103,14 +103,10 @@
             
             <!--Source Error message-->
             <StackPanel Orientation="Vertical">
-                <Border Background="Ivory" BorderThickness="2" CornerRadius="4" BorderBrush="Maroon" Margin="16" Padding="8" VerticalAlignment="Center" HorizontalAlignment="Left">
-                    <StackPanel Orientation="Vertical" Margin="8">
-                        <TextBlock Text="Backup item list is empty, please select items to backup" HorizontalAlignment="Left"/>
-                        <Button Content="  Select items to backup  "
-                                Command="{Binding OpenItemSelectWindowCommand}" CommandParameter="{Binding Path=ProjectData.CurrentBackupProfile}" HorizontalAlignment="Center" Margin="0,16,0,0"/>
-                    </StackPanel>
-                    <Border.Style>
-                        <Style TargetType="Border" >
+                <Button Content="  Select items to backup  "
+                                Command="{Binding OpenItemSelectWindowCommand}" CommandParameter="{Binding Path=ProjectData.CurrentBackupProfile}" HorizontalAlignment="Left" Margin="4,16,0,0">
+                    <Button.Style>
+                        <Style TargetType="Button" >
                             <Setter Property="Visibility" Value="Collapsed"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding Path=SelectionFolderList.Count}" Value="0">
@@ -118,9 +114,9 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </Border.Style>
-                </Border>
-
+                    </Button.Style>
+                </Button>
+    
                 <DockPanel LastChildFill="True">
                     <DockPanel.Style>
                         <Style TargetType="DockPanel" >

@@ -29,28 +29,35 @@ namespace CompleteBackup.Models.Profile
             profile.BackupAlertList.Clear();
             profile.RestoreAlertList.Clear();
 
-            foreach (var item in profile.BackupFolderList)
+            if (profile.BackupFolderList.Count() == 0)
             {
-                if (item.IsFolder)
+                profile.BackupAlertList.Add(new BackupPerfectAlertData() { Name = $"Back up item list is empty", Description = "You must select a t least on backup item, item can be a file or a folder, if you select a folder the entire folder content will be backup includeing all sub items. TO select items select in the \"Items to backup\" from Setting or press on \"Select items to backup button\""});
+            }
+            else
+            {
+                foreach (var item in profile.BackupFolderList)
                 {
-                    if (storage.DirectoryExists(item.Path))
+                    if (item.IsFolder)
                     {
-                        item.IsAvailable = true;
+                        if (storage.DirectoryExists(item.Path))
+                        {
+                            item.IsAvailable = true;
+                        }
+                        else
+                        {
+                            profile.BackupAlertList.Add(new BackupPerfectAlertData() { Name = $"Backup directory is not available: {item.Path}" });
+                        }
                     }
                     else
                     {
-                        profile.BackupAlertList.Add(new BackupPerfectAlertData() { Name = $"Backup directory is not available: {item.Path}" });
-                    }
-                }
-                else
-                {
-                    if (storage.FileExists(item.Path))
-                    {
-                        item.IsAvailable = true;
-                    }
-                    else
-                    {
-                        profile.BackupAlertList.Add(new BackupPerfectAlertData() { Name = $"Backup file is not available: {item.Path}" });
+                        if (storage.FileExists(item.Path))
+                        {
+                            item.IsAvailable = true;
+                        }
+                        else
+                        {
+                            profile.BackupAlertList.Add(new BackupPerfectAlertData() { Name = $"Backup file is not available: {item.Path}" });
+                        }
                     }
                 }
             }
@@ -59,13 +66,13 @@ namespace CompleteBackup.Models.Profile
             {
                 if (!storage.DirectoryExists(profile.TargetBackupFolder))
                 { 
-                    profile.BackupAlertList.Add(new BackupPerfectAlertData() { Name = $"The target backup directory is not available: {profile.TargetBackupFolder}",
-                    Description = "The target backp directory is the destination directory where the backup files will be stored, it is recomended to select an empty directory"});
+                    profile.BackupAlertList.Add(new BackupPerfectAlertData() { Name = $"Destination backup directory is not available: {profile.TargetBackupFolder}",
+                    Description = "Destination backp directory is the destination directory where the backup files will be stored, it is recomended to select an empty directory"});
                 }
             }
             else
             {
-                profile.BackupAlertList.Add(new BackupPerfectAlertData() { Name = $"Target backup directory is not set" });
+                profile.BackupAlertList.Add(new BackupPerfectAlertData() { Name = $"Destination backup directory is not set" });
             }
 
             if (profile.TargetRestoreFolder != null && profile.TargetRestoreFolder != string.Empty)
