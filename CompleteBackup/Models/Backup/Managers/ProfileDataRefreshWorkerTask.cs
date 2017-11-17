@@ -62,6 +62,7 @@ namespace CompleteBackup.Models.Profile
                 }
             }
 
+
             if (profile.TargetBackupFolder != null && profile.TargetBackupFolder != string.Empty)
             {
                 if (!storage.DirectoryExists(profile.TargetBackupFolder))
@@ -86,7 +87,6 @@ namespace CompleteBackup.Models.Profile
             {
                 profile.RestoreAlertList.Add(new BackupPerfectAlertData() { Name = $"Restore directory is not set" });
             }
-
         }
 
 
