@@ -50,7 +50,7 @@ namespace CompleteBackup.Models.Backup.Profile
                     }
                     else
                     {
-                        return "/Resources/Icons/FolderTreeView/Delete.ico";
+                        return "/Resources/Icons/Alert.ico";
                     }
                 }
                 catch (Exception ex)

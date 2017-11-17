@@ -386,5 +386,8 @@
     <Resource Include="Resources\Icons\Alert.ico" />
     <Resource Include="Resources\Icons\Error.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\HandStop.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

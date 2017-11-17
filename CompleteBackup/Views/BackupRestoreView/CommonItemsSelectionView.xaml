@@ -162,7 +162,7 @@
                             <DataTemplate>
                                 <DockPanel LastChildFill="True">
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Width="16" Source="{Binding Image}"/>
+                                        <Image Width="16" Source="{Binding Image}" Margin="0,0,4,0"/>
                                         <TextBlock Text="{Binding Path}"  Background="Transparent">
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock">
@@ -253,19 +253,22 @@
                         CommandParameter="{Binding ProjectData.CurrentBackupProfile}" Margin="4" VerticalAlignment="Center">
                 </Button>
                 <Grid Margin="4">
-                    <TextBlock Text="Please select a destination folder" FontStyle="Italic" FontWeight="SemiBold" Foreground="Gray">
-                        <TextBlock.Style>
-                            <Style TargetType="TextBlock" >
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Path=DestinationFolderList.Count}" Value="0">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Style>
-                    </TextBlock>
-                    <ListBox ItemsSource="{Binding DestinationFolderList}" BorderThickness="1" SelectionMode="Single">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/Icons/Alert.ico" Margin="0,0,4,0" Height="16" VerticalAlignment="Center"/>
+                        <TextBlock Text="Please select a destination folder" FontStyle="Italic" FontWeight="SemiBold" Foreground="Gray" VerticalAlignment="Center">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock" >
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=DestinationFolderList.Count}" Value="0">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </StackPanel>
+                    <ListBox ItemsSource="{Binding DestinationFolderList}" BorderThickness="0" SelectionMode="Single">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <DockPanel LastChildFill="True">
