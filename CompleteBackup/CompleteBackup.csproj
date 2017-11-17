@@ -113,6 +113,8 @@
     <Compile Include="ViewModels\ActionRestore\ICommands\OpenSelectRestoreItemsWindowICommand.cs" />
     <Compile Include="ViewModels\ActionRestore\RestoreItemsSelectionViewModel.cs" />
     <Compile Include="ViewModels\ActionRestore\ICommands\RestoreFolderSelectionICommand.cs" />
+    <Compile Include="ViewModels\MainWindow\ICommands\ResumeBackupProfileICommand.cs" />
+    <Compile Include="ViewModels\MainWindow\ICommands\SleepBackupProfileICommand.cs" />
     <Compile Include="ViewModels\ProfileSetting\EditBackupProfileWindowViewModel.cs" />
     <Compile Include="ViewModels\ProfileSetting\CreateBackupProfileWindowViewModel.cs" />
     <Compile Include="ViewModels\ExtendedControls\ICommnd\ClearLogConsoleICommand.cs" />

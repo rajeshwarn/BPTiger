@@ -12,6 +12,12 @@ using System.Windows;
 
 namespace CompleteBackup.DataRepository
 {
+    public class BackupPauseData
+    {
+        public string Name { get; set; }
+        public int Hours { get; set; }
+    }
+
     class BackupProjectRepository : ObservableObject
     {
         static public BackupProjectRepository Instance { get; private set; } = new BackupProjectRepository();
@@ -19,6 +25,18 @@ namespace CompleteBackup.DataRepository
         {
            LoadProjects();
         }
+
+        public List<BackupPauseData> BackupPauseDataList { get; set; } = new List<BackupPauseData>()
+        {
+            new BackupPauseData() { Name = "1 Hour", Hours = 1 },
+            new BackupPauseData() { Name = "2 Hours", Hours = 2 },
+            new BackupPauseData() { Name = "3 Hours", Hours = 3 },
+            new BackupPauseData() { Name = "6 Hours", Hours = 6 },
+            new BackupPauseData() { Name = "1 Days", Hours = 24 },
+            new BackupPauseData() { Name = "2 Days", Hours = 24 * 2 },
+            new BackupPauseData() { Name = "3 Days", Hours = 24 * 3 },
+            new BackupPauseData() { Name = "1 Week", Hours = 24 * 7 },
+        };
 
         private ObservableCollection<BackupProjectData> BackupProjectList { get; set; }// = new ObservableCollection<BackupProjectData>();
 

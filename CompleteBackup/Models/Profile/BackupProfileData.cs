@@ -151,6 +151,36 @@ namespace CompleteBackup.Models.Backup.Profile
             //RestoreAlertList.Add(new BackupPerfectAlertData { Name = "Invalid restore file alert" });
         }
 
+        public bool IsBackupSleep { get { return DateTime.Compare(WateUpFromSleepTime, DateTime.Now) > 0; } }
+
+        public DateTime WateUpFromSleepTime { get; set; }
+
+        public void SleepBackup(int hours)
+        {
+            DateTime timeNow = DateTime.Now;
+
+            WateUpFromSleepTime = timeNow.AddHours(hours);
+            //if (hours <= 24)
+            //{
+            //    WateUpFromSleepTime = TimeNow + new TimeSpan(0, hours, 0, 0);
+            //}
+            //else
+            //{
+            //    int days = hours / 24;
+            //    WateUpFromSleepTime = TimeNow + new TimeSpan(days, hours - days * 24, 0, 0);
+            //}
+
+            OnPropertyChanged("IsBackupSleep");
+
+
+            Application.Current.Dispatcher.Invoke(new Action(() =>
+            {
+                BackupAlertList.Add(new BackupPerfectAlertData() { Name = $"Back up is sleeping, wakup time {WateUpFromSleepTime}" });
+            }));
+
+        }
+
+
         [XmlIgnore]
         public ObservableCollection<BackupPerfectAlertData> BackupAlertList = new ObservableCollection<BackupPerfectAlertData>();
 

@@ -81,8 +81,8 @@
 
                 <RibbonGroup Header="Profile">
                     <RibbonSplitButton LargeImageSource="/Resources/Icons/Ribbon/Profile.ico" Label="Profile">
-                        <RibbonGallery SelectedValue="{Binding Project.SelectedBackupProject.CurrentBackupProfile}">
-                            <RibbonGalleryCategory ItemsSource="{Binding Project.SelectedBackupProject.BackupProfileList}">
+                        <RibbonGallery SelectedValue="{Binding ProjectData.CurrentBackupProfile}">
+                            <RibbonGalleryCategory ItemsSource="{Binding ProjectData.BackupProfileList}">
                                 <RibbonGalleryCategory.ItemTemplate>
                                     <DataTemplate>
                                         <RibbonButton LargeImageSource="/Resources/Icons/Ribbon/Stop.ico" Label="{Binding Name}"
@@ -96,7 +96,7 @@
                 </RibbonGroup>
 
                 <!--<RibbonGroup Header="Profiles">
-                    <ListView BorderThickness="0" ItemsSource="{Binding Project.SelectedBackupProject.BackupProfileList, Mode=OneWay}"
+                    <ListView BorderThickness="0" ItemsSource="{Binding Repository.SelectedBackupProject.BackupProfileList, Mode=OneWay}"
                              >
                         <ListView.ContextMenu>
                             <ContextMenu>
@@ -124,7 +124,7 @@
 
             <RibbonTab Header="Backup" KeyTip="B" >
                 <RibbonGroup Header="Backup items and destination">
-                    <RibbonMenuButton LargeImageSource="/Resources/Icons/BackupFolderSetting.ico" Label="Settings" KeyTip="S">
+                    <RibbonMenuButton LargeImageSource="/Resources/Icons/BackupFolderSetting.ico" Label="Folders" KeyTip="F">
                         <RibbonMenuItem ImageSource="/Resources/Icons/BackupItems.ico" Header="Items to backup" KeyTip="B"
                                         Command="{Binding OpenSelectBackupItemsWindowCommand}"
                                         CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>
@@ -189,6 +189,47 @@
                                   CommandParameter="{Binding ProjectData.CurrentBackupProfile}">
                     </RibbonButton>
                 </RibbonGroup>
+
+
+                <RibbonGroup Header="Setting">
+                    <!--Backup Sleep-->
+                    <RibbonSplitButton LargeImageSource="/Resources/Icons/Ribbon/Timer_Simple.ico"
+                        Command="{Binding ResumeBackupProfileCommand}" CommandParameter="{Binding }">
+                        <RibbonGallery>
+                            <RibbonGalleryCategory ItemsSource="{Binding Repository.BackupPauseDataList}">
+                                <RibbonGalleryCategory.ItemTemplate>
+                                    <DataTemplate>
+                                        <RibbonButton SmallImageSource="/Resources/Icons/Ribbon/Timer_Simple.ico" Label="{Binding Name}"
+                                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.SleepBackupProfileCommand}"
+                                            CommandParameter="{Binding }"/>
+                                    </DataTemplate>
+                                </RibbonGalleryCategory.ItemTemplate>
+                            </RibbonGalleryCategory>
+                        </RibbonGallery>
+                        <RibbonSplitButton.Style>
+                            <Style TargetType="RibbonSplitButton" >
+                                <Setter Property="Label" Value="Sleep"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ProjectData.CurrentBackupProfile.IsBackupSleep}" Value="true">
+                                        <Setter Property="Label" Value="Wakeup"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </RibbonSplitButton.Style>
+                    </RibbonSplitButton>
+
+
+                    <RibbonMenuButton LargeImageSource="/Resources/Icons/BackupFolderSetting.ico" Label="Settings" KeyTip="S">
+                        <RibbonMenuItem ImageSource="/Resources/Icons/BackupItems.ico" Header="Items to backup" KeyTip="B"
+                                        Command="{Binding OpenSelectBackupItemsWindowCommand}"
+                                        CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>
+                        <RibbonMenuItem ImageSource="/Resources/Icons/DestinationDrive.ico" Header="Destination" KeyTip="R"
+                                        Command="{Binding SelectTargetBackupFolderNameCommand}"
+                                        CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>
+                    </RibbonMenuButton>
+                    <RibbonButton SmallImageSource="/Resources/Icons/BackupFolderSetting.ico" Label="Policy" KeyTip="P" />
+                </RibbonGroup>
+                
                 
                 <RibbonGroup Visibility="Collapsed">
                     <RibbonGroup.Style>

@@ -29,7 +29,9 @@ namespace CompleteBackup.ViewModels.MainWindow
         public ICommand StopBackupCommand { get; private set; } = new StopBackupICommand<object>();
 
         public ICommand SelectBackupProfileCommand { get; private set; } = new SelectBackupProfileICommand<object>();
-        
+        public ICommand SleepBackupProfileCommand { get; private set; } = new SleepBackupProfileICommand<object>();
+        public ICommand ResumeBackupProfileCommand { get; private set; } = new ResumeBackupProfileICommand<object>();
+
 
         public ICommand RestoreBackupCommand { get; private set; } = new RestoreBackupICommand<object>();
 
@@ -59,7 +61,7 @@ namespace CompleteBackup.ViewModels.MainWindow
 
 
 
-        public BackupProjectRepository Project { get; set; } = BackupProjectRepository.Instance;
+        public BackupProjectRepository Repository { get; set; } = BackupProjectRepository.Instance;
         public BackupProjectData ProjectData { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject;
 
 
