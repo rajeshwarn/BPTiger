@@ -160,24 +160,13 @@ namespace CompleteBackup.Models.Backup.Profile
             DateTime timeNow = DateTime.Now;
 
             WateUpFromSleepTime = timeNow.AddHours(hours);
-            //if (hours <= 24)
-            //{
-            //    WateUpFromSleepTime = TimeNow + new TimeSpan(0, hours, 0, 0);
-            //}
-            //else
-            //{
-            //    int days = hours / 24;
-            //    WateUpFromSleepTime = TimeNow + new TimeSpan(days, hours - days * 24, 0, 0);
-            //}
 
             OnPropertyChanged("IsBackupSleep");
-
 
             Application.Current.Dispatcher.Invoke(new Action(() =>
             {
                 BackupAlertList.Add(new BackupPerfectAlertData() { Name = $"Back up is sleeping, wakup time {WateUpFromSleepTime}" });
             }));
-
         }
 
 
