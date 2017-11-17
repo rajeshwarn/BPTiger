@@ -44,7 +44,10 @@ namespace CompleteBackup.ViewModels
         {
             UpdateCurrentProfileChange();
         }
-                
+
+        public abstract bool Enabled { get; }
+
+
         public abstract ICommand OpenItemSelectWindowCommand { get; }
         public abstract ICommand SelectTargetFolderNameCommand { get; }
 
@@ -56,6 +59,7 @@ namespace CompleteBackup.ViewModels
 
         public void UpdateCurrentProfileChange()
         {
+            OnPropertyChanged("Enabled");
             OnPropertyChanged("DestinationFolderName");
             OnPropertyChanged("SelectionFolderList");
             OnPropertyChanged("SelectionFolderListNumberOfFiles");

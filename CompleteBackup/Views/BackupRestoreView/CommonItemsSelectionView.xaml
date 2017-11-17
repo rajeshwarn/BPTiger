@@ -53,7 +53,7 @@
         </Grid.RowDefinitions>
 
         <!--//Alert List-->
-        <Border Grid.Column="0" Grid.Row="0" BorderThickness="1" Background="LightYellow" CornerRadius="4" BorderBrush="Maroon" Margin="4" Padding="0">
+        <Border Grid.Column="0" Grid.Row="0" BorderThickness="1" Background="LightYellow" CornerRadius="4" BorderBrush="Maroon" Margin="8,8,8,16" Padding="0">
             <Border.Effect>
                 <DropShadowEffect ShadowDepth="3"/>
             </Border.Effect>
@@ -226,6 +226,20 @@
                     </Button>
                 </StackPanel>-->
             </StackPanel>
+            <GroupBox.Style>
+                <Style TargetType="GroupBox">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Enabled}" Value="False">
+                            <Setter Property="IsEnabled" Value="False"/>
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <BlurEffect/>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </GroupBox.Style>
         </GroupBox>
         
         <!--Destination-->
@@ -268,8 +282,23 @@
                     </TextBox.Style>
                 </TextBox>
             </DockPanel>
+            <GroupBox.Style>
+                <Style TargetType="GroupBox">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Enabled}" Value="False">
+                            <Setter Property="IsEnabled" Value="False"/>
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <BlurEffect/>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </GroupBox.Style>
         </GroupBox>
         <!--This text box is to trigger collection change event to view model-->
-        <TextBox Text="{Binding ProjectData.CurrentBackupProfile.Name}" Visibility="Collapsed" TextChanged="TextBox_TextChanged"/>
+        <TextBox Text="{Binding ProjectData.CurrentBackupProfile.Name}" Visibility="Collapsed" TextChanged="TextBox_TextChanged">
+        </TextBox>
     </Grid>
 </UserControl>

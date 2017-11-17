@@ -25,6 +25,8 @@ namespace CompleteBackup.ViewModels
 {
     public class RestoreItemsSelectionViewModel : GenericBackupItemsSelectionViewModel
     {
+        public override bool Enabled { get { return ProjectData.CurrentBackupProfile.LastBackupDateTime != null; } }
+
         public override ICommand OpenItemSelectWindowCommand { get; } = new OpenSelectRestoreItemsWindowICommand<object>();
         public override ICommand SelectTargetFolderNameCommand { get; } = new SelectTargetRestoreFolderNameICommand<object>();
 
