@@ -52,18 +52,49 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <ListBox Grid.Column="0" Grid.Row="0"
-                 ItemsSource="{Binding BackupAlertList}" BorderThickness="1" Background="LightYellow">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Grid.Column="0" Orientation="Horizontal">
-                        <Image Source="/Resources/Icons/Alert.ico" Height="24" Margin="0,0,8,0"/>
-                        <TextBlock x:Name="txAlertName" Text="{Binding Name}" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <!--//Alert List-->
+        <Border Grid.Column="0" Grid.Row="0" BorderThickness="1" Background="LightYellow" CornerRadius="4" BorderBrush="Maroon" Margin="4" Padding="0">
+            <Border.Effect>
+                <DropShadowEffect ShadowDepth="3"/>
+            </Border.Effect>
+            <DockPanel LastChildFill="True">
+                <ListBox DockPanel.Dock="Right" ItemsSource="{Binding BackupAlertList}" BorderThickness="0" Background="Transparent" VerticalAlignment="Center">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/Resources/Icons/FolderTreeView/LatestItem.ico" Height="16" Margin="0,0,0,0" ToolTip="Remove alert from list"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
 
+                <ListBox ItemsSource="{Binding BackupAlertList}" BorderThickness="0" Background="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Expander IsExpanded="False">
+                                <Expander.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="/Resources/Icons/Alert.ico" Height="24" Margin="0,0,8,0"/>
+                                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Expander.Header>
+                                <TextBlock Text="{Binding Description}" TextWrapping="Wrap" FontStyle="Italic" Margin="0,2,0,0"/>
+                            </Expander>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+            <Border.Style>
+                <Style TargetType="Border" >
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=BackupAlertList.Count}" Value="0">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+        </Border>
 
         <GroupBox Grid.Column="0" Grid.Row="1">
             <GroupBox.Header>
@@ -108,7 +139,7 @@
                             <ListBox ItemsSource="{Binding SelectionFolderList}" BorderThickness="0" HorizontalContentAlignment="Right">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                        <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="{Binding NumberOfFiles, StringFormat={}{0:#,#,#,#,##0}}" Margin="0,0,4,0"/>
                                             <TextBlock Text="Files"/>
                                         </StackPanel>

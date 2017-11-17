@@ -59,7 +59,8 @@ namespace CompleteBackup.Models.Profile
             {
                 if (!storage.DirectoryExists(profile.TargetBackupFolder))
                 { 
-                    profile.BackupAlertList.Add(new BackupPerfectAlertData() { Name = $"Target backup directory is not available: {profile.TargetBackupFolder}" });
+                    profile.BackupAlertList.Add(new BackupPerfectAlertData() { Name = $"The target backup directory is not available: {profile.TargetBackupFolder}",
+                    Description = "The target backp directory is the destination directory where the backup files will be stored, it is recomended to select an empty directory"});
                 }
             }
             else
