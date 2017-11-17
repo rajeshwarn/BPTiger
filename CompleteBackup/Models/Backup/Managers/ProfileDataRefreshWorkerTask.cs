@@ -81,11 +81,11 @@ namespace CompleteBackup.Models.Profile
             }
 
 
-            if (profile.TargetBackupFolder != null && profile.TargetBackupFolder != string.Empty)
+            if (profile.IsValidFolderName(profile.GetTargetBackupFolder()))
             {
-                if (!storage.DirectoryExists(profile.TargetBackupFolder))
+                if (!storage.DirectoryExists(profile.GetTargetBackupFolder()))
                 {
-                    AddBackupAlert(profile, (new BackupPerfectAlertData() { Name = $"Destination backup directory is not available: {profile.TargetBackupFolder}",
+                    AddBackupAlert(profile, (new BackupPerfectAlertData() { Name = $"Destination backup directory is not available: {profile.GetTargetBackupFolder()}",
                         Description = "Destination backp directory is the destination directory where the backup files will be stored, it is recomended to select an empty directory"}));
                 }
             }
@@ -108,11 +108,11 @@ namespace CompleteBackup.Models.Profile
                 }
 
 
-                if (profile.TargetRestoreFolder != null && profile.TargetRestoreFolder != string.Empty)
+                if (profile.IsValidFolderName(profile.GetTargetRestoreFolder()))
                 {
-                    if (!storage.DirectoryExists(profile.TargetRestoreFolder))
+                    if (!storage.DirectoryExists(profile.GetTargetRestoreFolder()))
                     {
-                        AddRestoreAlert(profile, (new BackupPerfectAlertData() { Name = $"Restore directory is not available {profile.TargetRestoreFolder}" }));
+                        AddRestoreAlert(profile, (new BackupPerfectAlertData() { Name = $"Restore directory is not available {profile.GetTargetRestoreFolder()}" }));
                     }
                 }
                 else
@@ -195,14 +195,14 @@ namespace CompleteBackup.Models.Profile
                     }
 
 
-                    if (profile.TargetBackupFolder != null)
+                    if (profile.IsValidFolderName(profile.GetTargetBackupFolder()))
                     {
                         //last backup time
                         DateTime? lastTime = null;
                         var lastSet = BackupBase.GetLastBackupSetName(profile);
                         if (lastSet != null)
                         {
-                            var sessionHistory = BackupSessionHistory.LoadHistory(profile.TargetBackupFolder, lastSet);
+                            var sessionHistory = BackupSessionHistory.LoadHistory(profile.GetTargetBackupFolder(), lastSet);
                             lastTime = sessionHistory?.TimeStamp;
                             Application.Current.Dispatcher.Invoke(new Action(() =>
                             {
@@ -211,11 +211,11 @@ namespace CompleteBackup.Models.Profile
                         }
                     }
 
-                    if (profile.TargetBackupFolder != null)
+                    if (profile.IsValidFolderName(profile.GetTargetBackupFolder()))
                     {
                         profile.BackupTargetDiskSizeNumber = 0;
                         //Target disk size
-                        string rootDrive = System.IO.Path.GetPathRoot(profile.TargetBackupFolder);
+                        string rootDrive = System.IO.Path.GetPathRoot(profile.GetTargetBackupFolder());
                         foreach (System.IO.DriveInfo drive in System.IO.DriveInfo.GetDrives().Where(d => d.ToString().Contains(rootDrive)))
                         {
                             if (drive.IsReady)
@@ -232,7 +232,7 @@ namespace CompleteBackup.Models.Profile
 
                         profile.BackupTargetUsedSizeNumber = 0;
                         //Target used Space
-                        profile.BackupTargetUsedSizeNumber = storage.GetSizeOfFiles(profile.TargetBackupFolder);
+                        profile.BackupTargetUsedSizeNumber = storage.GetSizeOfFiles(profile.GetTargetBackupFolder());
                         Application.Current.Dispatcher.Invoke(new Action(() =>
                         {
                             profile.BackupTargetUsedSize = FileFolderSizeHelper.GetNumberSizeString(profile.BackupTargetUsedSizeNumber);

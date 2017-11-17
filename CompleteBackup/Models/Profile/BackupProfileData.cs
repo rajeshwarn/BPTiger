@@ -127,9 +127,9 @@ namespace CompleteBackup.Models.Backup.Profile
 
         public void Init()
         {
-            if (TargetRestoreFolder == null)
+            if (GetTargetRestoreFolder() == null)
             {
-                TargetRestoreFolder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                TargetRestoreFolderList.Add(new FolderData() { IsFolder = true, IsAvailable = true, Path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) });
             }
 
             UpdateProfileProperties();
@@ -213,12 +213,45 @@ namespace CompleteBackup.Models.Backup.Profile
         IStorageInterface m_IStorage = new FileSystemStorage();
         public IStorageInterface GetStorageInterface() { return m_IStorage; }
 
-        private string m_TargetBackupFolder;
-        public string TargetBackupFolder { get { return m_TargetBackupFolder; } set { m_TargetBackupFolder = value; OnPropertyChanged(); } }
+        //Backup folders
+        //private string m_TargetBackupFolder;
+        //public string TargetBackupFolder { get { return m_TargetBackupFolder; } set { m_TargetBackupFolder = value; OnPropertyChanged(); } }
+        public ObservableCollection<FolderData> TargetBackupFolderList { get; set; } = new ObservableCollection<FolderData>();
+        public string GetTargetBackupFolder()
+        {
+            string path = null;
+            var folder = TargetBackupFolderList.FirstOrDefault();
+            if (folder != null)
+            {
+                path = folder.Path;
+            }
+
+            return path;
+        }
+
+        //Restore folders
+        //        private string m_TargetRestoreFolder;
+        //        public string TargetRestoreFolder { get { return m_TargetRestoreFolder; } set { m_TargetRestoreFolder = value; OnPropertyChanged(); } }
+        public ObservableCollection<FolderData> TargetRestoreFolderList { get; set; } = new ObservableCollection<FolderData>();
+
+        public string GetTargetRestoreFolder()
+        {
+            string path = null;
+            var folder = TargetRestoreFolderList.FirstOrDefault();
+            if (folder != null)
+            {
+                path = folder.Path;
+            }
+
+            return path;
+        }
+
+        public bool IsValidFolderName(string path)
+        {
+            return (path != null) && (path != string.Empty);
+        }
 
 
-        private string m_TargetRestoreFolder;
-        public string TargetRestoreFolder { get { return m_TargetRestoreFolder; } set { m_TargetRestoreFolder = value; OnPropertyChanged(); } }
 
         public ObservableCollection<FolderData> BackupFolderList { get; set; } = new ObservableCollection<FolderData>();
 
@@ -255,10 +288,10 @@ namespace CompleteBackup.Models.Backup.Profile
         public ObservableCollection<FolderData> RestoreFolderList { get; set; } = new ObservableCollection<FolderData>();
 
         [XmlIgnore]
-        public bool IsValidProfileFolder { get { return GetProfileTargetFolderStatus(m_TargetBackupFolder) != ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile; } }
+        public bool IsValidProfileFolder { get { return GetProfileTargetFolderStatus(GetTargetBackupFolder()) != ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile; } }
 
         [XmlIgnore]
-        public ProfileTargetFolderStatusEnum ProfileTargetFolderStatus { get { return GetProfileTargetFolderStatus(m_TargetBackupFolder); } }
+        public ProfileTargetFolderStatusEnum ProfileTargetFolderStatus { get { return GetProfileTargetFolderStatus(GetTargetBackupFolder()); } }
 
 
         [XmlIgnore]

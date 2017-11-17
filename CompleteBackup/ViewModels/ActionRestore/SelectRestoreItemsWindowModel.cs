@@ -90,7 +90,7 @@ namespace CompleteBackup.ViewModels
         protected override HistoryTypeEnum? GetFolderHistoryType(string path)
         {
             HistoryTypeEnum? historyType = null;
-            string folder = m_IStorage.Combine(m_IStorage.Combine(ProjectData.CurrentBackupProfile.TargetBackupFolder, m_LastSetPathCache), path);
+            string folder = m_IStorage.Combine(m_IStorage.Combine(ProjectData.CurrentBackupProfile.GetTargetBackupFolder(), m_LastSetPathCache), path);
 
             if (!m_IStorage.DirectoryExists(folder))
             {
@@ -118,7 +118,7 @@ namespace CompleteBackup.ViewModels
                     int iSessionIndex = 1;
                     foreach (var setPath in backSetList)
                     {
-                        var sessionHistory = BackupSessionHistory.LoadHistory(profile.TargetBackupFolder, setPath);
+                        var sessionHistory = BackupSessionHistory.LoadHistory(profile.GetTargetBackupFolder(), setPath);
                         if (sessionHistory != null)
                         {
                             sessionHistory.SessionHistoryIndex = iSessionIndex;
@@ -126,7 +126,7 @@ namespace CompleteBackup.ViewModels
 
                             var folderItem = item as FolderMenuItem;
 
-                            var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, setPath);
+                            var lastSetPath = m_IStorage.Combine(profile.GetTargetBackupFolder(), setPath);
                             var lastSetPath2 = m_IStorage.Combine(lastSetPath, folderItem.RelativePath);
 
                             //if (folderItem.ChildFolderMenuItems.Count() == 0)
@@ -154,7 +154,7 @@ namespace CompleteBackup.ViewModels
                 case BackupTypeEnum.Snapshot:
                 case BackupTypeEnum.Incremental:
                     {
-                        var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, m_LastSetPathCache);
+                        var lastSetPath = m_IStorage.Combine(profile.GetTargetBackupFolder(), m_LastSetPathCache);
 
                         foreach (var item in profile.BackupFolderList.Where(i => i.IsAvailable))
                         {
@@ -178,12 +178,12 @@ namespace CompleteBackup.ViewModels
                         var backSetList = BackupBase.GetBackupSetList(profile);
                         foreach (var setPath in backSetList.Where(p => p != m_LastSetPathCache))
                         {
-                            m_BackupSetPathCacheList.Add(m_IStorage.Combine(profile.TargetBackupFolder, setPath));
+                            m_BackupSetPathCacheList.Add(m_IStorage.Combine(profile.GetTargetBackupFolder(), setPath));
                         }
 
                         m_RootFolderMenuItemTree.ParentItem = null;
                         m_RootFolderMenuItemTree.IsFolder = true;
-                        m_RootFolderMenuItemTree.Path = profile.TargetBackupFolder;
+                        m_RootFolderMenuItemTree.Path = profile.GetTargetBackupFolder();
                         m_RootFolderMenuItemTree.RelativePath = string.Empty;
                         m_RootFolderMenuItemTree.Name = "BACKUP";
 
@@ -191,7 +191,7 @@ namespace CompleteBackup.ViewModels
                         foreach (var setPath in backSetList)
                         {
                             iSessionIndex++;
-                            var sessionHistory = BackupSessionHistory.LoadHistory(profile.TargetBackupFolder, setPath);
+                            var sessionHistory = BackupSessionHistory.LoadHistory(profile.GetTargetBackupFolder(), setPath);
                             if (sessionHistory == null)
                             {
                                 Trace.WriteLine("Error, Select Restore Differential Items, History is null");
@@ -200,7 +200,7 @@ namespace CompleteBackup.ViewModels
                             {
                                 sessionHistory.SessionHistoryIndex = iSessionIndex;
 
-                                var lastSetPath = m_IStorage.Combine(profile.TargetBackupFolder, setPath);
+                                var lastSetPath = m_IStorage.Combine(profile.GetTargetBackupFolder(), setPath);
 
                                 m_RootFolderMenuItemTree.Path = lastSetPath;
 

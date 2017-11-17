@@ -233,7 +233,7 @@
                             <Setter Property="IsEnabled" Value="False"/>
                             <Setter Property="Effect">
                                 <Setter.Value>
-                                    <BlurEffect/>
+                                    <BlurEffect Radius="1"/>
                                 </Setter.Value>
                             </Setter>
                         </DataTrigger>
@@ -250,9 +250,57 @@
             <DockPanel LastChildFill="True">
                 <Button DockPanel.Dock="Right" Content=" ... " 
                         Command="{Binding SelectTargetFolderNameCommand}"
-                        CommandParameter="{Binding ProjectData.CurrentBackupProfile}" Margin="0,12,4,4" VerticalAlignment="Center">
+                        CommandParameter="{Binding ProjectData.CurrentBackupProfile}" Margin="4" VerticalAlignment="Center">
                 </Button>
-                <TextBox x:Name="txDestinationFolder"
+                <Grid Margin="4">
+                    <TextBlock Text="Please select a destination folder" FontStyle="Italic" FontWeight="SemiBold" Foreground="Gray">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock" >
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=DestinationFolderList.Count}" Value="0">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <ListBox ItemsSource="{Binding DestinationFolderList}" BorderThickness="1" SelectionMode="Single">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <DockPanel LastChildFill="True">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Width="16" Source="{Binding Image}"/>
+                                        <TextBlock Text="{Binding Path}"  Background="Transparent">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsAvailable}" Value="False">
+                                                            <Setter Property="Foreground" Value="Red"/>
+                                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DockPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.Style>
+                            <Style TargetType="ListBox" >
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=DestinationFolderList.Count}" Value="0">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.Style>
+                    </ListBox>
+                </Grid>
+
+                <!--<TextBox x:Name="txDestinationFolder"
                          Validation.ErrorTemplate="{StaticResource validationTargetFolderErrorTemplate}" Margin="4,16,4,8">
                     <TextBox.Text>
                         <Binding Path="DestinationFolderName"
@@ -280,7 +328,7 @@
                             </Style.Triggers>
                         </Style>
                     </TextBox.Style>
-                </TextBox>
+                </TextBox>-->
             </DockPanel>
             <GroupBox.Style>
                 <Style TargetType="GroupBox">
@@ -289,7 +337,7 @@
                             <Setter Property="IsEnabled" Value="False"/>
                             <Setter Property="Effect">
                                 <Setter.Value>
-                                    <BlurEffect/>
+                                    <BlurEffect Radius="1"/>
                                 </Setter.Value>
                             </Setter>
                         </DataTrigger>

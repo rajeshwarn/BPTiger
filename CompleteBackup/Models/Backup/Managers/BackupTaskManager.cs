@@ -2,6 +2,7 @@
 using CompleteBackup.Models.Backup.Profile;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -195,8 +196,10 @@ namespace CompleteBackup.Models.Profile
 
         public void StartBackup(BackupProfileData profile, bool bFullBackupScan)
         {
-            if (profile.TargetBackupFolder == null)
+            if (!profile.IsValidFolderName(profile.GetTargetBackupFolder()))
             {
+                Debug.Assert(profile.IsValidFolderName(profile.GetTargetBackupFolder()), "Assert - Target backup destination is not valid");
+
                 return;
             }
 

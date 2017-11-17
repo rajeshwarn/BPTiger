@@ -60,8 +60,8 @@ namespace CompleteBackup.ViewModels
         public void UpdateCurrentProfileChange()
         {
             OnPropertyChanged("Enabled");
-            OnPropertyChanged("DestinationFolderName");
             OnPropertyChanged("SelectionFolderList");
+            OnPropertyChanged("DestinationFolderList");
             OnPropertyChanged("SelectionFolderListNumberOfFiles");
             OnPropertyChanged("SelectionTotalFolderListSize");
 
@@ -73,7 +73,7 @@ namespace CompleteBackup.ViewModels
 
         public abstract ObservableCollection<BackupPerfectAlertData> BackupAlertList { get; }
         public abstract ObservableCollection<FolderData> SelectionFolderList { get; }
-        public abstract string DestinationFolderName { get; set; }
+        public abstract ObservableCollection<FolderData> DestinationFolderList { get; }
 
         public abstract long? SelectionFolderListNumberOfFiles { get; }
         public abstract long? SelectionTotalFolderListSize { get; }        

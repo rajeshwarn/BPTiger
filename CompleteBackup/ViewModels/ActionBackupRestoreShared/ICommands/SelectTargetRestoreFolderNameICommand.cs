@@ -34,7 +34,11 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
 
         void SaveRestoreFolder(BackupProfileData profile, string path)
         {
-            profile.TargetRestoreFolder = path;
+
+            //TODO - only one destination folder is supported right now
+            profile.TargetRestoreFolderList.Clear();
+            var folderData = new FolderData() { IsFolder = true, IsAvailable = true, Path = path};
+            profile.TargetRestoreFolderList.Add(folderData);
 
             BackupProjectRepository.Instance.SaveProject();
         }

@@ -79,7 +79,7 @@ namespace CompleteBackup.Models.Backup.Storage
 
         public bool DirectoryExists(string path)
         {
-            if (path == null)
+            if ((path == null) || (path == string.Empty))
             {
                 return false;
             }

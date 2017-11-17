@@ -33,9 +33,8 @@ namespace CompleteBackup.ViewModels
         public override ObservableCollection<BackupPerfectAlertData> BackupAlertList { get { return BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile?.BackupAlertList; } }
 
         public override ObservableCollection<FolderData> SelectionFolderList { get { return BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile?.BackupFolderList; } }
+        public override ObservableCollection<FolderData> DestinationFolderList { get { return ProjectData?.CurrentBackupProfile.TargetBackupFolderList; } }
 
-        public override string DestinationFolderName { get { return BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile?.TargetBackupFolder; }
-            set { if (BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile != null) { BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile.TargetBackupFolder = value; OnPropertyChanged(); } } }
         public override long? SelectionFolderListNumberOfFiles { get { return ProjectData.CurrentBackupProfile?.BackupSourceFilesNumber; } }
         public override long? SelectionTotalFolderListSize { get { return ProjectData.CurrentBackupProfile?.BackupSourceFoldersSize; } }
 

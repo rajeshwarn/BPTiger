@@ -32,7 +32,7 @@ namespace CompleteBackup.Models.backup
             m_TimeStamp = DateTime.Now;
             m_Profile = profile;
             m_SourceBackupPathList = profile.BackupFolderList.ToList();//.Where(i => i.IsAvailable).ToList();
-            m_TargetBackupPath = profile.TargetBackupFolder;
+            m_TargetBackupPath = profile.GetTargetBackupFolder();
 
             m_IStorage = profile.GetStorageInterface();
             m_Logger = profile.Logger;
@@ -128,7 +128,7 @@ namespace CompleteBackup.Models.backup
             var backupProfileList = new List<string>();
             var storage = profile.GetStorageInterface();
 
-            string[] setEntries = storage.GetDirectories(profile.TargetBackupFolder);            
+            string[] setEntries = storage.GetDirectories(profile.GetTargetBackupFolder());            
             foreach (var entry in setEntries.Where(s => storage.GetFileName(s).StartsWith(profile.BackupSignature)))
             {
                 backupProfileList.Add(storage.GetFileName(entry));
@@ -141,7 +141,7 @@ namespace CompleteBackup.Models.backup
             var backupProfileList = new List<string>();
             var storage = profile.GetStorageInterface();
 
-            string[] setEntries = storage.GetDirectories(profile.TargetBackupFolder);
+            string[] setEntries = storage.GetDirectories(profile.GetTargetBackupFolder());
             foreach (var entry in setEntries.Where(s => storage.GetFileName(s).StartsWith(profile.BackupSignature)))
             {
                 backupProfileList.Add(storage.GetFileName(entry));

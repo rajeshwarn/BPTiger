@@ -34,7 +34,10 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
 
         void SaveTargetFolder(BackupProfileData profile, string path)
         {
-            profile.TargetBackupFolder = path;
+            //TODO - only one destination folder is supported right now
+            profile.TargetBackupFolderList.Clear();
+            var folderData = new FolderData() { IsFolder = true, IsAvailable = true, Path = path };
+            profile.TargetBackupFolderList.Add(folderData);
 
             BackupProjectRepository.Instance.SaveProject();
         }
@@ -114,6 +117,7 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
                                             default:
                                                 {
                                                     SaveTargetFolder(profile, fileDialog.SelectedPath);
+                                                    bRetry = false;
                                                 }
                                                 break;
                                         }
