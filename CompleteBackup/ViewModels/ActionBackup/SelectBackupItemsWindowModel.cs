@@ -101,8 +101,8 @@ namespace CompleteBackup.ViewModels
 
             //Add selected folders to tree list
             var itemList = new List<FolderMenuItem>();
-            Application.Current.Dispatcher.Invoke(new Action(() =>
-            {
+    //        Application.Current.Dispatcher.Invoke(new Action(() =>
+    //        {
                 foreach (var folder in SelectedItemList)
                 {
                     string pr = Directory.GetDirectoryRoot(folder.Path);
@@ -121,7 +121,7 @@ namespace CompleteBackup.ViewModels
                         }
                     }
                 }
-            }));
+ //           }));
 
             //After we added the folders, we need update selected folders root items to mark the correct selection
             foreach (var item in itemList)

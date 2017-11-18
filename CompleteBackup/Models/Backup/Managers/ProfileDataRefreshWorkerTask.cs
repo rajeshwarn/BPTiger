@@ -87,6 +87,8 @@ namespace CompleteBackup.Models.Profile
                 {
                     AddBackupAlert(profile, (new BackupPerfectAlertData() { Name = $"Destination backup directory is not available: {profile.GetTargetBackupFolder()}",
                         Description = "Destination backp directory is the destination directory where the backup files will be stored, it is recomended to select an empty directory"}));
+                    var folderData = profile.GetTargetBackupFolderData();
+                    folderData.IsAvailable = false;
                 }
             }
             else

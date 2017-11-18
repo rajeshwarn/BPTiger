@@ -264,7 +264,7 @@
                             </Style>
                         </StackPanel.Style>
                     </StackPanel>
-                    <StackPanel Orientation="Vertical" Margin="4,0,0,0">
+                    <StackPanel Orientation="Vertical">
                         <DockPanel LastChildFill="True">
                             <Button DockPanel.Dock="Right" Content=" ... " 
                                     Command="{Binding SelectTargetFolderNameCommand}"
@@ -275,7 +275,7 @@
                                     <DataTemplate>
                                         <DockPanel LastChildFill="True">
                                             <StackPanel Orientation="Horizontal">
-                                                <Image Width="16" Source="{Binding Image}"/>
+                                                <Image Width="16" Source="{Binding Image}" Margin="0,0,4,0"/>
                                                 <TextBlock Text="{Binding Path}"  Background="Transparent">
                                                     <TextBlock.Style>
                                                         <Style TargetType="TextBlock">
@@ -288,7 +288,18 @@
                                                         </Style>
                                                     </TextBlock.Style>
                                                 </TextBlock>
-                                            </StackPanel>
+                                            <TextBlock Text="  -  Item not available" FontWeight="SemiBold" FontStyle="Italic" Foreground="Gray">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsAvailable}" Value="True">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </StackPanel>
                                         </DockPanel>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>

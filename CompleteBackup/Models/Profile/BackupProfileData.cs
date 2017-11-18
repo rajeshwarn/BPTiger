@@ -253,13 +253,17 @@ namespace CompleteBackup.Models.Backup.Profile
         public string GetTargetBackupFolder()
         {
             string path = null;
-            var folder = TargetBackupFolderList.FirstOrDefault();
+            var folder = GetTargetBackupFolderData();
             if (folder != null)
             {
                 path = folder.Path;
             }
 
             return path;
+        }
+        public FolderData GetTargetBackupFolderData()
+        {
+            return TargetBackupFolderList.FirstOrDefault();
         }
 
         //Restore folders
