@@ -234,7 +234,7 @@ namespace CompleteBackup.Models.Profile
 
             if (profile.BackupFolderList.Count() == 0)
             {
-                BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.BackupItemListEmpty);
+                BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.BackupItemListEmpty);
             }
             else
             {
@@ -248,7 +248,7 @@ namespace CompleteBackup.Models.Profile
                         }
                         else
                         {
-                            BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.BackupItemListFolderNotAvailable, item.Path);
+                            BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.BackupItemListFolderNotAvailable, item.Path);
                         }
                     }
                     else
@@ -259,7 +259,7 @@ namespace CompleteBackup.Models.Profile
                         }
                         else
                         {
-                            BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.BackupItemListFileNotAvailable, item.Path);
+                            BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.BackupItemListFileNotAvailable, item.Path);
                         }
                     }
                 }
@@ -273,37 +273,37 @@ namespace CompleteBackup.Models.Profile
                     var folderData = profile.GetTargetBackupFolderData();
                     folderData.IsAvailable = false;
 
-                    BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.BackupDestinationFolderNotAvailable, folderData.Path);
+                    BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.BackupDestinationFolderNotAvailable, folderData.Path);
                 }
             }
             else
             {
-                BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.BackupDestinationFolderNotConfigured);
+                BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.BackupDestinationFolderNotConfigured);
             }
 
 
             //Restore
             if (profile.LastBackupDateTime == null)
             {
-                BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.BackupDestinationNotFound);
+                BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.BackupDestinationNotFound);
             }
             else
             {
                 if (profile.RestoreFolderList.Count == 0)
                 {
-                    BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.RestoreItemListEmpty);
+                    BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.RestoreItemListEmpty);
                 }
 
                 if (profile.IsValidFolderName(profile.GetTargetRestoreFolder()))
                 {
                     if (!storage.DirectoryExists(profile.GetTargetRestoreFolder()))
                     {
-                        BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.RestoreDestinationFolderNotAvailable, profile.GetTargetRestoreFolder());
+                        BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.RestoreDestinationFolderNotAvailable, profile.GetTargetRestoreFolder());
                     }
                 }
                 else
                 {
-                    BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.RestoreDestinationFolderNotConfigured);
+                    BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.RestoreDestinationFolderNotConfigured);
                 }
             }
         }

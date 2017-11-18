@@ -16,6 +16,11 @@ using System.Threading.Tasks;
 
 namespace CompleteBackup.Models.Backup
 {
+    public class FileSystemProfileBackupWatcherTimer : System.Timers.Timer
+    {
+        public BackupProfileData Profile;
+    }
+
     public class FileSystemWatcherWorkerTask : BackgroundWorker
     {
         private FileSystemWatcherWorkerTask() { }
