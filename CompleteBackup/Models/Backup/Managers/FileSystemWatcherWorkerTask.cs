@@ -1,6 +1,7 @@
 ﻿using CompleteBackup.DataRepository;
 using CompleteBackup.Models.Backup.Profile;
 using CompleteBackup.Models.Backup.Project;
+using CompleteBackup.Models.Profile;
 using CompleteBackup.Models.Utilities;
 using CompleteBackup.Views;
 using System;
@@ -22,10 +23,25 @@ namespace CompleteBackup.Models.Backup
         BackupProfileData m_Profile;
         BackupPerfectLogger m_Logger;
 
+        FileSystemProfileBackupWatcherTimer m_FileSystemWatcherBackupTimer;
 
+        public void UpdateFileSystemWatcherInterval(long wakeupIntervalSec)
+        {
+            if (m_FileSystemWatcherBackupTimer != null)
+            {
+                m_FileSystemWatcherBackupTimer.Interval = wakeupIntervalSec;
+            }
+        }
 
+        public static FileSystemWatcherWorkerTask StartNewInstance(BackupProfileData profile, long wakeupIntervalSec)
+        {
+            var task = new FileSystemWatcherWorkerTask(profile, wakeupIntervalSec);
+            task.RunWorkerAsync();
 
-        public FileSystemWatcherWorkerTask(BackupProfileData profile)
+            return task;
+        }
+
+        FileSystemWatcherWorkerTask(BackupProfileData profile, long wakeupIntervalSec)
         {
             m_Profile = profile;
             m_Logger = profile.Logger;
@@ -64,8 +80,16 @@ namespace CompleteBackup.Models.Backup
                 {
                 }
             };
-        }
-    
 
+            m_FileSystemWatcherBackupTimer = new FileSystemProfileBackupWatcherTimer()
+            {
+                Profile = profile,
+                Interval = wakeupIntervalSec,
+                AutoReset = true,
+                Enabled = true,
+            };
+
+            m_FileSystemWatcherBackupTimer.Elapsed += BackupTaskManager.OnFileSystemWatcherBackupTimerStartBackup;
+        }
     }
 }

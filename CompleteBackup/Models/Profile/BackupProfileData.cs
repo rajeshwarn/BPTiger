@@ -112,21 +112,7 @@ namespace CompleteBackup.Models.Backup.Profile
 
             UpdateProfileProperties();
 
-            FileSystemWatcherWorker = new FileSystemWatcherWorkerTask(this);
-            FileSystemWatcherWorker.RunWorkerAsync();
-
-            m_FileSystemWatcherBackupTimer = new FileSystemProfileBackupWatcherTimer()
-            {
-                Profile = this,
-                Interval = m_UpdateWatchItemsTimeSeconds * 1000,
-                AutoReset = true,
-                Enabled = true,
-            };
-
-            m_FileSystemWatcherBackupTimer.Elapsed += BackupTaskManager.OnFileSystemWatcherBackupTimerStartBackup;
-
-            //BackupAlertList.Add(new BackupPerfectAlertData { Name = "Invalid backup file alert" });
-            //RestoreAlertList.Add(new BackupPerfectAlertData { Name = "Invalid restore file alert" });
+            FileSystemWatcherWorker = FileSystemWatcherWorkerTask.StartNewInstance(this, m_UpdateWatchItemsTimeSeconds * 1000);
         }
 
         public bool IsBackupSleep { get { return DateTime.Compare(WateUpFromSleepTime, DateTime.Now) > 0; } }
@@ -168,8 +154,6 @@ namespace CompleteBackup.Models.Backup.Profile
         [XmlIgnore]
         public ObservableCollection<BackupPerfectAlertData> RestoreAlertList = new ObservableCollection<BackupPerfectAlertData>();
 
-        private FileSystemProfileBackupWatcherTimer m_FileSystemWatcherBackupTimer;
-
         [XmlIgnore]
         public FileSystemWatcherWorkerTask FileSystemWatcherWorker { get; private set; }
 
@@ -180,13 +164,8 @@ namespace CompleteBackup.Models.Backup.Profile
 
         //Time to backup new changes in seconds
         private long m_UpdateWatchItemsTimeSeconds = 6;
-        public long UpdateWatchItemsTimeSeconds { get { return m_UpdateWatchItemsTimeSeconds; } set { m_UpdateWatchItemsTimeSeconds = value; if (m_FileSystemWatcherBackupTimer != null) { m_FileSystemWatcherBackupTimer.Interval = value * 1000; } OnPropertyChanged(); } }
-
-
-        //private string m_CurrentBackupFile;
-        //[XmlIgnore]
-        //public string CurrentBackupFile { get { return m_CurrentBackupFile; } set { m_CurrentBackupFile = value; OnPropertyChanged(); } }
-
+        public long UpdateWatchItemsTimeSeconds { get { return m_UpdateWatchItemsTimeSeconds; } set { m_UpdateWatchItemsTimeSeconds = value; FileSystemWatcherWorker?.UpdateFileSystemWatcherInterval(value * 1000); OnPropertyChanged(); } }
+        
 
         [XmlIgnore]
         public bool IsDetaledLog { get; set; } = false;
