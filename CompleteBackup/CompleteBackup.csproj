@@ -391,5 +391,8 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\HandStop.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Sleep.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

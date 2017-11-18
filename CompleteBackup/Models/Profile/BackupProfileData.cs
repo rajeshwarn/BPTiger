@@ -157,16 +157,30 @@ namespace CompleteBackup.Models.Backup.Profile
 
         public void SleepBackup(int hours)
         {
-            DateTime timeNow = DateTime.Now;
-
-            WateUpFromSleepTime = timeNow.AddHours(hours);
-
-            OnPropertyChanged("IsBackupSleep");
-
-            Application.Current.Dispatcher.Invoke(new Action(() =>
+            if (hours == 0)
             {
-                BackupAlertList.Add(new BackupPerfectAlertData() { Name = $"Back up is sleeping, wakup time {WateUpFromSleepTime}" });
-            }));
+                WateUpFromSleepTime = DateTime.Now;
+
+                OnPropertyChanged("IsBackupSleep");
+
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    BackupAlertList.Add(new BackupPerfectAlertData() { Name = $"Wake up backup - back up is now running" });
+                }));
+            }
+            else
+            {
+                DateTime timeNow = DateTime.Now;
+
+                WateUpFromSleepTime = timeNow.AddHours(hours);
+
+                OnPropertyChanged("IsBackupSleep");
+
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    BackupAlertList.Add(new BackupPerfectAlertData() { Name = $"Back up is sleeping, wakup time {WateUpFromSleepTime}" });
+                }));
+            }
         }
 
 

@@ -122,73 +122,84 @@
                                                         </Style>
                                                     </Border.Style>
                                                     <Grid>
-
-                                                        <!--Task running-->
-                                                        <Grid Margin="0,2,7,0">
-                                                            <Grid.Style>
-                                                                <Style TargetType="Grid">
-                                                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                                                    <Style.Triggers>
-                                                                        <DataTrigger Binding="{Binding IsBackupWorkerBusy}" Value="True">
-                                                                            <Setter Property="Visibility" Value="Visible"/>
-                                                                        </DataTrigger>
-                                                                        <DataTrigger Binding="{Binding IsBackupWorkerPaused}" Value="True">
-                                                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                                                        </DataTrigger>
-                                                                    </Style.Triggers>
-                                                                </Style>
-                                                            </Grid.Style>
-                                                            <extended_view:ProcessingSpinnerView HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                                                        </Grid>
-
-                                                        <!--Pause Icon-->
-                                                        <Grid Margin="0,0,0,0">
-                                                            <Grid.Style>
-                                                                <Style TargetType="Grid">
-                                                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                                                    <Style.Triggers>
-                                                                        <DataTrigger Binding="{Binding IsBackupWorkerPaused}" Value="True">
-                                                                            <Setter Property="Visibility" Value="Visible"/>
-                                                                            <!--Blinking-->
-                                                                            <DataTrigger.EnterActions>
-                                                                                <BeginStoryboard x:Name="blinking">
-                                                                                    <Storyboard RepeatBehavior="Forever">
-                                                                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" AutoReverse="True" To="0.2" Duration="0:0:0.7">
-                                                                                        </DoubleAnimation>
-                                                                                    </Storyboard>
-                                                                                </BeginStoryboard>
-                                                                            </DataTrigger.EnterActions>
-                                                                            <DataTrigger.ExitActions>
-                                                                                <StopStoryboard BeginStoryboardName="blinking"/>
-                                                                            </DataTrigger.ExitActions>
-                                                                        </DataTrigger>
-                                                                    </Style.Triggers>
-                                                                </Style>
-                                                            </Grid.Style>
-                                                            <Image Source="/Resources/Icons/Ribbon/Pause.ico" HorizontalAlignment="Right" VerticalAlignment="Top" Width="24"/>
-                                                        </Grid>
-
-                                                        <!--pending task-->
-                                                        <Grid>
-                                                            <Grid.Style>
-                                                                <Style TargetType="Grid">
-                                                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                                                    <Setter Property="Margin" Value="0,0,0,0"/>
-                                                                    <Style.Triggers>
-                                                                        <DataTrigger Binding="{Binding IsBackupWorkerPending}" Value="True">
-                                                                            <Setter Property="Visibility" Value="Visible"/>
-                                                                        </DataTrigger>
-                                                                        <DataTrigger Binding="{Binding IsBackupWorkerBusy}" Value="True">
-                                                                            <Setter Property="Margin" Value="0,28,3,0"/>
-                                                                        </DataTrigger>
-                                                                    </Style.Triggers>
-                                                                </Style>
-                                                            </Grid.Style>
-                                                            <Image Source="/Resources/Icons/Ribbon/Timer_Simple.ico" HorizontalAlignment="Right" VerticalAlignment="Top" Width="18"/>
-                                                        </Grid>
-
                                                         <!--Content-->
                                                         <StackPanel Orientation="Vertical" >
+                                                            <DockPanel LastChildFill="True">
+                                                                <!--Notification Icons-->
+                                                                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                                                                    <!--Pause Icon-->
+                                                                    <Grid Margin="0,0,0,0">
+                                                                        <Grid.Style>
+                                                                            <Style TargetType="Grid">
+                                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                                                <Style.Triggers>
+                                                                                    <DataTrigger Binding="{Binding IsBackupWorkerPaused}" Value="True">
+                                                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                                                        <!--Blinking-->
+                                                                                        <DataTrigger.EnterActions>
+                                                                                            <BeginStoryboard x:Name="blinking">
+                                                                                                <Storyboard RepeatBehavior="Forever">
+                                                                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" AutoReverse="True" To="0.2" Duration="0:0:0.7">
+                                                                                                    </DoubleAnimation>
+                                                                                                </Storyboard>
+                                                                                            </BeginStoryboard>
+                                                                                        </DataTrigger.EnterActions>
+                                                                                        <DataTrigger.ExitActions>
+                                                                                            <StopStoryboard BeginStoryboardName="blinking"/>
+                                                                                        </DataTrigger.ExitActions>
+                                                                                    </DataTrigger>
+                                                                                </Style.Triggers>
+                                                                            </Style>
+                                                                        </Grid.Style>
+                                                                        <Image Source="/Resources/Icons/Ribbon/Pause.ico" HorizontalAlignment="Right" VerticalAlignment="Top" Width="24"/>
+                                                                    </Grid>
+                                                                    <!--Task running-->
+                                                                    <Grid Margin="0,2,7,0">
+                                                                        <Grid.Style>
+                                                                            <Style TargetType="Grid">
+                                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                                                <Style.Triggers>
+                                                                                    <DataTrigger Binding="{Binding IsBackupWorkerBusy}" Value="True">
+                                                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                                                    </DataTrigger>
+                                                                                    <DataTrigger Binding="{Binding IsBackupWorkerPaused}" Value="True">
+                                                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                                                    </DataTrigger>
+                                                                                </Style.Triggers>
+                                                                            </Style>
+                                                                        </Grid.Style>
+                                                                        <extended_view:ProcessingSpinnerView HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                                                                    </Grid>
+                                                                </StackPanel>
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <!--Sleep Icon-->
+                                                                    <Image Source="/Resources/Icons/Sleep.png" Width="18">
+                                                                            <Image.Style>
+                                                                            <Style TargetType="Image">
+                                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                                                <Style.Triggers>
+                                                                                    <DataTrigger Binding="{Binding IsBackupSleep}" Value="true">
+                                                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                                                    </DataTrigger>
+                                                                                </Style.Triggers>
+                                                                            </Style>
+                                                                        </Image.Style>
+                                                                    </Image>
+                                                                    <!--pending task-->
+                                                                    <Image Source="/Resources/Icons/Ribbon/Timer_Simple.ico" HorizontalAlignment="Right" VerticalAlignment="Top" Width="18">
+                                                                        <Image.Style>
+                                                                            <Style TargetType="Image">
+                                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                                                <Style.Triggers>
+                                                                                    <DataTrigger Binding="{Binding IsBackupWorkerPending}" Value="True">
+                                                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                                                    </DataTrigger>
+                                                                                </Style.Triggers>
+                                                                            </Style>
+                                                                        </Image.Style>
+                                                                    </Image>
+                                                                </StackPanel>
+                                                            </DockPanel>
                                                             <Image Source="{Binding BackupTypeImage}" Width="32" />
                                                             <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" TextWrapping="Wrap" Margin="0,4,0,0"/>
                                                             <TextBlock Text="{Binding Description}" HorizontalAlignment="Left" FontStyle="Italic" TextWrapping="Wrap" Margin="0,4,0,0" Foreground="Gray"/>

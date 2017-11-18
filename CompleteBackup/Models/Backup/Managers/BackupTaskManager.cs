@@ -104,6 +104,10 @@ namespace CompleteBackup.Models.Profile
                 task.IsPaused = false;
             }
         }
+        public void SleepBackup(BackupProfileData profile, int hours)
+        {
+
+        }
 
         public void StopBackupTask(BackupProfileData profile)
         {
@@ -116,9 +120,9 @@ namespace CompleteBackup.Models.Profile
                     {
                         task.IsPaused = false;
                     }
-                }
 
-                task.CancelAsync();
+                    task.CancelAsync();
+                }
             }
         }
 
@@ -196,6 +200,13 @@ namespace CompleteBackup.Models.Profile
 
         public void StartBackup(BackupProfileData profile, bool bFullBackupScan)
         {
+            if (profile.IsBackupSleep)
+            {
+                profile.Logger.Writeln($"***Back up in sleep mode until {profile.WateUpFromSleepTime}, skipping this backup task [Full backup = {bFullBackupScan}]");
+
+                return;
+            }
+
             if (!profile.IsValidFolderName(profile.GetTargetBackupFolder()))
             {
                 Debug.Assert(profile.IsValidFolderName(profile.GetTargetBackupFolder()), "Assert - Target backup destination is not valid");

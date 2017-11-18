@@ -194,16 +194,7 @@
                 <RibbonGroup Header="Setting">
                     <!--Backup Sleep-->
 
-                    <RibbonMenuButton Label="Sleep" ItemsSource="{Binding Repository.BackupPauseDataList}" SmallImageSource="/Resources/Icons/Ribbon/Timer_Simple.ico" KeyTip="S">
-                        <!--<RibbonMenuButton.Style>
-                            <Style TargetType="{x:Type RibbonMenuButton}">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Path=CollectionRepository.CurrentCollection}" Value="{x:Null}">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </RibbonMenuButton.Style>-->
+                    <!--<RibbonMenuButton Label="Sleep" ItemsSource="{Binding Repository.BackupPauseDataList}" SmallImageSource="/Resources/Icons/Ribbon/Timer_Simple.ico" KeyTip="S">
                         <RibbonMenuButton.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Name}"/>
@@ -216,11 +207,11 @@
                                 <Setter Property="CommandParameter" Value="{Binding }" />
                             </Style>
                         </RibbonMenuButton.ItemContainerStyle>
-                    </RibbonMenuButton>
+                    </RibbonMenuButton>-->
 
 
-                    <RibbonSplitButton LargeImageSource="/Resources/Icons/Ribbon/Timer_Simple.ico"
-                        Command="{Binding ResumeBackupProfileCommand}" CommandParameter="{Binding }">
+                    <RibbonSplitButton SmallImageSource="/Resources/Icons/Ribbon/Timer_Simple.ico"
+                        Command="{Binding SleepBackupProfileCommand}" CommandParameter="{Binding }">
                         <RibbonGallery>
                             <RibbonGalleryCategory ItemsSource="{Binding Repository.BackupPauseDataList}">
                                 <RibbonGalleryCategory.ItemTemplate>
