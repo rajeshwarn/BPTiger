@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace CompleteBackup.ViewModels.FolderSelection.ICommands
@@ -44,12 +45,19 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
             {
                 path = profile.GetStorageInterface().GetDirectoryName(folderData.Path);
             }
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
+            try
             {
-                FileName = path,
-                UseShellExecute = true,
-                Verb = "open"
-            });
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
+                {
+                    FileName = path,
+                    UseShellExecute = true,
+                    Verb = "open"
+                });
+            }
+            catch (System.ComponentModel.Win32Exception ex)
+            {
+                MessageBox.Show($"Could not open {path}\n{ex.Message}", "Open folder location", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

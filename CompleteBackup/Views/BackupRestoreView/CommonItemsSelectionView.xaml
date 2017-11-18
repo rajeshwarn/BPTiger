@@ -291,6 +291,16 @@
                                 </DockPanel>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
+                        <ListBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Edit"
+                                          Command="{Binding SelectTargetFolderNameCommand}"
+                                          CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>
+                                <Separator/>
+                                <MenuItem Header="Open location" Command="{Binding OpenItemLocationCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}"/>
+                            </ContextMenu>
+                        </ListBox.ContextMenu>
                         <ListBox.Style>
                             <Style TargetType="ListBox" >
                                 <Setter Property="Visibility" Value="Visible"/>
