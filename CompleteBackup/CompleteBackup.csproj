@@ -64,6 +64,7 @@
     <Compile Include="Models\Backup\BackupFactory.cs" />
     <Compile Include="Models\Backup\DifferentialWatcherBackup.cs" />
     <Compile Include="Models\Backup\FileSystemWatcherBackup.cs" />
+    <Compile Include="Models\Backup\Managers\BackupAlertManager.cs" />
     <Compile Include="Models\Backup\Managers\FileSystemWatcerItemManager.cs" />
     <Compile Include="Models\Backup\IncrementalFullWatcherBackup.cs" />
     <Compile Include="Models\Backup\Managers\BackupTaskManager.cs" />
@@ -78,7 +79,7 @@
     <Compile Include="Models\Backup\Managers\ProfileDataRefreshWorkerTask.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Models\Backup\Managers\BackupWorkerTask.cs">
+    <Compile Include="Models\Backup\Managers\BackupProcessWorkerTask.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Models\Profile\FolderData.cs" />

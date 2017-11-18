@@ -270,6 +270,7 @@
                                     Command="{Binding SelectTargetFolderNameCommand}"
                                     CommandParameter="{Binding ProjectData.CurrentBackupProfile}" Margin="4" VerticalAlignment="Center">
                             </Button>
+                            <!--Destination Folder list-->
                             <ListBox ItemsSource="{Binding DestinationFolderList}" BorderThickness="0" SelectionMode="Single" VerticalAlignment="Center">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
@@ -328,7 +329,9 @@
                         </ListBox>-->
 
                         <!--Destination folder usage-->
-                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0" HorizontalAlignment="Right">
+                        
+                    <!--Backup Destination folder size-->
+                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0" HorizontalAlignment="Right">
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Right" ToolTip="The destination backup size might be bigger than the actual total source folders, this is because of history file that are stored with some backup type">
                             <TextBlock Text="Destination backup size : " />
                             <Separator/>
@@ -345,18 +348,17 @@
                             </StackPanel>
                         </StackPanel>
                         <StackPanel.Style>
-                                <Style TargetType="StackPanel" >
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Path=IsBackupView}" Value="True">
-                                            <Setter Property="Visibility" Value="Visible"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </StackPanel.Style>
-                        </StackPanel>
-                        
-                        <StackPanel.Style>
+                            <Style TargetType="StackPanel" >
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=IsBackupView}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                    </StackPanel>
+                    <StackPanel.Style>
                             <Style TargetType="StackPanel" >
                                 <Setter Property="Visibility" Value="Visible"/>
                                 <Style.Triggers>

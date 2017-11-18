@@ -43,28 +43,6 @@ namespace CompleteBackup.Models.Backup.Profile
         public bool IsChecked { get; set; } = false;
     }
 
-    public enum BackupPerfectAlertTypeEnum
-    {
-        Notification,
-        Warning,
-        Error,
-    }
-    public enum BackupPerfectAlertSourceEnum
-    {
-        Generic,
-        Backup,
-        Restore,
-    }
-
-    public class BackupPerfectAlertData
-    {
-        public DateTime AlertTime { get; set; }
-        public BackupPerfectAlertSourceEnum BackupPerfectAlertSource { get; set; }       
-        public BackupPerfectAlertTypeEnum AlertType { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string ImageName { get; set; }
-    }
 
     class ProfileHelper
     {

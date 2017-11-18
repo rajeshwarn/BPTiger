@@ -15,13 +15,13 @@ namespace CompleteBackup.Models.Profile
     {
         static public BackupTaskManager Instance { get; set; } = new BackupTaskManager();
 
-        List<BackupWorkerTask> m_BackupWorkerTaskQueue = new List<BackupWorkerTask>();
+        List<BackupProcessWorkerTask> m_BackupWorkerTaskQueue = new List<BackupProcessWorkerTask>();
         //public BackupWorkerTask CurrentBackupWorkerTask { get; set; }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public BackupWorkerTask GetRunningBackupWorkerTask(BackupProfileData profile)
+        public BackupProcessWorkerTask GetRunningBackupWorkerTask(BackupProfileData profile)
         {
-            BackupWorkerTask task = null;
+            BackupProcessWorkerTask task = null;
 
             //lock (this)
             {
@@ -32,9 +32,9 @@ namespace CompleteBackup.Models.Profile
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
-        BackupWorkerTask GetPendingBackupWorkerTask(BackupProfileData profile)
+        BackupProcessWorkerTask GetPendingBackupWorkerTask(BackupProfileData profile)
         {
-            BackupWorkerTask task = null;
+            BackupProcessWorkerTask task = null;
 
            // lock (this)
             {
@@ -45,9 +45,9 @@ namespace CompleteBackup.Models.Profile
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
-        BackupWorkerTask GetPausedBackupWorkerTask(BackupProfileData profile)
+        BackupProcessWorkerTask GetPausedBackupWorkerTask(BackupProfileData profile)
         {
-            BackupWorkerTask task = null;
+            BackupProcessWorkerTask task = null;
 
             // lock (this)
             {
@@ -141,7 +141,7 @@ namespace CompleteBackup.Models.Profile
         }
 
 
-        public void CompleteAndStartNextBackup(BackupWorkerTask completedTask)
+        public void CompleteAndStartNextBackup(BackupProcessWorkerTask completedTask)
         {
             BackupProjectRepository.Instance.SelectedBackupProject.Logger.Writeln($"<-- Backup completed {completedTask.GetProfile().Name}");
 
@@ -158,7 +158,7 @@ namespace CompleteBackup.Models.Profile
 
         void StartNextBackupTask(BackupProfileData profile)
         {
-            BackupWorkerTask task = null;
+            BackupProcessWorkerTask task = null;
             lock (this)
             {
                 int iBusyTasks = m_BackupWorkerTaskQueue.Where(t => (t.IsBusy == true)).Count();
@@ -216,7 +216,7 @@ namespace CompleteBackup.Models.Profile
 
             lock (this)
             {
-                m_BackupWorkerTaskQueue.Add(new BackupWorkerTask(profile, bFullBackupScan));
+                m_BackupWorkerTaskQueue.Add(new BackupProcessWorkerTask(profile, bFullBackupScan));
             }
 
             StartNextBackupTask(profile);            

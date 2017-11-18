@@ -45,7 +45,7 @@ namespace CompleteBackup.Models.backup
 
         public ManualResetEvent PauseWaitHandle { get; set; } = new ManualResetEvent(true);
 
-        BackupWorkerTask m_Task;
+        BackupProcessWorkerTask m_Task;
 
         public bool CheckCancellationPending()
         {

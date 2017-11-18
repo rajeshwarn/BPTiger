@@ -1,4 +1,5 @@
 ﻿using CompleteBackup.Models.backup;
+using CompleteBackup.Models.Backup;
 using CompleteBackup.Models.Backup.History;
 using CompleteBackup.Models.Backup.Profile;
 using CompleteBackup.Models.Backup.Storage;
@@ -22,21 +23,6 @@ namespace CompleteBackup.Models.Profile
 
         private ProfileDataRefreshWorkerTask() { }
 
-        private void AddBackupAlert(BackupProfileData profile, BackupPerfectAlertData alert)
-        {
-            Application.Current.Dispatcher.Invoke(new Action(() =>
-            {
-                profile.BackupAlertList.Add(alert);
-            }));
-        }
-        private void AddRestoreAlert(BackupProfileData profile, BackupPerfectAlertData alert)
-        {
-            Application.Current.Dispatcher.Invoke(new Action(() =>
-            {
-                profile.RestoreAlertList.Add(alert);
-            }));
-        }
-
         private void UpdateAlerts(BackupProfileData profile)
         {
             var storage = profile.GetStorageInterface();
@@ -49,7 +35,7 @@ namespace CompleteBackup.Models.Profile
 
             if (profile.BackupFolderList.Count() == 0)
             {
-                AddBackupAlert(profile, new BackupPerfectAlertData() { Name = $"Back up item list is empty", Description = "You must select atleast one backup item, item can be a file or a folder, if the selected item is folder the entire folder content will be backup includeing all sub items. TO select items select in the \"Items to backup\" from Setting or press on \"Select items to backup button\""});
+                BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.BackupItemListEmpty);
             }
             else
             {
@@ -63,7 +49,7 @@ namespace CompleteBackup.Models.Profile
                         }
                         else
                         {
-                            AddBackupAlert(profile, (new BackupPerfectAlertData() { Name = $"Backup directory is not available: {item.Path}" }));
+                            BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.BackupItemListFolderNotAvailable, item.Path);
                         }
                     }
                     else
@@ -74,7 +60,7 @@ namespace CompleteBackup.Models.Profile
                         }
                         else
                         {
-                            AddBackupAlert(profile, (new BackupPerfectAlertData() { Name = $"Backup file is not available: {item.Path}" }));
+                            BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.BackupItemListFileNotAvailable, item.Path);
                         }
                     }
                 }
@@ -85,41 +71,40 @@ namespace CompleteBackup.Models.Profile
             {
                 if (!storage.DirectoryExists(profile.GetTargetBackupFolder()))
                 {
-                    AddBackupAlert(profile, (new BackupPerfectAlertData() { Name = $"Destination backup directory is not available: {profile.GetTargetBackupFolder()}",
-                        Description = "Destination backp directory is the destination directory where the backup files will be stored, it is recomended to select an empty directory"}));
                     var folderData = profile.GetTargetBackupFolderData();
                     folderData.IsAvailable = false;
+
+                    BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.BackupDestinationFolderNotAvailable, folderData.Path);
                 }
             }
             else
             {
-                AddBackupAlert(profile, (new BackupPerfectAlertData() { Name = $"Destination backup directory is not set" }));
+                BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.BackupDestinationFolderNotConfigured);
             }
 
 
             //Restore
             if (profile.LastBackupDateTime == null)
             {
-                AddRestoreAlert(profile, (new BackupPerfectAlertData() { Name = $"Backup not found, nothing to restore", Description = "Could not find the destination backup.  This usually happens if the destination backup storage is not available or has not been running" }));
+                BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.BackupDestinationNotFound);
             }
             else
             {
                 if (profile.RestoreFolderList.Count == 0)
                 {
-                    AddRestoreAlert(profile, (new BackupPerfectAlertData() { Name = $"Restore item list is empty", Description = "You need to select at least one item if you want to start the restore process" }));
+                    BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.RestoreItemListEmpty);
                 }
-
 
                 if (profile.IsValidFolderName(profile.GetTargetRestoreFolder()))
                 {
                     if (!storage.DirectoryExists(profile.GetTargetRestoreFolder()))
                     {
-                        AddRestoreAlert(profile, (new BackupPerfectAlertData() { Name = $"Restore directory is not available {profile.GetTargetRestoreFolder()}" }));
+                        BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.RestoreDestinationFolderNotAvailable, profile.GetTargetRestoreFolder());
                     }
                 }
                 else
                 {
-                    AddRestoreAlert(profile, (new BackupPerfectAlertData() { Name = $"Restore directory is not set" }));
+                    BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.RestoreDestinationFolderNotConfigured);
                 }
             }
         }

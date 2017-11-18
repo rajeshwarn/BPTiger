@@ -71,7 +71,7 @@ namespace CompleteBackup.Models.Profile
             BackupTaskManager.Instance.CompleteAndStartNextBackup(this);
         }
 
-        public BackupWorkerTask(BackupProfileData profile, bool bFullBackupScan)
+        public BackupProcessWorkerTask(BackupProfileData profile, bool bFullBackupScan)
         {
             m_Profile = profile;
             m_Logger = profile.Logger;
