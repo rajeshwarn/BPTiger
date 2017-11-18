@@ -41,7 +41,7 @@ namespace CompleteBackup.Views.ExtendedControls
         }
 
 
-        public uint PumpNumber { get { return m_ViewModel.PumpNumber; } set { m_ViewModel.PumpNumber = value; } }
+        public string PumpNumber { get { return m_ViewModel.PumpNumber; } set { m_ViewModel.PumpNumber = value; } }
         public float GaugeValue { get { return m_ViewModel.GaugeValue; } set { m_ViewModel.GaugeValue = (value > 1) ? 1 : value; } }
 
         private ChartGaugeViewModel m_ViewModel;

@@ -145,7 +145,7 @@
                                 <Setter Property="Label" Value="Start"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding ProjectData.CurrentBackupProfile.IsBackupWorkerPaused}" Value="True">
-                                        <Setter Property="Label" Value="Resume"/>
+                                        <Setter Property="Label" Value="Continue"/>
                                         <DataTrigger.EnterActions>
                                             <BeginStoryboard x:Name="blinking">
                                                 <Storyboard RepeatBehavior="Forever">

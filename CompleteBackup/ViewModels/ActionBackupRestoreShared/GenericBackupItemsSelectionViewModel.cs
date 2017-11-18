@@ -5,6 +5,7 @@ using CompleteBackup.Models.Backup.Storage;
 using CompleteBackup.Models.FolderSelection;
 using CompleteBackup.ViewModels.FolderSelection.ICommands;
 using CompleteBackup.Views;
+using CompleteBackup.Views.ExtendedControls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -46,6 +47,7 @@ namespace CompleteBackup.ViewModels
         }
 
         public abstract bool Enabled { get; }
+        public abstract bool IsBackupView { get; }
 
 
         public abstract ICommand OpenItemSelectWindowCommand { get; }
@@ -74,6 +76,9 @@ namespace CompleteBackup.ViewModels
         public abstract ObservableCollection<BackupPerfectAlertData> BackupAlertList { get; }
         public abstract ObservableCollection<FolderData> SelectionFolderList { get; }
         public abstract ObservableCollection<FolderData> DestinationFolderList { get; }
+
+        public abstract ObservableCollection<ChartGaugeView> TargetFolderGaugeList { get; }
+
 
         public abstract long? SelectionFolderListNumberOfFiles { get; }
         public abstract long? SelectionTotalFolderListSize { get; }        

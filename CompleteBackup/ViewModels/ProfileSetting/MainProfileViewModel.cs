@@ -31,7 +31,7 @@ namespace CompleteBackup.ViewModels
         {
             ProfileBackupType = ProfileHelper.BackupTypeList.FirstOrDefault(i => i.BackupType == ProjectData.CurrentBackupProfile?.BackupType);
 
-            ProfileGaugeList.Add(new ChartGaugeView(Brushes.Red, Brushes.Green, Brushes.Yellow) { PumpNumber = 0, GaugeValue = 0.6F });
+            ProfileGaugeList.Add(new ChartGaugeView(Brushes.Red, Brushes.Green, Brushes.Yellow) { PumpNumber = null, GaugeValue = 0.6F });
 
             //Register to get update event when backup profile changed
             ProjectData.CurrentBackupProfile?.ProfileDataRefreshTask?.RegisterEvent(ProfileDataUpdateEvent);

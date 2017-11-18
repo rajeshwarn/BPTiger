@@ -137,17 +137,25 @@ namespace CompleteBackup.Models.Profile
                 {
                     UpdateAlerts(profile);
 
-
                     Application.Current.Dispatcher.Invoke(new Action(() =>
                     {
-                        profile.BackupTargetDiskSize = "n/a";
-                        profile.BackupTargetUsedSize = "n/a";
-                        profile.BackupTargetFreeSize = "n/a";
+                        //profile.BackupTargetDiskSize = "n/a";
+                        //profile.BackupTargetUsedSize = "n/a";
+                        //profile.BackupTargetFreeSize = "n/a";
+
+                        profile.BackupSourceFilesNumber = 0;
+                        profile.BackupSourceFoldersSize = 0;
+
+                        profile.RestoreSourceFilesNumber = 0;
+                        profile.RestoreSourceFoldersSize = 0;
+
+                        profile.BackupTargetDiskSizeNumber = 0;
+                        profile.BackupTargetUsedSizeNumber = 0;
+                        profile.BackupTargetFreeSizeNumber = 0;
                     }));
 
-                    //Source folders sizes and number of files
-                    profile.BackupSourceFilesNumber = 0;
-                    profile.BackupSourceFoldersSize = 0;
+
+                    //Backup Items
                     foreach (var item in profile.BackupFolderList.Where(i => i.IsAvailable))
                     {
                         if (item.IsFolder)
@@ -170,9 +178,7 @@ namespace CompleteBackup.Models.Profile
                     }
 
 
-                    //Restore folders sizes and number of files
-                    profile.RestoreSourceFilesNumber = 0;
-                    profile.RestoreSourceFoldersSize = 0;
+                    //Restore Items
                     foreach (var item in profile.RestoreFolderList)
                     {
                         if (item.IsFolder)
@@ -195,9 +201,10 @@ namespace CompleteBackup.Models.Profile
                     }
 
 
+                    //Target Backup Folder
                     if (profile.IsValidFolderName(profile.GetTargetBackupFolder()))
                     {
-                        //last backup time
+                        //Get last backup time
                         DateTime? lastTime = null;
                         var lastSet = BackupBase.GetLastBackupSetName(profile);
                         if (lastSet != null)
@@ -213,33 +220,37 @@ namespace CompleteBackup.Models.Profile
 
                     if (profile.IsValidFolderName(profile.GetTargetBackupFolder()))
                     {
-                        profile.BackupTargetDiskSizeNumber = 0;
-                        //Target disk size
+                        //Target backup storage, total disk size
                         string rootDrive = System.IO.Path.GetPathRoot(profile.GetTargetBackupFolder());
                         foreach (System.IO.DriveInfo drive in System.IO.DriveInfo.GetDrives().Where(d => d.ToString().Contains(rootDrive)))
                         {
                             if (drive.IsReady)
                             {
-                                profile.BackupTargetDiskSizeNumber = drive.TotalSize;
                                 Application.Current.Dispatcher.Invoke(new Action(() =>
                                 {
-                                    profile.BackupTargetDiskSize = FileFolderSizeHelper.GetNumberSizeString(profile.BackupTargetDiskSizeNumber);
+                                    profile.BackupTargetDiskSizeNumber = drive.TotalSize;
+                                    profile.BackupTargetFreeSizeNumber = drive.AvailableFreeSpace;
+
+                                    //profile.BackupTargetDiskSize = FileFolderSizeHelper.GetNumberSizeString(profile.BackupTargetDiskSizeNumber);
                                 }));
 
                                 break;
                             }
                         }
 
-                        profile.BackupTargetUsedSizeNumber = 0;
-                        //Target used Space
-                        profile.BackupTargetUsedSizeNumber = storage.GetSizeOfFiles(profile.GetTargetBackupFolder());
+                        //Target backup folder used Space
+                        var totaltargetUseSize = storage.GetSizeOfFiles(profile.GetTargetBackupFolder());
                         Application.Current.Dispatcher.Invoke(new Action(() =>
                         {
-                            profile.BackupTargetUsedSize = FileFolderSizeHelper.GetNumberSizeString(profile.BackupTargetUsedSizeNumber);
+                            profile.BackupTargetUsedSizeNumber = totaltargetUseSize;
+                            //profile.BackupTargetUsedSize = FileFolderSizeHelper.GetNumberSizeString(profile.BackupTargetUsedSizeNumber);
                         }));
 
-                        //Target free space
-                        profile.BackupTargetFreeSizeNumber = 0;
+                        //Target backup storage free space
+                        //Application.Current.Dispatcher.Invoke(new Action(() =>
+                        //{
+                        //    profile.BackupTargetFreeSizeNumber = profile.BackupTargetDiskSizeNumber - profile.BackupTargetUsedSizeNumber;
+                        //}));
                         //rootDrive = Path.GetPathRoot(profile.TargetBackupFolder);
                         //foreach (DriveInfo drive in DriveInfo.GetDrives().Where(d => d.ToString().Contains(rootDrive)))
                         //{

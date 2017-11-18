@@ -502,16 +502,16 @@ namespace CompleteBackup.Models.Backup.Profile
         }
 
         public long BackupTargetDiskSizeNumber { get; set; } = 0;
-        private string m_BackupTargetDiskSize = "Data Not available";
-        public string BackupTargetDiskSize { get { return m_BackupTargetDiskSize; } set { m_BackupTargetDiskSize = value; OnPropertyChanged(); } }
+//        private string m_BackupTargetDiskSize = "Data Not available";
+//        public string BackupTargetDiskSize { get { return m_BackupTargetDiskSize; } set { m_BackupTargetDiskSize = value; OnPropertyChanged(); } }
 
         public long BackupTargetUsedSizeNumber { get; set; } = 0;
-        private string m_BackupTargetUsedSize = "Data Not available";
-        public string BackupTargetUsedSize { get { return m_BackupTargetUsedSize; } set { m_BackupTargetUsedSize = value; OnPropertyChanged(); } }
+//        private string m_BackupTargetUsedSize = "Data Not available";
+//        public string BackupTargetUsedSize { get { return m_BackupTargetUsedSize; } set { m_BackupTargetUsedSize = value; OnPropertyChanged(); } }
 
         public long BackupTargetFreeSizeNumber { get; set; } = 0;
-        private string m_BackupTargetFreeSize = "Data Not available";
-        public string BackupTargetFreeSize { get { return m_BackupTargetFreeSize; } set { m_BackupTargetFreeSize = value; OnPropertyChanged(); } }
+//        private string m_BackupTargetFreeSize = "Data Not available";
+//        public string BackupTargetFreeSize { get { return m_BackupTargetFreeSize; } set { m_BackupTargetFreeSize = value; OnPropertyChanged(); } }
 
 
         public long m_BackupSourceFilesNumber { get; set; } = 0;

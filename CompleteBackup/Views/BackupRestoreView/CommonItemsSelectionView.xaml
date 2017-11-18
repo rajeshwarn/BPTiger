@@ -116,7 +116,7 @@
                         </Style>
                     </Button.Style>
                 </Button>
-    
+
                 <DockPanel LastChildFill="True">
                     <DockPanel.Style>
                         <Style TargetType="DockPanel" >
@@ -127,7 +127,7 @@
                             </Style.Triggers>
                         </Style>
                     </DockPanel.Style>
-                    
+
                     <!--Main file list-->
                     <StackPanel DockPanel.Dock="Right" Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
@@ -155,7 +155,7 @@
                         </StackPanel>
                         <Separator/>
                     </StackPanel>
-                    
+
                     <!--Folde list-->
                     <ListBox ItemsSource="{Binding SelectionFolderList}" BorderThickness="0" Margin="0,0,8,0" SelectionMode="Single">
                         <ListBox.ItemTemplate>
@@ -248,61 +248,105 @@
             <GroupBox.Header>
                 <TextBlock FontWeight="Bold" Text="Destination"/>
             </GroupBox.Header>
-            <DockPanel LastChildFill="True">
-                <Button DockPanel.Dock="Right" Content=" ... " 
-                        Command="{Binding SelectTargetFolderNameCommand}"
-                        CommandParameter="{Binding ProjectData.CurrentBackupProfile}" Margin="4" VerticalAlignment="Center">
-                </Button>
                 <Grid Margin="4">
+                    <!--Alert,if item list is empty-->
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Icons/Alert.ico" Margin="0,0,4,0" Height="16" VerticalAlignment="Center"/>
-                        <TextBlock Text="Please select a destination folder" FontStyle="Italic" FontWeight="SemiBold" Foreground="Gray" VerticalAlignment="Center">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock" >
+                        <TextBlock Text="Please select a destination folder" FontStyle="Italic" FontWeight="SemiBold" Foreground="Gray" VerticalAlignment="Center"/>
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel" >
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=DestinationFolderList.Count}" Value="0">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Margin="4,0,0,0">
+                        <DockPanel LastChildFill="True">
+                            <Button DockPanel.Dock="Right" Content=" ... " 
+                                    Command="{Binding SelectTargetFolderNameCommand}"
+                                    CommandParameter="{Binding ProjectData.CurrentBackupProfile}" Margin="4" VerticalAlignment="Center">
+                            </Button>
+                            <ListBox ItemsSource="{Binding DestinationFolderList}" BorderThickness="0" SelectionMode="Single" VerticalAlignment="Center">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <DockPanel LastChildFill="True">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Width="16" Source="{Binding Image}"/>
+                                                <TextBlock Text="{Binding Path}"  Background="Transparent">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsAvailable}" Value="False">
+                                                                    <Setter Property="Foreground" Value="Red"/>
+                                                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                                <ListBox.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Edit"
+                                          Command="{Binding SelectTargetFolderNameCommand}"
+                                          CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>
+                                        <Separator/>
+                                        <MenuItem Header="Open location" Command="{Binding OpenItemLocationCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}"/>
+                                    </ContextMenu>
+                                </ListBox.ContextMenu>
+                            </ListBox>
+                        </DockPanel>
+                        <!--<ListBox ToolTip="Destination Folder Utilization" ItemsSource="{Binding TargetFolderGaugeList}"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                    IsSynchronizedWithCurrentItem="True"
+                                    BorderThickness="0" Background="Transparent" Margin="0,8,0,0">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel IsItemsHost="True" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                        </ListBox>-->
+
+                        <!--Destination folder usage-->
+                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0" HorizontalAlignment="Right">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Right" ToolTip="The destination backup size might be bigger than the actual total source folders, this is because of history file that are stored with some backup type">
+                            <TextBlock Text="Destination backup size : " />
+                            <Separator/>
+                            <TextBlock Text="Total storage size : "/>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Right">
+                            <TextBlock Text="{Binding ProjectData.CurrentBackupProfile.BackupTargetUsedSizeNumber, Converter={StaticResource NumberToComputerSizeConverter}}" FontWeight="Bold"></TextBlock>
+                            <Separator/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding  ProjectData.CurrentBackupProfile.BackupTargetDiskSizeNumber, Converter={StaticResource NumberToComputerSizeConverter}}" FontWeight="Bold"></TextBlock>
+                                <TextBlock Text=" ("/>
+                                <TextBlock Text="{Binding  ProjectData.CurrentBackupProfile.BackupTargetFreeSizeNumber, Converter={StaticResource NumberToComputerSizeConverter}}" FontWeight="Bold"></TextBlock>
+                                <TextBlock Text=" free)"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel.Style>
+                                <Style TargetType="StackPanel" >
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Path=DestinationFolderList.Count}" Value="0">
+                                        <DataTrigger Binding="{Binding Path=IsBackupView}" Value="True">
                                             <Setter Property="Visibility" Value="Visible"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                    </StackPanel>
-                    <ListBox ItemsSource="{Binding DestinationFolderList}" BorderThickness="0" SelectionMode="Single">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <DockPanel LastChildFill="True">
-                                    <StackPanel Orientation="Horizontal">
-                                        <Image Width="16" Source="{Binding Image}"/>
-                                        <TextBlock Text="{Binding Path}"  Background="Transparent">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsAvailable}" Value="False">
-                                                            <Setter Property="Foreground" Value="Red"/>
-                                                            <Setter Property="FontWeight" Value="SemiBold"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
-                                    </StackPanel>
-                                </DockPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                        <ListBox.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="Edit"
-                                          Command="{Binding SelectTargetFolderNameCommand}"
-                                          CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>
-                                <Separator/>
-                                <MenuItem Header="Open location" Command="{Binding OpenItemLocationCommand}"
-                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}"/>
-                            </ContextMenu>
-                        </ListBox.ContextMenu>
-                        <ListBox.Style>
-                            <Style TargetType="ListBox" >
+                            </StackPanel.Style>
+                        </StackPanel>
+                        
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel" >
                                 <Setter Property="Visibility" Value="Visible"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding Path=DestinationFolderList.Count}" Value="0">
@@ -310,8 +354,8 @@
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
-                        </ListBox.Style>
-                    </ListBox>
+                        </StackPanel.Style>
+                    </StackPanel>
                 </Grid>
 
                 <!--<TextBox x:Name="txDestinationFolder"
@@ -343,7 +387,7 @@
                         </Style>
                     </TextBox.Style>
                 </TextBox>-->
-            </DockPanel>
+           
             <GroupBox.Style>
                 <Style TargetType="GroupBox">
                     <Style.Triggers>

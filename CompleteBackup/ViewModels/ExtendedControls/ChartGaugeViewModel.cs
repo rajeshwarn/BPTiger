@@ -51,7 +51,7 @@ namespace CompleteBackup.ViewModels.ExtendedControls
         private int m_DotSize = 6;
         public int GaugeSize { get { return m_GaugeSize; } set { m_GaugeSize = value; OnPropertyChanged(); } }
 
-        public uint PumpNumber { get; set; }
+        public string PumpNumber { get; set; }
 
         public float _GaugeValue { get; set; }
         public float GaugeValue

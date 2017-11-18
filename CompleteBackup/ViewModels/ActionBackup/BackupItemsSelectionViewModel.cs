@@ -6,6 +6,7 @@ using CompleteBackup.Models.FolderSelection;
 using CompleteBackup.ViewModels.FolderSelection.ICommands;
 using CompleteBackup.ViewModels.FolderSelection.Validators;
 using CompleteBackup.Views;
+using CompleteBackup.Views.ExtendedControls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -25,7 +26,16 @@ namespace CompleteBackup.ViewModels
 {
     public class BackupItemsSelectionViewModel : GenericBackupItemsSelectionViewModel
     {
+        public BackupItemsSelectionViewModel()
+        {
+            float ratioTotal = (float)ProjectData.CurrentBackupProfile?.BackupTargetFreeSizeNumber / (float)ProjectData.CurrentBackupProfile?.BackupTargetDiskSizeNumber;
+            TargetFolderGaugeList.Add(new ChartGaugeView(System.Windows.Media.Brushes.Red, System.Windows.Media.Brushes.Green, System.Windows.Media.Brushes.Yellow) { PumpNumber = "Storage", GaugeValue = ratioTotal });
+            float ratiobackup = (float)ProjectData.CurrentBackupProfile?.BackupTargetUsedSizeNumber / (float)ProjectData.CurrentBackupProfile?.BackupTargetDiskSizeNumber;
+            TargetFolderGaugeList.Add(new ChartGaugeView(System.Windows.Media.Brushes.Red, System.Windows.Media.Brushes.Green, System.Windows.Media.Brushes.Yellow) { PumpNumber = "Backup", GaugeValue = ratiobackup });
+        }
+
         public override bool Enabled { get; } = true;
+        public override bool IsBackupView { get; } = true;
 
         public override ICommand OpenItemSelectWindowCommand { get; } = new OpenSelectBackupItemsWindowICommand<object>();
         public override ICommand SelectTargetFolderNameCommand { get; } = new SelectTargetBackupFolderNameICommand<object>();
@@ -34,6 +44,8 @@ namespace CompleteBackup.ViewModels
 
         public override ObservableCollection<FolderData> SelectionFolderList { get { return BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile?.BackupFolderList; } }
         public override ObservableCollection<FolderData> DestinationFolderList { get { return ProjectData?.CurrentBackupProfile.TargetBackupFolderList; } }
+        public override ObservableCollection<ChartGaugeView> TargetFolderGaugeList { get; } = new ObservableCollection<ChartGaugeView>();
+
 
         public override long? SelectionFolderListNumberOfFiles { get { return ProjectData.CurrentBackupProfile?.BackupSourceFilesNumber; } }
         public override long? SelectionTotalFolderListSize { get { return ProjectData.CurrentBackupProfile?.BackupSourceFoldersSize; } }
