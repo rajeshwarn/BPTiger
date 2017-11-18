@@ -30,7 +30,7 @@ namespace CompleteBackup.Views
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var profile = BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile;
-            profile?.UpdateProfileProperties();
+            profile?.RefreshProfileProperties();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)

@@ -55,7 +55,7 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
                 viewModel.ProjectData?.CurrentBackupProfile.RestoreFolderList.Add(item);
             }
 
-            viewModel.ProjectData?.CurrentBackupProfile.UpdateProfileProperties();
+            viewModel.ProjectData?.CurrentBackupProfile.RefreshProfileProperties();
 
             //BackupProjectRepository.Instance.SaveProject();
         }

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,96 +20,16 @@ namespace CompleteBackup.Models.Profile
 {
     public class ProfileDataRefreshWorkerTask : BackgroundWorker
     {
-        //private BackupProfileData m_Profile;
-
         private ProfileDataRefreshWorkerTask() { }
 
-        private void UpdateAlerts(BackupProfileData profile)
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public void StartTask()
         {
-            var storage = profile.GetStorageInterface();
-
-            Application.Current.Dispatcher.Invoke(new Action(() =>
+            if (!IsBusy)
             {
-                profile.BackupAlertList.Clear();
-                profile.RestoreAlertList.Clear();
-            }));
-
-            if (profile.BackupFolderList.Count() == 0)
-            {
-                BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.BackupItemListEmpty);
-            }
-            else
-            {
-                foreach (var item in profile.BackupFolderList)
-                {
-                    if (item.IsFolder)
-                    {
-                        if (storage.DirectoryExists(item.Path))
-                        {
-                            item.IsAvailable = true;
-                        }
-                        else
-                        {
-                            BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.BackupItemListFolderNotAvailable, item.Path);
-                        }
-                    }
-                    else
-                    {
-                        if (storage.FileExists(item.Path))
-                        {
-                            item.IsAvailable = true;
-                        }
-                        else
-                        {
-                            BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.BackupItemListFileNotAvailable, item.Path);
-                        }
-                    }
-                }
-            }
-
-
-            if (profile.IsValidFolderName(profile.GetTargetBackupFolder()))
-            {
-                if (!storage.DirectoryExists(profile.GetTargetBackupFolder()))
-                {
-                    var folderData = profile.GetTargetBackupFolderData();
-                    folderData.IsAvailable = false;
-
-                    BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.BackupDestinationFolderNotAvailable, folderData.Path);
-                }
-            }
-            else
-            {
-                BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.BackupDestinationFolderNotConfigured);
-            }
-
-
-            //Restore
-            if (profile.LastBackupDateTime == null)
-            {
-                BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.BackupDestinationNotFound);
-            }
-            else
-            {
-                if (profile.RestoreFolderList.Count == 0)
-                {
-                    BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.RestoreItemListEmpty);
-                }
-
-                if (profile.IsValidFolderName(profile.GetTargetRestoreFolder()))
-                {
-                    if (!storage.DirectoryExists(profile.GetTargetRestoreFolder()))
-                    {
-                        BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.RestoreDestinationFolderNotAvailable, profile.GetTargetRestoreFolder());
-                    }
-                }
-                else
-                {
-                    BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.RestoreDestinationFolderNotConfigured);
-                }
+                RunWorkerAsync();
             }
         }
-
 
         public ProfileDataRefreshWorkerTask(BackupProfileData profile)
         {
@@ -298,5 +219,95 @@ namespace CompleteBackup.Models.Profile
         {
             m_ProfileDataUpdateEventCallback -= callback;
         }
+
+
+
+        private void UpdateAlerts(BackupProfileData profile)
+        {
+            var storage = profile.GetStorageInterface();
+
+            Application.Current.Dispatcher.Invoke(new Action(() =>
+            {
+                profile.BackupAlertList.Clear();
+                profile.RestoreAlertList.Clear();
+            }));
+
+            if (profile.BackupFolderList.Count() == 0)
+            {
+                BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.BackupItemListEmpty);
+            }
+            else
+            {
+                foreach (var item in profile.BackupFolderList)
+                {
+                    if (item.IsFolder)
+                    {
+                        if (storage.DirectoryExists(item.Path))
+                        {
+                            item.IsAvailable = true;
+                        }
+                        else
+                        {
+                            BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.BackupItemListFolderNotAvailable, item.Path);
+                        }
+                    }
+                    else
+                    {
+                        if (storage.FileExists(item.Path))
+                        {
+                            item.IsAvailable = true;
+                        }
+                        else
+                        {
+                            BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.BackupItemListFileNotAvailable, item.Path);
+                        }
+                    }
+                }
+            }
+
+
+            if (profile.IsValidFolderName(profile.GetTargetBackupFolder()))
+            {
+                if (!storage.DirectoryExists(profile.GetTargetBackupFolder()))
+                {
+                    var folderData = profile.GetTargetBackupFolderData();
+                    folderData.IsAvailable = false;
+
+                    BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.BackupDestinationFolderNotAvailable, folderData.Path);
+                }
+            }
+            else
+            {
+                BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.BackupDestinationFolderNotConfigured);
+            }
+
+
+            //Restore
+            if (profile.LastBackupDateTime == null)
+            {
+                BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.BackupDestinationNotFound);
+            }
+            else
+            {
+                if (profile.RestoreFolderList.Count == 0)
+                {
+                    BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.RestoreItemListEmpty);
+                }
+
+                if (profile.IsValidFolderName(profile.GetTargetRestoreFolder()))
+                {
+                    if (!storage.DirectoryExists(profile.GetTargetRestoreFolder()))
+                    {
+                        BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.RestoreDestinationFolderNotAvailable, profile.GetTargetRestoreFolder());
+                    }
+                }
+                else
+                {
+                    BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertValueEnum.RestoreDestinationFolderNotConfigured);
+                }
+            }
+        }
+
+
     }
 }

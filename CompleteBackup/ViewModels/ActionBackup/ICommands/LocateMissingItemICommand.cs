@@ -49,7 +49,7 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
                             folderData.Name = profile.GetStorageInterface().GetFileName(fileDialog.SelectedPath);
                             folderData.IsAvailable = true;
 
-                            profile.UpdateProfileProperties();
+                            profile.RefreshProfileProperties();
 
                             //BackupProjectRepository.Instance.SaveProject();
                         }

@@ -95,36 +95,9 @@ namespace CompleteBackup.DataRepository
                         Name = "Backup Profiles",
                         BackupProfileList = new ObservableCollection<BackupProfileData>()
                         {
-                            new BackupProfileData()
-                            {
-                                BackupType =  BackupTypeEnum.Snapshot,
-                                Name = "Sample Snapshot backup ",
-                                Description = "home backup",
-                                BackupFolderList = new ObservableCollection<FolderData>()
-                                {
-                                    //empty folder list
-                                },
-                            },
-                            new BackupProfileData()
-                            {
-                                BackupType =  BackupTypeEnum.Incremental,
-                                Name = "Sample Incremental backup",
-                                Description = "home backup",
-                                BackupFolderList = new ObservableCollection<FolderData>()
-                                {
-                                    //empty folder list
-                                },
-                            },
-                            new BackupProfileData()
-                            {
-                                BackupType =  BackupTypeEnum.Differential,
-                                Name = "Sample Differential",
-                                Description = "home backup",
-                                BackupFolderList = new ObservableCollection<FolderData>()
-                                {
-                                    //empty folder list
-                                },
-                            },
+                            BackupProfileManager.CreateBackupProfileData("Sample Snapshot backup ", BackupTypeEnum.Snapshot, "home backup"),
+                            BackupProfileManager.CreateBackupProfileData("Sample Incremental backup ", BackupTypeEnum.Incremental, "home backup"),
+                            BackupProfileManager.CreateBackupProfileData("Sample Differential backup ", BackupTypeEnum.Differential, "home backup"),
                         }
                     }
                 };

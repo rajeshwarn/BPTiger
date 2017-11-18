@@ -83,7 +83,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Models\Profile\FolderData.cs" />
-    <Compile Include="Models\Backup\Managers\ProfileManager.cs" />
+    <Compile Include="Models\Profile\BackupProfileManager.cs" />
     <Compile Include="Models\Project\BackupProjectData.cs" />
     <Compile Include="Models\Profile\BackupProfileData.cs" />
     <Compile Include="Models\Backup\Storage\NullStorage.cs" />

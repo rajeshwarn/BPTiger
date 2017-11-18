@@ -75,7 +75,7 @@ namespace CompleteBackup.ViewModels.MainWindow
                 if (CurrentPageViewModel is MainProfileViewModel)
                 {
                     var profileView = CurrentPageViewModel as MainProfileViewModel;
-                    profileView.ProfileData.UpdateProfileProperties();
+                    profileView.ProfileData.RefreshProfileProperties();
                 }
 
                 //ProjectData.CurrentBackupProfile?.UpdateProfileProperties();

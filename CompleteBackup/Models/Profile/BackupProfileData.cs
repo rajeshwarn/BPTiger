@@ -107,10 +107,11 @@ namespace CompleteBackup.Models.Backup.Profile
         {
             if (GetTargetRestoreFolder() == null)
             {
+                //Add default restore folder if not exists
                 TargetRestoreFolderList.Add(new FolderData() { IsFolder = true, IsAvailable = true, Path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) });
             }
 
-            UpdateProfileProperties();
+            RefreshProfileProperties();
 
             FileSystemWatcherWorker = FileSystemWatcherWorkerTask.StartNewInstance(this, m_UpdateWatchItemsTimeSeconds * 1000);
         }
@@ -442,23 +443,17 @@ namespace CompleteBackup.Models.Backup.Profile
         }
 
 
-
-        public void UpdateProfileProperties()
+        
+        public void RefreshProfileProperties()
         {
             lock (this)
             {
                 if (ProfileDataRefreshTask == null)
                 {
                     ProfileDataRefreshTask = new ProfileDataRefreshWorkerTask(this);
-                    ProfileDataRefreshTask.RunWorkerAsync();
                 }
-                else
-                {
-                    if (ProfileDataRefreshTask?.IsBusy == false)
-                    {
-                        ProfileDataRefreshTask.RunWorkerAsync();
-                    }
-                }
+
+                ProfileDataRefreshTask.StartTask();
             }
         }
 
