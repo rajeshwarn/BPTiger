@@ -204,9 +204,10 @@
                                         </Style>
                                     </MenuItem.Style>
                                 </MenuItem>-->
-                                <MenuItem Header="Open location" Command="{Binding OpenItemLocationCommand}"
-                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}"/>
                                 <MenuItem Header="Edit" Command="{Binding OpenItemSelectWindowCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}"/>
+                                <Separator/>
+                                <MenuItem Header="Open location" Command="{Binding OpenItemLocationCommand}"
                                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}"/>
                             </ContextMenu>
                         </ListBox.ContextMenu>
