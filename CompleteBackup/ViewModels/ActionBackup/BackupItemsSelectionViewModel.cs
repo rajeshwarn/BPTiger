@@ -64,6 +64,8 @@ namespace CompleteBackup.ViewModels
         public override string SourceFileListGroupTitle { get; } = "Items to Backup";
         public override string SourceFileActionTitle { get; } = "Change";
         public override string DestinationGroupTitle { get; } = "Destination";
+        public override string SelectItemsToBackupOrRestoreButtonText { get; } = " Select Items to Backup ";
+
     }
 }
 

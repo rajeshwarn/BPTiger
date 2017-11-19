@@ -91,6 +91,7 @@ namespace CompleteBackup.ViewModels
         public abstract string SourceFileListGroupTitle { get; }
         public abstract string SourceFileActionTitle { get; }
         public abstract string DestinationGroupTitle { get; }
+        public abstract string SelectItemsToBackupOrRestoreButtonText { get; }
     }
 }
 
