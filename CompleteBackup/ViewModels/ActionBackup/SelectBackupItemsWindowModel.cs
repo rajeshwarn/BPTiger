@@ -91,7 +91,11 @@ namespace CompleteBackup.ViewModels
                     Name = name,
                 };
 
-                UpdateChildItemsInMenuItem(rootItem);
+                try
+                {
+                    UpdateChildItemsInMenuItem(rootItem);
+                }
+                catch (Exception) { }
 
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {

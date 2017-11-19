@@ -112,7 +112,7 @@ namespace CompleteBackup.ViewModels
         {
             var path = overridePath == null ? item.Path : overridePath;
             //Add all folders under item.Path
-            if (item.IsFolder && m_IStorage.DirectoryExists(path))
+            if (item.IsFolder)// && (m_IStorage.DirectoryExists(path) || )
             {
                 //Add folders
                 AddFoldersToFolderMenuItem(item, overridePath, history);
@@ -128,8 +128,13 @@ namespace CompleteBackup.ViewModels
         {
             var path = overridePath == null ? item.Path : overridePath;
 
+            if (!m_IStorage.DirectoryExists(path))
+            {
+                return;
+            }
+
             var subdirectoryList = m_IStorage.GetDirectoriesNames(path);
-            foreach (string subdirectory in subdirectoryList)
+            foreach (string subdirectory in subdirectoryList.Where(i => !BackupSessionHistory.IsHistoryItem(i)))
             {
                 string newPath = m_IStorage.Combine(path, subdirectory);
                 FileAttributes attr = m_IStorage.GetFileAttributes(newPath);

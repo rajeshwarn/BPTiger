@@ -134,7 +134,7 @@ namespace CompleteBackup.Models.backup
                 backupProfileList.Add(storage.GetFileName(entry));
             }
 
-            return backupProfileList.OrderByDescending(set => set).ToList();
+            return backupProfileList.OrderBy(set => set).ToList();
         }
         public static List<string> GetBackupSetWithTimeList(BackupProfileData profile)
         {
@@ -157,7 +157,7 @@ namespace CompleteBackup.Models.backup
             try
             {
                 var setList = GetBackupSetList(profile);
-                lastSet = setList.FirstOrDefault();
+                lastSet = setList.LastOrDefault();
             }
             catch (DirectoryNotFoundException)
             { }

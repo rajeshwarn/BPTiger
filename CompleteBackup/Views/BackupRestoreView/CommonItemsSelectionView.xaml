@@ -264,7 +264,11 @@
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Icons/Alert.ico" Margin="0,0,4,0" Height="16" VerticalAlignment="Center"/>
                         <TextBlock Text="Please select a destination folder" FontStyle="Italic" FontWeight="SemiBold" Foreground="Gray" VerticalAlignment="Center"/>
-                        <StackPanel.Style>
+                        <Button DockPanel.Dock="Right" Content=" ... " 
+                                    Command="{Binding SelectTargetFolderNameCommand}"
+                                    CommandParameter="{Binding ProjectData.CurrentBackupProfile}" Margin="4" VerticalAlignment="Center" HorizontalAlignment="Right">
+                        </Button>
+                    <StackPanel.Style>
                             <Style TargetType="StackPanel" >
                                 <Setter Property="Visibility" Value="Collapsed"/>
                                 <Style.Triggers>

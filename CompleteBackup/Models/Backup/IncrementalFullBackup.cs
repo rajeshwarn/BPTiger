@@ -225,13 +225,14 @@ namespace CompleteBackup.Models.backup
 
                             //Move file to last set
                             MoveFile(filePath, prevSetfilePath, true);
+                            m_BackupSessionHistory.AddDeletedFile(filePath, prevSetfilePath);
                         }
                         else
                         {
                             DeleteFile(filePath);
+                            m_BackupSessionHistory.AddDeletedFile(filePath, filePath);
                         }
 
-                        m_BackupSessionHistory.AddDeletedFile(filePath, currSetPath);
                     }
                 }
                 catch (Exception ex)
