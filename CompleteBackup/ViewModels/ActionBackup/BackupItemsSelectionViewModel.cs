@@ -29,9 +29,18 @@ namespace CompleteBackup.ViewModels
     {
         public BackupItemsSelectionViewModel()
         {
-            float ratioTotal = (float)ProjectData.CurrentBackupProfile?.BackupTargetFreeSizeNumber / (float)ProjectData.CurrentBackupProfile?.BackupTargetDiskSizeNumber;
+            float ratioTotal = 0;
+            if (ProjectData.CurrentBackupProfile?.BackupTargetDiskSizeNumber != null && (float)ProjectData.CurrentBackupProfile?.BackupTargetDiskSizeNumber > 0)
+            {
+                ratioTotal = (float)ProjectData.CurrentBackupProfile?.BackupTargetFreeSizeNumber / (float)ProjectData.CurrentBackupProfile?.BackupTargetDiskSizeNumber;
+            }
             TargetFolderGaugeList.Add(new ChartGaugeView(System.Windows.Media.Brushes.Red, System.Windows.Media.Brushes.Green, System.Windows.Media.Brushes.Yellow) { PumpNumber = "Storage", GaugeValue = ratioTotal });
-            float ratiobackup = (float)ProjectData.CurrentBackupProfile?.BackupTargetUsedSizeNumber / (float)ProjectData.CurrentBackupProfile?.BackupTargetDiskSizeNumber;
+
+            float ratiobackup = 0;
+            if (ProjectData.CurrentBackupProfile?.BackupTargetDiskSizeNumber != null && (float)ProjectData.CurrentBackupProfile?.BackupTargetDiskSizeNumber > 0)
+            {
+                ratiobackup = (float)ProjectData.CurrentBackupProfile?.BackupTargetUsedSizeNumber / (float)ProjectData.CurrentBackupProfile?.BackupTargetDiskSizeNumber;
+            }
             TargetFolderGaugeList.Add(new ChartGaugeView(System.Windows.Media.Brushes.Red, System.Windows.Media.Brushes.Green, System.Windows.Media.Brushes.Yellow) { PumpNumber = "Backup", GaugeValue = ratiobackup });
         }
 
@@ -41,10 +50,10 @@ namespace CompleteBackup.ViewModels
         public override ICommand OpenItemSelectWindowCommand { get; } = new OpenSelectBackupItemsWindowICommand<object>();
         public override ICommand SelectTargetFolderNameCommand { get; } = new SelectTargetBackupFolderNameICommand<object>();
 
-        public override ObservableCollection<BackupPerfectAlertData> BackupAlertList { get { return BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile?.BackupAlertList; } }
+        public override ObservableCollection<BackupPerfectAlertData> BackupAlertList { get { return BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile?.BackupAlertList; } }
 
-        public override ObservableCollection<FolderData> SelectionFolderList { get { return BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile?.BackupFolderList; } }
-        public override ObservableCollection<FolderData> DestinationFolderList { get { return ProjectData?.CurrentBackupProfile.TargetBackupFolderList; } }
+        public override ObservableCollection<FolderData> SelectionFolderList { get { return BackupProjectRepository.Instance.SelectedBackupProject?.CurrentBackupProfile?.BackupFolderList; } }
+        public override ObservableCollection<FolderData> DestinationFolderList { get { return ProjectData?.CurrentBackupProfile?.TargetBackupFolderList; } }
         public override ObservableCollection<ChartGaugeView> TargetFolderGaugeList { get; } = new ObservableCollection<ChartGaugeView>();
 
 

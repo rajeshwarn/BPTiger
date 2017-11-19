@@ -102,6 +102,8 @@ namespace CompleteBackup.Models.Backup.Profile
             {
                 BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.BackupFileSystemWatcherNotRunning);
             }
+
+            profile.UpdateAlerts();
         }
 
         public static string GetTargetBackupFolder(this BackupProfileData profile)

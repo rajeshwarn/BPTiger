@@ -220,27 +220,42 @@ namespace CompleteBackup.Models.Backup
             {
                 if (alert.ToString().StartsWith("Restore"))
                 {
-                    profile.RestoreAlertList.Add(alertData);
+                    var foundAlert = profile.RestoreAlertList.FirstOrDefault(e => e.AlertType == alert);
+                    if (foundAlert == null)
+                    {
+                        profile.RestoreAlertList.Add(alertData);
+                    }
                 }
                 else
                 {
-                    profile.BackupAlertList.Add(alertData);
+                    var foundAlert = profile.BackupAlertList.FirstOrDefault(e => e.AlertType == alert);
+                    if (foundAlert == null)
+                    {
+                        profile.BackupAlertList.Add(alertData);
+                    }
                 }
             }));
         }
 
         public void RemoveAlert(BackupProfileData profile, BackupPerfectAlertTypeEnum alert)
         {
-            var foundAlert = profile.BackupAlertList.FirstOrDefault(e => e.IsDeletable && e.AlertType == alert);
+//            var foundAlert = profile.BackupAlertList.FirstOrDefault(e => e.IsDeletable && e.AlertType == alert);
+            var foundAlert = profile.BackupAlertList.FirstOrDefault(e => e.AlertType == alert);
             if (foundAlert != null)
             {
-                profile.BackupAlertList.Remove(foundAlert);
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    profile.BackupAlertList.Remove(foundAlert);
+                }));
             }
 
             foundAlert = profile.RestoreAlertList.FirstOrDefault(e => e.IsDeletable && e.AlertType == alert);
             if (foundAlert != null)
             {
-                profile.RestoreAlertList.Remove(foundAlert);
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    profile.RestoreAlertList.Remove(foundAlert);
+                }));
             }
         }
     }

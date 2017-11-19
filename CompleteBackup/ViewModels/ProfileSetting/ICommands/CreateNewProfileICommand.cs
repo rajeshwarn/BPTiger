@@ -1,4 +1,6 @@
 ﻿using CompleteBackup.DataRepository;
+using CompleteBackup.Models.Backup.Profile;
+using CompleteBackup.Models.Profile;
 using CompleteBackup.Views;
 using System;
 using System.Collections.Generic;
@@ -39,8 +41,8 @@ namespace CompleteBackup.ViewModels.ICommands
             var vm = window.DataContext as CreateBackupProfileWindowViewModel;
 
             var profileType = vm.BackupTypeList.FirstOrDefault(b => b.IsChecked);
-
             vm.Profile.BackupType = profileType.BackupType;
+            vm.Profile.InitProfile();
 
             vm.Project.BackupProfileList.Add(vm.Profile);
 
