@@ -24,96 +24,31 @@ namespace CompleteBackup.Models.Backup.Profile
 {
     public class BackupProfileData : ObservableObject
     {
-        public enum ProfileTargetFolderStatusEnum
-        {
-            AssosiatedWithThisProfile, //no error looks good
-            AssosiatedWithADifferentProfile,
-            CoccuptedOrNotRecognizedProfile,
-            EmptyFolderNoProfile,
-            InvalidTargetPath,
-            NonEmptyFolderNoProfile,
-        }
+        //General properties
+        private BackupTypeEnum m_BackupType { get; set; } = BackupTypeEnum.Snapshot;
+        public BackupTypeEnum BackupType { get { return m_BackupType; } set { m_BackupType = value; OnPropertyChanged(); OnPropertyChanged("BackupTypeName"); OnPropertyChanged("BackupTypeImage"); } }
 
-        public static Dictionary<ProfileTargetFolderStatusEnum, string> ProfileTargetFolderStatusDictionary { get; } = new Dictionary<ProfileTargetFolderStatusEnum, string>()
-        {
-            { ProfileTargetFolderStatusEnum.AssosiatedWithADifferentProfile, "The folder is associated with a different backup profile" },
-            { ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile, "" },
-            { ProfileTargetFolderStatusEnum.CoccuptedOrNotRecognizedProfile, "The backup profile in this folder is not recognized or corrupted" },
-            { ProfileTargetFolderStatusEnum.EmptyFolderNoProfile, "" },
-            { ProfileTargetFolderStatusEnum.InvalidTargetPath, "The folder does not exist or invalid" },
-            { ProfileTargetFolderStatusEnum.NonEmptyFolderNoProfile, "The folder does not contain a backup profile" },
-        };
+        public Guid GUID { get; set; } = Guid.NewGuid();
 
+        private string m_Name;
+        public string Name { get { return m_Name; } set { m_Name = value; OnPropertyChanged(); } }
 
-        public BackupProfileData()
-        {
-        }
+        private string m_Description;
+        public string Description { get { return m_Description; } set { m_Description = value; OnPropertyChanged(); } }
 
-        public void Init()
-        {
-            if (GetTargetRestoreFolder() == null)
-            {
-                //Add default restore folder if not exists
-                TargetRestoreFolderList.Add(new FolderData() { IsFolder = true, IsAvailable = true, Path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) });
-            }
-
-            RefreshProfileProperties();
-
-            FileSystemWatcherWorker = FileSystemWatcherWorkerTask.StartNewInstance(this, m_UpdateWatchItemsTimeSeconds * 1000);
-        }
-
-        public bool IsBackupSleep { get { return DateTime.Compare(WateUpFromSleepTime, DateTime.Now) > 0; } }
-
-        public DateTime WateUpFromSleepTime { get; set; }
-
-        public void SleepBackup(int hours)
-        {
-            if (hours == 0)
-            {
-                WateUpFromSleepTime = DateTime.Now;
-
-                OnPropertyChanged("IsBackupSleep");
-
-                Application.Current.Dispatcher.Invoke(new Action(() =>
-                {
-                    BackupAlertManager.Instance.RemoveAlert(this, BackupPerfectAlertTypeEnum.BackupInSleepMode);
-                }));
-            }
-            else
-            {
-                DateTime timeNow = DateTime.Now;
-
-                WateUpFromSleepTime = timeNow.AddHours(hours);
-
-                OnPropertyChanged("IsBackupSleep");
-
-                Application.Current.Dispatcher.Invoke(new Action(() =>
-                {
-                    BackupAlertManager.Instance.AddAlert(this, BackupPerfectAlertTypeEnum.BackupInSleepMode, $"Wakeup time: {WateUpFromSleepTime}");
-                }));
-            }
-        }
-
+        //Properties collections
+        public ObservableCollection<FolderData> BackupFolderList { get; set; } = new ObservableCollection<FolderData>();
+        public ObservableCollection<FolderData> TargetBackupFolderList { get; set; } = new ObservableCollection<FolderData>();
 
         [XmlIgnore]
-        public ObservableCollection<BackupPerfectAlertData> BackupAlertList = new ObservableCollection<BackupPerfectAlertData>();
+        public ObservableCollection<FolderData> RestoreFolderList { get; set; } = new ObservableCollection<FolderData>();
+        public ObservableCollection<FolderData> TargetRestoreFolderList { get; set; } = new ObservableCollection<FolderData>();
 
-        [XmlIgnore]
-        public ObservableCollection<BackupPerfectAlertData> RestoreAlertList = new ObservableCollection<BackupPerfectAlertData>();
+        public ObservableCollection<FileSystemWatcherItemData> BackupWatcherItemList { get; set; } = new ObservableCollection<FileSystemWatcherItemData>();
 
-        [XmlIgnore]
-        public FileSystemWatcherWorkerTask FileSystemWatcherWorker { get; private set; }
 
-        [XmlIgnore]
-        public BackupPerfectLogger Logger { get; } = new BackupPerfectLogger();
 
-        //Policy
-
-        //Time to backup new changes in seconds
-        private long m_UpdateWatchItemsTimeSeconds = 6;
-        public long UpdateWatchItemsTimeSeconds { get { return m_UpdateWatchItemsTimeSeconds; } set { m_UpdateWatchItemsTimeSeconds = value; FileSystemWatcherWorker?.UpdateFileSystemWatcherInterval(value * 1000); OnPropertyChanged(); } }
-        
-
+        //Profile - Helpers
         [XmlIgnore]
         public bool IsDetaledLog { get; set; } = false;
 
@@ -132,111 +67,52 @@ namespace CompleteBackup.Models.Backup.Profile
         public string BackupTypeImage { get { return ProfileHelper.BackupTypeList.FirstOrDefault(i => i.BackupType == m_BackupType)?.ImageName; } set { } }
 
 
-
+        //Execution behaviour
         private BackupRunTypeEnum m_BackupRunType { get; set; } = BackupRunTypeEnum.Always;
         public BackupRunTypeEnum BackupRunType { get { return m_BackupRunType; } set { m_BackupRunType = value; OnPropertyChanged(); } }
 
-        private BackupTypeEnum m_BackupType { get; set; } = BackupTypeEnum.Snapshot;
-        public BackupTypeEnum BackupType { get { return m_BackupType; } set { m_BackupType = value; OnPropertyChanged(); OnPropertyChanged("BackupTypeName"); OnPropertyChanged("BackupTypeImage"); } }
+        [XmlIgnore]
+        public bool IsBackupSleep { get { return DateTime.Compare(WateUpFromSleepTime, DateTime.Now) > 0; } set { OnPropertyChanged(); } }
+        public DateTime WateUpFromSleepTime { get; set; }
 
-        public Guid GUID { get; set; } = Guid.NewGuid();
+        //Time to backup new changes in seconds
+        private long m_UpdateWatchItemsTimeSeconds = 6;
+        public long UpdateWatchItemsTimeSeconds { get { return m_UpdateWatchItemsTimeSeconds; } set { m_UpdateWatchItemsTimeSeconds = value; FileSystemWatcherWorker?.UpdateFileSystemWatcherInterval(value * 1000); OnPropertyChanged(); } }
 
-        private string m_Name;
-        public string Name { get { return m_Name; } set { m_Name = value; OnPropertyChanged(); } }
 
-        private string m_Description;
-        public string Description { get { return m_Description; } set { m_Description = value; OnPropertyChanged(); } }
 
-        IStorageInterface m_IStorage = new FileSystemStorage();
+        //Alerts
+        [XmlIgnore]
+        public ObservableCollection<BackupPerfectAlertData> BackupAlertList = new ObservableCollection<BackupPerfectAlertData>();
+
+        [XmlIgnore]
+        public ObservableCollection<BackupPerfectAlertData> RestoreAlertList = new ObservableCollection<BackupPerfectAlertData>();
+
+
+        //Helpers
+        [XmlIgnore]
+        public FileSystemWatcherWorkerTask FileSystemWatcherWorker { get; set; }
+
+        [XmlIgnore]
+        public ProfileDataRefreshWorkerTask ProfileDataRefreshTask { get; set; }
+
+        [XmlIgnore]
+        public BackupPerfectLogger Logger { get; } = new BackupPerfectLogger();
+
+        private IStorageInterface m_IStorage = new FileSystemStorage();
         public IStorageInterface GetStorageInterface() { return m_IStorage; }
 
-        //Backup folders
-        //private string m_TargetBackupFolder;
-        //public string TargetBackupFolder { get { return m_TargetBackupFolder; } set { m_TargetBackupFolder = value; OnPropertyChanged(); } }
-        public ObservableCollection<FolderData> TargetBackupFolderList { get; set; } = new ObservableCollection<FolderData>();
-        public string GetTargetBackupFolder()
-        {
-            string path = null;
-            var folder = GetTargetBackupFolderData();
-            if (folder != null)
-            {
-                path = folder.Path;
-            }
 
-            return path;
-        }
-        public FolderData GetTargetBackupFolderData()
-        {
-            return TargetBackupFolderList.FirstOrDefault();
-        }
-
-        //Restore folders
-        //        private string m_TargetRestoreFolder;
-        //        public string TargetRestoreFolder { get { return m_TargetRestoreFolder; } set { m_TargetRestoreFolder = value; OnPropertyChanged(); } }
-        public ObservableCollection<FolderData> TargetRestoreFolderList { get; set; } = new ObservableCollection<FolderData>();
-
-        public string GetTargetRestoreFolder()
-        {
-            string path = null;
-            var folder = TargetRestoreFolderList.FirstOrDefault();
-            if (folder != null)
-            {
-                path = folder.Path;
-            }
-
-            return path;
-        }
-
-        public bool IsValidFolderName(string path)
-        {
-            return (path != null) && (path != string.Empty);
-        }
-
-
-
-        public ObservableCollection<FolderData> BackupFolderList { get; set; } = new ObservableCollection<FolderData>();
-
-        public ObservableCollection<FileSystemWatcherItemData> BackupWatcherItemList { get; set; } = new ObservableCollection<FileSystemWatcherItemData>();
-
-        public void AddItemToBackupWatcherItemList(FileSystemWatcherItemData item)
-        {
-            lock (this)
-            {
-                BackupWatcherItemList.Add(item);
-            }
-        }
-
-        public long BackupWatcherItemListCount { get { return BackupWatcherItemList.Count(); } set { } }
-
-
-        public void ClearBackupFolderList()
-        {
-            //clear only available items
-            var availableItems = BackupFolderList.Where(i => i.IsAvailable == true).ToArray();
-            if (availableItems != null)
-            {
-                foreach (var item in availableItems)
-                {
-                    BackupFolderList.Remove(item);
-                }
-            }
-        }
 
         [XmlIgnore]
-        public ProfileDataRefreshWorkerTask ProfileDataRefreshTask { get; private set; }
+        public bool IsValidProfileFolder { get { return this.GetProfileTargetFolderStatus(this.GetTargetBackupFolder()) != ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile; } }
 
         [XmlIgnore]
-        public ObservableCollection<FolderData> RestoreFolderList { get; set; } = new ObservableCollection<FolderData>();
-
-        [XmlIgnore]
-        public bool IsValidProfileFolder { get { return GetProfileTargetFolderStatus(GetTargetBackupFolder()) != ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile; } }
-
-        [XmlIgnore]
-        public ProfileTargetFolderStatusEnum ProfileTargetFolderStatus { get { return GetProfileTargetFolderStatus(GetTargetBackupFolder()); } }
-
+        public ProfileTargetFolderStatusEnum ProfileTargetFolderStatus { get { return this.GetProfileTargetFolderStatus(this.GetTargetBackupFolder()); } }
 
         [XmlIgnore]
         public bool? IsBackupWorkerBusy { get { return BackupTaskManager.Instance.IsBackupWorkerBusy(this); } set { OnPropertyChanged(); OnPropertyChanged("IsBackupWorkerPending"); } }
+
         [XmlIgnore]
         public bool? IsBackupWorkerPending { get { return BackupTaskManager.Instance.IsBackupWorkerPending(this); } set { OnPropertyChanged(); } }
 
@@ -244,177 +120,12 @@ namespace CompleteBackup.Models.Backup.Profile
         public bool? IsBackupWorkerPaused { get { return BackupTaskManager.Instance.IsBackupWorkerPaused(this); } set { OnPropertyChanged(); } }
 
 
-        //private ProfileTargetFolderStatusEnum m_ProfileTargetFolderStatus = ProfileTargetFolderStatusEnum.InvalidTargetPath;
-        public ProfileTargetFolderStatusEnum GetProfileTargetFolderStatus(string path)
-        {
-            ProfileTargetFolderStatusEnum profileStatus;
-
-            if (!m_IStorage.DirectoryExists(path))
-            {
-                profileStatus = ProfileTargetFolderStatusEnum.InvalidTargetPath;
-            }
-            else
-            {
-                var subdirectoryList = GetDirectoriesNames(path);
-
-                if (subdirectoryList == null || subdirectoryList.Count() == 0)
-                {
-                    profileStatus = ProfileTargetFolderStatusEnum.EmptyFolderNoProfile;
-                }
-                else
-                {
-                    int iMatchCount = 0;
-                    int iOtherMatchCount = 0;
-                    foreach (string subDirectory in subdirectoryList)
-                    {
-                        string newPath = m_IStorage.Combine(path, subDirectory);
-                        if (m_IStorage.IsFolder(newPath))
-                        {
-                            if (subDirectory.StartsWith(GUID.ToString("D")))
-                            {
-                                iMatchCount++;
-                            }
-                            else
-                            {
-                                try
-                                {
-                                    if (subDirectory.Length > 36)
-                                    {
-                                        Guid newGuid = Guid.Parse(subDirectory.Substring(0, 32 + 4));
-                                        iOtherMatchCount++;
-                                    }
-                                }
-                                catch (ArgumentNullException)
-                                {
-                                    Console.WriteLine("The string to be parsed is null.");
-                                }
-                                catch (FormatException)
-                                {
-//                                    Console.WriteLine("Bad format: {0}", subDirectory);
-                                }
-                            }
-                        }
-                    }
-
-                    if (iMatchCount == subdirectoryList.Count)
-                    {
-                        profileStatus = ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile;
-                    }
-                    else if (iMatchCount == 0 && iOtherMatchCount == 0)
-                    {
-                        profileStatus = ProfileTargetFolderStatusEnum.NonEmptyFolderNoProfile;
-                    }
-                    else if (iOtherMatchCount > 0)
-                    {
-                        profileStatus = ProfileTargetFolderStatusEnum.AssosiatedWithADifferentProfile;
-                    }
-                    else
-                    {
-                        profileStatus = ProfileTargetFolderStatusEnum.CoccuptedOrNotRecognizedProfile;
-                    }
-                }
-            }
-
-            return profileStatus;
-        }
-
-        public int ConverBackupProfileFolderToNewPath(string path)
-        {
-            int iCount = -1;
-
-            var subdirectoryList = GetDirectoriesNames(path);
-            if (subdirectoryList == null || subdirectoryList.Count() == 0)
-            {
-                return 0;
-            }
-            else
-            {
-                iCount = 0;
-                foreach (string subDirectory in subdirectoryList)
-                {
-                    string sourcePath = m_IStorage.Combine(path, subDirectory);
-                    if (m_IStorage.IsFolder(sourcePath) && (subDirectory.Length >= 36))
-                    {
-                        try
-                        {
-                            Guid newGuid = Guid.Parse(subDirectory.Substring(0, 36));
-                            if (GUID != newGuid)
-                            {
-                                var sub1 = subDirectory.Substring(36, subDirectory.Length - 36);
-                                var sub2 = subDirectory.Remove(36);
-
-                                var destDirectory = GUID.ToString("D") + subDirectory.Substring(36, subDirectory.Length - 36);
-                                string targetPath = m_IStorage.Combine(path, destDirectory);
-                                if (m_IStorage.MoveDirectory(sourcePath, targetPath))
-                                {
-                                    iCount++;
-                                }
-                            }
-                        }
-                        catch (ArgumentNullException)
-                        {
-                            Console.WriteLine("The string to be parsed is null.");
-                        }
-                        catch (FormatException)
-                        {
-                            //                                    Console.WriteLine("Bad format: {0}", subDirectory);
-                        }
-                    }
-                }
-            }
-
-            return iCount;
-        }
-
-
-
-        public List<string> GetDirectoriesNames(string path)
-        {
-
-            //Process directories
-            string[] sourceSubdirectoryEntries = m_IStorage.GetDirectories(path);
-            var sourceSubdirectoryEntriesList = new List<string>();
-            if (sourceSubdirectoryEntries != null)
-            {
-                if (sourceSubdirectoryEntriesList != null)
-                {
-                    foreach (var entry in sourceSubdirectoryEntries)
-                    {
-                        sourceSubdirectoryEntriesList.Add(m_IStorage.GetFileName(entry));
-                    }
-                }
-            }
-
-            return sourceSubdirectoryEntriesList;
-        }
-
-
-        
-        public void RefreshProfileProperties()
-        {
-            lock (this)
-            {
-                if (ProfileDataRefreshTask == null)
-                {
-                    ProfileDataRefreshTask = new ProfileDataRefreshWorkerTask(this);
-                }
-
-                ProfileDataRefreshTask.StartTask();
-            }
-        }
-
+        //File system properties
         public long BackupTargetDiskSizeNumber { get; set; } = 0;
-//        private string m_BackupTargetDiskSize = "Data Not available";
-//        public string BackupTargetDiskSize { get { return m_BackupTargetDiskSize; } set { m_BackupTargetDiskSize = value; OnPropertyChanged(); } }
 
         public long BackupTargetUsedSizeNumber { get; set; } = 0;
-//        private string m_BackupTargetUsedSize = "Data Not available";
-//        public string BackupTargetUsedSize { get { return m_BackupTargetUsedSize; } set { m_BackupTargetUsedSize = value; OnPropertyChanged(); } }
 
         public long BackupTargetFreeSizeNumber { get; set; } = 0;
-//        private string m_BackupTargetFreeSize = "Data Not available";
-//        public string BackupTargetFreeSize { get { return m_BackupTargetFreeSize; } set { m_BackupTargetFreeSize = value; OnPropertyChanged(); } }
-
 
         public long m_BackupSourceFilesNumber { get; set; } = 0;
         public long BackupSourceFilesNumber { get { return m_BackupSourceFilesNumber; } set { m_BackupSourceFilesNumber = value; OnPropertyChanged(); } }

@@ -69,15 +69,15 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
                                         var folderStatus = profile.GetProfileTargetFolderStatus(path);
                                         switch (folderStatus)
                                         {
-                                            case BackupProfileData.ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile:
+                                            case ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile:
 
                                                 SaveTargetFolder(profile, fileDialog.SelectedPath);
                                                 bRetry = false;
 
                                                 break;
 
-                                            case BackupProfileData.ProfileTargetFolderStatusEnum.AssosiatedWithADifferentProfile:
-                                            case BackupProfileData.ProfileTargetFolderStatusEnum.CoccuptedOrNotRecognizedProfile:
+                                            case ProfileTargetFolderStatusEnum.AssosiatedWithADifferentProfile:
+                                            case ProfileTargetFolderStatusEnum.CoccuptedOrNotRecognizedProfile:
 
                                                 MessageBoxResult result = MessageBox.Show($"The backup folder is assosiated with a different Backup Profile or corrupted\n\nWould you like to try to convert and associate this target folder to this Backup Profile?\nPress Yes to try to convert or No if you are not sure", "Backup folder", MessageBoxButton.YesNoCancel, MessageBoxImage.Error);
 
@@ -107,12 +107,12 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
 
                                                 break;
 
-                                            case BackupProfileData.ProfileTargetFolderStatusEnum.InvalidTargetPath:
+                                            case ProfileTargetFolderStatusEnum.InvalidTargetPath:
                                                 MessageBox.Show($"Destination folder error is invalid or not available, please select a different folder", "Destination folder", MessageBoxButton.OK, MessageBoxImage.Error);
                                                 break;
 
-                                            case BackupProfileData.ProfileTargetFolderStatusEnum.NonEmptyFolderNoProfile:
-                                            case BackupProfileData.ProfileTargetFolderStatusEnum.EmptyFolderNoProfile:
+                                            case ProfileTargetFolderStatusEnum.NonEmptyFolderNoProfile:
+                                            case ProfileTargetFolderStatusEnum.EmptyFolderNoProfile:
 
                                             default:
                                                 {

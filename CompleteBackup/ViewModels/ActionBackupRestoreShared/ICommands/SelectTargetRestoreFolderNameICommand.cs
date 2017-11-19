@@ -70,9 +70,9 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
                                         var folderStatus = profile.GetProfileTargetFolderStatus(path);
                                         switch (folderStatus)
                                         {
-                                            case BackupProfileData.ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile:
-                                            case BackupProfileData.ProfileTargetFolderStatusEnum.AssosiatedWithADifferentProfile:
-                                            case BackupProfileData.ProfileTargetFolderStatusEnum.CoccuptedOrNotRecognizedProfile:
+                                            case ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile:
+                                            case ProfileTargetFolderStatusEnum.AssosiatedWithADifferentProfile:
+                                            case ProfileTargetFolderStatusEnum.CoccuptedOrNotRecognizedProfile:
                                                 MessageBoxResult result = MessageBox.Show($"The restore directory you have selected contains backup item, Are you sure you want to use this directory to store your restore backup items?", "Restore destination", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
                                                 if (result == MessageBoxResult.Yes)
                                                 {
@@ -81,7 +81,7 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
                                                 }
                                                 break;
 
-                                            case BackupProfileData.ProfileTargetFolderStatusEnum.EmptyFolderNoProfile:
+                                            case ProfileTargetFolderStatusEnum.EmptyFolderNoProfile:
                                                 result = MessageBox.Show($"The restore directory you have selected is not empty, Are you sure you want to use this directory to store your restore backup items?", "Restore destination", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
                                                 if (result == MessageBoxResult.Yes)
                                                 {

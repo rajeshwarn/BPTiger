@@ -20,7 +20,7 @@ namespace CompleteBackup.Models.Backup.Project
         {
             foreach (var profile in BackupProfileList)
             {
-                profile.Init();
+                profile.InitProfile();
             }
         }
 

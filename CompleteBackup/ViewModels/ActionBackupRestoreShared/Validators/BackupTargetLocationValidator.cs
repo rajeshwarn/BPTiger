@@ -57,16 +57,16 @@ namespace CompleteBackup.ViewModels.FolderSelection.Validators
             else if (Context.ViewModel is BackupItemsSelectionViewModel)
             {
                 var folderStatus = profile.GetProfileTargetFolderStatus(name);
-                if (folderStatus == Models.Backup.Profile.BackupProfileData.ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile ||
-                    folderStatus == Models.Backup.Profile.BackupProfileData.ProfileTargetFolderStatusEnum.EmptyFolderNoProfile)
+                if (folderStatus == ProfileTargetFolderStatusEnum.AssosiatedWithThisProfile ||
+                    folderStatus == ProfileTargetFolderStatusEnum.EmptyFolderNoProfile)
                 {
                     return ValidationResult.ValidResult;
                 }
                 else
                 {
                     var num = (int)folderStatus;
-                    var res = BackupProfileData.ProfileTargetFolderStatusDictionary[folderStatus];
-                    return new ValidationResult(false, BackupProfileData.ProfileTargetFolderStatusDictionary[folderStatus]);
+                    var res = ProfileHelper.ProfileTargetFolderStatusDictionary[folderStatus];
+                    return new ValidationResult(false, ProfileHelper.ProfileTargetFolderStatusDictionary[folderStatus]);
                 }
             }
             else
