@@ -34,7 +34,17 @@ namespace CompleteBackup.Models.Backup
         {
             if (m_FileSystemWatcherBackupTimer != null)
             {
-                m_FileSystemWatcherBackupTimer.Interval = wakeupIntervalSec;
+                if (wakeupIntervalSec == 0)
+                {
+                    m_FileSystemWatcherBackupTimer.Enabled = false;
+                    BackupAlertManager.Instance.AddAlert(m_Profile, BackupPerfectAlertTypeEnum.BackupFileSystemWatcherNotRunning);
+                }
+                else
+                {
+                    BackupAlertManager.Instance.RemoveAlert(m_Profile, BackupPerfectAlertTypeEnum.BackupFileSystemWatcherNotRunning);
+                    m_FileSystemWatcherBackupTimer.Interval = wakeupIntervalSec;
+                    m_FileSystemWatcherBackupTimer.Enabled = true;
+                }
             }
         }
 
@@ -91,7 +101,7 @@ namespace CompleteBackup.Models.Backup
                 Profile = profile,
                 Interval = wakeupIntervalSec,
                 AutoReset = true,
-                Enabled = true,
+                Enabled = profile.IsWatchFileSystem,
             };
 
             m_FileSystemWatcherBackupTimer.Elapsed += BackupTaskManager.OnFileSystemWatcherBackupTimerStartBackup;

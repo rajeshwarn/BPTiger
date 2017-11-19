@@ -5,6 +5,7 @@ using CompleteBackup.Models.Backup.Project;
 using CompleteBackup.Models.Backup.Storage;
 using CompleteBackup.Models.FolderSelection;
 using CompleteBackup.ViewModels.FolderSelection.ICommands;
+using CompleteBackup.ViewModels.ICommands;
 using CompleteBackup.Views;
 using CompleteBackup.Views.ExtendedControls;
 using System;
@@ -57,6 +58,9 @@ namespace CompleteBackup.ViewModels
         public ICommand LocateMissingItemCommand { get; private set; } = new LocateMissingItemICommand<object>();
 
         public ICommand OpenItemLocationCommand { get; private set; } = new OpenItemLocationICommand<object>();
+
+        public ICommand DeleteAlertCommand { get; private set; } = new DeleteAlertICommand<object>();
+
 
         public BackupProjectData ProjectData { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject;
 

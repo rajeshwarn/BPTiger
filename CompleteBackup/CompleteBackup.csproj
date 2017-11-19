@@ -116,6 +116,7 @@
     <Compile Include="ViewModels\ActionRestore\ICommands\RestoreFolderSelectionICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\ResumeBackupProfileICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\SleepBackupProfileICommand.cs" />
+    <Compile Include="ViewModels\ActionBackupRestoreShared\ICommands\DeleteAlertICommand.cs" />
     <Compile Include="ViewModels\ProfileSetting\EditBackupProfileWindowViewModel.cs" />
     <Compile Include="ViewModels\ProfileSetting\CreateBackupProfileWindowViewModel.cs" />
     <Compile Include="ViewModels\ExtendedControls\ICommnd\ClearLogConsoleICommand.cs" />
@@ -394,6 +395,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\Sleep.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Information.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

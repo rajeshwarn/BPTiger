@@ -68,16 +68,37 @@ namespace CompleteBackup.Models.Backup.Profile
 
 
         //Execution behaviour
-        private BackupRunTypeEnum m_BackupRunType { get; set; } = BackupRunTypeEnum.Always;
-        public BackupRunTypeEnum BackupRunType { get { return m_BackupRunType; } set { m_BackupRunType = value; OnPropertyChanged(); } }
+        //private BackupRunTypeEnum m_BackupRunType { get; set; } = BackupRunTypeEnum.Always;
+        //public BackupRunTypeEnum BackupRunType { get { return m_BackupRunType; } set { m_BackupRunType = value; OnPropertyChanged(); } }
+
+        private bool m_IsWatchFileSystem { get; set; } = true;
+        public bool IsWatchFileSystem { get { return m_IsWatchFileSystem; } set {
+                if (m_IsWatchFileSystem != value)
+                {
+                    if (value)
+                    {
+                        FileSystemWatcherWorker?.UpdateFileSystemWatcherInterval(m_UpdateWatchItemsTimeSeconds * 1000);
+                    }
+                    else
+                    {
+                        FileSystemWatcherWorker?.UpdateFileSystemWatcherInterval(0);
+                    }
+                }
+
+                m_IsWatchFileSystem = value;
+                OnPropertyChanged();
+                BackupProjectRepository.Instance?.SaveProject();
+            }
+        }
 
         [XmlIgnore]
-        public bool IsBackupSleep { get { return DateTime.Compare(WateUpFromSleepTime, DateTime.Now) > 0; } set { OnPropertyChanged(); } }
+        public bool IsBackupSleep { get { return DateTime.Compare(WateUpFromSleepTime, DateTime.Now) > 0; } set { OnPropertyChanged(); }
+        }
         public DateTime WateUpFromSleepTime { get; set; }
 
         //Time to backup new changes in seconds
         private long m_UpdateWatchItemsTimeSeconds = 6;
-        public long UpdateWatchItemsTimeSeconds { get { return m_UpdateWatchItemsTimeSeconds; } set { m_UpdateWatchItemsTimeSeconds = value; FileSystemWatcherWorker?.UpdateFileSystemWatcherInterval(value * 1000); OnPropertyChanged(); } }
+        public long UpdateWatchItemsTimeSeconds { get { return m_UpdateWatchItemsTimeSeconds; } set { m_UpdateWatchItemsTimeSeconds = value; FileSystemWatcherWorker?.UpdateFileSystemWatcherInterval(value * 1000); OnPropertyChanged(); BackupProjectRepository.Instance?.SaveProject(); } }
 
 
 

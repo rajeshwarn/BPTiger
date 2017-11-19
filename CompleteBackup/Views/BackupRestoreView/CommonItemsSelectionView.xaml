@@ -61,9 +61,20 @@
                 <ListBox DockPanel.Dock="Right" ItemsSource="{Binding BackupAlertList}" BorderThickness="0" Background="Transparent" VerticalAlignment="Center">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Image Source="/Resources/Icons/FolderTreeView/LatestItem.ico" Height="16" Margin="0,0,0,0" ToolTip="Remove alert from list"/>
-                            </StackPanel>
+                            <Button VerticalAlignment="Center"
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.DeleteAlertCommand}" CommandParameter="{Binding }" Margin="0,4">
+                                <Image Source="/Resources/Icons/Ribbon/DeleteRed.ico" Height="16" ToolTip="Remove alert from list"/>
+                                <Button.Style>
+                                    <Style TargetType="Button" >
+                                        <Setter Property="Visibility" Value="Hidden"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsDeletable}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
@@ -74,7 +85,7 @@
                             <Expander IsExpanded="False">
                                 <Expander.Header>
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Source="/Resources/Icons/Alert.ico" Height="24" Margin="0,0,8,0"/>
+                                        <Image Source="{Binding ImageName}" Height="24" Margin="0,0,8,0"/>
                                         <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Expander.Header>

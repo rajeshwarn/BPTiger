@@ -192,31 +192,17 @@
 
 
                 <RibbonGroup Header="Setting">
-                    <!--Backup Sleep-->
-
-                    <!--<RibbonMenuButton Label="Sleep" ItemsSource="{Binding Repository.BackupPauseDataList}" SmallImageSource="/Resources/Icons/Ribbon/Timer_Simple.ico" KeyTip="S">
-                        <RibbonMenuButton.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}"/>
-                            </DataTemplate>
-                        </RibbonMenuButton.ItemTemplate>
-                        <RibbonMenuButton.ItemContainerStyle>
-                            <Style TargetType="{x:Type RibbonMenuItem}">
-                                <Setter Property="ImageSource" Value="/Resources/Icons/Ribbon/Timer_Simple.ico" />
-                                <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.SleepBackupProfileCommand}"/>
-                                <Setter Property="CommandParameter" Value="{Binding }" />
-                            </Style>
-                        </RibbonMenuButton.ItemContainerStyle>
-                    </RibbonMenuButton>-->
-
-
-                    <RibbonSplitButton SmallImageSource="/Resources/Icons/Ribbon/Timer_Simple.ico"
+                    <!--Backup Sleep/Wakeup-->
+                    <RibbonSplitButton
+                        SmallImageSource="/Resources/Icons/Ribbon/Timer_Simple.ico"
                         Command="{Binding SleepBackupProfileCommand}" CommandParameter="{Binding }">
                         <RibbonGallery>
                             <RibbonGalleryCategory ItemsSource="{Binding Repository.BackupPauseDataList}">
                                 <RibbonGalleryCategory.ItemTemplate>
                                     <DataTemplate>
-                                        <RibbonButton SmallImageSource="/Resources/Icons/Ribbon/Timer_Simple.ico" Label="{Binding Name}"
+                                        <RibbonButton
+                                            SmallImageSource="/Resources/Icons/Ribbon/Timer_Simple.ico"
+                                            Label="{Binding Name}"
                                             Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.SleepBackupProfileCommand}"
                                             CommandParameter="{Binding }"/>
                                     </DataTemplate>
@@ -235,16 +221,11 @@
                         </RibbonSplitButton.Style>
                     </RibbonSplitButton>
 
-
-                    <RibbonMenuButton LargeImageSource="/Resources/Icons/BackupFolderSetting.ico" Label="Settings" KeyTip="S">
-                        <RibbonMenuItem ImageSource="/Resources/Icons/BackupItems.ico" Header="Items to backup" KeyTip="B"
-                                        Command="{Binding OpenSelectBackupItemsWindowCommand}"
-                                        CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>
-                        <RibbonMenuItem ImageSource="/Resources/Icons/DestinationDrive.ico" Header="Destination" KeyTip="R"
-                                        Command="{Binding SelectTargetBackupFolderNameCommand}"
-                                        CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>
-                    </RibbonMenuButton>
-                    <RibbonButton SmallImageSource="/Resources/Icons/BackupFolderSetting.ico" Label="Policy" KeyTip="P" />
+                    <RibbonCheckBox
+                        IsChecked="{Binding ProjectData.CurrentBackupProfile.IsWatchFileSystem}"
+                        SmallImageSource="/Resources/Icons/BackupFolderSetting.ico"
+                        Label="Watch File System" KeyTip="W"
+                        />
                 </RibbonGroup>
                 
                 

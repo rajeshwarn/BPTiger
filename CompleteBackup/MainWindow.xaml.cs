@@ -29,10 +29,5 @@ namespace CompleteBackup
             var project = BackupProjectRepository.Instance.SelectedBackupProject;
             project?.Init();
         }
-
-    private void BackupTypeRibbonGallery_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-    {
-       // MessageBox.Show(rcmbCategory.SelectionBoxItem.ToString());
     }
-}
 }

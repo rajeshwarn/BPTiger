@@ -19,11 +19,11 @@ namespace CompleteBackup.Models.Backup.Profile
         NonEmptyFolderNoProfile,
     }
 
-    public enum BackupRunTypeEnum
-    {
-        Always,
-        Manual,
-    }
+    //public enum BackupRunTypeEnum
+    //{
+    //    Always,
+    //    Manual,
+    //}
     public enum BackupTypeEnum
     {
         Snapshot,
@@ -92,6 +92,16 @@ namespace CompleteBackup.Models.Backup.Profile
             profile.RefreshProfileProperties();
 
             profile.FileSystemWatcherWorker = FileSystemWatcherWorkerTask.StartNewInstance(profile, profile.UpdateWatchItemsTimeSeconds * 1000);
+
+            if (profile.IsBackupSleep)
+            {
+                BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.BackupInSleepMode, $", Wakeup time: {profile.WateUpFromSleepTime}");
+            }
+
+            if (!profile.IsWatchFileSystem)
+            {
+                BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.BackupFileSystemWatcherNotRunning);
+            }
         }
 
         public static string GetTargetBackupFolder(this BackupProfileData profile)
@@ -187,7 +197,7 @@ namespace CompleteBackup.Models.Backup.Profile
 
                 Application.Current.Dispatcher.Invoke(new Action(() =>
                 {
-                    BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.BackupInSleepMode, $"Wakeup time: {profile.WateUpFromSleepTime}");
+                    BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.BackupInSleepMode, $", Wakeup time: {profile.WateUpFromSleepTime}");
                 }));
             }
         }
