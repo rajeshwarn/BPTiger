@@ -139,13 +139,13 @@ namespace CompleteBackup.ViewModels
             }
         }
 
-        List<string> m_BackupSetPathCacheList = new List<string>();
+        //List<string> m_BackupSetPathCacheList = new List<string>();
 
         protected override void AddRootItemsToTree()
         {
             var profile = ProjectData.CurrentBackupProfile;
             ClearItemList();
-            m_BackupSetPathCacheList.Clear();
+            //m_BackupSetPathCacheList.Clear();
 
             m_LastSetPathCache = BackupBase.GetLastBackupSetName(profile);
 
@@ -176,10 +176,10 @@ namespace CompleteBackup.ViewModels
                 case BackupTypeEnum.Differential:
                     {
                         var backSetList = BackupBase.GetBackupSetList(profile);
-                        foreach (var setPath in backSetList.Where(p => p != m_LastSetPathCache))
-                        {
-                            m_BackupSetPathCacheList.Add(m_IStorage.Combine(profile.GetTargetBackupFolder(), setPath));
-                        }
+                        //foreach (var setPath in backSetList.Where(p => p != m_LastSetPathCache))
+                        //{
+                        //    m_BackupSetPathCacheList.Add(m_IStorage.Combine(profile.GetTargetBackupFolder(), setPath));
+                        //}
 
                         m_RootFolderMenuItemTree.ParentItem = null;
                         m_RootFolderMenuItemTree.IsFolder = true;
@@ -248,7 +248,60 @@ namespace CompleteBackup.ViewModels
                 {
                     return;
                 }
-                
+
+                //Latest items
+                var fileList = m_IStorage.GetFiles(itemPath);
+                foreach (var file in fileList)
+                {
+                    //var filePath = m_IStorage.Combine(item.Path, file);
+                    var fileName = m_IStorage.GetFileName(file);
+                    FileAttributes attr = File.GetAttributes(file);
+                    if (!IsHidden(attr))
+                    {
+                        bool bSelected = false;
+                        var rp = m_IStorage.Combine(item.RelativePath, fileName);
+
+                        var foundItem = item.ChildFolderMenuItems.Where(i => i.Name == fileName).FirstOrDefault();
+                        bool bDeletedItem = false;
+                        HistoryTypeEnum historyType = HistoryTypeEnum.NoChange;
+                        if (foundItem == null)
+                        {
+                            if (history?.SessionHistoryIndex > 1)
+                            {
+                                bDeletedItem = true;
+                                historyType = HistoryTypeEnum.Deleted;
+                            }
+
+                            var newItem = CreateMenuItem(m_IStorage.IsFolder(file), bSelected, file, rp, fileName, item, attr, historyType);
+                            Application.Current.Dispatcher.Invoke(new Action(() =>
+                            {
+                                item.ChildFolderMenuItems.Add(newItem);
+                            }));
+
+                            foundItem = newItem;
+                        }
+
+                        var timeDate = history?.TimeStamp;
+
+                        if (bDeletedItem)
+                        {
+                            historyType = HistoryTypeEnum.Deleted;
+                        }
+                        else
+                        {
+                            historyType = HistoryTypeEnum.Changed;
+                        }
+                        var newMenuItem = CreateMenuItem(m_IStorage.IsFolder(file), bSelected, file, rp, timeDate.ToString(), foundItem, attr, historyType);
+
+                        Application.Current.Dispatcher.Invoke(new Action(() =>
+                        {
+                            foundItem.ChildFolderMenuItems.Add(newMenuItem);
+                        }));
+                    }
+                }
+
+
+                ////History Items
                 foreach (var historyItem in history.HistoryItemList)
                 {
                     //var filePath = m_IStorage.Combine(item.Path, file);
@@ -257,8 +310,6 @@ namespace CompleteBackup.ViewModels
                         (historyItem.HistoryType == HistoryTypeEnum.Deleted && (m_IStorage.GetDirectoryName(historyItem.SourcePath) == itemPath)))
                     {
                         var fileName = m_IStorage.GetFileName(historyItem.TargetPath);
-                        //                    FileAttributes attr = File.GetAttributes(item.TargetPath);
-                        //                    if (!IsHidden(attr))
                         {
                             bool bSelected = false;
                             var rp = m_IStorage.Combine(item.RelativePath, fileName);

@@ -187,18 +187,19 @@ namespace CompleteBackup.Models.backup
                         {
                             var destPath = m_IStorage.Combine(lastSetPath, m_IStorage.GetFileName(entry));
                             MoveDirectory(entry, destPath, true);
+                            m_BackupSessionHistory.AddDeletedFolder(entry, destPath);
                         }
                         else
                         {
-                            DeleteDirectory(m_IStorage.Combine(currSetPath, entry));
+                            var deletePath = m_IStorage.Combine(currSetPath, entry);
+                            DeleteDirectory(deletePath);
+                            m_BackupSessionHistory.AddDeletedFolder(deletePath, deletePath);
                         }
                     }
                     catch (Exception ex)
                     {
                         m_Logger.Writeln($"**Exception while deleting directory: {entry}\n{ex.Message}");
                     }
-
-                    m_BackupSessionHistory.AddDeletedFolder(entry, currSetPath);
                 }
             }
         }

@@ -142,7 +142,7 @@ namespace CompleteBackup.ViewModels
                 {
                     HistoryTypeEnum? historyType = GetFolderHistoryType(m_IStorage.Combine(item.RelativePath, subdirectory));
 
-                    if (history == null || history.SessionHistoryIndex == 1 || historyType == HistoryTypeEnum.Deleted)
+                    //if (history == null)// || history.SessionHistoryIndex == 1 || historyType == HistoryTypeEnum.Deleted)
                     {
                         bool bSelected = item.Selected == true;
 
