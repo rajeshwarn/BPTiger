@@ -154,22 +154,22 @@ namespace CompleteBackup.ViewModels
 
         protected abstract void AddFilesToFolderMenuItem(FolderMenuItem item, string itemPath, BackupSessionHistory history);
 
-        protected void AddFilesToFolderMenuItemBase(FolderMenuItem item, string itemPath, BackupSessionHistory history)
-        {
-            var fileList = m_IStorage.GetFiles(itemPath);
-            foreach (var file in fileList.Where(f => !IsPathExistsInPathList(f, item.ChildFolderMenuItems)))
-            {
-                //var filePath = m_IStorage.Combine(item.Path, file);
-                var fileName = m_IStorage.GetFileName(file);
-                FileAttributes attr = File.GetAttributes(file);
-                if (!IsHidden(attr))
-                {
-                    bool bSelected = false;
-                    var rp = m_IStorage.Combine(item.RelativePath, fileName);
-                    item.ChildFolderMenuItems.Add(CreateMenuItem(m_IStorage.IsFolder(file), bSelected, file, rp, fileName, item, attr));
-                }
-            }
-        }
+        //protected void AddFilesToFolderMenuItemBaseXXX(FolderMenuItem item, string itemPath, BackupSessionHistory history)
+        //{
+        //    var fileList = m_IStorage.GetFiles(itemPath);
+        //    foreach (var file in fileList.Where(f => !IsPathExistsInPathList(f, item.ChildFolderMenuItems)))
+        //    {
+        //        //var filePath = m_IStorage.Combine(item.Path, file);
+        //        var fileName = m_IStorage.GetFileName(file);
+        //        FileAttributes attr = File.GetAttributes(file);
+        //        if (!IsHidden(attr))
+        //        {
+        //            bool bSelected = false;
+        //            var rp = m_IStorage.Combine(item.RelativePath, fileName);
+        //            item.ChildFolderMenuItems.Add(CreateMenuItem(m_IStorage.IsFolder(file), bSelected, file, rp, fileName, item, attr));
+        //        }
+        //    }
+        //}
 
 
 
