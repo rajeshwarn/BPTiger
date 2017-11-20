@@ -28,6 +28,7 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
         public bool CanExecute(object parameter)
         {
             bool bExecute = true;
+
             return bExecute;
         }
 

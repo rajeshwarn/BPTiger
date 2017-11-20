@@ -112,6 +112,9 @@ namespace CompleteBackup.Models.Backup.Profile
 
         //Helpers
         [XmlIgnore]
+        public bool FileSystemWatcherEnabled { get { return BackupType != BackupTypeEnum.Snapshot; } }
+
+        [XmlIgnore]
         public FileSystemWatcherWorkerTask FileSystemWatcherWorker { get; set; }
 
         [XmlIgnore]

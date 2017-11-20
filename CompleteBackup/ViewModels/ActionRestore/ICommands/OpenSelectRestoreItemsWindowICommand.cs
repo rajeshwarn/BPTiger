@@ -28,12 +28,17 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
 
         public bool CanExecute(object parameter)
         {
-            bool bExecute = true;
+            bool bExecute = false;
 
             var profile = parameter as BackupProfileData;
             if (profile != null)
             {
                 bExecute = (profile.IsValidFolderName(profile.GetTargetBackupFolder()) && (profile.BackupFolderList.Count() > 0));
+            }
+
+            if (!bExecute)
+            {
+                int ttt = 0;
             }
 
             return bExecute;

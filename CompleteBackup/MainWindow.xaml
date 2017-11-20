@@ -225,10 +225,19 @@
                         IsChecked="{Binding ProjectData.CurrentBackupProfile.IsWatchFileSystem}"
                         SmallImageSource="/Resources/Icons/BackupFolderSetting.ico"
                         Label="Watch File System" KeyTip="W"
-                        />
+                        ToolTip="Check to enable File system watcher, this will monitor and apply any changes to the file system to your backup in realtime based on the backup policy.  This feature does not work with Snapshot backup type">
+                        <RibbonCheckBox.Style>
+                            <Style TargetType="RibbonCheckBox">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ProjectData.CurrentBackupProfile.FileSystemWatcherEnabled}" Value="False">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </RibbonCheckBox.Style>
+                    </RibbonCheckBox>
                 </RibbonGroup>
-                
-                
+                               
                 <RibbonGroup Visibility="Collapsed">
                     <RibbonGroup.Style>
                         <Style TargetType="RibbonGroup">

@@ -134,17 +134,29 @@ namespace CompleteBackup.Models.backup
 
         public static List<string> GetBackupSetList(BackupProfileData profile)
         {
-            var backupProfileList = new List<string>();
             var storage = profile.GetStorageInterface();
+            var setEntries = storage.GetDirectories(profile.GetTargetBackupFolder()).Where(s => storage.GetFileName(s).StartsWith(profile.BackupSignature)).OrderBy(set => set);
 
-            string[] setEntries = storage.GetDirectories(profile.GetTargetBackupFolder());            
-            foreach (var entry in setEntries.Where(s => storage.GetFileName(s).StartsWith(profile.BackupSignature)))
+            var itemList = new List<string>();
+            if (!profile.FileSystemWatcherEnabled)
             {
-                backupProfileList.Add(storage.GetFileName(entry));
+                var lastSet = setEntries.LastOrDefault();
+                if (lastSet != null)
+                {
+                    itemList.Add(lastSet);
+                }
+            }
+            else
+            {
+                if (setEntries != null)
+                {
+                    itemList = setEntries.ToList();
+                }
             }
 
-            return backupProfileList.OrderBy(set => set).ToList();
+            return itemList;
         }
+
         public static List<string> GetBackupSetWithTimeList(BackupProfileData profile)
         {
             var backupProfileList = new List<string>();

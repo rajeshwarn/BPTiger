@@ -91,7 +91,10 @@ namespace CompleteBackup.Models.Backup.Profile
             profile.ProfileDataRefreshTask = new ProfileDataRefreshWorkerTask(profile);
             profile.RefreshProfileProperties();
 
-            profile.FileSystemWatcherWorker = FileSystemWatcherWorkerTask.StartNewInstance(profile, profile.UpdateWatchItemsTimeSeconds * 1000);
+            if (profile.BackupType != BackupTypeEnum.Snapshot)
+            {
+                profile.FileSystemWatcherWorker = FileSystemWatcherWorkerTask.StartNewInstance(profile, profile.UpdateWatchItemsTimeSeconds * 1000);
+            }
 
             if (profile.IsBackupSleep)
             {
