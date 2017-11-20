@@ -48,19 +48,19 @@ namespace CompleteBackup.Models.Backup.History
 
         static readonly public string HistoryDirectory = ".BackupComnpleteHistory";
 
-        public static bool IsHistoryItem(FolderMenuItem item)
-        {
-            return (item.IsFolder && (item.Name == BackupSessionHistory.HistoryDirectory));
-        }
-        public static bool IsHistoryItem(string path)
-        {
-            return (path.EndsWith(BackupSessionHistory.HistoryDirectory));
-        }
+        //public static bool IsHistoryItem(FolderMenuItem item)
+        //{
+        //    return (item.IsFolder && (item.Name == BackupSessionHistory.HistoryDirectory));
+        //}
+        //public static bool IsHistoryItem(string path)
+        //{
+        //    return (path.EndsWith(BackupSessionHistory.HistoryDirectory));
+        //}
 
-        public static bool IsHistoryFile(string path)
-        {
-            return path.EndsWith(".json", true, null);
-        }
+        //public static bool IsHistoryFile(string path)
+        //{
+        //    return path.EndsWith(".json", true, null);
+        //}
 
         BackupSessionHistory() { }
 
@@ -97,17 +97,11 @@ namespace CompleteBackup.Models.Backup.History
         }
         public void AddDeletedFile(string source, string dest)
         {
-            if (!BackupSessionHistory.IsHistoryItem(source))
-            {
-                HistoryItemList.Add(new HistoryItem() { SourcePath = source, TargetPath = dest, HistoryType = HistoryTypeEnum.Deleted });
-            }
+            HistoryItemList.Add(new HistoryItem() { SourcePath = source, TargetPath = dest, HistoryType = HistoryTypeEnum.Deleted });
         }
         public void AddDeletedFolder(string source, string dest)
         {
-            if (!BackupSessionHistory.IsHistoryItem(source))
-            {
-                HistoryItemList.Add(new HistoryItem() { SourcePath = source, TargetPath = dest, HistoryType = HistoryTypeEnum.Deleted, HistoryItemType = HistoryItemTypeEnum.Directory });
-            }
+            HistoryItemList.Add(new HistoryItem() { SourcePath = source, TargetPath = dest, HistoryType = HistoryTypeEnum.Deleted, HistoryItemType = HistoryItemTypeEnum.Directory });
         }
         public void AddNoChangeFile(string source, string dest)
         {

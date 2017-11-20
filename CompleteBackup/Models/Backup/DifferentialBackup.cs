@@ -37,6 +37,9 @@ namespace CompleteBackup.Models.backup
 
                 CreateNewBackupSetFolderAndMoveDataToOldSet(newFullTargetPath, lastFullTargetPath);
 
+                lastFullTargetPath = m_IStorage.Combine(lastFullTargetPath, BackupBase.TargetBackupBaseDirectoryName);
+                newFullTargetPath = m_IStorage.Combine(newFullTargetPath, BackupBase.TargetBackupBaseDirectoryName);
+
                 ProcessBackupRootFolders(newFullTargetPath, lastFullTargetPath);
 
                 var sourceDirectoryEntriesList = m_SourceBackupPathList.Where(i => i.IsFolder).ToList();
@@ -110,7 +113,7 @@ namespace CompleteBackup.Models.backup
                         }
                         CopyFile(sourcePath, currSetFilePath);
 
-                        m_BackupSessionHistory.AddUpdatedFile(sourcePath, currSetFilePath);
+                        m_BackupSessionHistory.AddUpdatedFile(sourcePath, lastSetFilePath);
                     }
                 }
                 else

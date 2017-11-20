@@ -134,7 +134,7 @@ namespace CompleteBackup.ViewModels
             }
 
             var subdirectoryList = m_IStorage.GetDirectoriesNames(path);
-            foreach (string subdirectory in subdirectoryList.Where(i => !BackupSessionHistory.IsHistoryItem(i)))
+            foreach (string subdirectory in subdirectoryList)
             {
                 string newPath = m_IStorage.Combine(path, subdirectory);
                 FileAttributes attr = m_IStorage.GetFileAttributes(newPath);

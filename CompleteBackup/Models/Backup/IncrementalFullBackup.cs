@@ -33,10 +33,10 @@ namespace CompleteBackup.Models.backup
             }
             else
             {
-                ProcessBackupRootFolders(m_IStorage.Combine(m_TargetBackupPath, backupName));
+                ProcessBackupRootFolders(m_IStorage.Combine(m_IStorage.Combine(m_TargetBackupPath, backupName), BackupBase.TargetBackupBaseDirectoryName));
             }
 
-            var newFullTargetPath = m_IStorage.Combine(m_TargetBackupPath, backupName);
+            var newFullTargetPath = m_IStorage.Combine(m_IStorage.Combine(m_TargetBackupPath, backupName), BackupBase.TargetBackupBaseDirectoryName);
 
             var sourceDirectoryEntriesList = m_SourceBackupPathList.Where(i => i.IsFolder).ToList();
             var sourceFileEntriesList = m_SourceBackupPathList.Where(i => !i.IsFolder).ToList();
@@ -258,12 +258,7 @@ namespace CompleteBackup.Models.backup
             CreateDirectory(lastFullTargetPath);
 
             //Move history file to last set
-            var fileEntries = m_IStorage.GetFiles(newFullTargetPath);
-            foreach (string fileName in fileEntries.Where(f => BackupSessionHistory.IsHistoryFile(f)))
-            {
-                MoveFile(m_IStorage.Combine(newFullTargetPath, m_IStorage.GetFileName(fileName)),
-                         m_IStorage.Combine(lastFullTargetPath, m_IStorage.GetFileName(fileName)));
-            }
+            MoveDirectory(m_IStorage.Combine(newFullTargetPath, BackupSessionHistory.HistoryDirectory), m_IStorage.Combine(lastFullTargetPath, BackupSessionHistory.HistoryDirectory));
         }
     }
 }

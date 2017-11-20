@@ -31,11 +31,12 @@ namespace CompleteBackup.Models.backup
         {
             m_TimeStamp = DateTime.Now;
             m_Profile = profile;
-            m_SourceBackupPathList = profile.BackupFolderList.ToList();//.Where(i => i.IsAvailable).ToList();
-            m_TargetBackupPath = profile.GetTargetBackupFolder();
-
             m_IStorage = profile.GetStorageInterface();
             m_Logger = profile.Logger;
+
+            m_SourceBackupPathList = profile.BackupFolderList.ToList();//.Where(i => i.IsAvailable).ToList();
+            m_TargetBackupPath = GetTargetSetArchivePath(profile);
+
             m_BackupSessionHistory = new BackupSessionHistory(profile.GetStorageInterface());
 
             m_ProgressBar = progressBar;
@@ -70,6 +71,14 @@ namespace CompleteBackup.Models.backup
             return m_TimeStamp;
         }
 
+
+        public static string TargetBackupBaseDirectoryName { get; } = "Archive";
+
+
+        protected static string GetTargetSetArchivePath(BackupProfileData profile)
+        {
+            return profile.GetStorageInterface().Combine("Archive", profile.GetTargetBackupFolder());
+        }
 
         protected string GetTargetSetName()
         {

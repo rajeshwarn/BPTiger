@@ -31,7 +31,7 @@ namespace CompleteBackup.Models.backup
 
         protected string CreateNewBackupSetFolder(string newSetName)
         {
-            var targetSetPath = m_IStorage.Combine(m_TargetBackupPath, newSetName);
+            var targetSetPath = m_IStorage.Combine(m_IStorage.Combine(m_TargetBackupPath, newSetName), BackupBase.TargetBackupBaseDirectoryName);
             CreateDirectory(targetSetPath);
 
             return targetSetPath;
