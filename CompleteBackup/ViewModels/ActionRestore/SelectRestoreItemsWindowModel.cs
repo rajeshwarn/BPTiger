@@ -139,8 +139,6 @@ namespace CompleteBackup.ViewModels
             }
         }
 
-        //List<string> m_BackupSetPathCacheList = new List<string>();
-
         protected override void AddRootItemsToTree()
         {
             var profile = ProjectData.CurrentBackupProfile;
