@@ -1,0 +1,52 @@
+﻿
+Steps:
+
+1. Create a new page View (User Interface), you can clone one of the existing Views under Views/OptionsWindows and change the class name
+
+2. Create a new ModelView (Data logic behind the view) with the same prefix name under ViewModels/OptionsWindow, you can use one of the existing View Models as a reference
+
+3. Link the View to the ViewModel (new template) in OptionsWindows.xaml and under the Window.Resources tag
+For example, If the new View/ViewModel names are MyNewView and MyNewViewModel you should add the below tag:
+
+        <DataTemplate DataType="{x:Type view_models:MyNewViewModel}">
+            <views:MyNewView />
+        </DataTemplate>
+
+4. Last step (almost) is to add the new view to the Options used interface dialog. This is done dynamically during
+runtime, you will have to create a new instance of your viewModel class and add 
+it to an appropriate place inside the page view tree, you can create a new PageViewModelsTree if you want to 
+display your page view in a separate section.
+You should add your code inside the OptionsWindowViewModel constructor (OptionsWindowViewModel.cs)
+
+Example 1 - Adding the new page to an existing section (Property Page)
+Note: This is a one line code change (My New Page)!
+
+                    new PageViewModelsTree()
+                    {
+                        Name = "Database", // This is the name that will be displayed (property page name)
+                        PageViewModel = new DatabaseGeneralViewModel(), // this is the default view model when the user click on "My new page"
+                        PageTree = new List<PageViewModelsTree>
+                        {
+                            new PageViewModelsTree() { Name = "General", PageViewModel = new DatabaseGeneralViewModel() },
+                            new PageViewModelsTree() { Name = "Database", PageViewModel = new DatabaseEnvironmentViewModel() }
+This is the new page-->>	new PageViewModelsTree() { Name = "MyNew Page", PageViewModel = new MyNewViewModel() }
+                        }
+                    },
+
+
+Example 1 - Adding the new page to a new Property Page:
+
+                    new PageViewModelsTree()
+                    {
+                        Name = "My new page",  
+                        PageViewModel = new MyNewViewModel(),  
+                        PageTree = new List<PageViewModelsTree>
+                        {
+                            new PageViewModelsTree() { Name = "My new page", PageViewModel = new MyNewViewModel() },
+                        }
+                    },
+
+
+5. Last step is to save or apply changes when an "OK" button is pressed.
+
+Simply add a Save() logic to the Execute() command in the SavePropertiesICommand relay command (one line change).

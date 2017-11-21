@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="RadAnalytics.Views.GraphOptionsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RadAnalytics.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="600">
+    <Grid>
+        <StackPanel  Margin="5,5,5,5" Orientation="Vertical" VerticalAlignment="Top">
+
+
+            <GroupBox Header="View" Margin="5,5,5,5">
+                <StackPanel  Margin="5,5,5,5" Orientation="Vertical" VerticalAlignment="Top">
+                    <CheckBox Content="Check this to enable graph (by default)" IsChecked="{Binding Path=GraphSettings.DefaultEnableGraphDraw}" Margin="0,0,0,5"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="20">
+                        <TextBlock Text="Default bar graph width: "/>
+                        <TextBox Width = "50" Text="{Binding Path=GraphSettings.GraphBarWidth}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="20">
+                        <TextBlock Text="Default bar graph margin: "/>
+                        <TextBox Width = "50" Text="{Binding Path=GraphSettings.GraphBarMargin}"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+
+
+        </StackPanel>
+    </Grid>
+</UserControl>

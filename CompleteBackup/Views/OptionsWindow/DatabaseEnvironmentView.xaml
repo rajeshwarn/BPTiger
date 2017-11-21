@@ -1,0 +1,121 @@
+﻿<UserControl x:Class="RadAnalytics.Views.DatabaseEnvironmentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RadAnalytics.Views"
+             xmlns:props="clr-namespace:RadAnalytics.Properties"
+             xmlns:converters="clr-namespace:RadAnalytics.Resources.Converters"             
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="800">
+    <UserControl.Resources>
+        <props:MongoDBSettings x:Key="MongoDBSettings" />
+        <converters:PassThroughConverter x:Key="PassThroughConverter" />
+
+        <Style TargetType="GroupBox">
+            <Setter Property="Margin" Value="5,5"/>
+        </Style>
+        <Style TargetType="StackPanel">
+            <Setter Property="Margin" Value="2,2,2,2"/>
+        </Style>
+        <Style TargetType="DockPanel">
+            <Setter Property="Margin" Value="2,2,2,2"/>
+        </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,2,5,0"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="5,0,5,0"/>
+            <Setter Property="Width" Value="80"/>
+        </Style>
+
+
+    </UserControl.Resources>
+
+    <Grid>
+        <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+            <TextBlock HorizontalAlignment="Right">
+                Download MongoDB:
+                <Hyperlink 
+                    NavigateUri="https://www.mongodb.org/dl/win32/i386"
+                    RequestNavigate="DatabaseEnvironmentView_Hyperlink_RequestNavigate">
+                    32bit version
+                </Hyperlink>
+                , 
+                <Hyperlink 
+                    NavigateUri="https://www.mongodb.com/download-center?filter=enterprise#enterprise"
+                    RequestNavigate="DatabaseEnvironmentView_Hyperlink_RequestNavigate">
+                    all other versions
+                </Hyperlink>
+            </TextBlock>
+            <GroupBox Header="MongoDB Path">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+                    <DockPanel LastChildFill="True">
+                        <TextBlock Text="MongoDB bin folder:"  DockPanel.Dock="Left"/>
+                        <Button Content=" ... " DockPanel.Dock="Right"
+                                Command="{Binding SelectFolderNameCommand}">
+                            <Button.CommandParameter>
+                                <MultiBinding Converter="{StaticResource PassThroughConverter}">
+                                    <Binding Path="MongoDBSettings"/>
+                                    <Binding Source="MongoBinPath"/>
+                                </MultiBinding>
+                            </Button.CommandParameter>
+                        </Button>
+                        <TextBox Text="{Binding Path=MongoDBSettings.MongoBinPath}" Width="Auto"/>
+                    </DockPanel>
+                    <DockPanel LastChildFill="True">
+                        <TextBlock Text="MongoDB database folder:"  DockPanel.Dock="Left"/>
+                        <Button Content=" ... "
+                                Command="{Binding SelectFolderNameCommand}"
+                                DockPanel.Dock="Right">
+                            <Button.CommandParameter>
+                            <MultiBinding Converter="{StaticResource PassThroughConverter}">
+                                <Binding Path="MongoDBSettings"/>
+                                <Binding Source="MongoDataBasePath"/>
+                            </MultiBinding>
+                            </Button.CommandParameter>
+                        </Button>
+                        <TextBox Text="{Binding Path=MongoDBSettings.MongoDataBasePath}" Width="Auto"/>
+                    </DockPanel>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="MongoDB Configuration">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+                    <DockPanel LastChildFill="True">
+                        <TextBlock Text="Mongo start arguments:" DockPanel.Dock="Left"/>
+                        <TextBox Text="{Binding Path=MongoDBSettings.MongoStartArguments}" Width="Auto"/>
+                    </DockPanel>
+                    <DockPanel LastChildFill="True">
+                        <TextBlock Text="Mongo stop arguments:" DockPanel.Dock="Left"/>
+                        <TextBox Text="{Binding Path=MongoDBSettings.MongoStopArguments}" Width="Auto"/>
+                    </DockPanel>
+                    <DockPanel LastChildFill="True">
+                        <TextBlock Text="Mongo repair arguments:" DockPanel.Dock="Left"/>
+                        <TextBox Text="{Binding Path=MongoDBSettings.MongoRepairArguments}" Width="Auto"/>
+                    </DockPanel>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <TextBlock Text="Mongo watchdog timeout interval (mSec):"/>
+                        <TextBox Text="{Binding Path=MongoDBSettings.ServerWatchDogInterval}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <TextBlock Text="Mongo stop join timeout (mSec):"/>
+                        <TextBox Text="{Binding Path=MongoDBSettings.StopServerJoinTimeout}"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="Read Policy">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <TextBlock Text="Read count limit:"/>
+                        <TextBox Text="{Binding Path=MongoDBSettings.ReadCountLimit}"/>
+                    </StackPanel>
+
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+    </Grid>
+</UserControl>

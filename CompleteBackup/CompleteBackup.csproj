@@ -76,9 +76,7 @@
     <Compile Include="Models\Backup\History\BackupSessionHistory.cs" />
     <Compile Include="Models\FolderSelection\BackupFolderMenuItem.cs" />
     <Compile Include="Models\FolderSelection\RestoreFolderMenuItem.cs" />
-    <Compile Include="Models\Backup\Managers\ProfileDataRefreshWorkerTask.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Models\Backup\Managers\ProfileDataRefreshWorkerTask.cs" />
     <Compile Include="Models\Backup\Managers\BackupProcessWorkerTask.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -119,6 +117,15 @@
     <Compile Include="ViewModels\MainWindow\ICommands\ResumeBackupProfileICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\SleepBackupProfileICommand.cs" />
     <Compile Include="ViewModels\ActionBackupRestoreShared\ICommands\DeleteAlertICommand.cs" />
+    <Compile Include="ViewModels\OptionsWindow\DatabaseGeneralViewModel.cs" />
+    <Compile Include="ViewModels\OptionsWindow\ICommands\CancelPropertiesICommand.cs" />
+    <Compile Include="ViewModels\OptionsWindow\ICommands\ChangePageICommand.cs" />
+    <Compile Include="ViewModels\OptionsWindow\ICommands\ResetPropertiesICommand.cs" />
+    <Compile Include="ViewModels\OptionsWindow\ICommands\SavePropertiesICommand.cs" />
+    <Compile Include="ViewModels\OptionsWindow\OptionsWindowViewModel.cs" />
+    <Compile Include="ViewModels\OptionsWindow\Utilities\IPageViewModel.cs" />
+    <Compile Include="ViewModels\OptionsWindow\Utilities\PageViewModelsTree.cs" />
+    <Compile Include="ViewModels\OptionsWindow\Utilities\ViewModelBase.cs" />
     <Compile Include="ViewModels\ProfileSetting\EditBackupProfileWindowViewModel.cs" />
     <Compile Include="ViewModels\ProfileSetting\CreateBackupProfileWindowViewModel.cs" />
     <Compile Include="ViewModels\ExtendedControls\ICommnd\ClearLogConsoleICommand.cs" />
@@ -186,6 +193,12 @@
     <Compile Include="Views\MainWindow\GenericStatusBarView.cs" />
     <Compile Include="Views\MainWindow\MainWindowStatusBarView.xaml.cs">
       <DependentUpon>MainWindowStatusBarView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OptionsWindow\DatabaseGeneralView.xaml.cs">
+      <DependentUpon>DatabaseGeneralView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OptionsWindow\OptionsWindow.xaml.cs">
+      <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ProfileSetting\EditBackupProfileWindowView.xaml.cs">
       <DependentUpon>EditBackupProfileWindowView.xaml</DependentUpon>
@@ -256,6 +269,14 @@
     <Page Include="Views\MainWindow\MainWindowStatusBarView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\OptionsWindow\DatabaseGeneralView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\OptionsWindow\OptionsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ProfileSetting\EditBackupProfileWindowView.xaml">
       <Generator>MSBuild:Compile</Generator>

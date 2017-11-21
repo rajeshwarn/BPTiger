@@ -1,0 +1,132 @@
+﻿<UserControl x:Class="RadAnalytics.Views.RadDataCaptureView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:s="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="clr-namespace:RadAnalytics.Views"
+             xmlns:converters="clr-namespace:RadAnalytics.Resources.Converters"             
+             xmlns:props="clr-namespace:RadAnalytics.Properties"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="600">
+    
+    <UserControl.Resources>
+        <s:Boolean x:Key="True">True</s:Boolean>
+        <s:Boolean x:Key="False">False</s:Boolean>
+        <props:JagSettings x:Key="JagSettings" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converters:PassThroughConverter x:Key="PassThroughConverter" />
+
+        <Style TargetType="GroupBox">
+            <Setter Property="Margin" Value="5,5"/>
+        </Style>
+        <Style TargetType="StackPanel">
+            <Setter Property="Margin" Value="2,2,2,2"/>
+        </Style>
+        <Style TargetType="DockPanel">
+            <Setter Property="Margin" Value="2,5,2,2"/>
+        </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,2,5,0"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="5,0,5,0"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+            <GroupBox Header="Libraries">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+                    <!--<TextBlock TextWrapping="WrapWithOverflow"
+                               Text="" Margin="0,0,0,0"/>-->
+                    <DockPanel LastChildFill="True">
+                        <TextBlock Text="Binaries (fastpoint/bin) path:"  DockPanel.Dock="Left"/>
+                        <Button Content=" ... " DockPanel.Dock="Right"
+                                Command="{Binding SelectFolderNameCommand}">
+                            <Button.CommandParameter>
+                                <MultiBinding Converter="{StaticResource PassThroughConverter}">
+                                    <Binding Path="JagSettings"/>
+                                    <Binding Source="FastpointBinPath"/>
+                                </MultiBinding>
+                            </Button.CommandParameter>
+                        </Button>
+                        <TextBox Text="{Binding Path=JagSettings.FastpointBinPath}" Width="Auto"/>
+                    </DockPanel>
+                    <DockPanel LastChildFill="False">
+                        <TextBlock Text="JagSpyProxy.dll version:" DockPanel.Dock="Left"/>
+                        <TextBlock Text="{Binding JagProxyDLLVersion}" DockPanel.Dock="Left"/>
+
+                        <Button DockPanel.Dock="Right" Content="Auto Config" Command="{Binding SetJagSpyProxyManuallyCommand}"/>
+                        <Button DockPanel.Dock="Right" Content="Manual Select" Command="{Binding SetJagSpyProxyManuallyCommand}" CommandParameter="{StaticResource True}" Margin="0,0,10,0"/>
+                    </DockPanel>                    
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    </StackPanel>
+                    <!--<DockPanel LastChildFill="True">
+                        <TextBlock Text="{Binding JagSpyProxyDLLName, Mode=OneWay}"  DockPanel.Dock="Left"/>
+                        <TextBlock Text="path:"  DockPanel.Dock="Left"/>
+                        <Button Content=" ... " DockPanel.Dock="Right"
+                                Command="{Binding SelectFolderNameCommand}">
+                            <Button.CommandParameter>
+                                <MultiBinding Converter="{StaticResource PassThroughConverter}">
+                                    <Binding Path="JagSettings"/>
+                                    <Binding Source="JagProxyDLLPath"/>
+                                </MultiBinding>
+                            </Button.CommandParameter>
+                        </Button>
+                        <TextBox Text="{Binding Path=JagSettings.JagProxyDLLPath}" Width="Auto"/>
+                    </DockPanel>-->
+                </StackPanel>
+            </GroupBox>
+
+
+            <GroupBox Header="Interface">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <CheckBox Content="POS Fuel Interface" IsChecked="{Binding Path=JagSettings.EnablePOSFuelInterface}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <CheckBox Content="ICR Fuel Interface" IsChecked="{Binding Path=JagSettings.EnableICRFuelInterface}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <CheckBox Content="Icarus Status Client" IsChecked="{Binding Path=JagSettings.EnableIcarusStatusClient}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <CheckBox Content="POS Alert Interface" IsChecked="{Binding Path=JagSettings.EnablePOSAlertInterface}"/>
+                    </StackPanel>
+                    <StackPanel Visibility="Collapsed" Orientation="Horizontal" HorizontalAlignment="Left">
+                        <CheckBox Content="Dispenser Fuel Interface" IsChecked="{Binding Path=JagSettings.EnableDispenserFuelInterface}"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="ICR Generic">
+                <CheckBox DockPanel.Dock="Left"  Content="ICR Generic Protocol" IsChecked="{Binding Path=JagSettings.EnableICRGenericTraceInterface}"/>
+            </GroupBox>
+
+            <GroupBox Header="RadRam">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <CheckBox Content="Completed Fuel Sale" IsChecked="{Binding Path=JagSettings.EnableRadRamCompletedFuelSale}"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="Rad Pipes">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <CheckBox Content="Jag Logs" IsChecked="{Binding Path=JagSettings.EnableRadPipesJagLogs}"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            
+            <GroupBox Header="SM Logs">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <CheckBox Content="SM Logs" IsChecked="{Binding Path=JagSettings.EnableSMLoggerLogs}"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+    </Grid>
+</UserControl>
