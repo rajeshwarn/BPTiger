@@ -32,9 +32,7 @@ namespace CompleteBackup.ViewModels
 
         RestoreActionTypeEnum RestoreActionType { get; set; }  = RestoreActionTypeEnum.SpecificFileVersion;
 
-        public ICommand RestoreFolderSelectionCommand { get; private set; } = new RestoreFolderSelectionICommand<object>();
-
-        protected string m_LastSetPathCache;
+        public ICommand RestoreFolderSelectionCommand { get; private set; } = new RestoreFolderSelectionICommand<object>();        
 
         public SelectRestoreItemsWindowModel() : base()
         {
@@ -145,7 +143,7 @@ namespace CompleteBackup.ViewModels
             ClearItemList();
             //m_BackupSetPathCacheList.Clear();
 
-            m_LastSetPathCache = BackupBase.GetLastBackupSetName_(profile);
+            m_LastSetPathCache = BackupBase.GetLastBackupSetPath_(profile);
 
             switch (profile.BackupType)
             {
@@ -176,6 +174,8 @@ namespace CompleteBackup.ViewModels
                 case BackupTypeEnum.Differential:
                     {
                         var backSetList = BackupBase.GetBackupSetList_(profile);
+                        //var lastSetName = BackupBase.GetLastBackupSetPath_(profile);
+
                         //foreach (var setPath in backSetList.Where(p => p != m_LastSetPathCache))
                         //{
                         //    m_BackupSetPathCacheList.Add(m_IStorage.Combine(profile.GetTargetBackupFolder(), setPath));
@@ -343,8 +343,6 @@ namespace CompleteBackup.ViewModels
                         }
                     }
                 }
-
-
             }
         }
     }

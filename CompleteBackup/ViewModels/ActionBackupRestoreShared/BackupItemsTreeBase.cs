@@ -41,6 +41,7 @@ namespace CompleteBackup.ViewModels
 
         protected IStorageInterface m_IStorage;
 
+        protected string m_LastSetPathCache;
 
         public BackupItemsTreeBase()
         {
@@ -141,7 +142,6 @@ namespace CompleteBackup.ViewModels
                 if (!IsHidden(attr) && !IsNameExistsInNameList(subdirectory, item.ChildFolderMenuItems))
                 {
                     HistoryTypeEnum? historyType = GetFolderHistoryType(m_IStorage.Combine(item.RelativePath, subdirectory));
-
                     //if (history == null)// || history.SessionHistoryIndex == 1 || historyType == HistoryTypeEnum.Deleted)
                     {
                         bool bSelected = item.Selected == true;
