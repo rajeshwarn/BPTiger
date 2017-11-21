@@ -115,7 +115,7 @@ namespace CompleteBackup.Models.Backup.Profile
             var folder = profile.GetTargetBackupFolderData();
             if (folder != null)
             {
-                path = folder.Path;
+                path = folder.Path;//profile.GetStorageInterface().Combine(folder.Path, BackupProfileData.TargetBackupBaseDirectoryName);
             }
 
             return path;

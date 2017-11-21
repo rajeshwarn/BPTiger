@@ -35,7 +35,7 @@ namespace CompleteBackup.Models.backup
             m_Logger = profile.Logger;
 
             m_SourceBackupPathList = profile.BackupFolderList.ToList();//.Where(i => i.IsAvailable).ToList();
-            m_TargetBackupPath = GetTargetSetArchivePath(profile);
+            m_TargetBackupPath = profile.GetTargetBackupFolder();
 
             m_BackupSessionHistory = new BackupSessionHistory(profile.GetStorageInterface());
 
@@ -71,13 +71,13 @@ namespace CompleteBackup.Models.backup
             return m_TimeStamp;
         }
 
-
-        public static string TargetBackupBaseDirectoryName { get; } = "Archive";
-
-
-        protected static string GetTargetSetArchivePath(BackupProfileData profile)
+        protected string GetTargetArchivePath(string path)
         {
-            return profile.GetStorageInterface().Combine("Archive", profile.GetTargetBackupFolder());
+            return m_IStorage.Combine(path, BackupProfileData.TargetBackupBaseDirectoryName);
+        }
+        protected string GetTargetSetNamePath()
+        {
+            return m_IStorage.Combine(GetTargetSetName(), BackupProfileData.TargetBackupBaseDirectoryName);
         }
 
         protected string GetTargetSetName()
@@ -87,7 +87,7 @@ namespace CompleteBackup.Models.backup
 
         protected string GetTimeStampString()
         {
-            return  $"{m_TimeStamp.Year:0000}-{m_TimeStamp.Month:00}-{m_TimeStamp.Day:00}_{m_TimeStamp.Hour:00}{m_TimeStamp.Minute:00}{m_TimeStamp.Hour:00}{m_TimeStamp.Second:00}{m_TimeStamp.Millisecond:000}";
+            return $"{m_TimeStamp.Year:0000}-{m_TimeStamp.Month:00}-{m_TimeStamp.Day:00}_{m_TimeStamp.Hour:00}{m_TimeStamp.Minute:00}{m_TimeStamp.Hour:00}{m_TimeStamp.Second:00}{m_TimeStamp.Millisecond:000}";
         }
 
 
@@ -96,7 +96,31 @@ namespace CompleteBackup.Models.backup
 
         public List<FolderData> m_SourceBackupPathList;
 
-        public string m_TargetBackupPath;
+        protected string m_TargetBackupPath;
+
+        //protected string GetTargetBackupPath()
+        //{
+        //    return m_TargetBackupPath;
+        //}
+        protected string GetTargetBackupPathWithSetName(string path)
+        {
+            return m_IStorage.Combine(path, GetTargetSetName());
+        }
+        protected string GetTargetBackupPathWithSetPath(string path)
+        {
+            return m_IStorage.Combine(path, GetTargetSetNamePath());
+        }
+
+
+
+        protected string GetTargetBackupPathWithSetName()
+        {
+            return m_IStorage.Combine(GetTargetBackupFullPath(), GetTargetSetName());
+        }
+        protected string GetTargetBackupFullPath()
+        {
+            return m_IStorage.Combine(m_TargetBackupPath, GetTargetSetNamePath());
+        }
 
         private GenericStatusBarView m_ProgressBar;
         public GenericStatusBarView ProgressBar { get { return m_ProgressBar; } set { } }
@@ -132,7 +156,7 @@ namespace CompleteBackup.Models.backup
             }
         }
 
-        public static List<string> GetBackupSetList(BackupProfileData profile)
+        public static List<string> GetBackupSetList_(BackupProfileData profile)
         {
             var backupProfileList = new List<string>();
             var setEntries = profile.GetStorageInterface().GetDirectories(profile.GetTargetBackupFolder()).OrderBy(set => set);
@@ -156,7 +180,7 @@ namespace CompleteBackup.Models.backup
             return backupProfileList;
         }
 
-        public static List<string> GetBackupSetWithTimeList(BackupProfileData profile)
+        public static List<string> GetBackupSetWithTimeList_(BackupProfileData profile)
         {
             var backupProfileList = new List<string>();
             var storage = profile.GetStorageInterface();
@@ -170,13 +194,38 @@ namespace CompleteBackup.Models.backup
             return backupProfileList.OrderByDescending(set => set).ToList();
         }
 
-        public static string GetLastBackupSetName(BackupProfileData profile)
+        public static List<string> GetBackupSetPathWithTimeList_(BackupProfileData profile)
         {
-            string lastSet = null;
+            var backupProfileList = new List<string>();
+            var storage = profile.GetStorageInterface();
+
+            string[] setEntries = storage.GetDirectories(profile.GetTargetBackupFolder());
+            foreach (var entry in setEntries.Where(s => storage.GetFileName(s).StartsWith(profile.BackupSignature)))
+            {
+                backupProfileList.Add(profile.GetStorageInterface().Combine(storage.GetFileName(entry), BackupProfileData.TargetBackupBaseDirectoryName));
+            }
+
+            return backupProfileList.OrderByDescending(set => set).ToList();
+        }
+
+        public static string GetLastBackupSetPath_(BackupProfileData profile)
+        {
+            var name = GetLastBackupSetName_(profile);
+            if (name != null)
+            {
+                name = profile.GetStorageInterface().Combine(name, BackupProfileData.TargetBackupBaseDirectoryName);
+            }
+
+            return name;
+        }
+
+        public static string GetLastBackupSetName_(BackupProfileData profile)
+            {
+                string lastSet = null;
 
             try
             {
-                var setList = GetBackupSetList(profile);
+                var setList = GetBackupSetList_(profile);
                 lastSet = setList.LastOrDefault();
             }
             catch (DirectoryNotFoundException)

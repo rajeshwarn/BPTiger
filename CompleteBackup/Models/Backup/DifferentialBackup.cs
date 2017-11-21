@@ -23,33 +23,34 @@ namespace CompleteBackup.Models.backup
         {
             m_BackupSessionHistory.Reset(GetTimeStamp());
 
-            var targetSet = GetTargetSetName();
-            var lastSet = BackupBase.GetLastBackupSetName(m_Profile);
-            if (lastSet == null)
+            var lastSetName = BackupBase.GetLastBackupSetName_(m_Profile);
+            if (lastSetName == null)
             {
                 //First backup
-                ProcessNewBackupRootFolders(CreateNewBackupSetFolder(targetSet));
+                var backupPath = GetTargetBackupPathWithSetPath(m_TargetBackupPath);
+                CreateDirectory(backupPath);
+
+                ProcessNewBackupRootFolders(backupPath);
             }
             else
             {
-                var lastFullTargetPath = m_IStorage.Combine(m_TargetBackupPath, lastSet);
-                var newFullTargetPath = m_IStorage.Combine(m_TargetBackupPath, targetSet);
+                var lastSetPath = m_IStorage.Combine(m_TargetBackupPath, lastSetName);
+                var targetSetPath = GetTargetBackupPathWithSetName(m_TargetBackupPath);
 
-                CreateNewBackupSetFolderAndMoveDataToOldSet(newFullTargetPath, lastFullTargetPath);
+                CreateNewBackupSetFolderAndMoveDataToOldSet(targetSetPath, lastSetPath);
 
-                lastFullTargetPath = m_IStorage.Combine(lastFullTargetPath, BackupBase.TargetBackupBaseDirectoryName);
-                newFullTargetPath = m_IStorage.Combine(newFullTargetPath, BackupBase.TargetBackupBaseDirectoryName);
+                var lastSetArchivePath = GetTargetArchivePath(lastSetPath);
+                var targetSetArchivePath = GetTargetBackupPathWithSetPath(m_TargetBackupPath);
 
-                ProcessBackupRootFolders(newFullTargetPath, lastFullTargetPath);
+                ProcessBackupRootFolders(targetSetArchivePath, lastSetArchivePath);
 
                 var sourceDirectoryEntriesList = m_SourceBackupPathList.Where(i => i.IsFolder).ToList();
                 var sourceFileEntriesList = m_SourceBackupPathList.Where(i => !i.IsFolder).ToList();
-                HandleDeletedItems(sourceDirectoryEntriesList, newFullTargetPath, lastFullTargetPath);
-                HandleDeletedFiles(sourceFileEntriesList, newFullTargetPath, lastFullTargetPath);
-
+                HandleDeletedItems(sourceDirectoryEntriesList, targetSetArchivePath, lastSetArchivePath);
+                HandleDeletedFiles(sourceFileEntriesList, targetSetArchivePath, lastSetArchivePath);
             }
 
-            BackupSessionHistory.SaveHistory(m_TargetBackupPath, targetSet, m_BackupSessionHistory);
+            BackupSessionHistory.SaveHistory(m_TargetBackupPath, GetTargetSetName(), m_BackupSessionHistory);
         }
 
         protected override void ProcessBackupRootFolders(string newTargetPath, string lastTargetPath)

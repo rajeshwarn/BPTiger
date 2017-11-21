@@ -23,24 +23,24 @@ namespace CompleteBackup.Models.backup
         {
             m_BackupSessionHistory.Reset(GetTimeStamp());
 
-            var targetSet = GetTargetSetName();
-            var lastSet = BackupBase.GetLastBackupSetName(m_Profile);
-            if (lastSet == null)
+            var targetSetName = GetTargetSetName();
+            var lastSetName = GetLastBackupSetName_(m_Profile);
+            if (lastSetName == null)
             {
                 //First backup
-                ProcessNewBackupRootFolders(CreateNewBackupSetFolder(targetSet));
+                ProcessNewBackupRootFolders(CreateNewBackupSetFolder(targetSetName));
             }
             else
             {
-                var lastFullTargetPath = m_IStorage.Combine(m_TargetBackupPath, lastSet);
-                var newFullTargetPath = m_IStorage.Combine(m_TargetBackupPath, targetSet);
+                var lastFullTargetPath = m_IStorage.Combine(m_TargetBackupPath, GetLastBackupSetPath_(m_Profile));
+                var newFullTargetPath = m_IStorage.Combine(m_TargetBackupPath, GetTargetSetNamePath());
 
                 CreateNewBackupSetFolderAndMoveDataToOldSet(newFullTargetPath, lastFullTargetPath);
 
                 ProcessBackupRootFolders(newFullTargetPath, lastFullTargetPath);
             }
 
-            BackupSessionHistory.SaveHistory(m_TargetBackupPath, targetSet, m_BackupSessionHistory);
+            BackupSessionHistory.SaveHistory(m_TargetBackupPath, targetSetName, m_BackupSessionHistory);
         }
     }
 }

@@ -24,26 +24,30 @@ namespace CompleteBackup.Models.backup
         {
             m_BackupSessionHistory.Reset(GetTimeStamp());
 
-            var backupName = BackupBase.GetLastBackupSetName(m_Profile);
-            if (backupName == null)
+            var backupSetName = BackupBase.GetLastBackupSetName_(m_Profile);
+            var backupPath = BackupBase.GetLastBackupSetPath_(m_Profile);
+            if (backupSetName == null)
             {
                 //First backup
-                backupName = GetTargetSetName();
-                ProcessNewBackupRootFolders(CreateNewBackupSetFolder(backupName));
+                backupSetName = GetTargetSetName();
+                backupPath = GetTargetBackupPathWithSetPath(m_TargetBackupPath);
+                CreateDirectory(backupPath);
+
+                ProcessNewBackupRootFolders(backupPath);
             }
             else
             {
-                ProcessBackupRootFolders(m_IStorage.Combine(m_IStorage.Combine(m_TargetBackupPath, backupName), BackupBase.TargetBackupBaseDirectoryName));
+                backupPath = m_IStorage.Combine(m_TargetBackupPath, backupPath);
+                ProcessBackupRootFolders(backupPath);
+
+                var sourceDirectoryEntriesList = m_SourceBackupPathList.Where(i => i.IsFolder).ToList();
+                var sourceFileEntriesList = m_SourceBackupPathList.Where(i => !i.IsFolder).ToList();
+
+                HandleDeletedItems(sourceDirectoryEntriesList, m_TargetBackupPath);
+                HandleDeletedFiles(sourceFileEntriesList, m_TargetBackupPath);
             }
 
-            var newFullTargetPath = m_IStorage.Combine(m_IStorage.Combine(m_TargetBackupPath, backupName), BackupBase.TargetBackupBaseDirectoryName);
-
-            var sourceDirectoryEntriesList = m_SourceBackupPathList.Where(i => i.IsFolder).ToList();
-            var sourceFileEntriesList = m_SourceBackupPathList.Where(i => !i.IsFolder).ToList();
-            HandleDeletedItems(sourceDirectoryEntriesList, newFullTargetPath);
-            HandleDeletedFiles(sourceFileEntriesList, newFullTargetPath);
-
-            BackupSessionHistory.SaveHistory(m_TargetBackupPath, backupName, m_BackupSessionHistory);
+            BackupSessionHistory.SaveHistory(m_TargetBackupPath, backupSetName, m_BackupSessionHistory);
         }
 
 

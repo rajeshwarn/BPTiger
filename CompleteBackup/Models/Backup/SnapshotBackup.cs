@@ -21,17 +21,18 @@ namespace CompleteBackup.Models.backup
         {
             m_BackupSessionHistory.Reset(GetTimeStamp());
 
-            string backupName = GetTargetSetName();
-            string targetSetPath = CreateNewBackupSetFolder(backupName);
+            var backupPath = GetTargetBackupPathWithSetPath(m_TargetBackupPath);
+            CreateDirectory(backupPath);
 
-            ProcessBackupRootFolders(targetSetPath);
+            ProcessBackupRootFolders(backupPath);
 
-            BackupSessionHistory.SaveHistory(m_TargetBackupPath, backupName, m_BackupSessionHistory);
+            BackupSessionHistory.SaveHistory(m_TargetBackupPath, GetTargetSetName(), m_BackupSessionHistory);
         }
 
         protected string CreateNewBackupSetFolder(string newSetName)
         {
-            var targetSetPath = m_IStorage.Combine(m_IStorage.Combine(m_TargetBackupPath, newSetName), BackupBase.TargetBackupBaseDirectoryName);
+            var targetSetPath = m_IStorage.Combine(m_TargetBackupPath, newSetName);
+
             CreateDirectory(targetSetPath);
 
             return targetSetPath;

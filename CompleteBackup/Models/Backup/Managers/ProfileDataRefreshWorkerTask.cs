@@ -40,6 +40,7 @@ namespace CompleteBackup.Models.Profile
                         }
                         else
                         {
+                            item.IsAvailable = false;
                             BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.BackupItemListFolderNotAvailable, $": {item.Path}");
                         }
                     }
@@ -51,6 +52,7 @@ namespace CompleteBackup.Models.Profile
                         }
                         else
                         {
+                            item.IsAvailable = false;
                             BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.BackupItemListFileNotAvailable, $": {item.Path}");
                         }
                     }
@@ -58,44 +60,58 @@ namespace CompleteBackup.Models.Profile
             }
 
 
-            if (profile.IsValidFolderName(profile.GetTargetBackupFolder()))
+            foreach (var item in profile.TargetBackupFolderList)
             {
-                if (!storage.DirectoryExists(profile.GetTargetBackupFolder()))
+                if (profile.IsValidFolderName(item.Path))
                 {
-                    var folderData = profile.GetTargetBackupFolderData();
-                    folderData.IsAvailable = false;
-
-                    BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.BackupDestinationFolderNotAvailable, $": {folderData.Path}");
+                    if (!storage.DirectoryExists(item.Path))
+                    {
+                        item.IsAvailable = false;
+                        BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.BackupDestinationFolderNotAvailable, $": {item.Path}");
+                    }
+                    else
+                    {
+                        item.IsAvailable = true;
+                    }
+                }
+                else
+                {
+                    item.IsAvailable = false;
+                    BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.BackupDestinationFolderNotConfigured);
                 }
             }
-            else
-            {
-                BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.BackupDestinationFolderNotConfigured);
-            }
-
 
             //Restore
             if (profile.LastBackupDateTime == null)
             {
                 BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.Restore_BackupDestinationNotFound);
             }
+
+            if (profile.RestoreFolderList.Count == 0)
+            {
+                BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.RestoreItemListEmpty);
+            }
             else
             {
-                if (profile.RestoreFolderList.Count == 0)
+                foreach (var item in profile.RestoreFolderList)
                 {
-                    BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.RestoreItemListEmpty);
-                }
-
-                if (profile.IsValidFolderName(profile.GetTargetRestoreFolder()))
-                {
-                    if (!storage.DirectoryExists(profile.GetTargetRestoreFolder()))
+                    if (profile.IsValidFolderName(item.Path))
                     {
-                        BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.RestoreDestinationFolderNotAvailable, $": {profile.GetTargetRestoreFolder()}");
+                        if (!storage.DirectoryExists(item.Path))
+                        {
+                            item.IsAvailable = false;
+                            BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.RestoreDestinationFolderNotAvailable, $": {profile.GetTargetRestoreFolder()}");
+                        }
+                        else
+                        {
+                            item.IsAvailable = true;
+                        }
                     }
-                }
-                else
-                {
-                    BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.RestoreDestinationFolderNotConfigured);
+                    else
+                    {
+                        item.IsAvailable = false;
+                        BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.RestoreDestinationFolderNotConfigured);
+                    }
                 }
             }
         }
@@ -167,8 +183,7 @@ namespace CompleteBackup.Models.Profile
                             }));
                         }
                     }
-
-
+                       
                     //Restore Items
                     foreach (var item in profile.RestoreFolderList)
                     {
@@ -197,7 +212,7 @@ namespace CompleteBackup.Models.Profile
                     {
                         //Get last backup time
                         DateTime? lastTime = null;
-                        var lastSet = BackupBase.GetLastBackupSetName(profile);
+                        var lastSet = BackupBase.GetLastBackupSetName_(profile);
                         if (lastSet != null)
                         {
                             var sessionHistory = BackupSessionHistory.LoadHistory(profile.GetTargetBackupFolder(), lastSet);

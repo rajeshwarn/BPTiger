@@ -110,7 +110,7 @@ namespace CompleteBackup.ViewModels
             else
             {
                 var profile = ProjectData.CurrentBackupProfile;
-                var backSetList = BackupBase.GetBackupSetList(profile);
+                var backSetList = BackupBase.GetBackupSetList_(profile);
 
                     //xxxxx
                 foreach (var item in itemList)
@@ -126,7 +126,7 @@ namespace CompleteBackup.ViewModels
 
                             var folderItem = item as FolderMenuItem;
 
-                            var lastSetPath = m_IStorage.Combine(m_IStorage.Combine(profile.GetTargetBackupFolder(), setPath), BackupBase.TargetBackupBaseDirectoryName);
+                            var lastSetPath = m_IStorage.Combine(profile.GetTargetBackupFolder(), setPath);
                             var lastSetPath2 = m_IStorage.Combine(lastSetPath, folderItem.RelativePath);
 
                             //if (folderItem.ChildFolderMenuItems.Count() == 0)
@@ -145,7 +145,7 @@ namespace CompleteBackup.ViewModels
             ClearItemList();
             //m_BackupSetPathCacheList.Clear();
 
-            m_LastSetPathCache = BackupBase.GetLastBackupSetName(profile);
+            m_LastSetPathCache = BackupBase.GetLastBackupSetName_(profile);
 
             switch (profile.BackupType)
             {
@@ -158,7 +158,7 @@ namespace CompleteBackup.ViewModels
                         {
                             
                             var directoryName = m_IStorage.GetFileName(item.Path);
-                            var restorePath = m_IStorage.Combine(lastSetPath, m_IStorage.Combine(BackupBase.TargetBackupBaseDirectoryName, directoryName));
+                            var restorePath = m_IStorage.Combine(lastSetPath, m_IStorage.Combine(profile.GetTargetBackupFolder(), directoryName));
 
                             var rootItem = CreateMenuItem(m_IStorage.IsFolder(restorePath), false, restorePath, directoryName, directoryName, null, 0);
 
@@ -174,7 +174,7 @@ namespace CompleteBackup.ViewModels
                     break;
                 case BackupTypeEnum.Differential:
                     {
-                        var backSetList = BackupBase.GetBackupSetList(profile);
+                        var backSetList = BackupBase.GetBackupSetList_(profile);
                         //foreach (var setPath in backSetList.Where(p => p != m_LastSetPathCache))
                         //{
                         //    m_BackupSetPathCacheList.Add(m_IStorage.Combine(profile.GetTargetBackupFolder(), setPath));
@@ -199,7 +199,7 @@ namespace CompleteBackup.ViewModels
                             {
                                 sessionHistory.SessionHistoryIndex = iSessionIndex;
 
-                                var lastSetPath = m_IStorage.Combine(m_IStorage.Combine(profile.GetTargetBackupFolder(), setPath), BackupBase.TargetBackupBaseDirectoryName);
+                                var lastSetPath = m_IStorage.Combine(profile.GetTargetBackupFolder(), setPath);
 
                                 m_RootFolderMenuItemTree.Path = lastSetPath;
 

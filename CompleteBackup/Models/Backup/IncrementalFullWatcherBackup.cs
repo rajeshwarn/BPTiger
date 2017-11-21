@@ -23,7 +23,7 @@ namespace CompleteBackup.Models.backup
         {
             m_BackupSessionHistory.Reset(GetTimeStamp());
 
-            var backupName = BackupBase.GetLastBackupSetName(m_Profile);
+            var backupName = BackupBase.GetLastBackupSetName_(m_Profile);
             if (backupName == null)
             {
                 //First backup
