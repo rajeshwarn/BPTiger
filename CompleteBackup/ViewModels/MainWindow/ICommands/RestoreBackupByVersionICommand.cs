@@ -1,6 +1,8 @@
-﻿using CompleteBackup.Models.backup;
+﻿using CompleteBackup.DataRepository;
+using CompleteBackup.Models.backup;
 using CompleteBackup.Models.Backup.Profile;
 using CompleteBackup.Models.Profile;
+using CompleteBackup.ViewModels.FolderSelection.ICommands;
 using CompleteBackup.Views;
 using CompleteBackup.Views.MainWindow;
 using System;
@@ -12,9 +14,9 @@ using System.Windows.Input;
 
 namespace CompleteBackup.ViewModels.ICommands
 {
-    internal class RestoreBackupICommand<T> : ICommand
+    internal class RestoreBackupByVersionICommand<T> : ICommand
     {
-        public RestoreBackupICommand()
+        public RestoreBackupByVersionICommand()
         {
         }
         public event EventHandler CanExecuteChanged
@@ -32,8 +34,9 @@ namespace CompleteBackup.ViewModels.ICommands
         public bool CanExecute(object parameter)
         {
             var profile = parameter as BackupProfileData;
+            var currProfile = BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile;
 
-            bool bExecute = (profile != null);
+            bool bExecute = currProfile != null;
 
             return bExecute;
         }
@@ -53,6 +56,11 @@ namespace CompleteBackup.ViewModels.ICommands
             {
        //         profile.StartBackup();
             }
+
+            var command = new OpenSelectRestoreItemsWindowICommand<object>();
+
+            var currProfile = BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile;
+            command.Execute(currProfile);
         }
     }
 }

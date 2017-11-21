@@ -123,16 +123,61 @@
 
 
             <RibbonTab Header="Backup" KeyTip="B" >
-                <RibbonGroup Header="Backup items and destination">
-                    <RibbonMenuButton LargeImageSource="/Resources/Icons/BackupFolderSetting.ico" Label="Folders" KeyTip="F">
-                        <RibbonMenuItem ImageSource="/Resources/Icons/BackupItems.ico" Header="Items to backup" KeyTip="B"
+                <RibbonGroup Header="Backup Settings">
+                    <RibbonMenuButton LargeImageSource="/Resources/Icons/BackupFolderSetting.ico" Label="Item Setting" KeyTip="F">
+                        <RibbonMenuItem ImageSource="/Resources/Icons/BackupItems.ico" Header="Backup Items" KeyTip="B"
                                         Command="{Binding OpenSelectBackupItemsWindowCommand}"
                                         CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>
-                        <RibbonMenuItem ImageSource="/Resources/Icons/DestinationDrive.ico" Header="Destination" KeyTip="R"
+                        <RibbonMenuItem ImageSource="/Resources/Icons/DestinationDrive.ico" Header="Backup Destination" KeyTip="R"
                                         Command="{Binding SelectTargetBackupFolderNameCommand}"
                                         CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>
                     </RibbonMenuButton>
-                    <RibbonButton SmallImageSource="/Resources/Icons/BackupFolderSetting.ico" Label="Policy" KeyTip="P" />
+
+                    <!--Backup Sleep/Wakeup-->
+                    <RibbonSplitButton
+                        SmallImageSource="/Resources/Icons/Ribbon/Timer_Simple.ico"
+                        Command="{Binding SleepBackupProfileCommand}" CommandParameter="{Binding }">
+                        <RibbonGallery>
+                            <RibbonGalleryCategory ItemsSource="{Binding Repository.BackupPauseDataList}">
+                                <RibbonGalleryCategory.ItemTemplate>
+                                    <DataTemplate>
+                                        <RibbonButton
+                                            SmallImageSource="/Resources/Icons/Ribbon/Timer_Simple.ico"
+                                            Label="{Binding Name}"
+                                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.SleepBackupProfileCommand}"
+                                            CommandParameter="{Binding }"/>
+                                    </DataTemplate>
+                                </RibbonGalleryCategory.ItemTemplate>
+                            </RibbonGalleryCategory>
+                        </RibbonGallery>
+                        <RibbonSplitButton.Style>
+                            <Style TargetType="RibbonSplitButton" >
+                                <Setter Property="Label" Value="Sleep"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ProjectData.CurrentBackupProfile.IsBackupSleep}" Value="true">
+                                        <Setter Property="Label" Value="Wakeup"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </RibbonSplitButton.Style>
+                    </RibbonSplitButton>
+
+                    <!--Watch File system Interval-->
+                    <RibbonCheckBox
+                        IsChecked="{Binding ProjectData.CurrentBackupProfile.IsWatchFileSystem}"
+                        SmallImageSource="/Resources/Icons/BackupFolderSetting.ico"
+                        Label="Watch File System" KeyTip="W"
+                        ToolTip="Check to enable File system watcher, this will monitor and apply any changes to the file system to your backup in realtime based on the backup policy.  This feature does not work with Snapshot backup type">
+                        <RibbonCheckBox.Style>
+                            <Style TargetType="RibbonCheckBox">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ProjectData.CurrentBackupProfile.FileSystemWatcherEnabled}" Value="False">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </RibbonCheckBox.Style>
+                    </RibbonCheckBox>
                 </RibbonGroup>
 
                 <RibbonGroup Header="Run backup now" ToolTip="Click start to manually run a full backup">
@@ -190,53 +235,6 @@
                     </RibbonButton>
                 </RibbonGroup>
 
-
-                <RibbonGroup Header="Setting">
-                    <!--Backup Sleep/Wakeup-->
-                    <RibbonSplitButton
-                        SmallImageSource="/Resources/Icons/Ribbon/Timer_Simple.ico"
-                        Command="{Binding SleepBackupProfileCommand}" CommandParameter="{Binding }">
-                        <RibbonGallery>
-                            <RibbonGalleryCategory ItemsSource="{Binding Repository.BackupPauseDataList}">
-                                <RibbonGalleryCategory.ItemTemplate>
-                                    <DataTemplate>
-                                        <RibbonButton
-                                            SmallImageSource="/Resources/Icons/Ribbon/Timer_Simple.ico"
-                                            Label="{Binding Name}"
-                                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.SleepBackupProfileCommand}"
-                                            CommandParameter="{Binding }"/>
-                                    </DataTemplate>
-                                </RibbonGalleryCategory.ItemTemplate>
-                            </RibbonGalleryCategory>
-                        </RibbonGallery>
-                        <RibbonSplitButton.Style>
-                            <Style TargetType="RibbonSplitButton" >
-                                <Setter Property="Label" Value="Sleep"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ProjectData.CurrentBackupProfile.IsBackupSleep}" Value="true">
-                                        <Setter Property="Label" Value="Wakeup"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </RibbonSplitButton.Style>
-                    </RibbonSplitButton>
-
-                    <RibbonCheckBox
-                        IsChecked="{Binding ProjectData.CurrentBackupProfile.IsWatchFileSystem}"
-                        SmallImageSource="/Resources/Icons/BackupFolderSetting.ico"
-                        Label="Watch File System" KeyTip="W"
-                        ToolTip="Check to enable File system watcher, this will monitor and apply any changes to the file system to your backup in realtime based on the backup policy.  This feature does not work with Snapshot backup type">
-                        <RibbonCheckBox.Style>
-                            <Style TargetType="RibbonCheckBox">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ProjectData.CurrentBackupProfile.FileSystemWatcherEnabled}" Value="False">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </RibbonCheckBox.Style>
-                    </RibbonCheckBox>
-                </RibbonGroup>
                                
                 <RibbonGroup Visibility="Collapsed">
                     <RibbonGroup.Style>
@@ -254,22 +252,30 @@
             </RibbonTab>
 
             <RibbonTab Header="Restore" KeyTip="R" >
-                <RibbonGroup Header="Restore items and destination">
-                    <RibbonMenuButton LargeImageSource="/Resources/Icons/BackupFolderSetting.ico" Label="Settings" KeyTip="S">
-                        <RibbonMenuItem ImageSource="/Resources/Icons/BackupItems.ico" Header="Items to backup" KeyTip="B"
+                <RibbonGroup Header="Restore Setting">
+                    <RibbonMenuButton LargeImageSource="/Resources/Icons/BackupFolderSetting.ico" Label="Destination" KeyTip="S">
+                        <!--<RibbonMenuItem ImageSource="/Resources/Icons/BackupItems.ico" Header="Destination " KeyTip="B"
                                         Command="{Binding OpenSelectRestoreItemsWindowCommand}"
-                                        CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>
-                        <RibbonMenuItem ImageSource="/Resources/Icons/DestinationDrive.ico" Header="Destination" KeyTip="R"
+                                        CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>-->
+                        <RibbonMenuItem ImageSource="/Resources/Icons/DestinationDrive.ico" Header="Destination directory" KeyTip="R"
                                         Command="{Binding SelectTargetRestoreFolderNameCommand}"
                                         CommandParameter="{Binding ProjectData.CurrentBackupProfile}"/>
                     </RibbonMenuButton>
-                    <RibbonButton SmallImageSource="/Resources/Icons/BackupFolderSetting.ico" Label="Policy" KeyTip="P" />
+                    <!--<RibbonButton SmallImageSource="/Resources/Icons/BackupFolderSetting.ico" Label="Policy" KeyTip="P" />-->
                 </RibbonGroup>
 
-                <RibbonGroup Header="Restore" ToolTip="Restore backup">
+                <RibbonGroup Header="Restore" ToolTip="Restore backup" KeyTip="R">
                     <!--Restore backup-->
-                    <RibbonButton LargeImageSource="/Resources/Icons/Ribbon/Restore.ico" Label="Restore"  KeyTip="R"
-                                  Command="{Binding RestoreBackupCommand}"
+                    <RibbonButton LargeImageSource="/Resources/Icons/Ribbon/RestoreLatestVersion.ico" Label="Latest version" KeyTip="L" ToolTip="Restore the latest version or the most up to date files and folders from the storage backup"
+                                  Command="{Binding RestoreBackupLatestVersionCommand}"
+                                  CommandParameter="{Binding ProjectData.CurrentBackupProfile}">
+                    </RibbonButton>
+                    <RibbonButton LargeImageSource="/Resources/Icons/Ribbon/RestoreSpecificVersion.ico" Label="Specific Date" KeyTip="D" ToolTip="Lets the choose the date of the files and folders from the storage backup"
+                                  Command="{Binding RestoreBackupByDateCommand}"
+                                  CommandParameter="{Binding ProjectData.CurrentBackupProfile}">
+                    </RibbonButton>
+                    <RibbonButton LargeImageSource="/Resources/Icons/Ribbon/RestoreDateVersion.ico" Label="Specific verison" KeyTip="V" ToolTip="Lets you choose a specific version of files and folders from the storage backup"
+                                  Command="{Binding RestoreBackupByVersionCommand}"
                                   CommandParameter="{Binding ProjectData.CurrentBackupProfile}">
                     </RibbonButton>
                 </RibbonGroup>

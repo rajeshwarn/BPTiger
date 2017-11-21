@@ -114,6 +114,8 @@
     <Compile Include="ViewModels\ActionRestore\ICommands\OpenSelectRestoreItemsWindowICommand.cs" />
     <Compile Include="ViewModels\ActionRestore\RestoreItemsSelectionViewModel.cs" />
     <Compile Include="ViewModels\ActionRestore\ICommands\RestoreFolderSelectionICommand.cs" />
+    <Compile Include="ViewModels\MainWindow\ICommands\RestoreBackupByDateICommand.cs" />
+    <Compile Include="ViewModels\MainWindow\ICommands\RestoreBackupLatestVersionICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\ResumeBackupProfileICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\SleepBackupProfileICommand.cs" />
     <Compile Include="ViewModels\ActionBackupRestoreShared\ICommands\DeleteAlertICommand.cs" />
@@ -134,7 +136,7 @@
     <Compile Include="ViewModels\ProfileSetting\SelectBackupTypeWindowViewModel.cs" />
     <Compile Include="ViewModels\ActionBackupRestoreShared\BackupItemsTreeBase.cs" />
     <Compile Include="ViewModels\ExtendedControls\ProcessingSpinnerViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ICommands\RestoreBackupICommand.cs" />
+    <Compile Include="ViewModels\MainWindow\ICommands\RestoreBackupByVersionICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\StopBackupICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\PauseBackupICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\StartFullBackupICommand.cs" />
@@ -398,6 +400,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\Information.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Ribbon\RestoreDateVersion.ico" />
+    <Resource Include="Resources\Icons\Ribbon\RestoreLatestVersion.ico" />
+    <Resource Include="Resources\Icons\Ribbon\RestoreSpecificVersion.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

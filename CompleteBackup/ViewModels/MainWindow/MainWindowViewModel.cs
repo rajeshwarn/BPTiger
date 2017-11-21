@@ -32,7 +32,9 @@ namespace CompleteBackup.ViewModels.MainWindow
         public ICommand SleepBackupProfileCommand { get; private set; } = new SleepBackupProfileICommand<object>();
         public ICommand ResumeBackupProfileCommand { get; private set; } = new ResumeBackupProfileICommand<object>();
 
-        public ICommand RestoreBackupCommand { get; private set; } = new RestoreBackupICommand<object>();
+        public ICommand RestoreBackupLatestVersionCommand { get; private set; } = new RestoreBackupLatestVersionICommand<object>();
+        public ICommand RestoreBackupByVersionCommand { get; private set; } = new RestoreBackupByVersionICommand<object>();
+        public ICommand RestoreBackupByDateCommand { get; private set; } = new RestoreBackupByDateICommand<object>();
 
         const int m_DefaultPageIndex = 1;
 
