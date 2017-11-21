@@ -121,7 +121,7 @@
                 </RibbonGroup>-->
             </RibbonTab>
 
-
+<!--BACKUP-->
             <RibbonTab Header="Backup" KeyTip="B" >
                 <RibbonGroup Header="Backup Settings">
                     <RibbonMenuButton LargeImageSource="/Resources/Icons/BackupFolderSetting.ico" Label="Item Setting" KeyTip="F">
@@ -251,6 +251,7 @@
                 </RibbonGroup>
             </RibbonTab>
 
+<!--RESTORE-->
             <RibbonTab Header="Restore" KeyTip="R" >
                 <RibbonGroup Header="Restore Setting">
                     <RibbonMenuButton LargeImageSource="/Resources/Icons/BackupFolderSetting.ico" Label="Destination" KeyTip="S">
@@ -264,8 +265,30 @@
                     <!--<RibbonButton SmallImageSource="/Resources/Icons/BackupFolderSetting.ico" Label="Policy" KeyTip="P" />-->
                 </RibbonGroup>
 
-                <RibbonGroup Header="Restore" ToolTip="Restore backup" KeyTip="R">
-                    <!--Restore backup-->
+
+                <RibbonGroup Header="Restore">
+                    <RibbonSplitButton Label="Restore" LargeImageSource="/Resources/Icons/Ribbon/RestoreLatestVersion.ico"
+                                       Command="{Binding RestoreBackupLatestVersionCommand}"
+                                       CommandParameter="{Binding ProjectData.CurrentBackupProfile}"
+                                       ToolTip="Restore the latest version or the most up to date files and folders from the storage backup">
+
+                        <RibbonMenuItem ImageSource="/Resources/Icons/Ribbon/RestoreLatestVersion.ico" Header="Latest version"
+                                       Command="{Binding RestoreBackupLatestVersionCommand}"
+                                       CommandParameter="{Binding ProjectData.CurrentBackupProfile}"
+                                       ToolTip="Restore the latest version or the most up to date files and folders from the storage backup"/>
+                        <RibbonMenuItem ImageSource="/Resources/Icons/Ribbon/RestoreDateVersion.ico" Header="Specific version"
+                                       Command="{Binding RestoreBackupByVersionCommand}"
+                                       CommandParameter="{Binding ProjectData.CurrentBackupProfile}"
+                                       ToolTip="Lets you choose a specific version of files and folders from the storage backup"/>
+                        <RibbonMenuItem ImageSource="/Resources/Icons/Ribbon/RestoreSpecificVersion.ico" Header="Specific date"
+                                       Command="{Binding RestoreBackupByDateCommand}"
+                                       CommandParameter="{Binding ProjectData.CurrentBackupProfile}"
+                                       ToolTip="Lets the choose the date of the files and folders from the storage backup"/>
+                    </RibbonSplitButton>
+                </RibbonGroup>
+                
+                <!--<RibbonGroup Header="Restore" ToolTip="Restore backup" KeyTip="R">
+                    --><!--Restore backup--><!--
                     <RibbonButton LargeImageSource="/Resources/Icons/Ribbon/RestoreLatestVersion.ico" Label="Latest version" KeyTip="L" ToolTip="Restore the latest version or the most up to date files and folders from the storage backup"
                                   Command="{Binding RestoreBackupLatestVersionCommand}"
                                   CommandParameter="{Binding ProjectData.CurrentBackupProfile}">
@@ -278,7 +301,7 @@
                                   Command="{Binding RestoreBackupByVersionCommand}"
                                   CommandParameter="{Binding ProjectData.CurrentBackupProfile}">
                     </RibbonButton>
-                </RibbonGroup>
+                </RibbonGroup>-->
             </RibbonTab>
 
             <RibbonTab Header="Logs" KeyTip="L" >
