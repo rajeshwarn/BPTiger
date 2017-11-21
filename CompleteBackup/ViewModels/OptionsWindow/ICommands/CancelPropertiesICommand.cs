@@ -42,7 +42,7 @@ namespace CompleteBackup.ViewModels.ICommands
             var window = parameter as Window;
             if (window != null)
             {
-                window.DialogResult = true;
+                //window.DialogResult = true;
                 window.Close();
             }
         }

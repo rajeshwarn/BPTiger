@@ -65,7 +65,8 @@
             <!-- Application Menu, located at the left-hand side (down arrow) -->
             <Ribbon.ApplicationMenu>
                 <RibbonApplicationMenu KeyTip="F">
-                    <RibbonApplicationMenuItem Header="Options" ImageSource="/Resources/Icons/Iconsmind-Outline-File.ico" />
+                    <RibbonApplicationMenuItem Header="Options" ImageSource="/Resources/Icons/Ribbon/options.png"
+                                               Command="{Binding OpenPropertiesWindowCommand}"/>
                     <RibbonApplicationMenuItem Header="Exit" ImageSource="/Resources/Icons/Iconsmind-Outline-File.ico" />
                 </RibbonApplicationMenu>
             </Ribbon.ApplicationMenu>

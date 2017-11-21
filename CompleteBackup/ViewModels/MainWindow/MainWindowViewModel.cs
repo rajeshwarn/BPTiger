@@ -15,6 +15,9 @@ namespace CompleteBackup.ViewModels.MainWindow
 {
     class MainWindowViewModel : ObservableObject
     {
+        
+        public ICommand OpenPropertiesWindowCommand { get; private set; } = new OpenPropertiesWindowICommand<object>();
+
         public ICommand OpenSelectBackupItemsWindowCommand { get; private set; } = new OpenSelectBackupItemsWindowICommand<object>();
         public ICommand SelectTargetBackupFolderNameCommand { get; private set; } = new SelectTargetBackupFolderNameICommand<object>();
         public ICommand SelectTargetRestoreFolderNameCommand { get; private set; } = new SelectTargetRestoreFolderNameICommand<object>();
