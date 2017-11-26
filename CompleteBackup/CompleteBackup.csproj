@@ -100,6 +100,11 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>BackupProjectRepositorySettings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Properties\General.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>General.settings</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\Convertors\NumberToComputerSizeConverter.cs" />
     <Compile Include="Utilities\Convertors\NullVisibilityConverter.cs" />
     <Compile Include="Utilities\FileFolderSizeHelper.cs" />
@@ -117,7 +122,7 @@
     <Compile Include="ViewModels\MainWindow\ICommands\ResumeBackupProfileICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\SleepBackupProfileICommand.cs" />
     <Compile Include="ViewModels\ActionBackupRestoreShared\ICommands\DeleteAlertICommand.cs" />
-    <Compile Include="ViewModels\OptionsWindow\DatabaseGeneralViewModel.cs" />
+    <Compile Include="ViewModels\OptionsWindow\BackupGeneralOptionsViewModel.cs" />
     <Compile Include="ViewModels\OptionsWindow\ICommands\CancelPropertiesICommand.cs" />
     <Compile Include="ViewModels\OptionsWindow\ICommands\ChangePageICommand.cs" />
     <Compile Include="ViewModels\OptionsWindow\ICommands\ResetPropertiesICommand.cs" />
@@ -195,8 +200,8 @@
     <Compile Include="Views\MainWindow\MainWindowStatusBarView.xaml.cs">
       <DependentUpon>MainWindowStatusBarView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\OptionsWindow\DatabaseGeneralView.xaml.cs">
-      <DependentUpon>DatabaseGeneralView.xaml</DependentUpon>
+    <Compile Include="Views\OptionsWindow\BackupGeneralOptionsView.xaml.cs">
+      <DependentUpon>BackupGeneralOptionsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\OptionsWindow\OptionsWindow.xaml.cs">
       <DependentUpon>OptionsWindow.xaml</DependentUpon>
@@ -271,7 +276,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\OptionsWindow\DatabaseGeneralView.xaml">
+    <Page Include="Views\OptionsWindow\BackupGeneralOptionsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -326,6 +331,10 @@
     <None Include="Properties\BackupProjectRepositorySettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>BackupProjectRepositorySettings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Properties\General.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>General.Designer.cs</LastGenOutput>
     </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -11,11 +11,11 @@ using System.Windows.Controls;
 namespace CompleteBackup.Views
 {
     /// <summary>
-    /// Interaction logic for DatabaseGeneralView.xaml
+    /// Interaction logic for BackupGeneralOptionsView.xaml
     /// </summary>
-    public partial class DatabaseGeneralView : UserControl
+    public partial class BackupGeneralOptionsView : UserControl
     {
-        public DatabaseGeneralView()
+        public BackupGeneralOptionsView()
         {
             InitializeComponent();
         }

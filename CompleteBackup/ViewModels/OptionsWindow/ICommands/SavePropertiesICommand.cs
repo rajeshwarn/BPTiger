@@ -38,27 +38,8 @@ namespace CompleteBackup.ViewModels.ICommands
         {
             var window = parameter as Window;
 
-            //Properties.CollectionExportSettings.Default.Save();
-            //Properties.GraphSettings.Default.Save();
+            Properties.General.Default.Save();
 
-            //Properties.CaptureGenericSettings.Default.Save();
-            //Properties.JagSettings.Default.Save();
-            //Properties.ICRGenericProtocolSettings.Default.Save();
-
-            //Properties.MongoDBSettings.Default.Save();
-            //Properties.ProcessStartSetting.Default.Save();
-            //Properties.Settings.Default.Save();
-
-
-            //foreach (var jagLogDetails in PumpRepository.Instance.JagLogDetailLevelsDataCollection)
-            //{
-            //    if ((jagLogDetails != null) && jagLogDetails.IsDirty())
-            //    {
-            //        IFuelGenericServiceInterface.Instance.SaveLoggingSetting(jagLogDetails);
-            //    }
-            //}
-
-            window.DialogResult = true;
             window.Close();
         }
     }

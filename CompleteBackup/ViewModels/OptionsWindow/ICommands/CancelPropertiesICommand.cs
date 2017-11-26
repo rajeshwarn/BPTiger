@@ -28,23 +28,18 @@ namespace CompleteBackup.ViewModels.ICommands
         }
 
         public bool CanExecute(object parameter)
-        {            
-            return true;
+        {
+            var window = parameter as Window;
+
+            return (window != null);
         }
 
         public void Execute(object parameter)
         {
-            //Properties.JagSettings.Default.Reload();
-            //Properties.MongoDBSettings.Default.Reload();
-            //Properties.ProcessStartSetting.Default.Reload();
-            //Properties.Settings.Default.Reload();
+            Properties.General.Default.Reload();
 
             var window = parameter as Window;
-            if (window != null)
-            {
-                //window.DialogResult = true;
-                window.Close();
-            }
+            window.Close();
         }
     }
 }

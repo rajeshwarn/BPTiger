@@ -34,18 +34,7 @@ namespace CompleteBackup.ViewModels.ICommands
 
         public void Execute(object parameter)
         {
-            var window = parameter as Window;
-
-            //Properties.CollectionExportSettings.Default.Reset();
-            //Properties.GraphSettings.Default.Reset();
-
-            //Properties.CaptureGenericSettings.Default.Reset();
-            //Properties.JagSettings.Default.Reset();
-            //Properties.ICRGenericProtocolSettings.Default.Reset();
-
-            //Properties.MongoDBSettings.Default.Reset();
-            //Properties.ProcessStartSetting.Default.Reset();
-            //Properties.Settings.Default.Reset();
+            Properties.General.Default.Reset();
         }
     }
 }

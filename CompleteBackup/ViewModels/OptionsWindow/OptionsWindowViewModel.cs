@@ -22,16 +22,16 @@ namespace CompleteBackup.ViewModels
             _pageViewModelsX = new PageViewModelsTree()
             {
                 Name = "Root",
-                PageViewModel = new DatabaseGeneralViewModel(),
+                PageViewModel = new BackupGeneralOptionsViewModel(),
                 PageTree = new List<PageViewModelsTree>
                 {
                     new PageViewModelsTree()
                     {
                         Name = "Database",
-                        PageViewModel = new DatabaseGeneralViewModel(),
+                        PageViewModel = new BackupGeneralOptionsViewModel(),
                         PageTree = new List<PageViewModelsTree>
                         {
-                            new PageViewModelsTree() { Name = "General", PageViewModel = new DatabaseGeneralViewModel() },
+                            new PageViewModelsTree() { Name = "General", PageViewModel = new BackupGeneralOptionsViewModel() },
 //                            new PageViewModelsTree() { Name = "Database", PageViewModel = new DatabaseEnvironmentViewModel() }
                         }
                     },
