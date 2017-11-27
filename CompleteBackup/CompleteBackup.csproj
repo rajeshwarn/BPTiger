@@ -80,6 +80,7 @@
     <Compile Include="Models\Backup\Managers\BackupProcessWorkerTask.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Models\Profile\BackupProfileScheduleData.cs" />
     <Compile Include="Models\Profile\FolderData.cs" />
     <Compile Include="Models\Profile\BackupProfileManager.cs" />
     <Compile Include="Models\Project\BackupProjectData.cs" />
