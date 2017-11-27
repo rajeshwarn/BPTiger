@@ -101,6 +101,11 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>BackupProjectRepositorySettings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Properties\BackupSchedule.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>BackupSchedule.settings</DependentUpon>
+    </Compile>
     <Compile Include="Properties\General.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -123,6 +128,7 @@
     <Compile Include="ViewModels\MainWindow\ICommands\ResumeBackupProfileICommand.cs" />
     <Compile Include="ViewModels\MainWindow\ICommands\SleepBackupProfileICommand.cs" />
     <Compile Include="ViewModels\ActionBackupRestoreShared\ICommands\DeleteAlertICommand.cs" />
+    <Compile Include="ViewModels\OptionsWindow\BackupScheduleOptionsViewModel.cs" />
     <Compile Include="ViewModels\OptionsWindow\BackupGeneralOptionsViewModel.cs" />
     <Compile Include="ViewModels\OptionsWindow\ICommands\CancelPropertiesICommand.cs" />
     <Compile Include="ViewModels\OptionsWindow\ICommands\ChangePageICommand.cs" />
@@ -201,6 +207,9 @@
     <Compile Include="Views\MainWindow\MainWindowStatusBarView.xaml.cs">
       <DependentUpon>MainWindowStatusBarView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\OptionsWindow\BackupScheduleOptionsView.xaml.cs">
+      <DependentUpon>BackupScheduleOptionsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\OptionsWindow\BackupGeneralOptionsView.xaml.cs">
       <DependentUpon>BackupGeneralOptionsView.xaml</DependentUpon>
     </Compile>
@@ -277,6 +286,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\OptionsWindow\BackupScheduleOptionsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\OptionsWindow\BackupGeneralOptionsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -332,6 +345,10 @@
     <None Include="Properties\BackupProjectRepositorySettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>BackupProjectRepositorySettings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Properties\BackupSchedule.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>BackupSchedule.Designer.cs</LastGenOutput>
     </None>
     <None Include="Properties\General.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

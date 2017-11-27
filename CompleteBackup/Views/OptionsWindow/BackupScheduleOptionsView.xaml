@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="CompleteBackup.Views.BackupScheduleOptionsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CompleteBackup.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="600">
+    <Grid>
+        <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+            <GroupBox Header="General" Margin="5,5,5,5">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Content="Start in system tray on startup" IsChecked="{Binding Settings.IsStartInSystemTrayOnStartup}"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+
+            <GroupBox Header="Tracing" Margin="5,5,5,5">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="20">
+                        <TextBlock Text="Set user away if not active for "/>
+                        <TextBox Width="40" Text="{Binding Settings.SetAwayTimeOutAfterNotActive}"/>
+                        <TextBlock Text=" minutes"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="20">
+                        <TextBlock Text="When user away use up to "/>
+                        <TextBox Width="40" Text="{Binding Settings.MaxCPUOnAway}"/>
+                        <TextBlock Text=" percent CPU"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="20">
+                        <TextBlock Text="When user present up to "/>
+                        <TextBox Width="40" Text="{Binding Settings.MaxCPUOnBusy}"/>
+                        <TextBlock Text=" percent CPU"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+    </Grid>
+</UserControl>

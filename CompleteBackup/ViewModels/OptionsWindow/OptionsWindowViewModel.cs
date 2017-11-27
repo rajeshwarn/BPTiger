@@ -27,7 +27,7 @@ namespace CompleteBackup.ViewModels
                 {
                     new PageViewModelsTree()
                     {
-                        Name = "Database",
+                        Name = "General",
                         PageViewModel = new BackupGeneralOptionsViewModel(),
                         PageTree = new List<PageViewModelsTree>
                         {
@@ -35,6 +35,17 @@ namespace CompleteBackup.ViewModels
 //                            new PageViewModelsTree() { Name = "Database", PageViewModel = new DatabaseEnvironmentViewModel() }
                         }
                     },
+
+                    new PageViewModelsTree()
+                    {
+                        Name = "Default Schedule",
+                        PageViewModel = new BackupGeneralOptionsViewModel(),
+                        PageTree = new List<PageViewModelsTree>
+                        {
+                            new PageViewModelsTree() { Name = "Backup Schedule", PageViewModel = new BackupScheduleOptionsViewModel() },
+                        }
+                    },
+                    
                 }
             };
 

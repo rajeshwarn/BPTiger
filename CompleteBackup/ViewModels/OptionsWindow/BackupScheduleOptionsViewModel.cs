@@ -14,10 +14,10 @@ using CompleteBackup.ViewModels;
 
 namespace CompleteBackup.ViewModels
 {
-    class BackupGeneralOptionsViewModel : ObservableObject, IPageViewModel
+    class BackupScheduleOptionsViewModel : ObservableObject, IPageViewModel
     {
-        public string Name { get { return "Backup General Options"; } }
+        public string Name { get { return "Backup Schedule Options"; } }
 
-        public Properties.General Settings { get { return Properties.General.Default; } }
+        public Properties.BackupSchedule Settings { get { return Properties.BackupSchedule.Default; } }
     }
 }

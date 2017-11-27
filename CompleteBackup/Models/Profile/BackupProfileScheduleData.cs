@@ -51,6 +51,8 @@ namespace CompleteBackup.Models.Profile
         Never,
     }
 
+
+
     public class BackupProfileScheduleData
     {
         public int DeepBackupDaysRunInterval { get; set; }

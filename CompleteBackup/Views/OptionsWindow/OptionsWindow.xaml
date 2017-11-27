@@ -12,6 +12,9 @@
         <DataTemplate DataType="{x:Type view_models:BackupGeneralOptionsViewModel}">
             <local:BackupGeneralOptionsView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type view_models:BackupScheduleOptionsViewModel}">
+            <local:BackupScheduleOptionsView />
+        </DataTemplate>
     </Window.Resources>
     
     <Window.DataContext>
