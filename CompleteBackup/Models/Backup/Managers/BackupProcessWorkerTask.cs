@@ -35,6 +35,9 @@ namespace CompleteBackup.Models.Profile
         protected BackupPerfectLogger m_Logger;
         bool m_bFullBackupScan;
 
+        int m_MaxActiveCPU;
+        int m_MaxIdleCPU;
+
         public BackupProfileData GetProfile()
         {
             return m_Profile;
@@ -42,7 +45,55 @@ namespace CompleteBackup.Models.Profile
 
         public void SleepIfNeeded()
         {
+            //PerformanceCounter("Processor", "% Processor Time", "_Total");
+            //PerformanceCounter("Processor", "% Privileged Time", "_Total");
+            //PerformanceCounter("Processor", "% Interrupt Time", "_Total");
+            //PerformanceCounter("Processor", "% DPC Time", "_Total");
+            //PerformanceCounter("Memory", "Available MBytes", null);
+            //PerformanceCounter("Memory", "Committed Bytes", null);
+            //PerformanceCounter("Memory", "Commit Limit", null);
+            //PerformanceCounter("Memory", "% Committed Bytes In Use", null);
+            //PerformanceCounter("Memory", "Pool Paged Bytes", null);
+            //PerformanceCounter("Memory", "Pool Nonpaged Bytes", null);
+            //PerformanceCounter("Memory", "Cache Bytes", null);
+            //PerformanceCounter("Paging File", "% Usage", "_Total");
+            //PerformanceCounter("PhysicalDisk", "Avg. Disk Queue Length", "_Total");
+            //PerformanceCounter("PhysicalDisk", "Disk Read Bytes/sec", "_Total");
+            //PerformanceCounter("PhysicalDisk", "Disk Write Bytes/sec", "_Total");
+            //PerformanceCounter("PhysicalDisk", "Avg. Disk sec/Read", "_Total");
+            //PerformanceCounter("PhysicalDisk", "Avg. Disk sec/Write", "_Total");
+            //PerformanceCounter("PhysicalDisk", "% Disk Time", "_Total");
+            //PerformanceCounter("Process", "Handle Count", "_Total");
+            //PerformanceCounter("Process", "Thread Count", "_Total");
+            //PerformanceCounter("System", "Context Switches/sec", null);
+            //PerformanceCounter("System", "System Calls/sec", null);
+            //PerformanceCounter("System", "Processor Queue Length", null);
 
+
+            PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+            //PerformanceCounter ramCounter = new PerformanceCounter("Memory", "Available MBytes");
+            //PerformanceCounter diskCounter = new PerformanceCounter("FileSystem Disk Activity", "FileSystem Bytes Written", "_Total");
+            PerformanceCounter diskCounter = new PerformanceCounter("PhysicalDisk", "% Disk Time", "_Total");
+
+
+            dynamic firstValue = cpuCounter.NextValue();
+            dynamic secondValue = cpuCounter.NextValue();
+
+            dynamic fsValue1 = diskCounter.NextValue();
+            dynamic fsValue2 = diskCounter.NextValue();
+
+            Int32 diskUsage = Convert.ToInt32(fsValue2);
+
+            if (secondValue >= m_MaxActiveCPU)
+            {
+                if (fsValue1 >= m_MaxActiveCPU)
+                {
+
+                    Thread.Sleep(500);
+                }
+            }
+
+            return;
         }
 
         private BackupProcessWorkerTask() { }
@@ -86,6 +137,9 @@ namespace CompleteBackup.Models.Profile
 
             DoWork += (sender, e) =>
             {
+                m_MaxActiveCPU = Properties.General.Default.MaxCPUOnBusy;
+                m_MaxIdleCPU = Properties.General.Default.MaxCPUOnAway;
+
                 m_ProgressBar = GenericStatusBarView.NewInstance;
                 profile.IsBackupWorkerBusy = true;
                 //                RunWorkerCompleted += new RunWorkerCompletedEventHandler(BackupTaskRunWorkerCompletedEvent);
