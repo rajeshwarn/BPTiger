@@ -81,7 +81,7 @@ namespace CompleteBackup.Models.backup
 
         protected void ProcessIncrementalBackupFile(string fileName, string sourcePath, string destPath)
         {
-            if (CheckCancellationPending()) { return; }
+            if (CheckCancellationPendingOrSleep()) { return; }
 
             var sourceFilePath = m_IStorage.Combine(sourcePath, fileName);
             var currSetFilePath = m_IStorage.Combine(destPath, fileName);

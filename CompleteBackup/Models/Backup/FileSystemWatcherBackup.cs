@@ -115,7 +115,7 @@ namespace CompleteBackup.Models.Backup
             long iItemCount = 0;
             foreach (var item in m_WatcherItemList)
             {
-                if (CheckCancellationPending()) { return; }
+                if (CheckCancellationPendingOrSleep()) { return; }
 
                 UpdateProgress("Running... ", ++iItemCount, item.Name);
 

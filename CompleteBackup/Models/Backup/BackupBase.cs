@@ -48,7 +48,8 @@ namespace CompleteBackup.Models.backup
 
         BackupProcessWorkerTask m_Task;
 
-        public bool CheckCancellationPending()
+
+        public bool CheckCancellationPendingOrSleep()
         {
             bool bCancle = false;
 
@@ -57,9 +58,16 @@ namespace CompleteBackup.Models.backup
                 m_Task = BackupTaskManager.Instance.GetRunningBackupWorkerTask(m_Profile);
             }
 
-            if ((m_Task != null) && m_Task.CancellationPending)
+            if (m_Task != null)
             {
-                bCancle = true;
+                if (m_Task.CancellationPending)
+                {
+                    bCancle = true;
+                }
+                else
+                {
+                    m_Task.SleepIfNeeded();
+                }
             }
 
             return bCancle;

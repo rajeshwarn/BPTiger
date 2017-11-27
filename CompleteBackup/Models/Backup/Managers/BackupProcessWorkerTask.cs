@@ -40,6 +40,10 @@ namespace CompleteBackup.Models.Profile
             return m_Profile;
         }
 
+        public void SleepIfNeeded()
+        {
+
+        }
 
         private BackupProcessWorkerTask() { }
 

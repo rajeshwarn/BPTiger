@@ -59,6 +59,7 @@ namespace CompleteBackup.Models.Backup.Profile
         [XmlIgnore]
         public bool IsCurrentProfileSelected { get { return BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile == this; } set { OnPropertyChanged(); } }
 
+        [XmlIgnore]
         public string BackupSignature { get { return $"{ GUID.ToString("D")}-BC-{BackupType}"; } }
 
 
@@ -70,10 +71,6 @@ namespace CompleteBackup.Models.Backup.Profile
         [XmlIgnore]
         public string BackupTypeImage { get { return ProfileHelper.BackupTypeList.FirstOrDefault(i => i.BackupType == m_BackupType)?.ImageName; } set { } }
 
-
-        //Execution behaviour
-        //private BackupRunTypeEnum m_BackupRunType { get; set; } = BackupRunTypeEnum.Always;
-        //public BackupRunTypeEnum BackupRunType { get { return m_BackupRunType; } set { m_BackupRunType = value; OnPropertyChanged(); } }
 
         private bool m_IsWatchFileSystem { get; set; } = true;
         public bool IsWatchFileSystem { get { return m_IsWatchFileSystem; } set {
@@ -167,7 +164,5 @@ namespace CompleteBackup.Models.Backup.Profile
 
         public long m_RestoreSourceFoldersSize { get; set; } = 0;
         public long RestoreSourceFoldersSize { get { return m_RestoreSourceFoldersSize; } set { m_RestoreSourceFoldersSize = value; OnPropertyChanged(); } }
-
-
     }
 }
