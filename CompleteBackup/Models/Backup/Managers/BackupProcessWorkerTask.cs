@@ -74,6 +74,7 @@ namespace CompleteBackup.Models.Profile
             //PerformanceCounter ramCounter = new PerformanceCounter("Memory", "Available MBytes");
             //PerformanceCounter diskCounter = new PerformanceCounter("FileSystem Disk Activity", "FileSystem Bytes Written", "_Total");
             PerformanceCounter diskCounter = new PerformanceCounter("PhysicalDisk", "% Disk Time", "_Total");
+            PerformanceCounter diskCounter2 = new PerformanceCounter("PhysicalDisk", "% Idle Time", "_Total");
 
 
             dynamic firstValue = cpuCounter.NextValue();
@@ -81,6 +82,13 @@ namespace CompleteBackup.Models.Profile
 
             dynamic fsValue1 = diskCounter.NextValue();
             dynamic fsValue2 = diskCounter.NextValue();
+            dynamic fsValue21 = diskCounter.NextValue();
+            dynamic fsValue22 = diskCounter.NextValue();
+
+            dynamic fsValue3 = diskCounter2.NextValue();
+            dynamic fsValue4 = diskCounter2.NextValue();
+            dynamic fsValue41 = diskCounter2.NextValue();
+            dynamic fsValue42 = diskCounter2.NextValue();
 
             Int32 diskUsage = Convert.ToInt32(fsValue2);
 
