@@ -70,31 +70,41 @@ namespace CompleteBackup.Models.Profile
             //PerformanceCounter("System", "Processor Queue Length", null);
 
 
-            PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+            PerformanceCounter cpuCounter  = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+  //          PerformanceCounter currCPUTime = new PerformanceCounter("Processor", "% Processor Time", null);//, Process.GetCurrentProcess().ProcessName);
+            
             //PerformanceCounter ramCounter = new PerformanceCounter("Memory", "Available MBytes");
             //PerformanceCounter diskCounter = new PerformanceCounter("FileSystem Disk Activity", "FileSystem Bytes Written", "_Total");
-            PerformanceCounter diskCounter = new PerformanceCounter("PhysicalDisk", "% Disk Time", "_Total");
-            PerformanceCounter diskCounter2 = new PerformanceCounter("PhysicalDisk", "% Idle Time", "_Total");
+            PerformanceCounter diskTime = new PerformanceCounter("PhysicalDisk", "% Disk Time", "_Total");
+
+            //PerformanceCounter diskCounter2 = new PerformanceCounter("PhysicalDisk", "% Idle Time", "_Total");
 
 
             dynamic firstValue = cpuCounter.NextValue();
             dynamic secondValue = cpuCounter.NextValue();
 
-            dynamic fsValue1 = diskCounter.NextValue();
-            dynamic fsValue2 = diskCounter.NextValue();
-            dynamic fsValue21 = diskCounter.NextValue();
-            dynamic fsValue22 = diskCounter.NextValue();
+//            dynamic currCPUVal1 = currCPUTime.NextValue();
+//            dynamic currCPUVal2 = currCPUTime.NextValue();
 
-            dynamic fsValue3 = diskCounter2.NextValue();
-            dynamic fsValue4 = diskCounter2.NextValue();
-            dynamic fsValue41 = diskCounter2.NextValue();
-            dynamic fsValue42 = diskCounter2.NextValue();
 
-            Int32 diskUsage = Convert.ToInt32(fsValue2);
+            float tmp = diskTime.NextValue();
+            var DISKTime = (float)(Math.Round((double)tmp, 1));
+
+            //dynamic fsValue1 = diskCounter.NextValue();
+            //dynamic fsValue2 = diskCounter.NextValue();
+            //dynamic fsValue21 = diskCounter.NextValue();
+            //dynamic fsValue22 = diskCounter.NextValue();
+
+            //dynamic fsValue3 = diskCounter2.NextValue();
+            //dynamic fsValue4 = diskCounter2.NextValue();
+            //dynamic fsValue41 = diskCounter2.NextValue();
+            //dynamic fsValue42 = diskCounter2.NextValue();
+
+            //Int32 diskUsage = Convert.ToInt32(fsValue2);
 
             if (secondValue >= m_MaxActiveCPU)
             {
-                if (fsValue1 >= m_MaxActiveCPU)
+                if (DISKTime >= m_MaxActiveCPU)
                 {
 
                     Thread.Sleep(500);

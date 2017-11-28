@@ -23,9 +23,9 @@ namespace CompleteBackup.Views
     /// <summary>
     /// Interaction logic for CommonItemsSelectionView.xaml
     /// </summary>
-    public partial class BackupView : UserControl
+    public partial class RestoreView : UserControl
     {
-        public BackupView()
+        public RestoreView()
         {
             InitializeComponent();
         }

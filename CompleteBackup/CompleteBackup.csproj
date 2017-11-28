@@ -176,6 +176,12 @@
     <Compile Include="ViewModels\ProfileSetting\MainProfileViewModel.cs" />
     <Compile Include="ViewModels\ProfileSetting\ProfileList\ProfileListViewModel.cs" />
     <Compile Include="ViewModels\ActionRestore\SelectRestoreItemsWindowModel.cs" />
+    <Compile Include="Views\BackupRestoreView\RestoreView.xaml.cs">
+      <DependentUpon>RestoreView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BackupRestoreView\BackupView.xaml.cs">
+      <DependentUpon>BackupView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ExtendedControls\LogProfileConsoleView.xaml.cs">
       <DependentUpon>LogProfileConsoleView.xaml</DependentUpon>
     </Compile>
@@ -246,6 +252,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\BackupRestoreView\RestoreView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\BackupRestoreView\BackupView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\ExtendedControls\LogProfileConsoleView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

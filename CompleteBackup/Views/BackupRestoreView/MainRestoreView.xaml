@@ -20,7 +20,8 @@
 
         <DockPanel LastChildFill="True">
             <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
-                <local:CommonItemsSelectionView />
+                <!--<local:CommonItemsSelectionView />-->
+                <local:RestoreView />
             </StackPanel>
         </DockPanel>
     </Grid>

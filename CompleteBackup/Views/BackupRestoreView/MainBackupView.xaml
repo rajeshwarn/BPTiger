@@ -69,7 +69,8 @@
                     <Grid.DataContext>
                         <view_model:BackupItemsSelectionViewModel/>
                     </Grid.DataContext>
-                    <local:CommonItemsSelectionView Grid.Row="0"/>
+                    <!--<local:CommonItemsSelectionView Grid.Row="0"/>-->
+                    <local:BackupView Grid.Row="0"/>
                 </Grid>
             </Grid>
         </Border>
