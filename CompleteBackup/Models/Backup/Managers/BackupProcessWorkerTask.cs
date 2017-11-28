@@ -15,8 +15,19 @@ using System.Windows;
 
 namespace CompleteBackup.Models.Profile
 {
+    internal struct LASTINPUTINFO
+    {
+        public int cbSize;
+
+        public int dwTime;
+    }
+
     public class BackupProcessWorkerTask : BackgroundWorker
     {
+        [System.Runtime.InteropServices.DllImport("User32.dll")]
+        private static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
+
+
         BackupBase m_BackupManager = null;
 
         public bool? IsPaused { get {
@@ -101,6 +112,16 @@ namespace CompleteBackup.Models.Profile
             //dynamic fsValue42 = diskCounter2.NextValue();
 
             //Int32 diskUsage = Convert.ToInt32(fsValue2);
+
+
+
+
+        //LASTINPUTINFO lastinputinfo = new LASTINPUTINFO();
+        //    lastinputinfo.cbSize = System.Runtime.InteropServices.Marshal.SizeOf(lastinputinfo);
+        //    GetLastInputInfo(ref lastinputinfo);
+        //    var res =  (((Environment.TickCount & int.MaxValue) - (lastinputinfo.dwTime & int.MaxValue)) & int.MaxValue);
+
+        //    var iIdel = System.Diagnostics.Process.GetCurrentProcess().TotalProcessorTime;
 
             if (secondValue >= m_MaxActiveCPU)
             {
