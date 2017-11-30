@@ -167,23 +167,29 @@ namespace CompleteBackup.Models.backup
         public static List<string> GetBackupSetList_(BackupProfileData profile)
         {
             var backupProfileList = new List<string>();
-            var setEntries = profile.GetStorageInterface().GetDirectories(profile.GetTargetBackupFolder()).OrderBy(set => set);
-
-            if (profile.FileSystemWatcherEnabled)
+            try
             {
-                foreach (var entry in setEntries)
+                var setEntries = profile.GetStorageInterface().GetDirectories(profile.GetTargetBackupFolder())?.OrderBy(set => set);
+                if (setEntries != null)
                 {
-                    backupProfileList.Add(profile.GetStorageInterface().GetFileName(entry));
+                    if (profile.FileSystemWatcherEnabled)
+                    {
+                        foreach (var entry in setEntries)
+                        {
+                            backupProfileList.Add(profile.GetStorageInterface().GetFileName(entry));
+                        }
+                    }
+                    else
+                    {
+                        var entry = setEntries.LastOrDefault();
+                        if (entry != null)
+                        {
+                            backupProfileList.Add(profile.GetStorageInterface().GetFileName(entry));
+                        }
+                    }
                 }
             }
-            else
-            {
-                var entry = setEntries.LastOrDefault();
-                if (entry != null)
-                {
-                    backupProfileList.Add(profile.GetStorageInterface().GetFileName(entry));
-                }
-            }
+            catch(DirectoryNotFoundException) { }
 
             return backupProfileList;
         }

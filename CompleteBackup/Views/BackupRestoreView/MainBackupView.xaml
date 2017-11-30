@@ -66,9 +66,9 @@
                     </Grid>
                 </Expander>
                 <Grid Grid.Row="1" >
-                    <Grid.DataContext>
+                    <!--<Grid.DataContext>
                         <view_model:BackupItemsSelectionViewModel/>
-                    </Grid.DataContext>
+                    </Grid.DataContext>-->
                     <!--<local:CommonItemsSelectionView Grid.Row="0"/>-->
                     <local:BackupView Grid.Row="0"/>
                 </Grid>

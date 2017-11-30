@@ -203,8 +203,8 @@
     <Compile Include="Views\BackupRestoreView\MainRestoreView.xaml.cs">
       <DependentUpon>MainRestoreView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\BackupRestoreView\CommonItemsSelectionView.xaml.cs">
-      <DependentUpon>CommonItemsSelectionView.xaml</DependentUpon>
+    <Compile Include="Views\BackupRestoreView\_XXX_CommonItemsSelectionView.xaml.cs">
+      <DependentUpon>_XXX_CommonItemsSelectionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ExtendedControls\LogConsoleView.xaml.cs">
       <DependentUpon>LogConsoleView.xaml</DependentUpon>
@@ -288,7 +288,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\BackupRestoreView\CommonItemsSelectionView.xaml">
+    <Page Include="Views\BackupRestoreView\_XXX_CommonItemsSelectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

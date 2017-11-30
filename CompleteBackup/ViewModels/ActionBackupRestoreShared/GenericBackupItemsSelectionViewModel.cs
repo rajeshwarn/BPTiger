@@ -49,7 +49,7 @@ namespace CompleteBackup.ViewModels
         }
 
         public abstract bool Enabled { get; }
-        public abstract bool IsBackupView { get; }
+//        public abstract bool IsBackupView { get; }
 
 
         public abstract ICommand OpenItemSelectWindowCommand { get; }
@@ -64,7 +64,7 @@ namespace CompleteBackup.ViewModels
 
         public BackupProjectData ProjectData { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject;
 
-        public void UpdateCurrentProfileChange()
+        public virtual void UpdateCurrentProfileChange()
         {
             OnPropertyChanged("Enabled");
             OnPropertyChanged("SelectionFolderList");

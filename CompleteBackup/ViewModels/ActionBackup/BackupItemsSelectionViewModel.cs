@@ -45,7 +45,7 @@ namespace CompleteBackup.ViewModels
         }
 
         public override bool Enabled { get; } = true;
-        public override bool IsBackupView { get; } = true;
+//        public override bool IsBackupView { get; } = true;
 
         public override ICommand OpenItemSelectWindowCommand { get; } = new OpenSelectBackupItemsWindowICommand<object>();
         public override ICommand SelectTargetFolderNameCommand { get; } = new SelectTargetBackupFolderNameICommand<object>();

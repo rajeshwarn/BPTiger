@@ -1,5 +1,7 @@
 ﻿using CompleteBackup.DataRepository;
+using CompleteBackup.Models.backup;
 using CompleteBackup.Models.Backup;
+using CompleteBackup.Models.Backup.History;
 using CompleteBackup.Models.Backup.Profile;
 using CompleteBackup.Models.Backup.Project;
 using CompleteBackup.Models.Backup.Storage;
@@ -25,6 +27,8 @@ using System.Windows.Media.Imaging;
 
 namespace CompleteBackup.ViewModels
 {
+
+
     public class RestoreItemsSelectionViewModel : GenericBackupItemsSelectionViewModel
     {
         public RestoreItemsSelectionViewModel()
@@ -32,8 +36,25 @@ namespace CompleteBackup.ViewModels
             TargetFolderGaugeList.Add(new ChartGaugeView(System.Windows.Media.Brushes.Red, System.Windows.Media.Brushes.Green, System.Windows.Media.Brushes.Yellow) { PumpNumber = null, GaugeValue = 0.0F });
         }
 
+        public override void UpdateCurrentProfileChange()
+        {
+            base.UpdateCurrentProfileChange();
+
+            var profile = BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile;
+            List<string> setList = BackupBase.GetBackupSetList_(profile);
+            BackupSessionHistoryList.Clear();
+            foreach (var setPath in setList)
+            {
+                var sessionHistory = BackupSessionHistory.LoadHistory(profile.GetTargetBackupFolder(), setPath);
+                BackupSessionHistoryList.Add(sessionHistory);
+            }
+        }
+
+
+        public ObservableCollection<BackupSessionHistory> BackupSessionHistoryList { get; } = new ObservableCollection<BackupSessionHistory>();
+
         public override bool Enabled { get { return ProjectData.CurrentBackupProfile.LastBackupDateTime != null; } }
-        public override bool IsBackupView { get; } = false;
+        //public override bool IsBackupView { get; } = false;
 
         public override ICommand OpenItemSelectWindowCommand { get; } = new OpenSelectRestoreItemsWindowICommand<object>();
         public override ICommand SelectTargetFolderNameCommand { get; } = new SelectTargetRestoreFolderNameICommand<object>();

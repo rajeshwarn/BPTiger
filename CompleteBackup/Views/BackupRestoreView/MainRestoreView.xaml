@@ -14,9 +14,9 @@
     <UserControl.Resources>
     </UserControl.Resources>
     <Grid>
-        <Grid.DataContext>
+        <!--<Grid.DataContext>
             <view_model:RestoreItemsSelectionViewModel/>
-        </Grid.DataContext>
+        </Grid.DataContext>-->
 
         <DockPanel LastChildFill="True">
             <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
