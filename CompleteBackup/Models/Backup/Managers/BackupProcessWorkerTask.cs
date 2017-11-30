@@ -128,7 +128,7 @@ namespace CompleteBackup.Models.Profile
                 if (DISKTime >= m_MaxActiveCPU)
                 {
 
-                    Thread.Sleep(500);
+                    //Thread.Sleep(500);
                 }
             }
 

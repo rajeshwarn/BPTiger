@@ -46,7 +46,10 @@ namespace CompleteBackup.ViewModels
             foreach (var setPath in setList)
             {
                 var sessionHistory = BackupSessionHistory.LoadHistory(profile.GetTargetBackupFolder(), setPath);
-                BackupSessionHistoryList.Add(sessionHistory);
+                if (sessionHistory != null)
+                {
+                    BackupSessionHistoryList.Add(sessionHistory);
+                }
             }
         }
 

@@ -115,7 +115,7 @@
             <!--Source Error message-->
             <StackPanel Orientation="Vertical">
 
-                <ListBox BorderThickness="1" ItemsSource="{Binding BackupSessionHistoryList, Mode=OneWay}"
+                <ListBox BorderThickness="0" ItemsSource="{Binding BackupSessionHistoryList, Mode=OneWay}"
                          ScrollViewer.VerticalScrollBarVisibility="Auto"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.ContextMenu>
@@ -133,7 +133,8 @@
                         <DataTemplate>
                             <Border BorderThickness="1" CornerRadius="3" Background="LightGray" BorderBrush="Gray" Margin="2" Padding="4">
                                 <StackPanel Orientation="Vertical">
-                                    <TextBlock Text="{Binding TimeStamp}"/>
+                                    <TextBlock Text="{Binding TimeStamp, StringFormat={}{0:yyyy-MMM-dd}}"/>
+                                    <TextBlock Text="{Binding TimeStamp, StringFormat={}{0:hh\:mm\:ss tt}}"/>
                                 </StackPanel>
                             </Border>
                         </DataTemplate>
