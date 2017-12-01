@@ -61,6 +61,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="DataRepository\BackupProjectRepository.cs" />
+    <Compile Include="Models\Backup\BackupBaseFileSystem.cs" />
     <Compile Include="Models\Backup\BackupFactory.cs" />
     <Compile Include="Models\Backup\DifferentialWatcherBackup.cs" />
     <Compile Include="Models\Backup\FileSystemWatcherBackup.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="ViewModels\ActionBackupRestoreShared\ICommands\SelectTargetRestoreFolderNameICommand.cs" />
     <Compile Include="ViewModels\ActionBackup\ICommands\OpenItemLocationICommand.cs" />
     <Compile Include="ViewModels\ActionBackup\ICommands\LocateMissingItemICommand.cs" />
+    <Compile Include="ViewModels\ActionRestore\SelectHistoryItemsViewModel.cs" />
     <Compile Include="ViewModels\ActionRestore\ICommands\OpenSelectRestoreItemsWindowICommand.cs" />
     <Compile Include="ViewModels\ActionRestore\RestoreItemsSelectionViewModel.cs" />
     <Compile Include="ViewModels\ActionRestore\ICommands\RestoreFolderSelectionICommand.cs" />
@@ -240,6 +242,9 @@
     <Compile Include="Views\ProfileSetting\SelectBackupTypeWindowView.xaml.cs">
       <DependentUpon>SelectBackupTypeWindowView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\BackupRestoreItemSelectionWindow\SelectHistoryItemsView.xaml.cs">
+      <DependentUpon>SelectHistoryItemsView.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -333,6 +338,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ProfileSetting\SelectBackupTypeWindowView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BackupRestoreItemSelectionWindow\SelectHistoryItemsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

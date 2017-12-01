@@ -21,7 +21,7 @@ namespace CompleteBackup.Models.backup
 
         public override void ProcessBackup()
         {
-            m_BackupSessionHistory.Reset(GetTimeStamp());
+            m_BackupSessionHistory.Reset(GetTimeStamp(), m_TargetBackupPath);
 
             var targetSetName = GetTargetSetName();
             var lastSetName = GetLastBackupSetName_(m_Profile);

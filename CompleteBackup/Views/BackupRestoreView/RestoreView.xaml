@@ -117,7 +117,8 @@
 
                 <ListBox BorderThickness="0" ItemsSource="{Binding BackupSessionHistoryList, Mode=OneWay}"
                          ScrollViewer.VerticalScrollBarVisibility="Auto"
-                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         SelectionChanged="HistoryListBox_SelectionChanged">
                     <ListBox.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="Add new profile"
@@ -152,130 +153,13 @@
                     </ListBox.ItemsPanel>
                 </ListBox>
 
-                <DockPanel LastChildFill="True">
-                    <DockPanel.Style>
-                        <Style TargetType="DockPanel" >
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=SelectionFolderList.Count}" Value="0">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </DockPanel.Style>
-
-                    <!--Main file list-->
-                    <StackPanel DockPanel.Dock="Right" Orientation="Vertical">
-                        <StackPanel Orientation="Horizontal">
-                            <!--Number of files-->
-                            <ListBox ItemsSource="{Binding SelectionFolderList}" BorderThickness="0" HorizontalContentAlignment="Right">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding NumberOfFiles, StringFormat={}{0:#,#,#,#,##0}}" Margin="0,0,4,0"/>
-                                            <TextBlock Text="Files"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
-                            <!--Total size-->
-                            <StackPanel Orientation="Horizontal">
-                                <ListBox ItemsSource="{Binding SelectionFolderList}" BorderThickness="0" HorizontalContentAlignment="Right">
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding TotalSize, Converter={StaticResource NumberToComputerSizeConverter}}" Background="Transparent"/>
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
-                            </StackPanel>
-                        </StackPanel>
-                        <Separator/>
+                <Border BorderThickness="1" Background="LightGray" CornerRadius="4" Margin="4,4,4,0" Padding="4">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="{Binding SelectedHistoryItem.TimeStamp}"/>
+                        <local:SelectHistoryItemsView x:Name="viewSelectHistoryItemsView"/>
                     </StackPanel>
-
-                    <!--Folde list-->
-                    <ListBox ItemsSource="{Binding SelectionFolderList}" BorderThickness="0" Margin="0,0,8,0" SelectionMode="Single">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <DockPanel LastChildFill="True">
-                                    <StackPanel Orientation="Horizontal">
-                                        <Image Width="16" Source="{Binding Image}" Margin="0,0,4,0"/>
-                                        <TextBlock Text="{Binding Path}"  Background="Transparent">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsAvailable}" Value="False">
-                                                            <Setter Property="Foreground" Value="Red"/>
-                                                            <Setter Property="FontWeight" Value="SemiBold"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
-                                        <TextBlock Text="  -  Item not available" FontWeight="SemiBold" FontStyle="Italic" Foreground="Gray">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsAvailable}" Value="True">
-                                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
-                                    </StackPanel>
-                                </DockPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                        <ListBox.ContextMenu>
-                            <ContextMenu>
-                                <!--<MenuItem Header="Locate item" Command="{Binding LocateMissingItemCommand}"
-                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}">
-                                    <MenuItem.Style>
-                                        <Style TargetType="MenuItem">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems[0].IsAvailable}" Value="True">
-                                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </MenuItem.Style>
-                                </MenuItem>-->
-                                <MenuItem Header="Edit" Command="{Binding OpenItemSelectWindowCommand}"
-                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}"/>
-                                <Separator/>
-                                <MenuItem Header="Open location" Command="{Binding OpenItemLocationCommand}"
-                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}"/>
-                            </ContextMenu>
-                        </ListBox.ContextMenu>
-                    </ListBox>
-                </DockPanel>
-
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <TextBlock Text="Total of "/>
-                    <TextBlock Text="{Binding SelectionFolderListNumberOfFiles, StringFormat={}{0:#,#,#,#,##0}}" FontWeight="Bold"></TextBlock>
-                    <TextBlock Text=" files, "/>
-                    <TextBlock Text="{Binding SelectionTotalFolderListSize, Converter={StaticResource NumberToComputerSizeConverter}}" FontWeight="Bold"></TextBlock>
-                </StackPanel>
-
-                <!--<StackPanel Orientation="Horizontal">
-                    <Button Content="{Binding SourceFileActionTitle}"
-                        Command="{Binding OpenItemSelectWindowCommand}" CommandParameter="{Binding Path=ProjectData.CurrentBackupProfile}">
-                    </Button>
-                </StackPanel>-->
+                </Border>
             </StackPanel>
-            <GroupBox.Style>
-                <Style TargetType="GroupBox">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Enabled}" Value="False">
-                            <Setter Property="IsEnabled" Value="False"/>
-                            <Setter Property="Effect">
-                                <Setter.Value>
-                                    <BlurEffect Radius="1"/>
-                                </Setter.Value>
-                            </Setter>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </GroupBox.Style>
         </GroupBox>
         
         <!--Destination-->

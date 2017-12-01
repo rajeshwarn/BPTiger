@@ -56,6 +56,9 @@ namespace CompleteBackup.Models.Profile
 
         public void SleepIfNeeded()
         {
+            return;
+
+
             //PerformanceCounter("Processor", "% Processor Time", "_Total");
             //PerformanceCounter("Processor", "% Privileged Time", "_Total");
             //PerformanceCounter("Processor", "% Interrupt Time", "_Total");

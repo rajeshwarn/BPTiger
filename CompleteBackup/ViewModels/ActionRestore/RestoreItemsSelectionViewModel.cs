@@ -27,8 +27,6 @@ using System.Windows.Media.Imaging;
 
 namespace CompleteBackup.ViewModels
 {
-
-
     public class RestoreItemsSelectionViewModel : GenericBackupItemsSelectionViewModel
     {
         public RestoreItemsSelectionViewModel()
@@ -53,6 +51,8 @@ namespace CompleteBackup.ViewModels
             }
         }
 
+        private BackupSessionHistory m_SelectedHistoryItem;
+        public BackupSessionHistory SelectedHistoryItem { get { return m_SelectedHistoryItem; } set { m_SelectedHistoryItem = value; OnPropertyChanged(); } }
 
         public ObservableCollection<BackupSessionHistory> BackupSessionHistoryList { get; } = new ObservableCollection<BackupSessionHistory>();
 

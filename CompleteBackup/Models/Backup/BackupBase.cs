@@ -20,14 +20,13 @@ using System.Xml;
 
 namespace CompleteBackup.Models.backup
 {
-    public abstract class BackupBase
+    public abstract class BackupBase : BackupBaseFileSystem
     {
         protected IStorageInterface m_IStorage;
         protected BackupProfileData m_Profile;
-        protected BackupSessionHistory m_BackupSessionHistory;
         protected BackupPerfectLogger m_Logger;
 
-        public BackupBase(BackupProfileData profile, GenericStatusBarView progressBar)
+        public BackupBase(BackupProfileData profile, GenericStatusBarView progressBar) : base(profile)
         {
             m_TimeStamp = DateTime.Now;
             m_Profile = profile;
@@ -36,8 +35,6 @@ namespace CompleteBackup.Models.backup
 
             m_SourceBackupPathList = profile.BackupFolderList.ToList();//.Where(i => i.IsAvailable).ToList();
             m_TargetBackupPath = profile.GetTargetBackupFolder();
-
-            m_BackupSessionHistory = new BackupSessionHistory(profile.GetStorageInterface());
 
             m_ProgressBar = progressBar;
         }
@@ -303,120 +300,5 @@ namespace CompleteBackup.Models.backup
 
             return sourceSubdirectoryEntriesList;
         }
-
-
-
-        #region File System wrappers
-        protected void CopyFile(string sourcePath, string targetPath, bool overwrite = false)
-        {
-            if (m_Profile.IsDetaledLog)
-            {
-                m_Logger.Writeln($"File Copy {sourcePath} To {targetPath}");
-            }
-            else
-            {
-                m_Logger.Writeln($"File Copy {sourcePath}");
-            }
-
-            m_IStorage.CopyFile(sourcePath, targetPath, overwrite);
-        }
-
-        protected void CreateDirectory(string path, bool bCheckIfExist = false)
-        {
-            if (m_Profile.IsDetaledLog)
-            {
-                m_Logger.Writeln($"Create Directory {path}");
-            }
-            else
-            {
-                m_Logger.Writeln($"Create Directory {path}");
-            }
-
-            try
-            {
-                m_IStorage.CreateDirectory(path, bCheckIfExist);
-            }
-            catch (Exception ex)
-            {
-                m_Logger.Writeln($"**Exception while creating directory: {path}\n{ex.Message}");
-            }
-        }
-
-        protected bool MoveDirectory(string sourcePath, string targetPath, bool bCreateFolder = false)
-        {
-            if (m_Profile.IsDetaledLog)
-            {
-                m_Logger.Writeln($"Move Directory {sourcePath} To {targetPath}");
-            }
-            else
-            {
-                m_Logger.Writeln($"Move Directory {sourcePath}");
-            }
-
-            var parentDir = m_IStorage.GetDirectoryName(targetPath);
-            if (!m_IStorage.DirectoryExists(parentDir))
-            {
-                CreateDirectory(parentDir);
-            }
-
-            return m_IStorage.MoveDirectory(sourcePath, targetPath, bCreateFolder);
-        }
-
-        protected bool DeleteDirectory(string path, bool bRecursive = true)
-        {
-            bool bRet = false;
-            try
-            {
-                bRet = m_IStorage.DeleteDirectory(path, bRecursive);
-                m_Logger.Writeln($"Delete Directory {path}");
-            }
-            catch (UnauthorizedAccessException)
-            {
-                m_Logger.Writeln($"Delete Read only Directory: {path}");
-                m_IStorage.SetFileAttributeRecrusive(path, FileAttributes.Normal);
-                bRet = m_IStorage.DeleteDirectory(path, bRecursive);
-            }
-            catch (Exception ex)
-            {
-                m_Logger.Writeln($"**Exception while deleteing directory: {path}\n{ex.Message}");
-            }
-
-            return bRet;
-        }
-
-        protected void MoveFile(string sourcePath, string targetPath, bool bCreateFolder = false)
-        {
-            if (m_Profile.IsDetaledLog)
-            {
-                m_Logger.Writeln($"Move File {sourcePath} To {targetPath}");
-            }
-            else
-            {
-                m_Logger.Writeln($"Move File {sourcePath}");
-            }
-
-            m_IStorage.MoveFile(sourcePath, targetPath, bCreateFolder);
-        }
-        protected void DeleteFile(string path)
-        {
-            try
-            {
-                m_IStorage.DeleteFile(path);
-                m_Logger.Writeln($"Delete File {path}");
-            }
-            catch (UnauthorizedAccessException)
-            {
-                m_Logger.Writeln($"Delete Read only file File {path}");
-                m_IStorage.SetFileAttribute(path, FileAttributes.Normal);
-                m_IStorage.DeleteFile(path);
-            }
-            catch (Exception ex)
-            {
-                m_Logger.Writeln($"**Exception while deleteing file: {path}\n{ex.Message}");
-            }
-        }
-
-        #endregion
-
     }
 }

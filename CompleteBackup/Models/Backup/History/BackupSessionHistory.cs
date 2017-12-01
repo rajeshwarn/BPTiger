@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -48,20 +49,6 @@ namespace CompleteBackup.Models.Backup.History
 
         static readonly public string HistoryDirectory = ".BackupComnpleteHistory";
 
-        //public static bool IsHistoryItem(FolderMenuItem item)
-        //{
-        //    return (item.IsFolder && (item.Name == BackupSessionHistory.HistoryDirectory));
-        //}
-        //public static bool IsHistoryItem(string path)
-        //{
-        //    return (path.EndsWith(BackupSessionHistory.HistoryDirectory));
-        //}
-
-        //public static bool IsHistoryFile(string path)
-        //{
-        //    return path.EndsWith(".json", true, null);
-        //}
-
         BackupSessionHistory() { }
 
         public BackupSessionHistory(IStorageInterface storage)
@@ -74,16 +61,17 @@ namespace CompleteBackup.Models.Backup.History
         [XmlIgnore]
         public int SessionHistoryIndex { get; set; }
 
-
         public List<HistoryItem> HistoryItemList { get; set; } = new List<HistoryItem>();
 
         public DateTime TimeStamp { get; set; }
+        public string TargetPath { get; set; }
 
 
-        public void Reset(DateTime dateTime)
+        public void Reset(DateTime dateTime, string path)
         {
             HistoryItemList.Clear();
             TimeStamp = dateTime;
+            TargetPath = path;
         }
 
         public void AddNewFile(string source, string dest)

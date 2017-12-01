@@ -22,7 +22,7 @@ namespace CompleteBackup.Models.backup
 
         public override void ProcessBackup()
         {
-            m_BackupSessionHistory.Reset(GetTimeStamp());
+            m_BackupSessionHistory.Reset(GetTimeStamp(), m_TargetBackupPath);
 
             var backupSetName = BackupBase.GetLastBackupSetName_(m_Profile);
             var backupPath = BackupBase.GetLastBackupSetPath_(m_Profile);
@@ -95,7 +95,7 @@ namespace CompleteBackup.Models.backup
                     if (m_IStorage.IsFileSame(sourceFilePath, currSetFilePath))
                     {
                         //Do nothing
-                        m_BackupSessionHistory.AddNoChangeFile(sourceFilePath, currSetFilePath);
+                        HandleSameFile(sourceFilePath, currSetFilePath);
                     }
                     else
                     {

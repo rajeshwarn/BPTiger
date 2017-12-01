@@ -21,7 +21,7 @@ namespace CompleteBackup.Models.backup
 
         public override void ProcessBackup()
         {
-            m_BackupSessionHistory.Reset(GetTimeStamp());
+            m_BackupSessionHistory.Reset(GetTimeStamp(), m_TargetBackupPath);
 
             var lastSetName = BackupBase.GetLastBackupSetName_(m_Profile);
             if (lastSetName == null)
@@ -100,7 +100,7 @@ namespace CompleteBackup.Models.backup
                     if (m_IStorage.IsFileSame(sourcePath, currSetFilePath))
                     {
                         //File is the same, do nothing
-                        m_BackupSessionHistory.AddNoChangeFile(sourcePath, currSetFilePath);
+                        HandleSameFile(sourcePath, currSetFilePath);
                     }
                     else
                     {
@@ -112,6 +112,7 @@ namespace CompleteBackup.Models.backup
                         {
                             CreateDirectory(currSetPath);
                         }
+
                         CopyFile(sourcePath, currSetFilePath);
 
                         m_BackupSessionHistory.AddUpdatedFile(sourcePath, lastSetFilePath);

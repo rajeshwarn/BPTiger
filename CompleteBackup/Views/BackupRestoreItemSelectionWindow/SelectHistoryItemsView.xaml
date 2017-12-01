@@ -3,10 +3,45 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:view_models="clr-namespace:CompleteBackup.ViewModels"
+             xmlns:folder_models="clr-namespace:CompleteBackup.Models.FolderSelection"
              xmlns:local="clr-namespace:CompleteBackup.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    
+    <UserControl.DataContext>
+        <view_models:SelectHistoryItemsViewModel/>
+    </UserControl.DataContext>
     <Grid>
-            
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <TreeView ItemsSource="{Binding FolderMenuItemTree}"
+                                  TreeViewItem.Expanded="TreeViewItem_Expanded">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate DataType="{x:Type folder_models:BackupFolderMenuItem}" ItemsSource="{Binding ChildFolderMenuItems}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="16" Source="{Binding MenuItemImage}"/>
+                            <CheckBox IsThreeState="True" IsChecked="{Binding Selected}" Click="FolderCheckBox_Click">
+                                <CheckBox.Style>
+                                    <Style TargetType="CheckBox">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsSelectable}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </CheckBox.Style>
+                            </CheckBox>
+                            <TextBlock Text="{Binding Name}" />
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="TreeViewItem">
+                        <Setter Property="IsExpanded" Value="{Binding IsExpanded}" />
+                    </Style>
+                </TreeView.ItemContainerStyle>
+            </TreeView>
+        </ScrollViewer>
     </Grid>
 </UserControl>

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CompleteBackup.Models.FolderSelection;
+using CompleteBackup.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,32 @@ namespace CompleteBackup.Views
         public SelectHistoryItemsView()
         {
             InitializeComponent();
+
+            var vm = DataContext as SelectHistoryItemsViewModel;
+            vm?.InitItems();
+        }
+
+        private void TreeViewItem_Expanded(object sender, RoutedEventArgs e)
+        {
+            TreeViewItem tvi = e.OriginalSource as TreeViewItem;
+            var itemList = tvi.Items;
+
+            var vm = DataContext as SelectRestoreItemsWindowModel;
+            //           vm.ExpandFolder(itemList);
+        }
+
+        private void FolderCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            var checkBox = e.OriginalSource as CheckBox;
+
+            if (checkBox.IsChecked == null)
+            {
+                checkBox.IsChecked = false;
+            }
+
+            var dc = checkBox.DataContext as RestoreFolderMenuItem;
+            var viewModel = DataContext as SelectRestoreItemsWindowModel;
+            //            viewModel.FolderTreeClick(dc, (bool)checkBox.IsChecked);
         }
     }
 }

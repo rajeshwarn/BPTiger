@@ -1,4 +1,5 @@
 ﻿using CompleteBackup.DataRepository;
+using CompleteBackup.Models.Backup.History;
 using CompleteBackup.Models.Backup.Storage;
 using CompleteBackup.Models.FolderSelection;
 using CompleteBackup.ViewModels;
@@ -29,11 +30,26 @@ namespace CompleteBackup.Views
         {
             InitializeComponent();
         }
-
+    
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             var vm = DataContext as GenericBackupItemsSelectionViewModel;
             vm.UpdateCurrentProfileChange();
+        }
+
+        private void HistoryListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count > 0)
+            {
+                var item = e.AddedItems[0];
+                var vm = DataContext as RestoreItemsSelectionViewModel;
+
+                var historyItem = item as BackupSessionHistory;
+                vm.SelectedHistoryItem = historyItem;
+
+                var selectHistoryItemsViewModel = viewSelectHistoryItemsView.DataContext as SelectHistoryItemsViewModel;
+                selectHistoryItemsViewModel.SelectedHistoryItem = historyItem;
+            }
         }
     }
 }

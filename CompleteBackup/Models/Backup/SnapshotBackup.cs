@@ -19,7 +19,7 @@ namespace CompleteBackup.Models.backup
 
         public override void ProcessBackup()
         {
-            m_BackupSessionHistory.Reset(GetTimeStamp());
+            m_BackupSessionHistory.Reset(GetTimeStamp(), m_TargetBackupPath);
 
             var backupPath = GetTargetBackupPathWithSetPath(m_TargetBackupPath);
             CreateDirectory(backupPath);

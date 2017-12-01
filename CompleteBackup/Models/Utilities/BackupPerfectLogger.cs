@@ -32,10 +32,10 @@ namespace CompleteBackup.Models.Utilities
         }
         public void Write(string text)
         {
-            Application.Current.Dispatcher.Invoke(new Action(() =>
-            {
+          //  Application.Current.Dispatcher.Invoke(new Action(() =>
+        //    {
                 LoggerData += $"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()} - {text}";
-            }));
+         //   }));
         }
     }
 }
