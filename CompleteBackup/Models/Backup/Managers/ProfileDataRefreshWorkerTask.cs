@@ -89,7 +89,7 @@ namespace CompleteBackup.Models.Profile
 
             if (profile.RestoreFolderList.Count == 0)
             {
-                BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.RestoreItemListEmpty);
+                //BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.RestoreItemListEmpty);
             }
             else
             {

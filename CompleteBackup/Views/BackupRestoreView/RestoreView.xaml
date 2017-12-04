@@ -107,7 +107,7 @@
             </Border.Style>
         </Border>
 
-        <GroupBox Grid.Column="0" Grid.Row="1">
+        <GroupBox Grid.Column="0" Grid.Row="1" Visibility="Collapsed">
             <GroupBox.Header>
                 <TextBlock FontWeight="Bold" Text="Backup History"></TextBlock>
             </GroupBox.Header>

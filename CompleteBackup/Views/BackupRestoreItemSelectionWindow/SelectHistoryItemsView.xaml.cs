@@ -35,8 +35,8 @@ namespace CompleteBackup.Views
             TreeViewItem tvi = e.OriginalSource as TreeViewItem;
             var itemList = tvi.Items;
 
-            var vm = DataContext as SelectRestoreItemsWindowModel;
-            //           vm.ExpandFolder(itemList);
+            var vm = DataContext as SelectHistoryItemsViewModel;
+            vm.ExpandFolder(itemList);
         }
 
         private void FolderCheckBox_Click(object sender, RoutedEventArgs e)
@@ -49,8 +49,8 @@ namespace CompleteBackup.Views
             }
 
             var dc = checkBox.DataContext as RestoreFolderMenuItem;
-            var viewModel = DataContext as SelectRestoreItemsWindowModel;
-            //            viewModel.FolderTreeClick(dc, (bool)checkBox.IsChecked);
+            var viewModel = DataContext as SelectHistoryItemsViewModel;
+            viewModel.FolderTreeClick(dc, (bool)checkBox.IsChecked);
         }
     }
 }
