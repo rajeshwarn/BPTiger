@@ -87,6 +87,12 @@ namespace CompleteBackup.Models.Profile
                 BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.Restore_BackupDestinationNotFound);
             }
 
+            List<string> setList = BackupBase.GetBackupSetList_(profile);
+            if (setList.Count == 0)
+            {
+                BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.RestoreSessionListIsEmpty);
+            }
+
             if (profile.RestoreFolderList.Count == 0)
             {
                 //BackupAlertManager.Instance.AddAlert(profile, BackupPerfectAlertTypeEnum.RestoreItemListEmpty);

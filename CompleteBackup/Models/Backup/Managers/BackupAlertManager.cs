@@ -49,6 +49,8 @@ namespace CompleteBackup.Models.Backup
         BackupDestinationFolderNotAvailable,
         RestoreDestinationFolderNotAvailable,
 
+        RestoreSessionListIsEmpty,
+
         Restore_BackupDestinationNotFound, //folder available no file
 
         BackupInSleepMode,
@@ -189,6 +191,17 @@ namespace CompleteBackup.Models.Backup
                     NotificationType = BackupPerfectNotificationTypeEnum.Warning,
                     Name = $"Restore directory is not available",
                     Description = "Please select a valid destination directory to store the restored files",
+                }
+            },
+
+            {
+                BackupPerfectAlertTypeEnum.RestoreSessionListIsEmpty,
+                new BackupPerfectAlertData()
+                {
+                    AlertType = BackupPerfectAlertTypeEnum.RestoreSessionListIsEmpty,
+                    NotificationType = BackupPerfectNotificationTypeEnum.Warning,
+                    Name = $"Backup data not found. Did you run backup for the first time?",
+                    Description = "No backup data - Did you run backup for the first time?",
                 }
             },
 

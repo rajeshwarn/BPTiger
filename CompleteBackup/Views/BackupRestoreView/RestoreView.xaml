@@ -107,61 +107,72 @@
             </Border.Style>
         </Border>
 
-        <GroupBox Grid.Column="0" Grid.Row="1" Visibility="Collapsed">
+        <GroupBox Grid.Column="0" Grid.Row="1">
             <GroupBox.Header>
                 <TextBlock FontWeight="Bold" Text="Backup History"></TextBlock>
             </GroupBox.Header>
-            
-            <!--Source Error message-->
-            <StackPanel Orientation="Vertical">
+            <GroupBox.Style>
+                <Style TargetType="GroupBox" >
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=BackupSessionHistoryList.Count}" Value="0">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </GroupBox.Style>
 
-                <ListBox BorderThickness="0" ItemsSource="{Binding BackupSessionHistoryList, Mode=OneWay}"
+            <Expander IsExpanded="False" Header="History">
+                <StackPanel Orientation="Vertical">
+
+                    <ListBox BorderThickness="0" ItemsSource="{Binding BackupSessionHistoryList, Mode=OneWay}"
                          ScrollViewer.VerticalScrollBarVisibility="Auto"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                          SelectionChanged="HistoryListBox_SelectionChanged">
-                    <ListBox.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="Add new profile"
+                        <ListBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Add new profile"
                                 Command="{Binding OpenCreateProfileWindowCommand}"
                                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}">
-                                <MenuItem.Icon>
-                                    <Image Source="/Resources/Icons/FolderTreeView/NewFolder.ico"/>
-                                </MenuItem.Icon>
-                            </MenuItem>
-                        </ContextMenu>
-                    </ListBox.ContextMenu>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Border BorderThickness="1" CornerRadius="3" Background="LightGray" BorderBrush="Gray" Margin="2" Padding="4">
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock Text="{Binding TimeStamp, StringFormat={}{0:yyyy-MMM-dd}}"/>
-                                    <TextBlock Text="{Binding TimeStamp, StringFormat={}{0:hh\:mm\:ss tt}}"/>
-                                </StackPanel>
-                            </Border>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                    <!--<ListBox.Style>
+                                    <MenuItem.Icon>
+                                        <Image Source="/Resources/Icons/FolderTreeView/NewFolder.ico"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu>
+                        </ListBox.ContextMenu>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderThickness="1" CornerRadius="3" Background="LightGray" BorderBrush="Gray" Margin="2" Padding="4">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="{Binding TimeStamp, StringFormat={}{0:yyyy-MMM-dd}}"/>
+                                        <TextBlock Text="{Binding TimeStamp, StringFormat={}{0:hh\:mm\:ss tt}}"/>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <!--<ListBox.Style>
                         <Style TargetType="ListBox" >
                             <Setter Property="HorizontalAlignment" Value="Center"/>
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                         </Style>
                     </ListBox.Style>-->
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel IsItemsHost="True" Orientation="Horizontal"  />
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                </ListBox>
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel IsItemsHost="True" Orientation="Horizontal"  />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                    </ListBox>
 
-                <Border BorderThickness="1" Background="LightGray" CornerRadius="4" Margin="4,4,4,0" Padding="4">
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Text="{Binding SelectedHistoryItem.TimeStamp}"/>
-                        <local:SelectHistoryItemsView x:Name="viewSelectHistoryItemsView"/>
-                    </StackPanel>
-                </Border>
-            </StackPanel>
+                    <Border BorderThickness="1" Background="LightGray" CornerRadius="4" Margin="4,4,4,0" Padding="4">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="{Binding SelectedHistoryItem.TimeStamp}"/>
+                            <local:SelectHistoryItemsView x:Name="viewSelectHistoryItemsView"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Expander>
         </GroupBox>
-        
+
         <!--Destination-->
         <GroupBox Grid.Column="0" Grid.Row="2">
             <GroupBox.Header>
