@@ -57,16 +57,15 @@ namespace CompleteBackup.Models.Backup.History
             //signature = profile.
         }
 
-
         [XmlIgnore]
         public int SessionHistoryIndex { get; set; }
 
-        public List<HistoryItem> HistoryItemList { get; set; } = new List<HistoryItem>();
-
         public DateTime TimeStamp { get; set; }
         public string SessionSignature { get; set; }
+        public string AtchiveName { get; set; }
         public string TargetPath { get; set; }
 
+        public List<HistoryItem> HistoryItemList { get; set; } = new List<HistoryItem>();
 
         public void Reset(DateTime dateTime, string signature, string path)
         {
@@ -74,44 +73,75 @@ namespace CompleteBackup.Models.Backup.History
             TimeStamp = dateTime;
             SessionSignature = signature;
             TargetPath = path;
+            AtchiveName = BackupProfileData.TargetBackupBaseDirectoryName;
         }
 
         public void AddNewFile(string source, string dest)
         {
-            HistoryItemList.Add(new HistoryItem() { SourcePath = source, TargetPath = dest, HistoryType = HistoryTypeEnum.Added });
+            var relativePath = ExtractRelativePath(TargetPath, dest);
+            var hItem = new HistoryItem() { SourcePath = source, TargetPath = relativePath, HistoryType = HistoryTypeEnum.Added };
+            HistoryItemList.Add(hItem);
         }
         public void AddUpdatedFile(string source, string dest)
         {
-            var hItem = new HistoryItem() { SourcePath = source, TargetPath = dest, HistoryType = HistoryTypeEnum.Changed };
+            var relativePath = ExtractRelativePath(TargetPath, dest);
+            var hItem = new HistoryItem() { SourcePath = source, TargetPath = relativePath, HistoryType = HistoryTypeEnum.Changed };
             HistoryItemList.Add(hItem);
         }
         public void AddDeletedFile(string source, string dest)
         {
-            HistoryItemList.Add(new HistoryItem() { SourcePath = source, TargetPath = dest, HistoryType = HistoryTypeEnum.Deleted });
+            var relativePath = ExtractRelativePath(TargetPath, dest);
+            HistoryItemList.Add(new HistoryItem() { SourcePath = source, TargetPath = relativePath, HistoryType = HistoryTypeEnum.Deleted });
         }
         public void AddDeletedFolder(string source, string dest)
         {
-            HistoryItemList.Add(new HistoryItem() { SourcePath = source, TargetPath = dest, HistoryType = HistoryTypeEnum.Deleted, HistoryItemType = HistoryItemTypeEnum.Directory });
+            var relativePath = ExtractRelativePath(TargetPath, dest);
+            HistoryItemList.Add(new HistoryItem() { SourcePath = source, TargetPath = relativePath, HistoryType = HistoryTypeEnum.Deleted, HistoryItemType = HistoryItemTypeEnum.Directory });
         }
         public void AddNoChangeFile(string source, string dest)
         {
+            var relativePath = ExtractRelativePath(TargetPath, dest);
             //HistoryItemList.Add(new HistoryItem() { Path = source, HistoryType = HistoryTypeEnum.NoChange });
         }
 
-        public void SaveHistoryItem(string path, HistoryItem item)
+
+        private string ExtractRelativePath(string path, string fullPath)
         {
-            var fileName = m_Storage.GetFileName(path);
-            var directory = m_Storage.GetDirectoryName(path);
+            if (fullPath.Length > path.Length)
+            {
+                var relativePath = fullPath.Substring(path.Length + 1);
 
-            var historyDir = m_Storage.Combine(directory, HistoryDirectory);
-            m_Storage.CreateDirectory(historyDir);
+                if (relativePath.StartsWith(SessionSignature))
+                {
+                    relativePath = relativePath.Substring(SessionSignature.Length + 1);
 
-            var destPath = m_Storage.Combine(historyDir, fileName + "_history.json");
+                    if (relativePath.StartsWith(AtchiveName))
+                    {
+                        relativePath = relativePath.Substring(AtchiveName.Length + 1);
+                    }
+                }
 
-            string json = json = JsonConvert.SerializeObject(item, Formatting.Indented);
-
-            File.WriteAllText(destPath, json);
+                return relativePath;
+            }
+            else
+            {
+                return fullPath;
+            }
         }
+        //public void SaveHistoryItem(string path, HistoryItem item)
+        //{
+        //    var fileName = m_Storage.GetFileName(path);
+        //    var directory = m_Storage.GetDirectoryName(path);
+
+        //    var historyDir = m_Storage.Combine(directory, HistoryDirectory);
+        //    m_Storage.CreateDirectory(historyDir);
+
+        //    var destPath = m_Storage.Combine(historyDir, fileName + "_history.json");
+
+        //    string json = json = JsonConvert.SerializeObject(item, Formatting.Indented);
+
+        //    File.WriteAllText(destPath, json);
+        //}
 
         public void SaveHistory()
         {
@@ -121,18 +151,13 @@ namespace CompleteBackup.Models.Backup.History
             var historyDir = m_IStorage.Combine(fullPath, HistoryDirectory);
             m_IStorage.CreateDirectory(historyDir);
 
-            //string date = currentDate == null ? string.Empty : $"_{currentDate}";
-            //string historyFile = m_IStorage.Combine(historyDir, $"{SessionSignature}{date}_history.json");
             string historyFile = m_IStorage.Combine(historyDir, $"{SessionSignature}_history.json");
 
             var historyData = new object[1];
-            historyData[0] = SessionSignature;
+            historyData[0] = this;
             string json = json = JsonConvert.SerializeObject(historyData, Formatting.Indented);
 
             File.WriteAllText(historyFile, json);
-            //System.Diagnostics.Process.Start(path);
-
-            //var hhh = LoadHistory(path, signature);
         }
 
         public static BackupSessionHistory LoadHistory(string path, string signature)
