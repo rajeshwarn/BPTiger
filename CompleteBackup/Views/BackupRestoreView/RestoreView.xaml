@@ -115,6 +115,9 @@
                 <Style TargetType="GroupBox" >
                     <Setter Property="Visibility" Value="Visible"/>
                     <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=CurrentBackupProfile.IsDifferentialBackup}" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
                         <DataTrigger Binding="{Binding Path=BackupSessionHistoryList.Count}" Value="0">
                             <Setter Property="Visibility" Value="Collapsed"/>
                         </DataTrigger>

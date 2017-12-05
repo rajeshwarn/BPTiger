@@ -32,6 +32,9 @@ namespace CompleteBackup.Models.Backup.Profile
         private BackupTypeEnum m_BackupType { get; set; } = BackupTypeEnum.Snapshot;
         public BackupTypeEnum BackupType { get { return m_BackupType; } set { m_BackupType = value; OnPropertyChanged(); OnPropertyChanged("BackupTypeName"); OnPropertyChanged("BackupTypeImage"); } }
 
+        [XmlIgnore]
+        public bool IsDifferentialBackup { get { return BackupType == BackupTypeEnum.Differential; } }
+
         public Guid GUID { get; set; } = Guid.NewGuid();
 
         private string m_Name;

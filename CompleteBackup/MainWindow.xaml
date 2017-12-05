@@ -267,7 +267,25 @@
                 </RibbonGroup>
 
 
+                
                 <RibbonGroup Header="Restore">
+                    <RibbonButton Label="Restore" LargeImageSource="/Resources/Icons/Ribbon/RestoreLatestVersion.ico"
+                                       Command="{Binding RestoreBackupLatestVersionCommand}"
+                                       CommandParameter="{Binding ProjectData.CurrentBackupProfile}"
+                                       ToolTip="Restore the latest version or the most up to date files and folders from the storage backup">
+                        <RibbonButton.Style>
+                            <Style TargetType="RibbonButton" >
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ProjectData.CurrentBackupProfile.IsDifferentialBackup}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </RibbonButton.Style>
+                    </RibbonButton>
+
+                    <!--Defferential Restore button-->
                     <RibbonSplitButton Label="Restore" LargeImageSource="/Resources/Icons/Ribbon/RestoreLatestVersion.ico"
                                        Command="{Binding RestoreBackupLatestVersionCommand}"
                                        CommandParameter="{Binding ProjectData.CurrentBackupProfile}"
@@ -285,6 +303,16 @@
                                        Command="{Binding RestoreBackupByDateCommand}"
                                        CommandParameter="{Binding ProjectData.CurrentBackupProfile}"
                                        ToolTip="Lets the choose the date of the files and folders from the storage backup"/>
+                        <RibbonSplitButton.Style>
+                            <Style TargetType="RibbonSplitButton" >
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ProjectData.CurrentBackupProfile.IsDifferentialBackup}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </RibbonSplitButton.Style>
                     </RibbonSplitButton>
                 </RibbonGroup>
                 
