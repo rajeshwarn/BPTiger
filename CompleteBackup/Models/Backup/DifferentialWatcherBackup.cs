@@ -21,9 +21,10 @@ namespace CompleteBackup.Models.backup
 
         public override void ProcessBackup()
         {
-            m_BackupSessionHistory.Reset(GetTimeStamp(), m_TargetBackupPath);
-
             var targetSetName = GetTargetSetName();
+
+            m_BackupSessionHistory.Reset(GetTimeStamp(), targetSetName, m_TargetBackupPath);
+
             var lastSetName = GetLastBackupSetName_(m_Profile);
             if (lastSetName == null)
             {
@@ -40,7 +41,7 @@ namespace CompleteBackup.Models.backup
                 ProcessBackupRootFolders(newFullTargetPath, lastFullTargetPath);
             }
 
-            BackupSessionHistory.SaveHistory(m_TargetBackupPath, targetSetName, m_BackupSessionHistory);
+            m_BackupSessionHistory.SaveHistory();
         }
     }
 }

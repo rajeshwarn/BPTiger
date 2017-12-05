@@ -64,13 +64,15 @@ namespace CompleteBackup.Models.Backup.History
         public List<HistoryItem> HistoryItemList { get; set; } = new List<HistoryItem>();
 
         public DateTime TimeStamp { get; set; }
+        public string SessionSignature { get; set; }
         public string TargetPath { get; set; }
 
 
-        public void Reset(DateTime dateTime, string path)
+        public void Reset(DateTime dateTime, string signature, string path)
         {
             HistoryItemList.Clear();
             TimeStamp = dateTime;
+            SessionSignature = signature;
             TargetPath = path;
         }
 
@@ -111,19 +113,20 @@ namespace CompleteBackup.Models.Backup.History
             File.WriteAllText(destPath, json);
         }
 
-        public static void SaveHistory(string path, string signature, BackupSessionHistory history, string currentDate = null)
+        public void SaveHistory()
         {
             var m_IStorage = new FileSystemStorage();
-            var fullPath = m_IStorage.Combine(path, signature);
+            var fullPath = m_IStorage.Combine(TargetPath, SessionSignature);
 
             var historyDir = m_IStorage.Combine(fullPath, HistoryDirectory);
             m_IStorage.CreateDirectory(historyDir);
 
-            string date = currentDate == null ? string.Empty : $"_{currentDate}";
-            string historyFile = m_IStorage.Combine(historyDir, $"{signature}{date}_history.json");
+            //string date = currentDate == null ? string.Empty : $"_{currentDate}";
+            //string historyFile = m_IStorage.Combine(historyDir, $"{SessionSignature}{date}_history.json");
+            string historyFile = m_IStorage.Combine(historyDir, $"{SessionSignature}_history.json");
 
             var historyData = new object[1];
-            historyData[0] = history;
+            historyData[0] = SessionSignature;
             string json = json = JsonConvert.SerializeObject(historyData, Formatting.Indented);
 
             File.WriteAllText(historyFile, json);
