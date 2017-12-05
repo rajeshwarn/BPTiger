@@ -3,10 +3,46 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:view_models="clr-namespace:CompleteBackup.ViewModels"
         xmlns:local="clr-namespace:CompleteBackup.Views"
         mc:Ignorable="d"
         Title="SelectRestoreItemsByDateWindow" Height="300" Width="300">
+    <Window.DataContext>
+        <view_models:SelectRestoreItemsByDateViewModel/>
+    </Window.DataContext>
+    
     <Grid>
-        
+        <DockPanel DockPanel.Dock="Right" Margin="7,7,7,7" Height="Auto">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="40" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Restore date: " VerticalAlignment="Center"/>
+                        <DatePicker SelectedDateFormat="Long"
+                                    SelectedDate="{Binding SelectedDate}"
+                                    DisplayDateStart="{Binding DisplayDateStart, Mode=OneWay}"
+                                    DisplayDateEnd="{Binding DisplayDateEnd, Mode=OneWay}"
+                                    FirstDayOfWeek="Monday"
+                                    VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Bottom">
+                    <!--<Separator Margin="0,10,0,2" />-->
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                            <Button Width="80" Content="Restore" Margin="20,5,0,5"
+                                    Command="{Binding XXXXSaveFolderSelectionCommand}"
+                                    CommandParameter="{Binding Path=DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
+                            <Button Width="80" Content="Cancel" Margin="20,5,0,5"
+                                    Command="{Binding CloseWindowCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
+                        </StackPanel>
+                    </DockPanel>
+                </StackPanel>
+            </Grid>
+        </DockPanel>
     </Grid>
 </Window>

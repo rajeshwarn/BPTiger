@@ -178,6 +178,7 @@
     <Compile Include="ViewModels\ProfileSetting\MainProfileViewModel.cs" />
     <Compile Include="ViewModels\ProfileSetting\ProfileList\ProfileListViewModel.cs" />
     <Compile Include="ViewModels\ActionRestore\SelectRestoreItemsWindowModel.cs" />
+    <Compile Include="ViewModels\ActionRestore\SelectRestoreItemsByDateViewModel.cs" />
     <Compile Include="Views\BackupRestoreView\RestoreView.xaml.cs">
       <DependentUpon>RestoreView.xaml</DependentUpon>
     </Compile>
@@ -244,6 +245,9 @@
     </Compile>
     <Compile Include="Views\BackupRestoreItemSelectionWindow\SelectHistoryItemsView.xaml.cs">
       <DependentUpon>SelectHistoryItemsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BackupRestoreItemSelectionWindow\SelectRestoreItemsByDateWindow.xaml.cs">
+      <DependentUpon>SelectRestoreItemsByDateWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -342,6 +346,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\BackupRestoreItemSelectionWindow\SelectHistoryItemsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BackupRestoreItemSelectionWindow\SelectRestoreItemsByDateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

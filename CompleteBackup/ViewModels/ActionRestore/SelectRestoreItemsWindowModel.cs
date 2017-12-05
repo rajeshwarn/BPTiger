@@ -151,13 +151,13 @@ namespace CompleteBackup.ViewModels
                 case BackupTypeEnum.Incremental:
                     {
                         var lastSetPath = m_IStorage.Combine(profile.GetTargetBackupFolder(), m_LastSetPathCache);
-                        var lastSetARchivePath = m_IStorage.Combine(lastSetPath, BackupProfileData.TargetBackupBaseDirectoryName);
+                        //var lastSetARchivePath = m_IStorage.Combine(lastSetPath, BackupProfileData.TargetBackupBaseDirectoryName);
 
                         foreach (var item in profile.BackupFolderList.Where(i => i.IsAvailable))
                         {
                             
                             var directoryName = m_IStorage.GetFileName(item.Path);
-                            var restorePath = m_IStorage.Combine(lastSetARchivePath, item.Name);
+                            var restorePath = m_IStorage.Combine(lastSetPath, item.Name);
 
                             var rootItem = CreateMenuItem(m_IStorage.IsFolder(restorePath), false, restorePath, directoryName, directoryName, null, 0);
 

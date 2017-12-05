@@ -57,11 +57,11 @@ namespace CompleteBackup.ViewModels.ICommands
        //         profile.StartBackup();
             }
 
-            var command = new OpenSelectRestoreItemsWindowICommand<object>();
+            new SelectRestoreItemsByDateWindow().Show();
 
-            var currProfile = BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile;
-            command.Execute(currProfile);
-
+            //var command = new OpenSelectRestoreItemsWindowICommand<object>();
+            //var currProfile = BackupProjectRepository.Instance.SelectedBackupProject.CurrentBackupProfile;
+            //command.Execute(currProfile);
         }
     }
 }
