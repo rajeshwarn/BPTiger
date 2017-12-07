@@ -22,9 +22,9 @@
 
                 </StackPanel>
             </Expander.Header>
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
+            <ScrollViewer x:Name="textLogScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
                 <TextBox Text="{Binding Project.CurrentBackupProfile.Logger.LoggerData}" IsReadOnly="True" BorderThickness="0" Background="Transparent"
-                           Foreground="Black" FontFamily="Consolas" Padding="8" TextWrapping="Wrap" />
+                           Foreground="Black" FontFamily="Consolas" Padding="8" TextWrapping="Wrap" TextChanged="LogTextBox_TextChanged" />
             </ScrollViewer>
         </Expander>
     </Grid>

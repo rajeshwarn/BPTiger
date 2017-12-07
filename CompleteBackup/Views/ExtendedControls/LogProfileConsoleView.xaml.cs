@@ -24,5 +24,10 @@ namespace CompleteBackup.Views
         {
             InitializeComponent();
         }
+
+        private void LogTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            textLogScrollViewer.ScrollToBottom();
+        }
     }
 }
