@@ -23,7 +23,7 @@ namespace CompleteBackup.Models.backup
         {
             var targetSetName = GetTargetSetName();
 
-            m_BackupSessionHistory.Reset(GetTimeStamp(), targetSetName, m_TargetBackupPath);
+            m_BackupSessionHistory.Reset(GetTimeStamp(), targetSetName, m_SourceBackupPathList, m_TargetBackupPath);
 
             var lastSetName = GetLastBackupSetName_(m_Profile);
             if (lastSetName == null)

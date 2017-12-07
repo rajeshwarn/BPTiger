@@ -1,4 +1,5 @@
 ﻿using CompleteBackup.Models.Backup.Storage;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -31,6 +32,7 @@ namespace CompleteBackup.Models.Backup.Profile
         private long m_TotalSize { get; set; }
         public long TotalSize { get { return m_TotalSize; } set { m_TotalSize = value; OnPropertyChanged(); } }
 
+        [JsonIgnore]
         [XmlIgnore]
         public object Image
         {

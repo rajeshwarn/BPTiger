@@ -63,16 +63,19 @@ namespace CompleteBackup.Models.Backup.History
         public DateTime TimeStamp { get; set; }
         public string SessionSignature { get; set; }
         public string AtchiveName { get; set; }
+
+        public List<FolderData> SourceBackupPathList { get; set; }
         public string TargetPath { get; set; }
 
         public List<HistoryItem> HistoryItemList { get; set; } = new List<HistoryItem>();
 
-        public void Reset(DateTime dateTime, string signature, string path)
+        public void Reset(DateTime dateTime, string signature, List<FolderData> sourceBackupPathList, string targetPath)
         {
             HistoryItemList.Clear();
             TimeStamp = dateTime;
             SessionSignature = signature;
-            TargetPath = path;
+            TargetPath = targetPath;
+            SourceBackupPathList = sourceBackupPathList;
             AtchiveName = BackupProfileData.TargetBackupBaseDirectoryName;
         }
 
