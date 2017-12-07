@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -111,12 +113,24 @@ namespace CompleteBackup.DataRepository
 
             SelectedBackupProject = BackupProjectList[0];
         }
+
+
         public void SaveProject()
         {
             if (BackupProjectList != null)
             {
-                Properties.BackupProjectRepositorySettings.Default.BackupProjectList = BackupProjectList;
-                Properties.BackupProjectRepositorySettings.Default.Save();
+                new Thread(new System.Threading.ThreadStart(() =>
+                {
+                    lock (BackupProjectRepository.Instance)
+                    {
+                        Properties.BackupProjectRepositorySettings.Default.BackupProjectList = BackupProjectList;
+                        Properties.BackupProjectRepositorySettings.Default.Save();
+                    }
+                }))
+                {
+                    IsBackground = false,
+                    Name = "BackupProjectRepositorySettings save task"
+                }.Start();
             }
         }
     }
