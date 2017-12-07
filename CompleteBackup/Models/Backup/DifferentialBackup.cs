@@ -113,7 +113,7 @@ namespace CompleteBackup.Models.backup
                             CreateDirectory(currSetPath);
                         }
 
-                        CopyFile(sourcePath, currSetFilePath);
+                        CopyUpdatedFile(sourcePath, currSetFilePath);
 
                         m_BackupSessionHistory.AddUpdatedFile(sourcePath, lastSetFilePath);
                     }
@@ -125,7 +125,7 @@ namespace CompleteBackup.Models.backup
                     {
                         CreateDirectory(currSetPath);
                     }
-                    CopyFile(sourcePath, currSetFilePath);
+                    CopyNewFile(sourcePath, currSetFilePath);
 
                     m_BackupSessionHistory.AddNewFile(sourcePath, currSetFilePath);
                 }

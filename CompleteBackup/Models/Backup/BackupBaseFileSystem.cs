@@ -45,19 +45,25 @@ namespace CompleteBackup.Models.backup
         }
 
 
-        protected void CopyFile(string sourcePath, string targetPath, bool overwrite = false)
+
+        protected void CopyUpdatedFile(string sourcePath, string targetPath, bool overwrite = false)
         {
-            if (m_Profile.IsDetaledLog)
-            {
-                m_Logger.Writeln($"File Copy {sourcePath} To {targetPath}");
-            }
-            else
-            {
-                m_Logger.Writeln($"File Copy {sourcePath}");
-            }
+            m_Logger.Writeln($"File UpdatedL: {sourcePath}");
+            m_IStorage.CopyFile(sourcePath, targetPath, overwrite);
+        }
+        protected void CopyRenamedFile(string sourcePath, string targetPath, bool overwrite = false)
+        {
+            m_Logger.Writeln($"File Renamed: {sourcePath}");
+            m_IStorage.CopyFile(sourcePath, targetPath, overwrite);
+        }
+
+        protected void CopyNewFile(string sourcePath, string targetPath, bool overwrite = false)
+        {
+            m_Logger.Writeln($"New File {sourcePath}");
 
             m_IStorage.CopyFile(sourcePath, targetPath, overwrite);
         }
+
 
         protected void CreateDirectory(string path, bool bCheckIfExist = false)
         {
@@ -124,17 +130,11 @@ namespace CompleteBackup.Models.backup
 
         protected void MoveFile(string sourcePath, string targetPath, bool bCreateFolder = false)
         {
-            if (m_Profile.IsDetaledLog)
-            {
-                m_Logger.Writeln($"Move File {sourcePath} To {targetPath}");
-            }
-            else
-            {
-                m_Logger.Writeln($"Move File {sourcePath}");
-            }
+            //m_Logger.Writeln($"Move File {sourcePath}");
 
             m_IStorage.MoveFile(sourcePath, targetPath, bCreateFolder);
         }
+
         protected void DeleteFile(string path)
         {
             try

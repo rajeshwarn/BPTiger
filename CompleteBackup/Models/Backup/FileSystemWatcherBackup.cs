@@ -151,7 +151,7 @@ namespace CompleteBackup.Models.Backup
                                     CreateDirectory(targetDir);
                                 }
 
-                                CopyFile(item.FullPath, newTargetPath);
+                                CopyUpdatedFile(item.FullPath, newTargetPath);
                             }
                             else
                             {
@@ -166,10 +166,10 @@ namespace CompleteBackup.Models.Backup
                                 }
                                 else
                                 {
-                                    //delete old version if no old set exists, happens with full backup and incremental
+                                    //delete old version if old set not exists, happens with full backup and incremental
                                     DeleteFile(newTargetPath);
                                 }
-                                CopyFile(item.FullPath, newTargetPath, true);
+                                CopyUpdatedFile(item.FullPath, newTargetPath, true);
                             }
 
                         }
@@ -203,7 +203,7 @@ namespace CompleteBackup.Models.Backup
                                 {
                                     CreateDirectory(dirName);
                                 }
-                                CopyFile(sourcePath, newTargetPath);
+                                CopyNewFile(sourcePath, newTargetPath);
                             }
                             else
                             {
@@ -305,7 +305,7 @@ namespace CompleteBackup.Models.Backup
                                     if (lastTargetPath != null)
                                     {
                                         var newLastTargetPath = m_IStorage.Combine(m_IStorage.Combine(lastTargetPath, m_IStorage.GetFileName(item.WatchPath)), m_IStorage.GetFileName(item.OldPath));
-                                        CopyFile(oldTargetPath, newLastTargetPath, true);
+                                        CopyRenamedFile(oldTargetPath, newLastTargetPath, true);
                                     }
                                     else
                                     {

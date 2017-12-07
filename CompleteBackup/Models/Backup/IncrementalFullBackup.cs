@@ -100,7 +100,7 @@ namespace CompleteBackup.Models.backup
                     else
                     {
                         //update/overwrite file
-                        CopyFile(sourceFilePath, currSetFilePath, true);
+                        CopyUpdatedFile(sourceFilePath, currSetFilePath, true);
 
                         m_BackupSessionHistory.AddUpdatedFile(sourceFilePath, currSetFilePath);
                     }
@@ -111,7 +111,7 @@ namespace CompleteBackup.Models.backup
                     {
                         CreateDirectory(destPath);
                     }
-                    CopyFile(sourceFilePath, currSetFilePath);
+                    CopyNewFile(sourceFilePath, currSetFilePath);
 
                     m_BackupSessionHistory.AddNewFile(sourceFilePath, currSetFilePath);
                 }

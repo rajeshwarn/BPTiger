@@ -82,7 +82,7 @@ namespace CompleteBackup.Models.backup
                 var sourceFilePath = m_IStorage.Combine(sourcePath, fileName);
                 var targetFilePath = m_IStorage.Combine(destPath, fileName);
 
-                CopyFile(sourceFilePath, targetFilePath);
+                CopyNewFile(sourceFilePath, targetFilePath);
 
                 m_BackupSessionHistory.AddNewFile(sourceFilePath, targetFilePath);
             }
