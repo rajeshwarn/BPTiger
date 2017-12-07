@@ -132,7 +132,7 @@ namespace CompleteBackup.Models.backup
             }
             catch (Exception ex)
             {
-                m_Logger.Writeln($"**Exception while procesing file set\nSource: {sourcePath}\nTarget: {currSetFilePath}\nLast: {lastSetFilePath}\n{ex.Message}");
+                m_Logger.Writeln($"**Exception while procesing file\n    Source: {sourcePath}\n    Target set: {currSetFilePath}\n    Last set: {lastSetFilePath}\n    {ex.Message}");
             }
         }
 
