@@ -15,18 +15,17 @@ using System.Windows;
 
 namespace CompleteBackup.Models.Profile
 {
-    internal struct LASTINPUTINFO
-    {
-        public int cbSize;
+    //internal struct LASTINPUTINFO
+    //{
+    //    public int cbSize;
 
-        public int dwTime;
-    }
+    //    public int dwTime;
+    //}
 
     public class BackupProcessWorkerTask : BackgroundWorker
     {
-        [System.Runtime.InteropServices.DllImport("User32.dll")]
-        private static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
-
+//        [System.Runtime.InteropServices.DllImport("User32.dll")]
+//        private static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
 
         BackupBase m_BackupManager = null;
 

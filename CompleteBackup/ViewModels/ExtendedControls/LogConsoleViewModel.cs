@@ -14,6 +14,8 @@ namespace CompleteBackup.ViewModels
 {
     public class LogConsoleViewModel
     {
+        public ICommand ClearLogConsoleCommand { get; private set; } = new ClearLogConsoleICommand<object>();
         public BackupProjectData Project { get; } = BackupProjectRepository.Instance.SelectedBackupProject;
+
     }
 }

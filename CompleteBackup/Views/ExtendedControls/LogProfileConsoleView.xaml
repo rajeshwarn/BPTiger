@@ -11,7 +11,17 @@
         <view_models:LogConsoleViewModel/>
     </UserControl.DataContext>
     <Grid>
-        <Expander Grid.Row="1" Header="Backup Logs"  IsExpanded="True">
+        <Expander Grid.Row="1" IsExpanded="True">
+            <Expander.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontWeight="Bold" Text="Backup Logs"></TextBlock>
+                    <Button ToolTip="Clear log console logs" Command="{Binding ClearLogConsoleCommand}"
+                            CommandParameter="{Binding Project.CurrentBackupProfile}" Margin="8,0,0,0">
+                        <Image Source="/Resources/Icons/Ribbon/Clear.ico" Height="16" />
+                    </Button>
+
+                </StackPanel>
+            </Expander.Header>
             <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
                 <TextBox Text="{Binding Project.CurrentBackupProfile.Logger.LoggerData}" IsReadOnly="True" BorderThickness="0" Background="Transparent"
                            Foreground="Black" FontFamily="Consolas" Padding="8" TextWrapping="Wrap" />
