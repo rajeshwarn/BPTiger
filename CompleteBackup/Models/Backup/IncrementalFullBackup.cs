@@ -102,7 +102,7 @@ namespace CompleteBackup.Models.backup
                         //update/overwrite file
                         CopyUpdatedFile(sourceFilePath, currSetFilePath, true);
 
-                        m_BackupSessionHistory.AddUpdatedFile(sourceFilePath, currSetFilePath);
+                        m_BackupSessionHistory.AddFile(sourceFilePath, currSetFilePath, HistoryTypeEnum.Changed);
                     }
                 }
                 else
@@ -113,7 +113,7 @@ namespace CompleteBackup.Models.backup
                     }
                     CopyNewFile(sourceFilePath, currSetFilePath);
 
-                    m_BackupSessionHistory.AddNewFile(sourceFilePath, currSetFilePath);
+                    m_BackupSessionHistory.AddFile(sourceFilePath, currSetFilePath, HistoryTypeEnum.Added);
                 }
             }
             catch (Exception ex)
@@ -230,12 +230,12 @@ namespace CompleteBackup.Models.backup
 
                             //Move file to last set
                             MoveFile(filePath, prevSetfilePath, true);
-                            m_BackupSessionHistory.AddDeletedFile(filePath, prevSetfilePath);
+                            m_BackupSessionHistory.AddFile(filePath, prevSetfilePath, HistoryTypeEnum.Deleted);
                         }
                         else
                         {
                             DeleteFile(filePath);
-                            m_BackupSessionHistory.AddDeletedFile(filePath, filePath);
+                            m_BackupSessionHistory.AddFile(filePath, filePath, HistoryTypeEnum.Deleted);
                         }
 
                     }

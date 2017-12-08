@@ -21,11 +21,11 @@ namespace CompleteBackup.ViewModels
             List<string> setList = BackupBase.GetBackupSetList_(profile);
             var firstSet = setList.FirstOrDefault();
             var firstSessionHistory = BackupSessionHistory.LoadHistory(profile.GetTargetBackupFolder(), firstSet);
-            m_DisplayDateStart = firstSessionHistory.TimeStamp;
+            m_DisplayDateStart = firstSessionHistory.HistoryData.TimeStamp;
 
             var lastSet = setList.LastOrDefault();
             var lastSessionHistory = BackupSessionHistory.LoadHistory(profile.GetTargetBackupFolder(), lastSet);
-            m_DisplayDateEnd = lastSessionHistory.TimeStamp;
+            m_DisplayDateEnd = lastSessionHistory.HistoryData.TimeStamp;
 
             m_SelectedDate = m_DisplayDateEnd;
         }

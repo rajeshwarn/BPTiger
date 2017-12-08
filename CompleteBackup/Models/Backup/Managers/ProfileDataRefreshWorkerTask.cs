@@ -222,7 +222,7 @@ namespace CompleteBackup.Models.Profile
                         if (lastSet != null)
                         {
                             var sessionHistory = BackupSessionHistory.LoadHistory(profile.GetTargetBackupFolder(), lastSet);
-                            lastTime = sessionHistory?.TimeStamp;
+                            lastTime = sessionHistory?.HistoryData?.TimeStamp;
                             Application.Current.Dispatcher.Invoke(new Action(() =>
                             {
                                 profile.LastBackupDateTime = lastTime;

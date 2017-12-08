@@ -41,7 +41,7 @@ namespace CompleteBackup.Models.backup
 
         protected void HandleSameFile(string sourcePath, string targetPath)
         {
-            m_BackupSessionHistory.AddNoChangeFile(sourcePath, targetPath);
+            m_BackupSessionHistory.AddFile(sourcePath, targetPath, HistoryTypeEnum.NoChange);
         }
 
 

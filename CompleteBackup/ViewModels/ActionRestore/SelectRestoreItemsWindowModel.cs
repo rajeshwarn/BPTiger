@@ -119,7 +119,7 @@ namespace CompleteBackup.ViewModels
                         var sessionHistory = BackupSessionHistory.LoadHistory(profile.GetTargetBackupFolder(), setPath);
                         if (sessionHistory != null)
                         {
-                            sessionHistory.SessionHistoryIndex = iSessionIndex;
+                            sessionHistory.HistoryData.SessionHistoryIndex = iSessionIndex;
                             iSessionIndex++;
 
                             var folderItem = item as FolderMenuItem;
@@ -198,7 +198,7 @@ namespace CompleteBackup.ViewModels
                             }
                             else
                             {
-                                sessionHistory.SessionHistoryIndex = iSessionIndex;
+                                sessionHistory.HistoryData.SessionHistoryIndex = iSessionIndex;
 
                                 var lastSetPath = m_IStorage.Combine(m_IStorage.Combine(profile.GetTargetBackupFolder(), setPath), BackupProfileData.TargetBackupBaseDirectoryName);
 
@@ -247,7 +247,7 @@ namespace CompleteBackup.ViewModels
                 ////History Items
                 if (history != null)
                 {
-                    foreach (var historyItem in history.HistoryItemList)
+                    foreach (var historyItem in history.HistoryData?.HistoryItemList)
                     {
                         //var filePath = m_IStorage.Combine(item.Path, file);
 
@@ -260,7 +260,7 @@ namespace CompleteBackup.ViewModels
                                 var rp = m_IStorage.Combine(item.RelativePath, fileName);
 
                                 var foundItem = item.ChildFolderMenuItems.Where(i => i.Name == fileName).FirstOrDefault();
-                                var timeDate = history?.TimeStamp;
+                                var timeDate = history?.HistoryData?.TimeStamp;
                                 HistoryTypeEnum historyType = historyItem.HistoryType;
 
                                 if (foundItem == null)
@@ -305,7 +305,7 @@ namespace CompleteBackup.ViewModels
                             bool bCreatedNew = false;
                             if (foundItem == null)
                             {
-                                if (history?.SessionHistoryIndex > 1)
+                                if (history?.HistoryData?.SessionHistoryIndex > 1)
                                 {
                                     bDeletedItem = true;
                                     historyType = HistoryTypeEnum.Deleted;
@@ -332,7 +332,7 @@ namespace CompleteBackup.ViewModels
                                     historyType = HistoryTypeEnum.Changed;
                                 }
 
-                                var timeDate = history?.TimeStamp;
+                                var timeDate = history?.HistoryData?.TimeStamp;
                                 var newMenuItem = CreateMenuItem(m_IStorage.IsFolder(file), bSelected, file, rp, timeDate.ToString(), foundItem, attr, historyType);
 
                                 Application.Current.Dispatcher.Invoke(new Action(() =>

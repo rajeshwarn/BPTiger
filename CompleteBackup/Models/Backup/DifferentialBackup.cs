@@ -115,7 +115,7 @@ namespace CompleteBackup.Models.backup
 
                         CopyUpdatedFile(sourcePath, currSetFilePath);
 
-                        m_BackupSessionHistory.AddUpdatedFile(sourcePath, lastSetFilePath);
+                        m_BackupSessionHistory.AddFile(sourcePath, lastSetFilePath, HistoryTypeEnum.Changed);
                     }
                 }
                 else
@@ -127,7 +127,7 @@ namespace CompleteBackup.Models.backup
                     }
                     CopyNewFile(sourcePath, currSetFilePath);
 
-                    m_BackupSessionHistory.AddNewFile(sourcePath, currSetFilePath);
+                    m_BackupSessionHistory.AddFile(sourcePath, currSetFilePath, HistoryTypeEnum.Added);
                 }
             }
             catch (Exception ex)

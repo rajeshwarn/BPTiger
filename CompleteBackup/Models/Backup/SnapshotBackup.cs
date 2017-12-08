@@ -84,7 +84,7 @@ namespace CompleteBackup.Models.backup
 
                 CopyNewFile(sourceFilePath, targetFilePath);
 
-                m_BackupSessionHistory.AddNewFile(sourceFilePath, targetFilePath);
+                m_BackupSessionHistory.AddFile(sourceFilePath, targetFilePath, HistoryTypeEnum.Added);
             }
             catch (Exception ex)
             {
