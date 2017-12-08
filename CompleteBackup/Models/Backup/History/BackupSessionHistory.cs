@@ -1,6 +1,7 @@
 ﻿using CompleteBackup.Models.Backup.Profile;
 using CompleteBackup.Models.Backup.Storage;
 using CompleteBackup.Models.FolderSelection;
+using CompleteBackup.Models.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
@@ -154,7 +155,7 @@ namespace CompleteBackup.Models.Backup.History
         //    File.WriteAllText(destPath, json);
         //}
 
-        public void SaveHistory()
+        public void SaveHistory(BackupPerfectLogger logger = null)
         {
             var m_IStorage = new FileSystemStorage();
             var fullPath = m_IStorage.Combine(HistoryData.TargetPath, HistoryData.SessionSignature);
