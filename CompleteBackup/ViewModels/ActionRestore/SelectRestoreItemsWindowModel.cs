@@ -151,7 +151,6 @@ namespace CompleteBackup.ViewModels
                 case BackupTypeEnum.Incremental:
                     {
                         var lastSetPath = m_IStorage.Combine(profile.GetTargetBackupFolder(), m_LastSetPathCache);
-                        //var lastSetARchivePath = m_IStorage.Combine(lastSetPath, BackupProfileData.TargetBackupBaseDirectoryName);
 
                         foreach (var item in profile.BackupFolderList.Where(i => i.IsAvailable))
                         {
@@ -159,14 +158,21 @@ namespace CompleteBackup.ViewModels
                             var directoryName = m_IStorage.GetFileName(item.Path);
                             var restorePath = m_IStorage.Combine(lastSetPath, item.Name);
 
-                            var rootItem = CreateMenuItem(m_IStorage.IsFolder(restorePath), false, restorePath, directoryName, directoryName, null, 0);
-
-                            UpdateChildItemsInMenuItem(rootItem);
-
-                            Application.Current.Dispatcher.Invoke(new Action(() =>
+                            if (m_IStorage.DirectoryExists(restorePath) || m_IStorage.FileExists(restorePath))
                             {
-                                FolderMenuItemTree.Add(rootItem);
-                            }));
+                                var rootItem = CreateMenuItem(m_IStorage.IsFolder(restorePath), false, restorePath, directoryName, directoryName, null, 0);
+
+                                UpdateChildItemsInMenuItem(rootItem);
+
+                                Application.Current.Dispatcher.Invoke(new Action(() =>
+                                {
+                                    FolderMenuItemTree.Add(rootItem);
+                                }));
+                            }
+                            else
+                            {
+                                profile.Logger.Writeln($"Skipping restore item, Item not found: {restorePath}");
+                            }
                         }
                     }
 

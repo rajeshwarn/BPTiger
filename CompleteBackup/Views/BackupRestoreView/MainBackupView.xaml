@@ -80,7 +80,7 @@
         </StackPanel>
 
         <Grid Grid.Row="1">
-            <local:LogProfileConsoleView/>
+            <!--<local:LogProfileConsoleView/>-->
         </Grid>
         
     </DockPanel>
