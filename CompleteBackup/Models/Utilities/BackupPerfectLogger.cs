@@ -62,7 +62,7 @@ namespace CompleteBackup.Models.Utilities
 
                 if ((secNow - m_LastLogSec) > 5000)
                 {
-                    Write(m_CachedLog);
+                    LoggerData += m_CachedLog;
                     m_CachedLog = string.Empty;
                     m_LastLogSec = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
                 }
