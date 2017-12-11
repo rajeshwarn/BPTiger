@@ -166,7 +166,7 @@ namespace CompleteBackup.Models.backup
             var backupProfileList = new List<string>();
             try
             {
-                var setEntries = profile.GetStorageInterface().GetDirectories(profile.GetTargetBackupFolder())?.OrderBy(set => set);
+                var setEntries = profile?.GetStorageInterface().GetDirectories(profile.GetTargetBackupFolder())?.OrderBy(set => set);
                 if (setEntries != null)
                 {
                     if (profile.FileSystemWatcherEnabled)

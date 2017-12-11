@@ -122,14 +122,14 @@ namespace CompleteBackup.Models.Backup.Profile
         }
         public static FolderData GetTargetBackupFolderData(this BackupProfileData profile)
         {
-            return profile.TargetBackupFolderList.FirstOrDefault();
+            return profile?.TargetBackupFolderList?.FirstOrDefault();
         }
 
 
         public static string GetTargetRestoreFolder(this BackupProfileData profile)
         {
             string path = null;
-            var folder = profile.TargetRestoreFolderList.FirstOrDefault();
+            var folder = profile?.TargetRestoreFolderList?.FirstOrDefault();
             if (folder != null)
             {
                 path = folder.Path;

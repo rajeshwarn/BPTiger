@@ -22,8 +22,6 @@ namespace CompleteBackup.Models.backup
 
         public override void ProcessBackup()
         {
-            m_BackupSessionHistory.Reset(GetTimeStamp(), GetTargetSetName(), m_SourceBackupPathList, m_TargetBackupPath);
-
             var backupSetName = BackupBase.GetLastBackupSetName_(m_Profile);
             var backupPath = BackupBase.GetLastBackupSetPath_(m_Profile);
             if (backupSetName == null)
@@ -31,6 +29,9 @@ namespace CompleteBackup.Models.backup
                 //First backup
                 backupSetName = GetTargetSetName();
                 backupPath = GetTargetBackupPathWithSetPath(m_TargetBackupPath);
+
+                m_BackupSessionHistory.Reset(GetTimeStamp(), backupSetName, m_SourceBackupPathList, m_TargetBackupPath);
+
                 CreateDirectory(backupPath);
 
                 ProcessNewBackupRootFolders(backupPath);
@@ -38,13 +39,17 @@ namespace CompleteBackup.Models.backup
             else
             {
                 backupPath = m_IStorage.Combine(m_TargetBackupPath, backupPath);
+
+                m_BackupSessionHistory.Reset(GetTimeStamp(), backupSetName, m_SourceBackupPathList, m_TargetBackupPath);
+
                 ProcessBackupRootFolders(backupPath);
 
                 var sourceDirectoryEntriesList = m_SourceBackupPathList.Where(i => i.IsFolder).ToList();
                 var sourceFileEntriesList = m_SourceBackupPathList.Where(i => !i.IsFolder).ToList();
 
-                HandleDeletedItems(sourceDirectoryEntriesList, m_TargetBackupPath);
-                HandleDeletedFiles(sourceFileEntriesList, m_TargetBackupPath);
+                var lastSetPath = GetTargetArchivePath(m_IStorage.Combine(m_TargetBackupPath, backupSetName));
+                HandleDeletedItems(sourceDirectoryEntriesList, lastSetPath);
+                HandleDeletedFiles(sourceFileEntriesList, lastSetPath);
             }
 
             m_BackupSessionHistory.SaveHistory();

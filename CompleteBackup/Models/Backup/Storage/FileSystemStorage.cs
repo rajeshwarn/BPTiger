@@ -385,7 +385,7 @@ namespace CompleteBackup.Models.Backup.Storage
         {
             if (directory.Length < MAX_PATH_LENGTH)
             {
-                return Directory.GetFiles(directory).ToList();
+                return Directory.GetFiles(directory)?.ToList();
             }
             else
             {
