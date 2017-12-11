@@ -145,6 +145,11 @@ namespace CompleteBackup.ViewModels
 
             m_LastSetPathCache = BackupBase.GetLastBackupSetPath_(profile);
 
+            if (m_LastSetPathCache == null)
+            {
+                return;
+            }
+
             switch (profile.BackupType)
             {
                 case BackupTypeEnum.Snapshot:

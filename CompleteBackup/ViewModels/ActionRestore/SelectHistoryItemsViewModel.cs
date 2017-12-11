@@ -71,8 +71,11 @@ namespace CompleteBackup.ViewModels
             //m_BackupSetPathCacheList.Clear();
 
             m_LastSetPathCache = BackupBase.GetLastBackupSetPath_(profile);
+            if (m_LastSetPathCache == null)
+            {
+                return;
+            }
 
-            var lastSetPath = m_IStorage.Combine(profile.GetTargetBackupFolder(), m_LastSetPathCache);
             //var lastSetARchivePath = m_IStorage.Combine(lastSetPath, BackupProfileData.TargetBackupBaseDirectoryName);
 
             var historyItem = SelectedHistoryItem;
@@ -80,6 +83,8 @@ namespace CompleteBackup.ViewModels
             {
                 return;
             }
+
+            var lastSetPath = m_IStorage.Combine(profile.GetTargetBackupFolder(), m_LastSetPathCache);
 
             string targetPath = null;
             if (historyItem.HistoryData?.HistoryItemList.Count() > 0)
