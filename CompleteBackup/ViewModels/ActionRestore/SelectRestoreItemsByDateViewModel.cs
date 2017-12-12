@@ -4,6 +4,7 @@ using CompleteBackup.Models.Backup.History;
 using CompleteBackup.Models.Backup.Profile;
 using CompleteBackup.Models.Backup.Project;
 using CompleteBackup.ViewModels.FolderSelection.ICommands;
+using CompleteBackup.ViewModels.ICommands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,7 @@ namespace CompleteBackup.ViewModels
         }
 
         public ICommand CloseWindowCommand { get; private set; } = new CloseWindowICommand<object>();
+        public ICommand RestoreFolderSelectionCommand { get; private set; } = new RestoreFolderSelectionByDateICommand<object>();
 
         public BackupProjectData ProjectData { get; set; } = BackupProjectRepository.Instance.SelectedBackupProject;
 

@@ -115,7 +115,7 @@ namespace CompleteBackup.Models.backup
 
                         CopyUpdatedFile(sourcePath, currSetFilePath);
 
-                        m_BackupSessionHistory.AddFile(sourcePath, lastSetFilePath, HistoryTypeEnum.Changed);
+                        m_BackupSessionHistory.AddFile(sourcePath, currSetFilePath, HistoryTypeEnum.Changed);
                     }
                 }
                 else

@@ -34,7 +34,7 @@
                     <DockPanel>
                         <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right">
                             <Button Width="80" Content="Restore" Margin="20,5,0,5"
-                                    Command="{Binding XXXXSaveFolderSelectionCommand}"
+                                    Command="{Binding RestoreFolderSelectionCommand}"
                                     CommandParameter="{Binding Path=DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"/>
                             <Button Width="80" Content="Cancel" Margin="20,5,0,5"
                                     Command="{Binding CloseWindowCommand}"

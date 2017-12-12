@@ -38,56 +38,55 @@ namespace CompleteBackup.Models.FolderSelection
 
         static IStorageInterface m_IStorage = new FileSystemStorage();
 
-        //object m_Image = null;
         public object Image
         {
             get
             {
-                if (HistoryType == null || (HistoryType == HistoryTypeEnum.NoChange))
+                ImageSource imageSource = null;
+                try
                 {
-                    ImageSource imageSource = null;
-                    try
-                    {
-                        var icon = m_IStorage.ExtractIconFromPath(Path);
-                        imageSource = Imaging.CreateBitmapSourceFromHIcon(
-                            icon.Handle,
-                            System.Windows.Int32Rect.Empty,
-                            System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
-                    }
-                    catch (Exception ex)
-                    {
-                        Trace.WriteLine($"Failed to get Icon {Path}\n{ex.Message}");
-                    }
-
-                    return imageSource;
-
+                    var icon = m_IStorage.ExtractIconFromPath(Path);
+                    imageSource = Imaging.CreateBitmapSourceFromHIcon(
+                        icon.Handle,
+                        System.Windows.Int32Rect.Empty,
+                        System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
                 }
-                else
+                catch (Exception ex)
                 {
-                    switch (HistoryType)
-                    {
-                        case HistoryTypeEnum.Added:
-                            return IsFolder ? "/Resources/Icons/FolderTreeView/NewFolder.ico" : "/Resources/Icons/FolderTreeView/NewItem.ico";
-
-                        case HistoryTypeEnum.Changed:
-                            return "/Resources/Icons/FolderTreeView/EditItem.ico";
-
-                        case HistoryTypeEnum.Deleted:
-                            return IsFolder ? "/Resources/Icons/FolderTreeView/DeleteFolder.ico" : "/Resources/Icons/FolderTreeView/DeleteItem.ico";
-
-                        case HistoryTypeEnum.NoChange:
-                            return "/Resources/Icons/FolderTreeView/LatestItem.ico";
-
-                        default:
-                            return "/Resources/Icons/FolderTreeView/LatestItem.ico";
-                    }
-//                    return m_Image;// ;
+                    Trace.WriteLine($"Failed to get Icon {Path}\n{ex.Message}");
                 }
+
+                return imageSource;    
             }
-            private set
+            private set { }
+        }
+
+
+
+        
+        public object HistoryTypeImage
+        {
+            get
             {
-                //m_Image = value;
+                switch (HistoryType)
+                {
+                    case HistoryTypeEnum.Added:
+                        return "/Resources/Icons/FolderTreeView/Add.ico";
+
+                    case HistoryTypeEnum.Changed:
+                        return "/Resources/Icons/FolderTreeView/Update.ico";
+
+                    case HistoryTypeEnum.Deleted:
+                        return "/Resources/Icons/FolderTreeView/Delete.ico";
+
+                    case HistoryTypeEnum.NoChange:
+                        return null;
+
+                    default:
+                        return null;
+                }
             }
+            private set { }
         }
     }
 }

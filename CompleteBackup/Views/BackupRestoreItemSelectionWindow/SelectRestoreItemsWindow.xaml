@@ -25,17 +25,19 @@
                             <TreeView.ItemTemplate>
                                 <HierarchicalDataTemplate DataType="{x:Type folder_models:RestoreFolderMenuItem}" ItemsSource="{Binding ChildFolderMenuItems}">
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Width="16" Source="{Binding Image}">
-                                            <Image.Style>
-                                                <Style TargetType="Image">
+                                        <Grid>
+                                            <Image Width="16" Source="{Binding Image}"/>
+                                            <Image Width="12" Source="{Binding HistoryTypeImage}" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+                                            <Grid.Style>
+                                                <Style TargetType="Grid">
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding Image}" Value="{x:Null}">
                                                             <Setter Property="Visibility" Value="Collapsed"/>
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
-                                            </Image.Style>
-                                        </Image>
+                                            </Grid.Style>
+                                        </Grid>
                                         <CheckBox IsThreeState="True" IsChecked="{Binding Selected}" Click="FolderCheckBox_Click">
                                             <CheckBox.Style>
                                                 <Style TargetType="CheckBox">

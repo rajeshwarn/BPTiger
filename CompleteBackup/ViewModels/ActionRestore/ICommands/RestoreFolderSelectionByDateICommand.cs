@@ -29,9 +29,9 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
         public bool CanExecute(object parameter)
         {
             bool bExecute = false;
-            var viewModel = parameter as SelectRestoreItemsByDateWindowModel;
+            var viewModel = parameter as SelectRestoreItemsByDateViewModel;
         
-            if (viewModel?.DirtyFlag == true)
+            if (viewModel != null)
             {
                 bExecute = true;
             }
@@ -41,20 +41,20 @@ namespace CompleteBackup.ViewModels.FolderSelection.ICommands
 
         public void Execute(object parameter)
         {
-            var viewModel = parameter as SelectRestoreItemsByDateWindowModel;
+            var viewModel = parameter as SelectRestoreItemsByDateViewModel;
 
-            if (viewModel != null)
-            {
-                viewModel.DirtyFlag = false;
-            }
+            //if (viewModel != null)
+            //{
+            //    viewModel.DirtyFlag = false;
+            //}
 
-            viewModel.UpdateSelectedFolderList();
+            //viewModel.UpdateSelectedFolderList();
 
-            viewModel.ProjectData?.CurrentBackupProfile.RestoreFolderList.Clear();
-            foreach (var item in viewModel.SelectedItemList)
-            {
-                viewModel.ProjectData?.CurrentBackupProfile.RestoreFolderList.Add(item);
-            }
+            //viewModel.ProjectData?.CurrentBackupProfile.RestoreFolderList.Clear();
+            //foreach (var item in viewModel.SelectedItemList)
+            //{
+            //    viewModel.ProjectData?.CurrentBackupProfile.RestoreFolderList.Add(item);
+            //}
 
             viewModel.ProjectData?.CurrentBackupProfile.RefreshProfileProperties();
 

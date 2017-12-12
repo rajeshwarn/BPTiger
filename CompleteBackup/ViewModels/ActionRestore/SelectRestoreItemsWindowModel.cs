@@ -256,47 +256,47 @@ namespace CompleteBackup.ViewModels
             else
             {
                 ////History Items
-                if (history != null)
-                {
-                    foreach (var historyItem in history.HistoryData?.HistoryItemList)
-                    {
-                        //var filePath = m_IStorage.Combine(item.Path, file);
+                //if (history != null)
+                //{
+                //    foreach (var historyItem in history.HistoryData?.HistoryItemList)
+                //    {
+                //        //var filePath = m_IStorage.Combine(item.Path, file);
 
-                        if ((m_IStorage.GetDirectoryName(historyItem.TargetPath) == itemPath) ||
-                            (historyItem.HistoryType == HistoryTypeEnum.Deleted && (m_IStorage.GetDirectoryName(historyItem.SourcePath) == itemPath)))
-                        {
-                            var fileName = m_IStorage.GetFileName(historyItem.TargetPath);
-                            {
-                                bool bSelected = false;
-                                var rp = m_IStorage.Combine(item.RelativePath, fileName);
+                //        if ((m_IStorage.GetDirectoryName(historyItem.TargetPath) == itemPath) ||
+                //            (historyItem.HistoryType == HistoryTypeEnum.Deleted && (m_IStorage.GetDirectoryName(historyItem.SourcePath) == itemPath)))
+                //        {
+                //            var fileName = m_IStorage.GetFileName(historyItem.TargetPath);
+                //            {
+                //                bool bSelected = false;
+                //                var rp = m_IStorage.Combine(item.RelativePath, fileName);
 
-                                var foundItem = item.ChildFolderMenuItems.Where(i => i.Name == fileName).FirstOrDefault();
-                                var timeDate = history?.HistoryData?.TimeStamp;
-                                HistoryTypeEnum historyType = historyItem.HistoryType;
+                //                var foundItem = item.ChildFolderMenuItems.Where(i => i.Name == fileName).FirstOrDefault();
+                //                var timeDate = history?.HistoryData?.TimeStamp;
+                //                HistoryTypeEnum historyType = historyItem.HistoryType;
 
-                                if (foundItem == null)
-                                {
-                                    var newItem = CreateMenuItem(historyItem.HistoryItemType == HistoryItemTypeEnum.Directory, bSelected, historyItem.TargetPath, rp, fileName, item, 0, historyType);
-                                    Application.Current.Dispatcher.Invoke(new Action(() =>
-                                    {
-                                        item.ChildFolderMenuItems.Add(newItem);
-                                    }));
+                //                if (foundItem == null)
+                //                {
+                //                    var newItem = CreateMenuItem(historyItem.HistoryItemType == HistoryItemTypeEnum.Directory, bSelected, historyItem.TargetPath, rp, fileName, item, 0, historyType);
+                //                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                //                    {
+                //                        item.ChildFolderMenuItems.Add(newItem);
+                //                    }));
 
-                                    foundItem = newItem;
-                                }
+                //                    foundItem = newItem;
+                //                }
 
-                                var newMenuItem = CreateMenuItem(historyItem.HistoryItemType == HistoryItemTypeEnum.Directory, bSelected, historyItem.TargetPath, rp, timeDate.ToString(), foundItem, 0, historyType);
+                //                var newMenuItem = CreateMenuItem(historyItem.HistoryItemType == HistoryItemTypeEnum.Directory, bSelected, historyItem.TargetPath, rp, timeDate.ToString(), foundItem, 0, historyType);
 
-                                Application.Current.Dispatcher.Invoke(new Action(() =>
-                                {
-                                    foundItem.ChildFolderMenuItems.Add(newMenuItem);
-                                }));
-                            }
-                        }
-                    }
-                }
+                //                Application.Current.Dispatcher.Invoke(new Action(() =>
+                //                {
+                //                    foundItem.ChildFolderMenuItems.Add(newMenuItem);
+                //                }));
+                //            }
+                //        }
+                //    }
+                //}
 
-                //Latest items
+
                 if (m_IStorage.DirectoryExists(itemPath))
                 {
                     var fileList = m_IStorage.GetFiles(itemPath);
@@ -312,14 +312,14 @@ namespace CompleteBackup.ViewModels
 
                             var foundItem = item.ChildFolderMenuItems.Where(i => i.Name == fileName).FirstOrDefault();
                             bool bDeletedItem = false;
-                            HistoryTypeEnum historyType = HistoryTypeEnum.NoChange;
+                            HistoryTypeEnum? historyType = null;// HistoryTypeEnum.NoChange;
                             bool bCreatedNew = false;
                             if (foundItem == null)
                             {
                                 if (history?.HistoryData?.SessionHistoryIndex > 1)
                                 {
                                     bDeletedItem = true;
-                                    historyType = HistoryTypeEnum.Deleted;
+ //                                   historyType = HistoryTypeEnum.Deleted;
                                 }
 
                                 var newItem = CreateMenuItem(m_IStorage.IsFolder(file), bSelected, file, rp, fileName, item, attr, historyType);
@@ -334,13 +334,10 @@ namespace CompleteBackup.ViewModels
 
                             if (bCreatedNew || foundItem.ChildFolderMenuItems.Where(i => i.Path == file).FirstOrDefault() == null)
                             {
-                                if (bDeletedItem)
+                                var foundItemInHistory = history.HistoryData.HistoryItemList.FirstOrDefault(i => i.TargetPath == rp);
+                                if (foundItemInHistory != null)
                                 {
-                                    historyType = HistoryTypeEnum.Deleted;
-                                }
-                                else
-                                {
-                                    historyType = HistoryTypeEnum.Changed;
+                                    historyType = foundItemInHistory.HistoryType;
                                 }
 
                                 var timeDate = history?.HistoryData?.TimeStamp;
