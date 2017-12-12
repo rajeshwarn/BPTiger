@@ -255,6 +255,7 @@ namespace CompleteBackup.ViewModels
             }
             else
             {
+                build errro
                 ////History Items
                 //if (history != null)
                 //{
