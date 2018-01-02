@@ -114,10 +114,16 @@
             
             <!--Source Error message-->
             <StackPanel Orientation="Vertical">
-                <Button Content="{Binding SelectItemsToBackupOrRestoreButtonText}"
-                                Command="{Binding OpenItemSelectWindowCommand}" CommandParameter="{Binding Path=ProjectData.CurrentBackupProfile}" HorizontalAlignment="Left" Margin="4,16,0,0">
-                    <Button.Style>
-                        <Style TargetType="Button" >
+                <!--Alert,if source list is empty-->
+                <StackPanel Orientation="Horizontal" Margin="4,16,0,0" >
+                    <Image Source="/Resources/Icons/Alert.ico" Margin="0,0,4,0" Height="16" VerticalAlignment="Center"/>
+                    <TextBlock Text="Please select items to backup" FontStyle="Italic" FontWeight="SemiBold" Foreground="Gray" VerticalAlignment="Center"/>
+                    <Button Content=" ... "
+                            Command="{Binding OpenItemSelectWindowCommand}"
+                            CommandParameter="{Binding Path=ProjectData.CurrentBackupProfile}"
+                            VerticalAlignment="Center" Margin="8,0,0,0"/>
+                    <StackPanel.Style>
+                        <Style TargetType="StackPanel" >
                             <Setter Property="Visibility" Value="Collapsed"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding Path=SelectionFolderList.Count}" Value="0">
@@ -125,8 +131,11 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </Button.Style>
-                </Button>
+                    </StackPanel.Style>
+
+                </StackPanel>
+
+
 
                 <DockPanel LastChildFill="True">
                     <DockPanel.Style>
@@ -264,9 +273,9 @@
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Icons/Alert.ico" Margin="0,0,4,0" Height="16" VerticalAlignment="Center"/>
                         <TextBlock Text="Please select a destination folder" FontStyle="Italic" FontWeight="SemiBold" Foreground="Gray" VerticalAlignment="Center"/>
-                        <Button DockPanel.Dock="Right" Content=" ... " 
+                        <Button Content=" ... " 
                                     Command="{Binding SelectTargetFolderNameCommand}"
-                                    CommandParameter="{Binding ProjectData.CurrentBackupProfile}" Margin="4" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                    CommandParameter="{Binding ProjectData.CurrentBackupProfile}" Margin="8,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Right">
                         </Button>
                     <StackPanel.Style>
                             <Style TargetType="StackPanel" >
