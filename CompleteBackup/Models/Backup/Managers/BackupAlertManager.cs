@@ -17,7 +17,6 @@ namespace CompleteBackup.Models.Backup
         public BackupPerfectAlertTypeEnum AlertType { get; set; }
         public bool IsDeletable { get { return NotificationType == BackupPerfectNotificationTypeEnum.Notification; } }
         public DateTime AlertTime { get; set; }
-//        public BackupPerfectAlertSourceEnum BackupPerfectAlertSource { get; set; }
         public BackupPerfectNotificationTypeEnum NotificationType { get; set; } = BackupPerfectNotificationTypeEnum.Warning;
         public string Name { get; set; }
         public string Description { get; set; }
@@ -83,11 +82,11 @@ namespace CompleteBackup.Models.Backup
         };
 
 
-        public static Dictionary<BackupPerfectAlertTypeEnum, BackupPerfectAlertData> BackupPerfectAlertValueDictionary { get; } = new Dictionary<BackupPerfectAlertTypeEnum, BackupPerfectAlertData>()
+        public static Dictionary<BackupPerfectAlertTypeEnum, Func<BackupPerfectAlertData>> BackupPerfectAlertValueDictionary { get; } = new Dictionary<BackupPerfectAlertTypeEnum, Func<BackupPerfectAlertData>>()
         {
             {
                 BackupPerfectAlertTypeEnum.BackupFileSystemWatcherNotRunning,
-                new BackupPerfectAlertData()
+                ()=> new BackupPerfectAlertData()
                 {
                     AlertType = BackupPerfectAlertTypeEnum.BackupFileSystemWatcherNotRunning,
                     NotificationType = BackupPerfectNotificationTypeEnum.Notification,
@@ -98,7 +97,7 @@ namespace CompleteBackup.Models.Backup
 
             {
                 BackupPerfectAlertTypeEnum.BackupInSleepMode,
-                new BackupPerfectAlertData()
+                ()=> new BackupPerfectAlertData()
                 {
                     AlertType = BackupPerfectAlertTypeEnum.BackupInSleepMode,
                     NotificationType = BackupPerfectNotificationTypeEnum.Notification,
@@ -109,7 +108,7 @@ namespace CompleteBackup.Models.Backup
 
             {
                 BackupPerfectAlertTypeEnum.BackupItemListEmpty,
-                new BackupPerfectAlertData()
+                ()=> new BackupPerfectAlertData()
                 {
                     AlertType = BackupPerfectAlertTypeEnum.BackupItemListEmpty,
                     NotificationType = BackupPerfectNotificationTypeEnum.Warning,
@@ -121,7 +120,7 @@ namespace CompleteBackup.Models.Backup
 
             {
                 BackupPerfectAlertTypeEnum.BackupItemListFolderNotAvailable,
-                new BackupPerfectAlertData()
+                ()=> new BackupPerfectAlertData()
                 {
                     AlertType = BackupPerfectAlertTypeEnum.BackupItemListFolderNotAvailable,
                     NotificationType = BackupPerfectNotificationTypeEnum.Warning,
@@ -131,17 +130,17 @@ namespace CompleteBackup.Models.Backup
 
             {
                 BackupPerfectAlertTypeEnum.BackupItemListFileNotAvailable,
-                new BackupPerfectAlertData()
+                ()=> new BackupPerfectAlertData()
                 {
                     AlertType = BackupPerfectAlertTypeEnum.BackupItemListFileNotAvailable,
                     NotificationType = BackupPerfectNotificationTypeEnum.Warning,
-                    Name = $"Backup file is not available",
+                    Name = $"Backup file not available",
                 }
             },
 
             {
                 BackupPerfectAlertTypeEnum.BackupDestinationFolderNotConfigured,
-                new BackupPerfectAlertData()
+                ()=> new BackupPerfectAlertData()
                 {
                     AlertType = BackupPerfectAlertTypeEnum.BackupDestinationFolderNotConfigured,
                     NotificationType = BackupPerfectNotificationTypeEnum.Warning,
@@ -152,7 +151,7 @@ namespace CompleteBackup.Models.Backup
 
             {
                 BackupPerfectAlertTypeEnum.BackupDestinationFolderNotAvailable,
-                new BackupPerfectAlertData()
+                ()=> new BackupPerfectAlertData()
                 {
                     AlertType = BackupPerfectAlertTypeEnum.BackupDestinationFolderNotAvailable,
                     NotificationType = BackupPerfectNotificationTypeEnum.Warning,
@@ -163,7 +162,7 @@ namespace CompleteBackup.Models.Backup
 
             {
                 BackupPerfectAlertTypeEnum.Restore_BackupDestinationNotFound,
-                new BackupPerfectAlertData()
+                ()=> new BackupPerfectAlertData()
                 {
                     AlertType = BackupPerfectAlertTypeEnum.Restore_BackupDestinationNotFound,
                     NotificationType = BackupPerfectNotificationTypeEnum.Warning,
@@ -174,7 +173,7 @@ namespace CompleteBackup.Models.Backup
 
             {
                 BackupPerfectAlertTypeEnum.RestoreItemListEmpty,
-                new BackupPerfectAlertData()
+                ()=> new BackupPerfectAlertData()
                 {
                     AlertType = BackupPerfectAlertTypeEnum.RestoreItemListEmpty,
                     NotificationType = BackupPerfectNotificationTypeEnum.Warning,
@@ -185,7 +184,7 @@ namespace CompleteBackup.Models.Backup
 
             {
                 BackupPerfectAlertTypeEnum.RestoreDestinationFolderNotAvailable,
-                new BackupPerfectAlertData()
+                ()=> new BackupPerfectAlertData()
                 {
                     AlertType = BackupPerfectAlertTypeEnum.RestoreDestinationFolderNotAvailable,
                     NotificationType = BackupPerfectNotificationTypeEnum.Warning,
@@ -196,7 +195,7 @@ namespace CompleteBackup.Models.Backup
 
             {
                 BackupPerfectAlertTypeEnum.RestoreSessionListIsEmpty,
-                new BackupPerfectAlertData()
+                ()=> new BackupPerfectAlertData()
                 {
                     AlertType = BackupPerfectAlertTypeEnum.RestoreSessionListIsEmpty,
                     NotificationType = BackupPerfectNotificationTypeEnum.Warning,
@@ -207,7 +206,7 @@ namespace CompleteBackup.Models.Backup
 
             {
                 BackupPerfectAlertTypeEnum.RestoreDestinationFolderNotConfigured,
-                new BackupPerfectAlertData()
+                ()=> new BackupPerfectAlertData()
                 {
                     AlertType = BackupPerfectAlertTypeEnum.RestoreDestinationFolderNotConfigured,
                     NotificationType = BackupPerfectNotificationTypeEnum.Warning,
@@ -220,7 +219,7 @@ namespace CompleteBackup.Models.Backup
 
         public void AddAlert(BackupProfileData profile, BackupPerfectAlertTypeEnum alert, string text = null)
         {
-            var alertData = BackupPerfectAlertValueDictionary[alert];
+            var alertData = BackupPerfectAlertValueDictionary[alert]();
 
             alertData.AlertTime = DateTime.Now;
 
