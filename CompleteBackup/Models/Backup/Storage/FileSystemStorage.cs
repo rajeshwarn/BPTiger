@@ -1,9 +1,12 @@
-﻿using System;
+﻿using CompleteBackup.DataRepository;
+using CompleteBackup.Models.Profile;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -352,12 +355,22 @@ namespace CompleteBackup.Models.Backup.Storage
                 }
                 catch (IOException ex)
                 {
-                    MessageBoxResult result = MessageBoxResult.None;
-                    result = MessageBox.Show($"{ex.Message}\n\nPress Yes to retry or No to Cancel", "Directory Access", MessageBoxButton.YesNoCancel, MessageBoxImage.Error);
-
-                    if (result == MessageBoxResult.Yes)
+                    //ProfileDataRefreshTask
+                    var project = BackupProjectRepository.Instance.SelectedBackupProject;
+                    if (project.BackupProfileList.FirstOrDefault(p => (p.ProfileDataRefreshTask != null) && p.ProfileDataRefreshTask.IsBusy) != null)
                     {
+                        Thread.Sleep(1000);
                         bRetry = true;
+                    }
+                    else
+                    {
+                        MessageBoxResult result = MessageBoxResult.None;
+                        result = MessageBox.Show($"{ex.Message}\n\nPress Yes to retry or No to Cancel", "Directory Access", MessageBoxButton.YesNoCancel, MessageBoxImage.Error);
+
+                        if (result == MessageBoxResult.Yes)
+                        {
+                            bRetry = true;
+                        }
                     }
                 }
             }
