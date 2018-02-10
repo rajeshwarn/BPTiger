@@ -10,7 +10,7 @@ namespace CompleteBackup.Models.Backup.Storage
 {
     class Win32LongPathDirectory
     {
-        public const int MAX_PATH = 260;
+        //public const int MAX_PATH = 245;//260;
 
         public static void CreateDirectory(string path)
         {
@@ -41,7 +41,8 @@ namespace CompleteBackup.Models.Backup.Storage
             }
             else
             {
-                DeleteDirectoriesRecrusive(new string[] { GetWin32LongPath(path) });
+                var longPath = new string[] { GetWin32LongPath(path) };
+                DeleteDirectoriesRecrusive(longPath);
             }
 
             //if (path.Length < MAX_PATH && !recursive)
@@ -71,10 +72,10 @@ namespace CompleteBackup.Models.Backup.Storage
         {
             foreach (string directory in directories)
             {
-                var files = Win32LongPathDirectory.GetFiles(directory, null, System.IO.SearchOption.TopDirectoryOnly);
+                var files = Win32LongPathDirectory.GetFiles(GetWin32LongPath(directory), null, System.IO.SearchOption.TopDirectoryOnly);
                 foreach (string file in files)
                 {
-                    Win32LongPathFile.Delete(file);
+                    Win32LongPathFile.Delete(GetWin32LongPath(file));
                 }
                 directories = Win32LongPathDirectory.GetDirectories(directory, null, System.IO.SearchOption.TopDirectoryOnly);
                 DeleteDirectoriesRecrusive(directories);
@@ -83,21 +84,10 @@ namespace CompleteBackup.Models.Backup.Storage
             }
         }
 
-        //public static bool Exists(string path)
-        //{
-        //    //if (path.Length < MAX_PATH)
-        //    //{
-        //    //    return System.IO.Directory.Exists(path);
-        //    //}
-        //    //else
-        //    //{
-        //    //    return LongExists(GetWin32LongPath(path));
-        //    //}
-        //}
 
         public static bool Exists(string path)
         {
-            var attr = Win32FileSystem.GetFileAttributesW(path);
+            var attr = Win32FileSystem.GetFileAttributesW(GetWin32LongPath(path));
 
             return (attr != Win32FileSystem.INVALID_FILE_ATTRIBUTES && ((attr & Win32FileSystem.FILE_ATTRIBUTE_DIRECTORY) == Win32FileSystem.FILE_ATTRIBUTE_DIRECTORY));
         }
@@ -140,7 +130,7 @@ namespace CompleteBackup.Models.Backup.Storage
                 }
                 else
                 {
-                    ThrowWin32Exception();
+                    //ThrowWin32Exception();
                 }
             }
             catch (Exception)
@@ -155,7 +145,7 @@ namespace CompleteBackup.Models.Backup.Storage
             searchPattern = searchPattern ?? "*";
 
             var files = new List<string>();
-            var dirs = new List<string> { path };
+            var dirs = new List<string> { GetWin32LongPath(path) };
 
             if (searchOption == System.IO.SearchOption.AllDirectories)
             {

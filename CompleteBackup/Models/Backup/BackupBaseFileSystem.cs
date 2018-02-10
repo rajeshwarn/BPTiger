@@ -110,7 +110,7 @@ namespace CompleteBackup.Models.backup
         {
             bool bRet = false;
             try
-            {
+            {               
                 bRet = m_IStorage.DeleteDirectory(path, bRecursive);
                 m_Logger.Writeln($"Delete Directory {path}");
             }

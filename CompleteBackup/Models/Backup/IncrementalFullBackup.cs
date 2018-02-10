@@ -138,7 +138,7 @@ namespace CompleteBackup.Models.backup
 
             foreach (var file in sourceFileList)
             {
-                ProcessIncrementalBackupFile(m_IStorage.GetFileName(file), sourcePath, currSetPath);
+                 ProcessIncrementalBackupFile(m_IStorage.GetFileName(file), sourcePath, currSetPath);
             }
 
             HandleDeletedFiles(sourceFileList, currSetPath);

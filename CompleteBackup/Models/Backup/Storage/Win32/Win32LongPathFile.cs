@@ -12,6 +12,18 @@ namespace CompleteBackup.Models.Backup.Storage
     class Win32LongPathFile
     {
         public const int MAX_PATH = 260;
+        //        public const int MAX_DIRECTORY_NAME = 248;
+
+        public static bool IsLongPath(string path)
+        {
+            var scCount = path.Count(c => c == '\\');
+            if ((path.Length + scCount) < MAX_PATH)
+            {
+                return false;
+            }
+
+            return true;
+        }
 
         public static bool Exists(string path)
         {
@@ -38,11 +50,17 @@ namespace CompleteBackup.Models.Backup.Storage
 
         public static void Delete(string path)
         {
-            if (path.Length < MAX_PATH) System.IO.File.Delete(path);
+            if (!IsLongPath(path))
+            {
+                System.IO.File.Delete(path);
+            }
             else
             {
                 bool ok = Win32FileSystem.DeleteFileW(GetWin32LongPath(path));
-                if (!ok) ThrowWin32Exception();
+                if (!ok)
+                {
+                    ThrowWin32Exception();
+                }
             }
         }
 
@@ -53,7 +71,7 @@ namespace CompleteBackup.Models.Backup.Storage
 
         public static void AppendAllText(string path, string contents, Encoding encoding)
         {
-            if (path.Length < MAX_PATH)
+            if (!IsLongPath(path))
             {
                 System.IO.File.AppendAllText(path, contents, encoding);
             }
@@ -76,7 +94,7 @@ namespace CompleteBackup.Models.Backup.Storage
 
         public static void WriteAllText(string path, string contents, Encoding encoding)
         {
-            if (path.Length < MAX_PATH)
+            if (!IsLongPath(path))
             {
                 System.IO.File.WriteAllText(path, contents, encoding);
             }
@@ -94,7 +112,7 @@ namespace CompleteBackup.Models.Backup.Storage
 
         public static void WriteAllBytes(string path, byte[] bytes)
         {
-            if (path.Length < MAX_PATH)
+            if (!IsLongPath(path))
             {
                 System.IO.File.WriteAllBytes(path, bytes);
             }
@@ -132,7 +150,7 @@ namespace CompleteBackup.Models.Backup.Storage
 
         public static string ReadAllText(string path, Encoding encoding)
         {
-            if (path.Length < MAX_PATH) { return System.IO.File.ReadAllText(path, encoding); }
+            if (!IsLongPath(path)) { return System.IO.File.ReadAllText(path, encoding); }
             var fileHandle = GetFileHandle(GetWin32LongPath(path));
 
             using (var fs = new System.IO.FileStream(fileHandle, System.IO.FileAccess.Read))
@@ -150,7 +168,7 @@ namespace CompleteBackup.Models.Backup.Storage
 
         public static string[] ReadAllLines(string path, Encoding encoding)
         {
-            if (path.Length < MAX_PATH) { return System.IO.File.ReadAllLines(path, encoding); }
+            if (!IsLongPath(path)) { return System.IO.File.ReadAllLines(path, encoding); }
             var fileHandle = GetFileHandle(GetWin32LongPath(path));
 
             using (var fs = new System.IO.FileStream(fileHandle, System.IO.FileAccess.Read))
@@ -164,7 +182,7 @@ namespace CompleteBackup.Models.Backup.Storage
         }
         public static byte[] ReadAllBytes(string path)
         {
-            if (path.Length < MAX_PATH) return System.IO.File.ReadAllBytes(path);
+            if (!IsLongPath(path)) return System.IO.File.ReadAllBytes(path);
             var fileHandle = GetFileHandle(GetWin32LongPath(path));
 
             using (var fs = new System.IO.FileStream(fileHandle, System.IO.FileAccess.Read))
@@ -196,7 +214,7 @@ namespace CompleteBackup.Models.Backup.Storage
 
         private static SafeFileHandle CreateFileForWrite(string filename)
         {
-            if (filename.Length >= MAX_PATH) filename = GetWin32LongPath(filename);
+            if (IsLongPath(filename)) filename = GetWin32LongPath(filename);
             SafeFileHandle hfile = Win32FileSystem.CreateFile(filename, (int)Win32FileSystem.FILE_GENERIC_WRITE, Win32FileSystem.FILE_SHARE_NONE, IntPtr.Zero, Win32FileSystem.CREATE_ALWAYS, 0, IntPtr.Zero);
             if (hfile.IsInvalid) ThrowWin32Exception();
             return hfile;
@@ -204,7 +222,7 @@ namespace CompleteBackup.Models.Backup.Storage
 
         private static SafeFileHandle CreateFileForAppend(string filename)
         {
-            if (filename.Length >= MAX_PATH) filename = GetWin32LongPath(filename);
+            if (IsLongPath(filename)) filename = GetWin32LongPath(filename);
             SafeFileHandle hfile = Win32FileSystem.CreateFile(filename, (int)Win32FileSystem.FILE_GENERIC_WRITE, Win32FileSystem.FILE_SHARE_NONE, IntPtr.Zero, Win32FileSystem.CREATE_NEW, 0, IntPtr.Zero);
             if (hfile.IsInvalid)
             {
@@ -216,7 +234,7 @@ namespace CompleteBackup.Models.Backup.Storage
 
         internal static SafeFileHandle GetFileHandle(string filename)
         {
-            if (filename.Length >= MAX_PATH) filename = GetWin32LongPath(filename);
+            if (IsLongPath(filename)) filename = GetWin32LongPath(filename);
             SafeFileHandle hfile = Win32FileSystem.CreateFile(filename, (int)Win32FileSystem.FILE_GENERIC_READ, Win32FileSystem.FILE_SHARE_READ, IntPtr.Zero, Win32FileSystem.OPEN_EXISTING, 0, IntPtr.Zero);
             if (hfile.IsInvalid) ThrowWin32Exception();
             return hfile;
@@ -224,8 +242,9 @@ namespace CompleteBackup.Models.Backup.Storage
 
         internal static SafeFileHandle GetFileHandleWithWrite(string filename)
         {
-            if (filename.Length >= MAX_PATH) filename = GetWin32LongPath(filename);
-            SafeFileHandle hfile = Win32FileSystem.CreateFile(filename, (int)(Win32FileSystem.FILE_GENERIC_READ | Win32FileSystem.FILE_GENERIC_WRITE | Win32FileSystem.FILE_WRITE_ATTRIBUTES), Win32FileSystem.FILE_SHARE_NONE, IntPtr.Zero, Win32FileSystem.OPEN_EXISTING, 0, IntPtr.Zero);
+            if (IsLongPath(filename)) filename = GetWin32LongPath(filename);
+//            SafeFileHandle hfile = Win32FileSystem.CreateFile(filename, (int)(Win32FileSystem.FILE_GENERIC_READ | Win32FileSystem.FILE_GENERIC_WRITE | Win32FileSystem.FILE_WRITE_ATTRIBUTES), Win32FileSystem.FILE_SHARE_NONE, IntPtr.Zero, Win32FileSystem.OPEN_EXISTING, 0, IntPtr.Zero);
+            SafeFileHandle hfile = Win32FileSystem.CreateFile(filename, (int)(Win32FileSystem.FILE_GENERIC_READ), Win32FileSystem.FILE_SHARE_READ, IntPtr.Zero, Win32FileSystem.OPEN_EXISTING, 0, IntPtr.Zero);
             if (hfile.IsInvalid) ThrowWin32Exception();
             return hfile;
         }
@@ -255,7 +274,14 @@ namespace CompleteBackup.Models.Backup.Storage
             int code = Marshal.GetLastWin32Error();
             if (code != 0)
             {
-                throw new System.ComponentModel.Win32Exception(code);
+                if (code == 5)
+                {
+                    throw new UnauthorizedAccessException();
+                }
+                else
+                {
+                    throw new System.ComponentModel.Win32Exception(code);
+                }
             }
         }
 

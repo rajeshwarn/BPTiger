@@ -17,6 +17,7 @@ namespace CompleteBackup.Models.Backup.Storage
         //private const int cMaxFilePathLength = Win32LongPathFile.MAX_PATH;
         //private const int cMaxFolderPathLength = Win32LongPathDirectory.MAX_PATH;
         private int MAX_PATH_LENGTH = Win32LongPathFile.MAX_PATH;
+//        private int MAX_DIRECTORY_NAME = Win32LongPathFile.MAX_DIRECTORY_NAME;
         //private const int cMaxWin32PathLength = Win32LongPathFile.MAX_PATH;
 
         public bool IsFileSameByLastChangeOnly { get; set; } = true;
@@ -39,6 +40,12 @@ namespace CompleteBackup.Models.Backup.Storage
                 }
             }
         }
+
+        public bool IsLongPath(string path)
+        {
+            return Win32LongPathFile.IsLongPath(path);
+        }
+
         public string Combine(string path1, string path2)
         {
             return Path.Combine(path1, path2);
@@ -51,7 +58,7 @@ namespace CompleteBackup.Models.Backup.Storage
 
         public string GetDirectoryName(string path)
         {
-            if (path.Length < MAX_PATH_LENGTH)
+            if (!IsLongPath(path))
             {
                 return Path.GetDirectoryName(path);
             }
@@ -63,14 +70,20 @@ namespace CompleteBackup.Models.Backup.Storage
 
         public bool FileExists(string path)
         {
-            if (path.Length < MAX_PATH_LENGTH)
+            bool bExists = false;
+
+            if (!IsLongPath(path))
             {
-                return System.IO.File.Exists(path);
+                bExists = System.IO.File.Exists(path);
             }
             else
             {
-                return Win32LongPathFile.Exists(path);
+                bExists = Win32LongPathFile.Exists(path);
             }
+
+            int code = System.Runtime.InteropServices.Marshal.GetLastWin32Error();
+
+            return bExists;
         }
 
         public bool IsFolder(string path)
@@ -86,7 +99,7 @@ namespace CompleteBackup.Models.Backup.Storage
             {
                 return false;
             }
-            else if (path.Length < MAX_PATH_LENGTH)
+            else if (!IsLongPath(path))
             {
                 return System.IO.Directory.Exists(path);
             }
@@ -111,7 +124,7 @@ namespace CompleteBackup.Models.Backup.Storage
 
         public void SetFileAttribute(string path, FileAttributes attribute)
         {
-            if (path.Length < MAX_PATH_LENGTH)
+            if (!IsLongPath(path))
             {
                 File.SetAttributes(path, attribute);
             }
@@ -125,41 +138,33 @@ namespace CompleteBackup.Models.Backup.Storage
         //used buy delete file/directory to delete read only files
         public void SetFileAttributeRecrusive(string folder, FileAttributes attribute)
         {
-            if (folder.Length < MAX_PATH_LENGTH)
+            foreach (string file in GetFiles(folder))
             {
-                foreach (string file in Directory.GetFiles(folder))
-                {
-                    File.SetAttributes(file, attribute);
-                }
-
-                foreach (string subDir in Directory.GetDirectories(folder))
-                {
-                    File.SetAttributes(subDir, attribute);
-                    SetFileAttributeRecrusive(subDir, attribute);
-                }
+                SetFileAttribute(file, attribute);
             }
-            else
-            {
-                foreach (string file in Directory.GetFiles(folder))
-                {
-                    Win32LongPathFile.SetAttributes(file, attribute);
-                }
 
-                foreach (string subDir in Directory.GetDirectories(folder))
-                {
-                    Win32LongPathFile.SetAttributes(subDir, attribute);
-                    SetFileAttributeRecrusive(subDir, attribute);
-                }
+            foreach (string subDir in GetDirectories(folder))
+            {
+                SetFileAttribute(subDir, attribute);
+                SetFileAttributeRecrusive(subDir, attribute);
             }
         }
 
         public bool DeleteDirectory(string path, bool bRecursive = false)
         {
-            if (path.Length < MAX_PATH_LENGTH)
+            if (!IsLongPath(path))
             {
                 //Handle read only
                 //SetFileAttribute(directory, FileAttributes.Normal);
-                Directory.Delete(path, bRecursive);
+                try
+                {
+                    Directory.Delete(path, bRecursive);
+                }
+                catch (System.IO.IOException)
+                {
+                    //Retry if recrusive path is long path
+                    Win32LongPathDirectory.Delete(path, bRecursive);
+                }
             }
             else
             {
@@ -171,7 +176,7 @@ namespace CompleteBackup.Models.Backup.Storage
 
         public void DeleteFile(string path)
         {
-            if (path.Length < MAX_PATH_LENGTH)
+            if (!IsLongPath(path))
             {
                 File.Delete(path);
             }
@@ -187,7 +192,7 @@ namespace CompleteBackup.Models.Backup.Storage
 
             if (path != null)
             {
-                if (path.Length < Win32LongPathDirectory.MAX_PATH)
+                if (!IsLongPath(path))
                 {
                     setEntries = Directory.GetDirectories(path);
                 }
@@ -214,7 +219,7 @@ namespace CompleteBackup.Models.Backup.Storage
 
         public DateTime GetLastWriteTime(string path)
         {
-            if (path.Length < MAX_PATH_LENGTH)
+            if (!IsLongPath(path))
             {
                 return File.GetLastWriteTime(path);
             }
@@ -228,7 +233,7 @@ namespace CompleteBackup.Models.Backup.Storage
         {
             if (IsFileSameByLastChangeOnly)
             {
-                if (file1.Length < MAX_PATH_LENGTH && file2.Length < MAX_PATH_LENGTH)
+                if (!IsLongPath(file1) && !IsLongPath(file2))
                 {
                     DateTime time1 = File.GetLastWriteTime(file1);
                     DateTime time2 = File.GetLastWriteTime(file2);
@@ -266,7 +271,9 @@ namespace CompleteBackup.Models.Backup.Storage
 
             if (!(bExists & bCheckIfExist))
             {
-                if (path.Length < MAX_PATH_LENGTH)
+                string directoryName = GetDirectoryName(path);
+
+                if (!IsLongPath(path))
                 {
                     System.IO.Directory.CreateDirectory(path);
                 }
@@ -279,7 +286,7 @@ namespace CompleteBackup.Models.Backup.Storage
 
         public void CopyFile(string sourcePath, string targetPath, bool bOverwrite = false)
         {
-            if (sourcePath.Length < MAX_PATH_LENGTH && (targetPath.Length < MAX_PATH_LENGTH))
+            if (!IsLongPath(sourcePath) && !IsLongPath(targetPath))
             {
                 File.Copy(sourcePath, targetPath, bOverwrite);
             }
@@ -295,7 +302,7 @@ namespace CompleteBackup.Models.Backup.Storage
             {
                 string targetDirectoryName = null;
 
-                if (targetPath.Length < MAX_PATH_LENGTH)
+                if (!IsLongPath(targetPath))
                 {
                     targetDirectoryName = Path.GetDirectoryName(targetPath);
                 }
@@ -311,7 +318,7 @@ namespace CompleteBackup.Models.Backup.Storage
                 }
             }
 
-            if (sourcePath.Length < MAX_PATH_LENGTH && (targetPath.Length < MAX_PATH_LENGTH))
+            if (!IsLongPath(sourcePath) && !IsLongPath(targetPath))
             {
                 File.Move(sourcePath, targetPath);
             }
@@ -343,7 +350,7 @@ namespace CompleteBackup.Models.Backup.Storage
                 try
                 {
                     bRetry = false;
-                    if (sourcePath.Length < MAX_PATH_LENGTH && targetPath.Length < MAX_PATH_LENGTH)
+                    if (!IsLongPath(sourcePath) && !IsLongPath(targetPath))
                     {
                         Directory.Move(sourcePath, targetPath);
                     }
@@ -382,7 +389,7 @@ namespace CompleteBackup.Models.Backup.Storage
 
         public string[] GetDirectories(string path, string searchPattern = null, System.IO.SearchOption searchOption = SearchOption.TopDirectoryOnly)
         {
-            if (path.Length < MAX_PATH_LENGTH)
+            if (!IsLongPath(path))
             {
                 return Directory.GetFiles(path, searchPattern);
             }
@@ -396,7 +403,7 @@ namespace CompleteBackup.Models.Backup.Storage
 
         public List<string> GetFiles(string directory, string searchPattern = null, SearchOption searchOption = SearchOption.TopDirectoryOnly)
         {
-            if (directory.Length < MAX_PATH_LENGTH)
+            if (!IsLongPath(directory))
             {
                 return Directory.GetFiles(directory)?.ToList();
             }
