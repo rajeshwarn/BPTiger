@@ -26,8 +26,7 @@ namespace CompleteBackup.Models.Backup.Profile
     {
         [XmlIgnore]
         public static string TargetBackupBaseDirectoryName { get; } = "Archive";
-
-
+        
         //General properties
         private BackupTypeEnum m_BackupType { get; set; } = BackupTypeEnum.Snapshot;
         public BackupTypeEnum BackupType { get { return m_BackupType; } set { m_BackupType = value; OnPropertyChanged(); OnPropertyChanged("BackupTypeName"); OnPropertyChanged("BackupTypeImage"); } }
